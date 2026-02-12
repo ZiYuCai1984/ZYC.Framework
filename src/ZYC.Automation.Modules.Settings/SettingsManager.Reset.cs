@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using Autofac;
+using ZYC.Automation.Abstractions.Config.Attributes;
 using ZYC.Automation.Modules.Secrets.Abstractions;
+using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
 
 namespace ZYC.Automation.Modules.Settings;
@@ -14,6 +16,11 @@ public partial class SettingsManager
         var states = LifetimeScope.Resolve<IState[]>();
         foreach (var state in states)
         {
+            if (state.GetType().ExistAttribute<SkipResetAttribute>())
+            {
+                continue;
+            }
+
             ResetObject(state);
         }
     }
@@ -26,6 +33,11 @@ public partial class SettingsManager
 
         foreach (var c in config)
         {
+            if (c.GetType().ExistAttribute<SkipResetAttribute>())
+            {
+                continue;
+            }
+
             ResetObject(c);
         }
     }
@@ -38,6 +50,11 @@ public partial class SettingsManager
         var secrets = secretsManager.GetSecretsConfigs();
         foreach (var s in secrets)
         {
+            if (s.GetType().ExistAttribute<SkipResetAttribute>())
+            {
+                continue;
+            }
+
             ResetObject(s);
         }
     }
@@ -60,6 +77,11 @@ public partial class SettingsManager
 
         foreach (var prop in props)
         {
+            if (prop.ExistAttribute<SkipResetAttribute>())
+            {
+                continue;
+            }
+
             var defaultValue = prop.GetValue(defaultInstance);
             prop.SetValue(obj, defaultValue);
         }
