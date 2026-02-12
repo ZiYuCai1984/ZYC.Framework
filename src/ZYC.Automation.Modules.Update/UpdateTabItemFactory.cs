@@ -7,23 +7,13 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 namespace ZYC.Automation.Modules.Update;
 
 [RegisterSingleInstance]
-internal class UpdateTabItemFactory : ITabItemFactory
+[TabItemRoute(Host = UpdateModuleConstants.Host)]
+internal class UpdateTabItemFactory : TabItemFactoryBase
 {
-    public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
+    public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;
         return context.Resolve<UpdateTabItem>(
             new TypedParameter(typeof(TabReference), new TabReference(context.Uri)));
-    }
-
-    public async Task<bool> CheckUriMatchedAsync(Uri uri)
-    {
-        await Task.CompletedTask;
-        if (uri.Host == UpdateModuleConstants.Host)
-        {
-            return true;
-        }
-
-        return false;
     }
 }
