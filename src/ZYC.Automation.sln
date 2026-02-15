@@ -119,6 +119,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.Mark
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.MarkdownViewer.Abstractions", "ZYC.Automation.Modules.MarkdownViewer.Abstractions\ZYC.Automation.Modules.MarkdownViewer.Abstractions.csproj", "{51853CD0-FE8C-3C50-E1F3-BC9B239582CB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.Gemini.Abstractions", "ZYC.Automation.Modules.Gemini.Abstractions\ZYC.Automation.Modules.Gemini.Abstractions.csproj", "{05441DD5-639A-A38E-76CC-51A6A1B99688}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.Gemini", "ZYC.Automation.Modules.Gemini\ZYC.Automation.Modules.Gemini.csproj", "{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.MCP.Server", "ZYC.Automation.Modules.MCP.Server\ZYC.Automation.Modules.MCP.Server.csproj", "{B39C5378-FCB3-2230-D8F1-2A46A11BF89B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZYC.Automation.Modules.MCP.Server.Abstractions", "ZYC.Automation.Modules.MCP.Server.Abstractions\ZYC.Automation.Modules.MCP.Server.Abstractions.csproj", "{C6942FD4-3F66-F8D4-E392-248BD60C3F7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +317,22 @@ Global
 		{51853CD0-FE8C-3C50-E1F3-BC9B239582CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51853CD0-FE8C-3C50-E1F3-BC9B239582CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51853CD0-FE8C-3C50-E1F3-BC9B239582CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05441DD5-639A-A38E-76CC-51A6A1B99688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05441DD5-639A-A38E-76CC-51A6A1B99688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05441DD5-639A-A38E-76CC-51A6A1B99688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05441DD5-639A-A38E-76CC-51A6A1B99688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B39C5378-FCB3-2230-D8F1-2A46A11BF89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B39C5378-FCB3-2230-D8F1-2A46A11BF89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B39C5378-FCB3-2230-D8F1-2A46A11BF89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B39C5378-FCB3-2230-D8F1-2A46A11BF89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6942FD4-3F66-F8D4-E392-248BD60C3F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6942FD4-3F66-F8D4-E392-248BD60C3F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6942FD4-3F66-F8D4-E392-248BD60C3F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6942FD4-3F66-F8D4-E392-248BD60C3F7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,6 +378,10 @@ Global
 		{B03A7F76-B721-4B2B-BD74-43A090228F8E} = {911DCF44-4C42-4704-9BD3-6AE70D6AAC43}
 		{1313DB7D-3CD8-688B-07E2-44513AFFFAA5} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
 		{51853CD0-FE8C-3C50-E1F3-BC9B239582CB} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
+		{05441DD5-639A-A38E-76CC-51A6A1B99688} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
+		{03AFF39A-0CE6-2573-91B7-A109AC0CCDBE} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
+		{B39C5378-FCB3-2230-D8F1-2A46A11BF89B} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
+		{C6942FD4-3F66-F8D4-E392-248BD60C3F7F} = {AE35FA0F-EDD7-480C-82AD-01539A34E137}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADE3FF46-E6C6-498A-85D8-A9119E294614}

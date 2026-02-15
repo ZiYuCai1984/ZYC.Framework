@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Thirdparty\ZYC.Automation.Terminal\ZYC.Automation.Terminal.csproj" />
+    <ProjectReference Include="..\ZYC.Automation.Core\ZYC.Automation.Core.csproj" />
+    <ProjectReference
+      Include="..\ZYC.Automation.Modules.Gemini.Abstractions\ZYC.Automation.Modules.Gemini.Abstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+    <PackageReference Include="ModelContextProtocol.AspNetCore" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

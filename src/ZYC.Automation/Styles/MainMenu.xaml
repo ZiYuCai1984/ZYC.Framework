@@ -27,11 +27,11 @@
                     <ColumnDefinition Width="17" />
                 </Grid.ColumnDefinitions>
                 <!--<ContentPresenter x:Name="Icon"
-                                                  Margin="1"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  ContentSource="Icon"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
+                                      Margin="1"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      ContentSource="Icon"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
                 <core:HybridIcon x:Name="Icon"
                                  Margin="1"
                                  HorizontalAlignment="Center"
@@ -54,10 +54,10 @@
                                Text="{TemplateBinding Header}"
                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                 <!--<ContentPresenter Grid.Column="2"
-                                                  Margin="{TemplateBinding Padding}"
-                                                  ContentSource="Header"
-                                                  RecognizesAccessKey="True"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
+                                      Margin="{TemplateBinding Padding}"
+                                      ContentSource="Header"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
                 <wpf:TextBlock Grid.Column="4"
                                Margin="{TemplateBinding Padding}"
                                Text="{TemplateBinding InputGestureText}"
@@ -149,11 +149,11 @@
                     <ColumnDefinition Width="17" />
                 </Grid.ColumnDefinitions>
                 <!--<ContentPresenter x:Name="Icon"
-                                                  Margin="1"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  ContentSource="Icon"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
+                                      Margin="1"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      ContentSource="Icon"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
                 <core:HybridIcon x:Name="Icon"
                                  Margin="1"
                                  HorizontalAlignment="Center"
@@ -178,11 +178,10 @@
                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                     Text="{TemplateBinding Header}" />
                 <!--<ContentPresenter Grid.Column="2"
-                                                  Margin="{TemplateBinding Padding}"
-                                                  ContentSource="Header"
-                                                  RecognizesAccessKey="True"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                                </ContentPresenter>-->
+                                      Margin="{TemplateBinding Padding}"
+                                      ContentSource="Header"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />-->
                 <wpf:TextBlock Grid.Column="4"
                                Margin="{TemplateBinding Padding}"
                                Text="{TemplateBinding InputGestureText}" />

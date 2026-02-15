@@ -27,7 +27,6 @@
         <mah:DropDownButton.ItemContainerStyle>
             <Style BasedOn="{StaticResource {x:Type MenuItem}}"
                    TargetType="{x:Type MenuItem}">
-                <Setter Property="Height" Value="32" />
                 <Setter Property="Icon"
                         Value="{Binding Icon,Converter={converters:PackIconMaterialConverter}}" />
                 <Setter Property="Command" Value="{Binding  Command}" />

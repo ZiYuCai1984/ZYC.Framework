@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace ZYC.Automation.Modules.FileExplorer;
+namespace ZYC.Automation.Core;
 
-internal static class ShellIconBase64
+public static class ShellIconBase64
 {
     // ReSharper disable InconsistentNaming
     private const uint SHGFI_PIDL = 0x000000008;

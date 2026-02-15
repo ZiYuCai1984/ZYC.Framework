@@ -62,7 +62,7 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-        <Grid Grid.Column="0"
+        <!--<Grid Grid.Column="0"
               Grid.ColumnSpan="3"
               VerticalAlignment="Center"
               HorizontalAlignment="Center"
@@ -74,7 +74,7 @@
                 <Run Text="{x:Static system:Environment.UserName}" />
                 <Run Text="]" />
             </TextBlock>
-        </Grid>
+        </Grid>-->
 
         <ItemsControl Grid.Column="2"
                       x:Name="ItemsControl">
