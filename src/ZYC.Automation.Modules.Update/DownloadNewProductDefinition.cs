@@ -45,7 +45,7 @@ internal class DownloadNewProductDefinition : IManagedTaskDefinition
         }
     }
 
-    public string? Description => "Download and install the new version of the product.";
+    public string Description => "Download and install the new version of the product.";
 
     public async Task ExecuteAsync(TaskExecutionContext context, CancellationToken ct)
     {

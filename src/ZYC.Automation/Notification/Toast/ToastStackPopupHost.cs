@@ -19,10 +19,12 @@ internal sealed class ToastStackPopupHost : IDisposable
 
     private const double EdgeMarginBottom = 0;
 
-    //private const double EdgeMargin = 8;
     private const double ToastMinWidth = 240;
+
     private const double ToastMaxWidth = 420;
+
     private const double ToastMinHeight = 48;
+
     private const double ToastGap = 8;
 
     private readonly Dictionary<IToast, EventHandler> _closedHandlers = new();
@@ -38,7 +40,10 @@ internal sealed class ToastStackPopupHost : IDisposable
 
     private HwndSource? _hwndSource;
 
-    public ToastStackPopupHost(IMainWindow mainWindow, IStatusBarView statusBarView, IRootGrid rootGrid,
+    public ToastStackPopupHost(
+        IMainWindow mainWindow,
+        IStatusBarView statusBarView,
+        IRootGrid rootGrid,
         ToastConfig toastConfig)
     {
         var ownerWindow = (Window)mainWindow.GetMainWindow();
@@ -199,7 +204,9 @@ internal sealed class ToastStackPopupHost : IDisposable
 
     private bool ShouldBeVisible()
     {
-        return _owner.IsVisible && _owner.WindowState != WindowState.Minimized;
+        return _owner.IsVisible
+               && _owner.WindowState != WindowState.Minimized
+               && _owner.IsActive;
     }
 
     private CustomPopupPlacement[] PlacePopupPlacement(Size popupSize, Size targetSize, Point offset)
