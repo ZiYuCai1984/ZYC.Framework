@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using ZYC.Automation.Abstractions.MainMenu;
-using ZYC.Automation.Core;
-using ZYC.Automation.MainMenu.BuildIn;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
 namespace ZYC.Automation.MainMenu;
@@ -19,10 +17,6 @@ internal class MainMenuManager : IMainMenuManager
         RegisterItem<IToolsMainMenuItemsProvider>();
         RegisterItem<IExtensionsMainMenuItemsProvider>();
         RegisterItem<IAboutMainMenuItemsProvider>();
-
-
-        lifetimeScope.RegisterFileMainMenuItem<RestartMainMenuItem>();
-        lifetimeScope.RegisterFileMainMenuItem<ExitMainMenuItem>();
     }
 
     private ILifetimeScope LifetimeScope { get; }

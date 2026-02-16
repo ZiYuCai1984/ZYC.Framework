@@ -10,7 +10,7 @@ namespace ZYC.Automation.Modules.CLI;
 [TabItemRoute(Host = CLIModuleConstants.Host)]
 internal class CLITabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => false;
+    public override bool IsSingle => false;
 
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {

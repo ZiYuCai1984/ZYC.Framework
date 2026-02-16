@@ -10,6 +10,8 @@ namespace ZYC.Automation.Tab.BuildIn;
 [Register]
 internal class SimpleTabItemFactory : ITabItemFactory
 {
+    public int Priority => 0;
+
     public SimpleTabItemFactory(
         ILifetimeScope lifetimeScope,
         SimpleTabItemFactoryInfo tabItemFactoryInfo,

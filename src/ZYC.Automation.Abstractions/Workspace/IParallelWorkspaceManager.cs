@@ -27,4 +27,6 @@ public interface IParallelWorkspaceManager
     bool CanSwap(WorkspaceNode workspaceNode);
 
     void SetHighlight(WorkspaceNode workspace, bool highlight);
+
+    Task MergeAllAsync();
 }

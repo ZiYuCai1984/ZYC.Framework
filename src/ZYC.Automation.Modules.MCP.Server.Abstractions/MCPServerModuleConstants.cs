@@ -4,7 +4,7 @@ namespace ZYC.Automation.Modules.MCP.Server.Abstractions;
 
 public static class MCPServerModuleConstants
 {
-    public const string Host = "mcpserver";
+    public const string Host = "mcp";
 
     public const string Title = "MCPServer";
 

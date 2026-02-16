@@ -2,9 +2,9 @@
 
 public interface ITabItemFactory
 {
-    bool IsSingle => true;
+    bool IsSingle { get; }
 
-    int Priority => 0;
+    int Priority { get; }
 
     Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context);
 

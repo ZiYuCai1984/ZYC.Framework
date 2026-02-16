@@ -19,6 +19,9 @@ internal class MockTabItemFactory : IMockTabItemFactory
 
     private IList<MockTabItemInfo> MockTabItemInfos { get; } = new List<MockTabItemInfo>();
 
+    public int Priority => 0;
+
+    public bool IsSingle => true;
 
     public async Task<ITabItemInstance> CreateTabItemInstanceAsync(
         TabItemCreationContext context)

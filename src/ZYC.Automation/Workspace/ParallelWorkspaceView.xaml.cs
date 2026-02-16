@@ -170,6 +170,22 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
         EventAggregator.Publish(new WorkspaceHighlightEvent(workspace, highlight));
     }
 
+    public async Task MergeAllAsync()
+    {
+        while (true)
+        {
+            var dic = GetWorkspaceDictionary();
+
+            if (dic.Count == 1)
+            {
+                return;
+            }
+
+            var foucs = GetFocusedWorkspace();
+            await MergeAsync(foucs);
+        }
+    }
+
     private async Task<object> CreateTabManagerViewAsync(WorkspaceView workspaceView)
     {
         await Task.CompletedTask;
