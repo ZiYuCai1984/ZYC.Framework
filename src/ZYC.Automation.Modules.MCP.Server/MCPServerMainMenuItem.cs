@@ -15,7 +15,6 @@ internal class MCPServerMainMenuItem : MainMenuItem
         {
             Title = MCPServerModuleConstants.Title,
             Icon = MCPServerModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Tools
         };
 
         Command = lifetimeScope.CreateNavigateCommand(MCPServerModuleConstants.Uri);

@@ -8,7 +8,7 @@ internal class Module : ModuleBase
 {
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
-        lifetimeScope.RegisterRootMainMenuItem<MCPServerMainMenuItem>();
+        lifetimeScope.RegisterToolsMainMenuItem<MCPServerMainMenuItem>();
         lifetimeScope.RegisterDefaultStatucBarItem<MCPServerStatusBarItem>();
 
         return Task.CompletedTask;

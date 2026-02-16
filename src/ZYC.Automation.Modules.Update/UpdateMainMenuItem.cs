@@ -15,7 +15,7 @@ internal class UpdateMainMenuItem : MainMenuItem
         {
             Title = UpdateModuleConstants.Title,
             Icon = UpdateModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Update_About
+            Anchor = AboutMainMenuAnchors.Update
         };
 
         Command = lifetimeScope.CreateNavigateCommand(UpdateModuleConstants.Uri);

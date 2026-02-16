@@ -14,9 +14,8 @@ internal class MockMainMenuItemsProvider : MainMenuItemsProvider, IMockMainMenuI
         Info = new MenuItemInfo
         {
             Title = "Mock",
-            Icon = "🚀",
-            Anchor = MainMenuAnchors.Extension,
-            Localization = false
+            Localization = false,
+            Priority = MainMenuPriority.About + 10
         };
     }
 

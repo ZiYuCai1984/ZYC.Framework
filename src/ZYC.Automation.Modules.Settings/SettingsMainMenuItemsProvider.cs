@@ -13,9 +13,8 @@ internal class SettingsMainMenuItemsProvider : MainMenuItemsProvider, ISettingsM
     {
         Info = new MenuItemInfo
         {
-            Anchor = MainMenuAnchors.Setting_Manager,
-            Icon = "CogOutline",
-            Title = "Settings"
+            Title = "Settings",
+            Priority = MainMenuPriority.View + 10
         };
 
         RegisterSubItem<UserSettingsMainMenuItem>();

@@ -13,8 +13,8 @@ internal class ExtensionsMainMenuItemsProvider : MainMenuItemsProvider, IExtensi
         Info = new MenuItemInfo
         {
             Title = "Extensions",
-            Icon = "HeadSnowflakeOutline",
-            Anchor = MainMenuAnchors.Extension
+            Icon = null,
+            Priority = MainMenuPriority.Extensions
         };
     }
 

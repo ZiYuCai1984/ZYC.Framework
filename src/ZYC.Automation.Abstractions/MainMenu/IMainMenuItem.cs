@@ -10,7 +10,7 @@ public interface IMainMenuItem
 
     public string Title { get; }
 
-    public string Icon { get; }
+    public string? Icon { get; }
 
     public string Anchor { get; }
 

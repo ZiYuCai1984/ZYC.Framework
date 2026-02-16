@@ -15,8 +15,7 @@ internal class ChronosynchronicityMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = ChronosynchronicityModuleConstants.Title,
-            Icon = ChronosynchronicityModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Default
+            Icon = ChronosynchronicityModuleConstants.Icon
         };
 
         Command = lifetimeScope.CreateNavigateCommand(ChronosynchronicityModuleConstants.Uri);

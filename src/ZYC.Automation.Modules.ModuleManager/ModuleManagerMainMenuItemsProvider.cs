@@ -19,6 +19,5 @@ internal class ModuleManagerMainMenuItemsProvider : MainMenuItemsProvider, IModu
     {
         Icon = ModuleManagerModuleConstants.Local.Icon,
         Title = "ModuleManager",
-        Anchor = MainMenuAnchors.Setting_Manager
     };
 }

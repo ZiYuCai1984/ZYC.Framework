@@ -5,16 +5,16 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
 namespace ZYC.Automation.MainMenu.BuildIn;
 
-[RegisterSingleInstanceAs(typeof(IToolsMainMenuItemsProvider))]
-internal class ToolsMainMenuItemsProvider : MainMenuItemsProvider, IToolsMainMenuItemsProvider
+[RegisterSingleInstanceAs(typeof(IAboutMainMenuItemsProvider))]
+internal class AboutMainMenuItemsProvider : MainMenuItemsProvider, IAboutMainMenuItemsProvider
 {
-    public ToolsMainMenuItemsProvider(ILifetimeScope lifetimeScope) : base(lifetimeScope)
+    public AboutMainMenuItemsProvider(ILifetimeScope lifetimeScope) : base(lifetimeScope)
     {
         Info = new MenuItemInfo
         {
-            Title = "Tools",
+            Title = "About",
             Icon = null,
-            Priority = MainMenuPriority.Tools
+            Priority = MainMenuPriority.About
         };
     }
 

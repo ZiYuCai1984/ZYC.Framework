@@ -28,7 +28,7 @@ public abstract class MainMenuItemsProvider : IMainMenuItemsProvider
 
     public string Title => Info.Title;
 
-    public string Icon => Info.Icon;
+    public string? Icon => Info.Icon;
 
     public string Anchor => Info.Anchor;
 

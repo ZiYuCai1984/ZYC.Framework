@@ -15,8 +15,7 @@ internal class GeminiMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = GeminiModuleConstants.Title,
-            Icon = GeminiModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Tools
+            Icon = GeminiModuleConstants.Icon
         };
 
         Command = lifetimeScope.CreateNavigateCommand(GeminiModuleConstants.Uri);

@@ -38,6 +38,36 @@ public static class LifetimeScopeTools
             mainMenuManager.RegisterItem<T>();
         }
 
+        public void RegisterFileMainMenuItem<T>() where T : IMainMenuItem
+        {
+            var provider = lifetimeScope.Resolve<IFileMainMenuItemsProvider>();
+            provider.RegisterSubItem<T>();
+        }
+
+        public void RegisterViewMainMenuItem<T>() where T : IMainMenuItem
+        {
+            var provider = lifetimeScope.Resolve<IViewMainMenuItemsProvider>();
+            provider.RegisterSubItem<T>();
+        }
+
+        public void RegisterToolsMainMenuItem<T>() where T : IMainMenuItem
+        {
+            var provider = lifetimeScope.Resolve<IToolsMainMenuItemsProvider>();
+            provider.RegisterSubItem<T>();
+        }
+
+        public void RegisterExtensionsMainMenuItem<T>() where T : IMainMenuItem
+        {
+            var provider = lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>();
+            provider.RegisterSubItem<T>();
+        }
+
+        public void RegisterAboutMainMenuItem<T>() where T : IMainMenuItem
+        {
+            var provider = lifetimeScope.Resolve<IAboutMainMenuItemsProvider>();
+            provider.RegisterSubItem<T>();
+        }
+
         public void RegisterTabItemFactory<T>() where T : ITabItemFactory
         {
             var tabItemFactoryManager = lifetimeScope.Resolve<ITabItemFactoryManager>();

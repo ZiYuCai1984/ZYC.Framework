@@ -13,8 +13,7 @@ internal class PasswordGeneratorMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = PasswordGeneratorTabItem.Constants.Title,
-            Icon = PasswordGeneratorTabItem.Constants.Icon,
-            Anchor = MainMenuAnchors.Default
+            Icon = PasswordGeneratorTabItem.Constants.Icon
         };
 
         Command = lifetimeScope.CreateNavigateCommand(PasswordGeneratorTabItem.Constants.Uri);

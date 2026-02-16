@@ -12,7 +12,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<BlazorDemoTabItemFactory>();
-        lifetimeScope.RegisterRootMainMenuItem<BlazorDemoMainMenuItem>();
+        lifetimeScope.RegisterToolsMainMenuItem<BlazorDemoMainMenuItem>();
 
         return Task.CompletedTask;
     }

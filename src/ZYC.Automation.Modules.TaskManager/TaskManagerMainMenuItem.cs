@@ -15,7 +15,6 @@ internal class TaskManagerMainMenuItem : MainMenuItem
         {
             Title = TaskManagerModuleConstants.Title,
             Icon = TaskManagerModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Setting_Manager
         };
 
         Command = lifetimeScope.CreateNavigateCommand(TaskManagerModuleConstants.Uri);

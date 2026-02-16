@@ -39,7 +39,7 @@ public class MainMenuItem : IMainMenuItem
 
     public virtual string Title => Info.Title;
 
-    public virtual string Icon => Info.Icon;
+    public virtual string? Icon => Info.Icon;
 
     public virtual string Anchor => Info.Anchor;
 

@@ -11,7 +11,6 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<GeminiTabItemFactory>();
-        lifetimeScope.RegisterRootMainMenuItem<GeminiMainMenuItem>();
         lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>()
             .RegisterSubItem<GeminiMainMenuItem>();
 

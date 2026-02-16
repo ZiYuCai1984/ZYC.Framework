@@ -15,8 +15,7 @@ internal class LogMainMenuItem : MainMenuItem
         {
             Title = LogModuleConstants.Title,
             Icon = LogModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Exit,
-            Priority = -1
+            Anchor = FileMainMenuAnchors.Open
         };
 
         Command = lifetimeScope.Resolve<OpenLogFolderCommand>();
