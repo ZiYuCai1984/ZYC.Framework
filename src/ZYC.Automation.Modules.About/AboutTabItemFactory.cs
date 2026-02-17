@@ -10,8 +10,6 @@ namespace ZYC.Automation.Modules.About;
 [TabItemRoute(Host = AboutModuleConstants.Host)]
 internal class AboutTabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => true;
-
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;

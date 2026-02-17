@@ -1,14 +1,20 @@
 ﻿using System.Windows.Threading;
+using ZYC.Automation.Modules.MCP.Server.Abstractions;
 
-namespace ZYC.Automation.Modules.Gemini;
+namespace ZYC.Automation.Modules.MCP.Server;
 
-public sealed class WpfUIDispatcher : IUIDispatcher
+public sealed class UIDispatcher : IUIDispatcher
 {
     private readonly Dispatcher _dispatcher;
 
-    public WpfUIDispatcher(Dispatcher dispatcher)
+    public UIDispatcher(Dispatcher dispatcher)
     {
         _dispatcher = dispatcher;
+    }
+
+    public bool CheckAccess()
+    {
+        return _dispatcher.CheckAccess();
     }
 
     public Task InvokeAsync(Action action)

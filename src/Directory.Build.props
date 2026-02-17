@@ -26,9 +26,9 @@
     <UseWPF>false</UseWPF>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Abstractions'))">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Abstractions'))">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>-->
+  </PropertyGroup>
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>

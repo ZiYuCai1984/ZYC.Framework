@@ -8,29 +8,29 @@ public static class ProductInfo
     /// <summary>
     ///     Gets the package identifier.
     /// </summary>
-    public const string PackageId = "ZYC.Automation.Alpha";
+    public static string PackageId => "ZYC.Automation.Alpha";
 
     /// <summary>
     ///     Gets the product name.
     /// </summary>
-    public const string ProductName = "ZYC.Automation.Alpha";
+    public static string ProductName => "ZYC.Automation.Alpha";
 
     /// <summary>
     ///     Gets the URI scheme used by the product.
     /// </summary>
-    public const string Scheme = "zyc";
+    public static string Scheme => "zyc";
 
     //!WARNING In order to adapt and release the version, the <Version> class cannot be used here
 
     /// <summary>
     ///     Gets the product version string.
     /// </summary>
-    public const string Version = "1.0.6";
+    public static string Version => "1.0.6";
 
     /// <summary>
     ///     Gets the product description.
     /// </summary>
-    public const string Description =
+    public static string Description =>
         "A highly extensible .NET WPF framework featuring Aspire integration and seamless Blazor interoperability for modern hybrid applications.";
 
     /// <summary>
