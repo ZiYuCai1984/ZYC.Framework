@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Autofac;
 using ZYC.Automation.Abstractions.MainMenu;
+using ZYC.Automation.Abstractions.Notification.Toast;
 using ZYC.Automation.Modules.MCP.Server.Abstractions;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
@@ -12,14 +13,18 @@ namespace ZYC.Automation.Modules.MCP.Server.UI;
 internal partial class MCPServerStatusBarItemView : INotifyPropertyChanged
 {
     public MCPServerStatusBarItemView(
+        IToastManager toastManager,
         ILifetimeScope lifetimeScope,
         MCPServerConfig mcpServerConfig)
     {
+        ToastManager = toastManager;
         LifetimeScope = lifetimeScope;
         MCPServerConfig = mcpServerConfig;
 
         InitializeComponent();
     }
+
+    private IToastManager ToastManager { get; }
 
     private ILifetimeScope LifetimeScope { get; }
 

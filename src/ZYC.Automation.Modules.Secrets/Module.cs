@@ -29,11 +29,12 @@ internal class Module : ModuleBase
 
 
         lifetimeScope.RegisterTabItemFactory<PasswordGeneratorTabItemFactory>();
-        lifetimeScope.Resolve<IToolsMainMenuItemsProvider>()
+        lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>()
             .RegisterSubItem<PasswordGeneratorMainMenuItem>();
 
         lifetimeScope.RegisterTabItemFactory<WlanPasswordTabItemFactory>();
-        lifetimeScope.Resolve<IToolsMainMenuItemsProvider>().RegisterSubItem<WlanPasswordMainMenuItem>();
+        lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>()
+            .RegisterSubItem<WlanPasswordMainMenuItem>();
 
 
         return Task.CompletedTask;

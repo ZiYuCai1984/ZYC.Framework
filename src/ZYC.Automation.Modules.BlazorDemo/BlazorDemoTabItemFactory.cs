@@ -10,8 +10,6 @@ namespace ZYC.Automation.Modules.BlazorDemo;
 [TabItemRoute(Host = BlazorDemoModuleConstants.Host)]
 internal class BlazorDemoTabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => true;
-
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;

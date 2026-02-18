@@ -13,7 +13,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<FileExplorerTabItemFactory>();
-        lifetimeScope.Resolve<IToolsMainMenuItemsProvider>()
+        lifetimeScope.Resolve<IFileMainMenuItemsProvider>()
             .RegisterSubItem<FileExplorerMainMenuItem>();
 
         return Task.CompletedTask;

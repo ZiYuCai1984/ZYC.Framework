@@ -18,8 +18,8 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <core:Component Type="mainMenu:MainMenuView" />
         <Grid Margin="2 0 0 0 "
@@ -30,25 +30,25 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ItemsControl HorizontalAlignment="Left"
-                      ItemsSource="{Binding QuickMenuTitleItems, RelativeSource={RelativeSource AncestorType=windowTitle:WindowTitleView}}">
+                          ItemsSource="{Binding QuickMenuTitleItems, RelativeSource={RelativeSource AncestorType=windowTitle:WindowTitleView}}">
                 <ItemsControl.Resources>
                     <DataTemplate DataType="{x:Type quickBar:QuickBarItemBase}">
                         <Button Command="{Binding Command}"
-                            Background="Transparent"
-                            BorderBrush="Transparent">
+                                Background="Transparent"
+                                BorderBrush="Transparent">
                             <core:HybridIcon HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         HorizontalContentAlignment="Stretch"
-                                         VerticalContentAlignment="Stretch"
-                                         Width="16"
-                                         Height="16"
-                                         FontSize="12"
-                                         Icon="{Binding Icon}" />
+                                             VerticalAlignment="Center"
+                                             HorizontalContentAlignment="Stretch"
+                                             VerticalContentAlignment="Stretch"
+                                             Width="16"
+                                             Height="16"
+                                             FontSize="12"
+                                             Icon="{Binding Icon}" />
                         </Button>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type quickBar:QuickBarItemSeparator}">
                         <Separator Width="20"
-                               Margin="8 0 ">
+                                   Margin="8 0 ">
                             <Separator.LayoutTransform>
                                 <TransformGroup>
                                     <TransformGroup.Children>
@@ -64,47 +64,33 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right" />
+                                    HorizontalAlignment="Right" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-            <!--<Grid Grid.Column="0"
-              Grid.ColumnSpan="3"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Center"
-              Visibility="{Binding WindowTitleConfig.IsMachineNameVisible,Converter={converters:BoolToVisibilityConverter}}">
-            <TextBlock FontWeight="SemiBold">
-                <Run Text="[" />
-                <Run Text="{x:Static system:Environment.MachineName}" />
-                <Run Text="\" />
-                <Run Text="{x:Static system:Environment.UserName}" />
-                <Run Text="]" />
-            </TextBlock>
-        </Grid>-->
-
             <ItemsControl Grid.Column="2"
-                      x:Name="ItemsControl">
+                          x:Name="ItemsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right" />
+                                    HorizontalAlignment="Right" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                         <Button Command="{Binding Command}"
-                            Visibility="{Binding IsVisible,Converter={converters:BoolToVisibilityConverter}}"
-                            Background="Transparent"
-                            BorderBrush="Transparent">
+                                Visibility="{Binding IsVisible,Converter={converters:BoolToVisibilityConverter}}"
+                                Background="Transparent"
+                                BorderBrush="Transparent">
                             <core:HybridIcon Icon="{Binding Icon}"
-                                         HorizontalContentAlignment="Stretch"
-                                         VerticalContentAlignment="Stretch"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         FontSize="12"
-                                         Width="16"
-                                         Height="16" />
+                                             HorizontalContentAlignment="Stretch"
+                                             VerticalContentAlignment="Stretch"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             FontSize="12"
+                                             Width="16"
+                                             Height="16" />
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

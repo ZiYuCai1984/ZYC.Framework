@@ -11,7 +11,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<MarkdownViewerTabItemFactory>();
-        lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>()
+        lifetimeScope.Resolve<IFileMainMenuItemsProvider>()
             .RegisterSubItem<MarkdownViewerMainMenuItem>();
 
         return Task.CompletedTask;

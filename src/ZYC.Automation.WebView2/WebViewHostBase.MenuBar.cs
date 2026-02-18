@@ -2,10 +2,13 @@
 using ZYC.Automation.Abstractions;
 using ZYC.Automation.Core.Commands;
 using ZYC.Automation.WebView2.Commands;
+using ZYC.Automation.WebView2.Menu;
 using Debugger = System.Diagnostics.Debugger;
 
 namespace ZYC.Automation.WebView2;
 
+// ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 public partial class WebViewHostBase
 {
     private CommandBase? _goBackCommand;
@@ -99,6 +102,8 @@ public partial class WebViewHostBase
 
     public virtual bool IsMenuBarVisible { get; private set; } = true;
 
+    protected virtual ExtendedMenuItem[] WebViewHostBaseExtendedMenuItems { get; } = [];
+
     internal void RaiseMenuBarCommandsCanExecuteChanged()
     {
         GoBackCommand?.RaiseCanExecuteChanged();
@@ -118,7 +123,8 @@ public partial class WebViewHostBase
 
         IsMenuBarSetuped = true;
 
-        var menuBarView = LifetimeScope.Resolve<MenuBarView>();
+        var menuBarView = LifetimeScope.Resolve<MenuBarView>(
+            new TypedParameter(typeof(ExtendedMenuItem[]), WebViewHostBaseExtendedMenuItems));
         menuBarView.DataContext = this;
 
         MainGrid.Children.Add(menuBarView);
@@ -126,7 +132,6 @@ public partial class WebViewHostBase
 
     public bool CanGoBack()
     {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (CoreWebView2 == null)
         {
             return false;
@@ -137,7 +142,6 @@ public partial class WebViewHostBase
 
     public bool CanGoForward()
     {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (CoreWebView2 == null)
         {
             return false;
@@ -148,13 +152,11 @@ public partial class WebViewHostBase
 
     public void GoBack()
     {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         CoreWebView2?.GoBack();
     }
 
     public void GoForward()
     {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         CoreWebView2?.GoForward();
     }
 }
