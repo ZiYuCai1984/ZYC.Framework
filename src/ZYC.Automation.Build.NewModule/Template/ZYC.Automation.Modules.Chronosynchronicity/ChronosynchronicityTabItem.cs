@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ZYC.Automation.Abstractions.Tab;
-using ZYC.Automation.Build.NewModule.Template.ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.Automation.Core.Tab;
+using ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.Automation.Modules.Chronosynchronicity.UI;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 

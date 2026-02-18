@@ -33,6 +33,7 @@ internal partial class TaskbarContextMenu : ITaskbarMenuManager, IDisposable
         RegisterMenuItem(lifetimeScope.Resolve<FreezeWindowTaskbarItem>());
         RegisterMenuItem(lifetimeScope.Resolve<UnfreezeWindowTaskbarItem>());
         RegisterMenuItem(lifetimeScope.Resolve<ShowWindowTaskbarMenuItem>());
+        RegisterMenuItem(lifetimeScope.Resolve<HideWindowTaskbarMenuItem>());
         RegisterMenuItem(lifetimeScope.Resolve<ExitProcessTaskbarItem>());
 
 

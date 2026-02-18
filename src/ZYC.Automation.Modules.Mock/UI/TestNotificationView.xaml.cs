@@ -58,4 +58,11 @@ public partial class TestNotificationView
             ToastManager.PromptException(exception);
         }
     }
+
+    // ReSharper disable once AsyncVoidEventHandlerMethod
+    private async void OnDelayPromptToastBtnClick(object sender, RoutedEventArgs e)
+    {
+        await Task.Delay(1000);
+        ToastManager.PromptMessage(ToastMessage.Warn("Hello World"));
+    }
 }

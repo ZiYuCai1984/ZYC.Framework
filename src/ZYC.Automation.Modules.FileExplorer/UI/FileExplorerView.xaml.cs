@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.WindowsAPICodePack.Controls;
 using Microsoft.WindowsAPICodePack.Shell;
 using ZYC.Automation.Abstractions;
+using ZYC.Automation.Core;
 using ZYC.Automation.Modules.FileExplorer.Abstractions;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -81,9 +82,9 @@ internal partial class FileExplorerView : IDisposable
             await FileExplorerTabItemInstance.TabInternalNavigatingAsync(
                 new Uri($"file:///{path}"));
 
-            _ = Task.Run(() =>
+            try
             {
-                try
+                AppContext.InvokeOnUIThread(() =>
                 {
                     var base64Icon = ShellIconBase64.TryGetFolderIconPngBase64(path);
                     if (string.IsNullOrWhiteSpace(base64Icon))
@@ -91,20 +92,17 @@ internal partial class FileExplorerView : IDisposable
                         return;
                     }
 
-                    AppContext.InvokeOnUIThread(() =>
-                    {
-                        FileExplorerTabItemInstance.UpdateIcon(base64Icon);
-                    });
-                }
-                catch (Exception exception)
-                {
-                    Logger.Error(exception);
-                }
-            });
+                    FileExplorerTabItemInstance.UpdateIcon(base64Icon);
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            //ignore
+            Logger.Error(ex);
         }
     }
 }

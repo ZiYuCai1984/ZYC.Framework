@@ -39,7 +39,6 @@
                             <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                             <wpf:TextBlock VerticalAlignment="Center"
                                            FontWeight="SemiBold">
-                                <Run Text="⚙️ " />
                                 <Run Text="{Binding Name,Mode=OneWay}" />
                             </wpf:TextBlock>
                             <ItemsControl ItemsSource="{Binding SettingItems}"

@@ -18,7 +18,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<UpdateTabItemFactory>();
-        lifetimeScope.RegisterRootMainMenuItem<UpdateMainMenuItem>();
+        lifetimeScope.RegisterAboutMainMenuItem<UpdateMainMenuItem>();
 
         return Task.CompletedTask;
     }

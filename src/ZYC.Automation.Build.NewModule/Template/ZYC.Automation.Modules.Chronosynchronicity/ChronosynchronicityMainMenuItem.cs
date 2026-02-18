@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ZYC.Automation.Abstractions.MainMenu;
-using ZYC.Automation.Build.NewModule.Template.ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.Automation.Core;
+using ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
 // ReSharper disable once CheckNamespace
@@ -15,8 +15,7 @@ internal class ChronosynchronicityMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = ChronosynchronicityModuleConstants.Title,
-            Icon = ChronosynchronicityModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Default
+            Icon = ChronosynchronicityModuleConstants.Icon
         };
 
         Command = lifetimeScope.CreateNavigateCommand(ChronosynchronicityModuleConstants.Uri);

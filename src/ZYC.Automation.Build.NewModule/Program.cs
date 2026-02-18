@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using ZYC.CoreToolkit;
 
 namespace ZYC.Automation.Build.NewModule;

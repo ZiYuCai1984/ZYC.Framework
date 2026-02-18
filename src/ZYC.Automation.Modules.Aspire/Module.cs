@@ -18,7 +18,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<AspireTabItemFactory>();
-        lifetimeScope.RegisterRootMainMenuItem<IAspireMainMenuItemsProvider>();
+        lifetimeScope.RegisterToolsMainMenuItem<IAspireMainMenuItemsProvider>();
 
         lifetimeScope.RegisterDefaultStatucBarItem<AspireStatusBarItem>();
 

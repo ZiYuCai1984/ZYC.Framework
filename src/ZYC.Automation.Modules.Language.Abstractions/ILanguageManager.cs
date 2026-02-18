@@ -1,10 +1,12 @@
-﻿using ZYC.Automation.Modules.Translator.Abstractions;
+﻿using ZYC.Automation.Abstractions.MCP;
+using ZYC.Automation.Modules.Translator.Abstractions;
 
 namespace ZYC.Automation.Modules.Language.Abstractions;
 
 /// <summary>
 ///     Provides language selection and localization services.
 /// </summary>
+[ExposeToMCP]
 public interface ILanguageManager
 {
     /// <summary>

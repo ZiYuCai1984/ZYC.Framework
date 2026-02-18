@@ -7,26 +7,16 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 namespace ZYC.Automation.Modules.BlazorDemo;
 
 [RegisterSingleInstance]
-internal class BlazorDemoTabItemFactory : ITabItemFactory
+[TabItemRoute(Host = BlazorDemoModuleConstants.Host)]
+internal class BlazorDemoTabItemFactory : TabItemFactoryBase
 {
     public bool IsSingle => true;
 
-    public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
+    public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;
 
         return context.Resolve<BlazorDemoTabItem>(
             new TypedParameter(typeof(TabReference), new TabReference(context.Uri)));
-    }
-
-    public async Task<bool> CheckUriMatchedAsync(Uri uri)
-    {
-        await Task.CompletedTask;
-        if (uri.Host == BlazorDemoModuleConstants.Host)
-        {
-            return true;
-        }
-
-        return false;
     }
 }

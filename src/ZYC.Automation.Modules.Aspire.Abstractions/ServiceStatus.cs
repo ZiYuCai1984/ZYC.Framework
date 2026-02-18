@@ -1,7 +1,7 @@
 ﻿namespace ZYC.Automation.Modules.Aspire.Abstractions;
 
 /// <summary>
-///     Represents the lifecycle state of the Aspire service.
+///     Represents the lifecycle state of the service.
 /// </summary>
 public enum ServiceStatus
 {

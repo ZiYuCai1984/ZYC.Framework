@@ -21,14 +21,6 @@
                Loaded="OnTaskManagerViewLoaded"
                Title="{localizations:L TaskManager}"
                DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <page:PageBase.HeaderAdditionContent>
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Right"

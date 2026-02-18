@@ -49,6 +49,7 @@ internal partial class CLIView : IDisposable
         if (IsDisposed)
         {
             DebuggerTools.Break();
+            return;
         }
 
         IsDisposed = true;

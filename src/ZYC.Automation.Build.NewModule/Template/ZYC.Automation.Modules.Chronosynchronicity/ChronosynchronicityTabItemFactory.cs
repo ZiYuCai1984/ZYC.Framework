@@ -1,32 +1,22 @@
 ﻿using Autofac;
 using ZYC.Automation.Abstractions.Tab;
-using ZYC.Automation.Build.NewModule.Template.ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.Automation.Core;
+using ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
 // ReSharper disable once CheckNamespace
 namespace ZYC.Automation.Modules.Chronosynchronicity;
 
 [RegisterSingleInstance]
-internal class ChronosynchronicityTabItemFactory : ITabItemFactory
+[TabItemRoute(Host = ChronosynchronicityModuleConstants.Host)]
+internal class ChronosynchronicityTabItemFactory : TabItemFactoryBase
 {
     public bool IsSingle => true;
 
-    public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
+    public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;
         return context.Resolve<ChronosynchronicityTabItem>(
             new TypedParameter(typeof(TabReference), new TabReference(context.Uri)));
-    }
-
-    public async Task<bool> CheckUriMatchedAsync(Uri uri)
-    {
-        await Task.CompletedTask;
-        if (uri.Host == ChronosynchronicityModuleConstants.Host)
-        {
-            return true;
-        }
-
-        return false;
     }
 }

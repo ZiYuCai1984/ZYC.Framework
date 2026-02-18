@@ -3,11 +3,6 @@
                     xmlns:system="clr-namespace:System;assembly=System.Runtime"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
-
     <Style TargetType="TextBlock"
            BasedOn="{StaticResource MahApps.Styles.TextBlock}">
         <Setter Property="FontWeight" Value="SemiBold" />

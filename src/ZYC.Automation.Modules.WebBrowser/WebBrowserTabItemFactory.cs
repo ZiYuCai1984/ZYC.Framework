@@ -9,6 +9,8 @@ namespace ZYC.Automation.Modules.WebBrowser;
 [RegisterSingleInstance]
 internal class WebBrowserTabItemFactory : ITabItemFactory
 {
+    public int Priority => 0;
+
     public WebBrowserTabItemFactory(IWebBrowserUriPolicy webBrowserUriPolicy)
     {
         WebBrowserUriPolicy = webBrowserUriPolicy;

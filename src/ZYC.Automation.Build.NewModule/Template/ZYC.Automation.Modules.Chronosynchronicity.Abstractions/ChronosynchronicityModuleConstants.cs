@@ -1,15 +1,15 @@
-﻿using MahApps.Metro.IconPacks;
-using ZYC.Automation.Abstractions;
+﻿using ZYC.Automation.Abstractions;
 
-namespace ZYC.Automation.Build.NewModule.Template.ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
+// ReSharper disable once CheckNamespace
+namespace ZYC.Automation.Modules.Chronosynchronicity.Abstractions;
 
 public static class ChronosynchronicityModuleConstants
 {
-    public static string Host => "chronosynchronicity";
+    public const string Host = "chronosynchronicity";
 
-    public static string Title => "Chronosynchronicity";
+    public const string Title = "Chronosynchronicity";
 
-    public static string Icon => nameof(PackIconMaterialKind.Bug);
+    public const string Icon = "CreationOutline";
 
     public static Uri Uri => UriTools.CreateAppUri(Host);
 }

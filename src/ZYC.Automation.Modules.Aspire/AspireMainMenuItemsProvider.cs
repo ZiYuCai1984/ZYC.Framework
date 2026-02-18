@@ -22,7 +22,6 @@ internal class AspireMainMenuItemsProvider : MainMenuItemsProvider, IAspireMainM
     {
         Title = AspireModuleContansts.Title,
         Icon = AspireModuleContansts.Icon,
-        Anchor = MainMenuAnchors.Default,
         Localization = false
     };
 }

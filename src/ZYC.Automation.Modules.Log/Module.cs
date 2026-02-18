@@ -38,7 +38,7 @@ internal class Module : ModuleBase
 
     public override async Task LoadAsync(ILifetimeScope lifetimeScope)
     {
-        lifetimeScope.RegisterRootMainMenuItem<LogMainMenuItem>();
+        lifetimeScope.RegisterFileMainMenuItem<LogMainMenuItem>();
         await Task.CompletedTask;
     }
 }

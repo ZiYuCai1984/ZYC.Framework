@@ -9,6 +9,10 @@ public abstract class TabItemFactoryBase : ITabItemFactory
             .Cast<TabItemRouteAttribute>()
             .ToArray();
 
+    public virtual bool IsSingle => true;
+
+    public virtual int Priority => 0;
+
     public abstract Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context);
 
     public virtual Task<bool> CheckUriMatchedAsync(Uri uri)

@@ -15,7 +15,7 @@ internal class Module : ModuleBase
         var taskManager = lifetimeScope.Resolve<ITaskManager>();
         await taskManager.InitializeAsync(CancellationToken.None);
 
-        lifetimeScope.RegisterRootMainMenuItem<TaskManagerMainMenuItem>();
+        lifetimeScope.RegisterToolsMainMenuItem<TaskManagerMainMenuItem>();
 
         var tabItemFactoryManager = lifetimeScope.Resolve<ITabItemFactoryManager>();
         tabItemFactoryManager.RegisterFactory<TaskManagerTabItemFactory>();

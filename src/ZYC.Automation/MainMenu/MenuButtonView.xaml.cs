@@ -9,6 +9,7 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 namespace ZYC.Automation.MainMenu;
 
 [RegisterSingleInstance]
+[Obsolete]
 public sealed partial class MenuButtonView
 {
     public MenuButtonView(IMainMenuManager mainMenuManager, MainMenuConfig mainMenuConfig)

@@ -41,6 +41,12 @@ public class HybridIcon : ContentControl
         }
 
         var s = (e.NewValue.ToString() ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(s))
+        {
+            hybridIcon.SetFromMaterialIcon(DefaultIconKind);
+            return;
+        }
+
 
         // 1) Try Material icon name first
         if (Enum.TryParse<PackIconMaterialKind>(s, true, out var materialKind))

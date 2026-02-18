@@ -6,6 +6,7 @@
     <ProjectReference Include="..\ZYC.Automation.Modules.Translator.Abstractions\ZYC.Automation.Modules.Translator.Abstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="PropertyChanged.Fody" />
     <PackageReference Include="ZYC.CoreToolkit.Abstractions" />
   </ItemGroup>
 </Project>

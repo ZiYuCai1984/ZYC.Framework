@@ -12,9 +12,9 @@ internal class ToolsMainMenuItemsProvider : MainMenuItemsProvider, IToolsMainMen
     {
         Info = new MenuItemInfo
         {
-            Anchor = MainMenuAnchors.Tool,
             Title = "Tools",
-            Icon = "WrenchOutline"
+            Icon = null,
+            Priority = MainMenuPriority.Tools
         };
     }
 

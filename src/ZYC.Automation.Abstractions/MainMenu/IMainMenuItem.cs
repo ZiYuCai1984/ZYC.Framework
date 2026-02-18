@@ -10,11 +10,13 @@ public interface IMainMenuItem
 
     public string Title { get; }
 
-    public string Icon { get; }
+    public string? Icon { get; }
 
     public string Anchor { get; }
 
     public int Priority { get; }
 
     public bool Localization { get; }
+
+    public bool IsHidden { get; }
 }

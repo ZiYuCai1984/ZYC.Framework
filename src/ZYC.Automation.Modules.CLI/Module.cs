@@ -15,7 +15,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<CLITabItemFactory>();
-        lifetimeScope.RegisterRootMainMenuItem<CLIMainMenuItem>();
+        lifetimeScope.RegisterToolsMainMenuItem<CLIMainMenuItem>();
 
 
         var appContext = lifetimeScope.Resolve<IAppContext>();

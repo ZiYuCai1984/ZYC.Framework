@@ -1,8 +1,11 @@
-﻿namespace ZYC.Automation.Modules.Aspire.Abstractions;
+﻿using ZYC.Automation.Abstractions.MCP;
+
+namespace ZYC.Automation.Modules.Aspire.Abstractions;
 
 /// <summary>
 ///     Manages the Aspire service lifecycle and tool acquisition.
 /// </summary>
+[ExposeToMCP]
 public interface IAspireServiceManager
 {
     /// <summary>

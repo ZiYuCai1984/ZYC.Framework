@@ -14,7 +14,8 @@ internal class UserSettingsMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Icon = SettingsModuleConstants.Icon,
-            Title = SettingsModuleConstants.Title
+            Title = SettingsModuleConstants.Title,
+            Anchor = SettingMainMenuAnchors.Settings
         };
 
         Command = lifetimeScope.CreateNavigateCommand(SettingsModuleConstants.Uri);

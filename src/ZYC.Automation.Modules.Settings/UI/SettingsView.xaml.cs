@@ -176,6 +176,11 @@ internal partial class SettingsView : ISettingsView
     {
         var comboBox = (ComboBox)sender;
         var item = (SettingItem)comboBox.Tag;
+        //TODO-zyc Needs to be refactored!!
+        if (comboBox.SelectedItem == null || item == null)
+        {
+            return;
+        }
 
         item.ValueChangedCallbackAction.Invoke(item, comboBox.SelectedItem.ToString());
         e.Handled = true;
