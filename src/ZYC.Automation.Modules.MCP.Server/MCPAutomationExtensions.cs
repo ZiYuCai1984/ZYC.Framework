@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Autofac;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Namotion.Reflection;
@@ -12,6 +13,7 @@ public static class MCPAutoToolDiscoveryExtensions
 {
     public static IMcpServerBuilder AddAutoDiscoveredTools(
         this IMcpServerBuilder builder,
+        ILifetimeScope lifetimeScope,
         IEnumerable<Assembly>? assemblies = null)
     {
         assemblies ??= AppDomain.CurrentDomain
@@ -23,10 +25,10 @@ public static class MCPAutoToolDiscoveryExtensions
 
         foreach (var asm in assemblies)
         {
-            foreach (var itf in SafeGetTypes(asm)
+            foreach (var interfaceType in SafeGetTypes(asm)
                          .Where(t => t is { IsInterface: true, IsGenericTypeDefinition: false }))
             {
-                var interfaceAttr = itf.GetCustomAttribute<ExposeToMCPAttribute>(true);
+                var interfaceAttr = interfaceType.GetCustomAttribute<ExposeToMCPAttribute>(true);
                 if (interfaceAttr is null)
                 {
                     continue;
@@ -34,9 +36,9 @@ public static class MCPAutoToolDiscoveryExtensions
 
                 var interfacePrefix = !string.IsNullOrWhiteSpace(interfaceAttr.Name)
                     ? interfaceAttr.Name!
-                    : TrimInterfaceName(itf.Name);
+                    : TrimInterfaceName(interfaceType.Name);
 
-                foreach (var method in itf.GetMethods())
+                foreach (var method in interfaceType.GetMethods())
                 {
                     if (method.IsSpecialName)
                     {
@@ -73,12 +75,8 @@ public static class MCPAutoToolDiscoveryExtensions
                     };
 
 
-                    var interfaceType = itf;
-                    // ReSharper disable once ConvertToLocalFunction
-                    Func<RequestContext<CallToolRequestParams>, object> factory =
-                        ctx => ctx.Services!.GetRequiredService(interfaceType);
-
-                    var tool = McpServerTool.Create(method, factory, options);
+                    var target = lifetimeScope.Resolve(interfaceType);
+                    var tool = McpServerTool.Create(method, target, options);
 
                     if (requiresUIThread)
                     {

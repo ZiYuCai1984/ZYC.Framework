@@ -9,7 +9,7 @@ namespace ZYC.Automation.Abstractions.Tab;
 ///     handling navigation, lifecycle, and focus state.
 /// </summary>
 [ExposeToMCP(InvokeOnUIThread = true)]
-public interface ITabManager
+public partial interface ITabManager
 {
     /// <summary>
     ///     Gets the navigation state (e.g., history, current path) for a specific workspace.
@@ -26,25 +26,12 @@ public interface ITabManager
     ITabItemInstance? GetFocusedTabItemInstance(Guid workspaceId);
 
     /// <summary>
-    ///     Sets a specific tab item instance as the focused tab within a workspace.
-    /// </summary>
-    /// <param name="workspaceId">The unique identifier of the workspace.</param>
-    /// <param name="instance">The tab item instance to focus.</param>
-    void SetFocusedTabItemInstance(Guid workspaceId, ITabItemInstance? instance);
-
-    /// <summary>
     ///     Retrieves all tab item instances currently open in the specified workspace.
     /// </summary>
     /// <param name="workspaceId">The unique identifier of the workspace.</param>
     /// <returns>An array of tab item instances.</returns>
     ITabItemInstance[] GetTabItemInstances(Guid workspaceId);
 
-    /// <summary>
-    ///     Determines which workspace node a specific tab item instance belongs to.
-    /// </summary>
-    /// <param name="instance">The tab item instance to locate.</param>
-    /// <returns>The workspace node containing the instance.</returns>
-    WorkspaceNode GetTabItemInstanceWorkspace(ITabItemInstance instance);
 
     /// <summary>
     ///     Asynchronously navigates to the specified URI in the current active context.
@@ -79,14 +66,6 @@ public interface ITabManager
     }
 
     /// <summary>
-    ///     Moves a tab item instance from one workspace to another.
-    /// </summary>
-    /// <param name="instance">The tab item instance to move.</param>
-    /// <param name="from">The source workspace ID.</param>
-    /// <param name="to">The destination workspace ID.</param>
-    void MoveTabItemInstance(ITabItemInstance instance, Guid from, Guid to);
-
-    /// <summary>
     ///     Transfers all tab item instances from a source workspace to a destination workspace.
     /// </summary>
     /// <param name="from">The source workspace ID.</param>
@@ -113,19 +92,48 @@ public interface ITabManager
     Task ReloadAsync(Uri uri);
 
     /// <summary>
-    ///     Asynchronously closes a specific tab item instance.
-    /// </summary>
-    /// <param name="instance">The instance to be closed.</param>
-    Task CloseAsync(ITabItemInstance instance);
-
-    /// <summary>
     ///     Asynchronously closes all open tabs across all workspaces.
     /// </summary>
     Task CloseAllAsync();
+}
+
+public partial interface ITabManager
+{
+    /// <summary>
+    ///     Moves a tab item instance from one workspace to another.
+    /// </summary>
+    /// <param name="instance">The tab item instance to move.</param>
+    /// <param name="from">The source workspace ID.</param>
+    /// <param name="to">The destination workspace ID.</param>
+    [MCPIgnore]
+    void MoveTabItemInstance(ITabItemInstance instance, Guid from, Guid to);
+
+    /// <summary>
+    ///     Asynchronously closes a specific tab item instance.
+    /// </summary>
+    /// <param name="instance">The instance to be closed.</param>
+    [MCPIgnore]
+    Task CloseAsync(ITabItemInstance instance);
 
     /// <summary>
     ///     Asynchronously restores the manager's state (e.g., re-opening tabs from a previous session).
     /// </summary>
     [MCPIgnore]
     Task RestoreStateAsync();
+
+    /// <summary>
+    ///     Determines which workspace node a specific tab item instance belongs to.
+    /// </summary>
+    /// <param name="instance">The tab item instance to locate.</param>
+    /// <returns>The workspace node containing the instance.</returns>
+    [MCPIgnore]
+    WorkspaceNode GetTabItemInstanceWorkspace(ITabItemInstance instance);
+
+    /// <summary>
+    ///     Sets a specific tab item instance as the focused tab within a workspace.
+    /// </summary>
+    /// <param name="workspaceId">The unique identifier of the workspace.</param>
+    /// <param name="instance">The tab item instance to focus.</param>
+    [MCPIgnore]
+    void SetFocusedTabItemInstance(Guid workspaceId, ITabItemInstance? instance);
 }

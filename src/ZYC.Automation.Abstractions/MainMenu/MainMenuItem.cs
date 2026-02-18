@@ -46,4 +46,6 @@ public class MainMenuItem : IMainMenuItem
     public virtual int Priority => Info.Priority;
 
     public virtual bool Localization => Info.Localization;
+
+    public virtual bool IsHidden { get; set; }
 }

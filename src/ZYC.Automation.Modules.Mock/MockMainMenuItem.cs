@@ -33,4 +33,6 @@ internal class MockMainMenuItem : IMainMenuItem
     public int Priority => 0;
 
     public bool Localization => false;
+
+    public bool IsHidden => false;
 }

@@ -1,9 +1,12 @@
-﻿namespace ZYC.Automation.Abstractions;
+﻿using ZYC.Automation.Abstractions.MCP;
+
+namespace ZYC.Automation.Abstractions;
 
 /// <summary>
 ///     Provides application-level context services.
 /// </summary>
-public interface IAppContext
+[ExposeToMCP]
+public partial interface IAppContext
 {
     /// <summary>
     ///     Gets the current working directory.
@@ -80,6 +83,7 @@ public interface IAppContext
     /// <summary>
     ///     Exits the process using the standard application shutdown flow.
     /// </summary>
+    [ExposeToMCP(RequiresUIThread = true)]
     void ExitProcess();
 
     /// <summary>
@@ -100,17 +104,22 @@ public interface IAppContext
 
         return StartupTarget.Alternate;
     }
+}
 
+public partial interface IAppContext
+{
     /// <summary>
     ///     Gets the UI synchronization context.
     /// </summary>
     /// <returns>The UI synchronization context.</returns>
+    [MCPIgnore]
     SynchronizationContext GetUISynchronizationContext();
 
     /// <summary>
     ///     Executes an action on the UI thread.
     /// </summary>
     /// <param name="action">The action to execute.</param>
+    [MCPIgnore]
     void InvokeOnUIThread(Action action);
 
     /// <summary>
@@ -118,6 +127,7 @@ public interface IAppContext
     /// </summary>
     /// <param name="func">The async action to execute.</param>
     /// <returns>A task that completes when the action finishes.</returns>
+    [MCPIgnore]
     Task InvokeOnUIThreadAsync(Func<Task> func);
 
     /// <summary>
@@ -126,6 +136,7 @@ public interface IAppContext
     /// <typeparam name="T">The result type.</typeparam>
     /// <param name="func">The async function to execute.</param>
     /// <returns>A task that returns the function result.</returns>
+    [MCPIgnore]
     Task<T> InvokeOnUIThreadAsync<T>(Func<Task<T>> func);
 
     /// <summary>

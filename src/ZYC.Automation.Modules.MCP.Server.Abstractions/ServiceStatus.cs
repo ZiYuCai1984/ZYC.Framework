@@ -1,4 +1,4 @@
-﻿namespace ZYC.Automation.Modules.Aspire.Abstractions;
+﻿namespace ZYC.Automation.Modules.MCP.Server.Abstractions;
 
 /// <summary>
 ///     Represents the lifecycle state of the service.

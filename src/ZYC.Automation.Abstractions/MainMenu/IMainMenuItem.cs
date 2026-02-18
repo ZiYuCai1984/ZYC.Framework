@@ -17,4 +17,6 @@ public interface IMainMenuItem
     public int Priority { get; }
 
     public bool Localization { get; }
+
+    public bool IsHidden { get; }
 }

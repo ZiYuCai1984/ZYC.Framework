@@ -22,6 +22,8 @@
                    TargetType="MenuItem">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                <Setter Property="Visibility"
+                        Value="{Binding IsHidden,Converter={converters:BoolToVisibilityConverter Reverse=True}}" />
                 <Setter Property="Command"
                         Value="{Binding Command}" />
                 <Setter Property="Header">

@@ -12,18 +12,18 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 namespace ZYC.Automation.Modules.MCP.Server;
 
 [Register]
-public sealed class MCPServerHost : IDisposable
+public sealed class MCPServer : IAsyncDisposable
 {
     private WebApplication? _app;
 
-    public MCPServerHost(ILifetimeScope lifetimeScope)
+    public MCPServer(ILifetimeScope lifetimeScope)
     {
         LifetimeScope = lifetimeScope;
     }
 
     private ILifetimeScope LifetimeScope { get; }
 
-    public async void Dispose()
+    public async ValueTask DisposeAsync()
     {
         if (_app is null)
         {
@@ -32,15 +32,20 @@ public sealed class MCPServerHost : IDisposable
 
         await _app.StopAsync();
         await _app.DisposeAsync();
+
+        _app = null;
+    }
+
+    public async Task StopAsync()
+    {
+        await DisposeAsync();
     }
 
     public async Task StartAsync(Dispatcher dispatcher, int port)
     {
         var builder = WebApplication.CreateBuilder();
 
-
         builder.WebHost.UseUrls($"http://127.0.0.1:{port}");
-        builder.Services.AddSingleton<IUIDispatcher>(_ => new UIDispatcher(dispatcher));
         builder.Host.UseServiceProviderFactory(
             new AutofacChildScopeServiceProviderFactory(LifetimeScope));
 
@@ -63,7 +68,7 @@ public sealed class MCPServerHost : IDisposable
                 };
             })
             .WithHttpTransport()
-            .AddAutoDiscoveredTools();
+            .AddAutoDiscoveredTools(LifetimeScope);
 
 
         var app = builder.Build();

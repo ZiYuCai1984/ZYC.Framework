@@ -1,7 +1,7 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <V_ZYC_CoreToolkit>3.8.0</V_ZYC_CoreToolkit>
+    <V_ZYC_CoreToolkit>3.8.1</V_ZYC_CoreToolkit>
   </PropertyGroup>
 
   <!--!WARNING Referenced by <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />, so it cannot be placed in nuget.targets-->
