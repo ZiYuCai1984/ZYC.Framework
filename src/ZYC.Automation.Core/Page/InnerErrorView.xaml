@@ -15,14 +15,16 @@
             FontFamily="Consolas"
             x:Name="TextEditor"
             SyntaxHighlighting="Markdown"
-            IsReadOnly="True">
+            IsReadOnly="True"
+            WordWrap="{Binding ErrorViewWrapSwitchCommand.IsTextWrap}">
             <avalonEdit:TextEditor.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="{Binding ErrorViewWrapSwitchCommand.Text}"
+                              Command="{Binding ErrorViewWrapSwitchCommand}"/>
                     <MenuItem Header="Copy"
                               Command="{markupEx:LifetimeScopeResolve commands:CopyAndNotifyCommand}"
                               CommandParameter="{Binding PlacementTarget.SelectedText,
                                        RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-                    <!--CommandTarget="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"-->
                     <MenuItem Header="Copy All"
                               Command="{markupEx:LifetimeScopeResolve commands:CopyAndNotifyCommand}"
                               CommandParameter="{Binding Exception}" />
