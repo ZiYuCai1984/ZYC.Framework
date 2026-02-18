@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ZYC.Automation.Abstractions.Notification.Toast;
 using ZYC.Automation.Modules.MCP.Server.Abstractions;
 using ZYC.CoreToolkit;
 
@@ -19,8 +20,12 @@ internal partial class MCPServerStatusBarItemView : IMCPServerManager
             _ = MCPServer.StartAsync(Dispatcher, MCPServerConfig.Port);
 
             MCPServiceStatus = MCPServiceStatus.Running();
+
+            ToastManager.PromptMessage(new ToastMessage(
+                $"Running at http://localhost:{MCPServerConfig.Port}",
+                MCPServerModuleConstants.Icon, false));
         }
-        catch (Exception e)
+        catch (Exception _)
         {
             //ignore
         }

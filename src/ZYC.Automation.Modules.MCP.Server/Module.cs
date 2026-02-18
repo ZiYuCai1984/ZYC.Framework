@@ -13,7 +13,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterToolsMainMenuItem<IMCPServerMainMenuItemsProvider>();
-        lifetimeScope.RegisterDefaultStatucBarItem<MCPServerStatusBarItem>();
+        //lifetimeScope.RegisterDefaultStatucBarItem<MCPServerStatusBarItem>();
 
         return Task.CompletedTask;
     }

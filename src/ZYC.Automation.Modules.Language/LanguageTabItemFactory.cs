@@ -10,7 +10,6 @@ namespace ZYC.Automation.Modules.Language;
 [TabItemRoute(Host = LanguageModuleConstants.Host)]
 internal class LanguageTabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => true;
 
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
