@@ -10,8 +10,6 @@ namespace ZYC.Automation.Modules.Aspire;
 [TabItemRoute(Host = AspireModuleContansts.Host)]
 internal class AspireTabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => true;
-
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;

@@ -6,7 +6,5 @@ namespace ZYC.Automation.Abstractions.Config;
 [AddINotifyPropertyChangedInterface]
 public class WindowTitleConfig : IConfig
 {
-    public bool IsMachineNameVisible { get; set; } = true;
-
     public bool IsVisible { get; set; } = true;
 }
