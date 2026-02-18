@@ -28,15 +28,15 @@ public static class ProductInfo
     public static string Version => "1.0.6";
 
     /// <summary>
-    ///     Gets the copyright notice.
-    /// </summary>
-    public static string Copyright => CoreToolkit.Abstractions.ProductInfo.Copyright;
-
-    /// <summary>
     ///     Gets the product description.
     /// </summary>
     public static string Description =>
         "A highly extensible .NET WPF framework featuring Aspire integration and seamless Blazor interoperability for modern hybrid applications.";
+
+    /// <summary>
+    ///     Gets the copyright notice.
+    /// </summary>
+    public static string Copyright => CoreToolkit.Abstractions.ProductInfo.Copyright;
 
     /// <summary>
     ///     Gets the product author.

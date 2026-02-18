@@ -26,15 +26,17 @@ public abstract class MainMenuItemsProvider : IMainMenuItemsProvider
 
     public IMainMenuItem[] SubItems => _subItems.ToArray();
 
-    public string Title => Info.Title;
+    public virtual string Title => Info.Title;
 
-    public string Icon => Info.Icon;
+    public virtual string? Icon => Info.Icon;
 
     public string Anchor => Info.Anchor;
 
     public int Priority => Info.Priority;
 
     public bool Localization => Info.Localization;
+
+    public virtual bool IsHidden { get; set; }
 
     public void RegisterSubItem<T>() where T : IMainMenuItem
     {

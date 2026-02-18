@@ -15,8 +15,7 @@ internal class MarkdownViewerMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = MarkdownViewerModuleConstants.Title,
-            Icon = MarkdownViewerModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Default
+            Icon = MarkdownViewerModuleConstants.Icon
         };
 
         Command = lifetimeScope.CreateNavigateCommand(MarkdownViewerModuleConstants.Uri);

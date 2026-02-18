@@ -1,4 +1,5 @@
 ﻿using ZYC.Automation.Abstractions.MainMenu;
+using ZYC.Automation.Modules.Settings.Abstractions;
 using ZYC.Automation.Modules.Settings.Commands;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
@@ -14,6 +15,7 @@ internal class ResetAllMainMenuItem : MainMenuItem
         {
             Icon = "RestoreAlert",
             Title = "ResetAll",
+            Anchor = SettingMainMenuAnchors.Other,
             Priority = 10
         };
     }

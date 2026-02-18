@@ -7,25 +7,15 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 namespace ZYC.Automation.Modules.CLI;
 
 [RegisterSingleInstance]
-internal class CLITabItemFactory : ITabItemFactory
+[TabItemRoute(Host = CLIModuleConstants.Host)]
+internal class CLITabItemFactory : TabItemFactoryBase
 {
-    public bool IsSingle => false;
+    public override bool IsSingle => false;
 
-    public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
+    public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;
         return context.Resolve<CLITabItem>(
             new TypedParameter(typeof(TabReference), new TabReference(context.Uri)));
-    }
-
-    public async Task<bool> CheckUriMatchedAsync(Uri uri)
-    {
-        await Task.CompletedTask;
-        if (uri.Host == CLIModuleConstants.Host)
-        {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -24,43 +24,43 @@ internal class WorkspaceMenuManager : IWorkspaceMenuManager
             new WorkspaceMenuItem(
                 "Reset",
                 resetCommand,
-                PackIconMaterialKind.Reload.ToString()));
+                nameof(PackIconMaterialKind.Reload)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "ToggleOrientation",
                 toggleOrientationCommand,
-                PackIconMaterialKind.OrbitVariant.ToString()));
+                nameof(PackIconMaterialKind.OrbitVariant)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "Swap",
                 swapCommand,
-                PackIconMaterialKind.SwapHorizontal.ToString()));
+                nameof(PackIconMaterialKind.SwapHorizontal)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "Merge",
                 mergeCommand,
-                PackIconMaterialKind.FlipToFront.ToString()));
+                nameof(PackIconMaterialKind.FlipToFront)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "SplitVertical",
                 splitVerticalCommand,
-                PackIconMaterialKind.FlipVertical.ToString()));
+                nameof(PackIconMaterialKind.FlipVertical)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "SplitHorizontal",
                 splitHorizontalCommand,
-                PackIconMaterialKind.FlipHorizontal.ToString()));
+                nameof(PackIconMaterialKind.FlipHorizontal)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
                 "Focus",
                 focusedWorkspaceCommand,
-                PackIconMaterialKind.ImageFilterCenterFocus.ToString()));
+                nameof(PackIconMaterialKind.ImageFilterCenterFocus)));
     }
 
     private ILifetimeScope LifetimeScope { get; }

@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:core="clr-namespace:ZYC.Automation.Core;assembly=ZYC.Automation.Core"
-             xmlns:mainMenu="clr-namespace:ZYC.Automation.MainMenu"
              xmlns:windowTitle="clr-namespace:ZYC.Automation.WindowTitle"
              xmlns:workspace="clr-namespace:ZYC.Automation.Workspace"
              xmlns:statusBar="clr-namespace:ZYC.Automation.StatusBar"
@@ -20,17 +19,8 @@
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <core:Component Type="mainMenu:MenuButtonView" />
-                <core:Component Grid.Column="1"
-                                Type="windowTitle:WindowTitleView" />
-            </Grid>
+            <core:Component Type="windowTitle:WindowTitleView" />
             <Grid Grid.Row="1">
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />

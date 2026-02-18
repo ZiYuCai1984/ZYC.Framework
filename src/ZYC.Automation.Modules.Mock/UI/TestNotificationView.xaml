@@ -26,6 +26,8 @@
                     Content="Warn" />
             <Button Click="OnPromptToastErrorBtnClick"
                     Content="Error" />
+            <Button Click="OnDelayPromptToastBtnClick"
+                    Content="Delay" />
         </StackPanel>
     </ScrollViewer>
 

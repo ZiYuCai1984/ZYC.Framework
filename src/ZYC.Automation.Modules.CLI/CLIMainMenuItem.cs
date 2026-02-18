@@ -15,7 +15,6 @@ internal class CLIMainMenuItem : MainMenuItem
         {
             Title = CLIModuleConstants.DefaultTitle,
             Icon = CLIModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Default,
             Localization = false
         };
 

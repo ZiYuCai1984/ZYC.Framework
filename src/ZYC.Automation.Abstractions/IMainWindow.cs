@@ -1,9 +1,12 @@
-﻿namespace ZYC.Automation.Abstractions;
+﻿using ZYC.Automation.Abstractions.MCP;
+
+namespace ZYC.Automation.Abstractions;
 
 /// <summary>
 ///     Represents a main window abstraction for the application.
 /// </summary>
-public interface IMainWindow
+[ExposeToMCP(InvokeOnUIThread = true)]
+public partial interface IMainWindow
 {
     /// <summary>
     ///     Sets the window state.
@@ -22,17 +25,6 @@ public interface IMainWindow
     /// </summary>
     /// <param name="topmost">Whether the window should be topmost.</param>
     void SetTopmost(bool topmost);
-
-    /// <summary>
-    ///     Initiates a window drag move.
-    /// </summary>
-    void DragMove();
-
-    /// <summary>
-    ///     Initializes the main window content.
-    /// </summary>
-    /// <param name="content">The content to display.</param>
-    void InitContent(object content);
 
     /// <summary>
     ///     Shows the window.
@@ -79,10 +71,27 @@ public interface IMainWindow
     /// </summary>
     /// <param name="value">Whether to freeze the window.</param>
     void SetIsFrozen(bool value);
+}
+
+public partial interface IMainWindow
+{
+    /// <summary>
+    ///     Initiates a window drag move.
+    /// </summary>
+    [MCPIgnore]
+    void DragMove();
+
+    /// <summary>
+    ///     Initializes the main window content.
+    /// </summary>
+    /// <param name="content">The content to display.</param>
+    [MCPIgnore]
+    void InitContent(object content);
 
     /// <summary>
     ///     Gets the underlying main window instance.
     /// </summary>
     /// <returns>The main window instance.</returns>
+    [MCPIgnore]
     object GetMainWindow();
 }

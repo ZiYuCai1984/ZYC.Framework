@@ -45,6 +45,22 @@ public interface IUpdateManager
     /// </returns>
     Task<UpdateContext> DownloadProductAsync(NewProduct product, CancellationToken token);
 
+
+    /// <summary>
+    ///     Downloads the update payload for the specified product and updates the current context with download progress and
+    ///     results.
+    /// </summary>
+    /// <param name="product">
+    ///     The target product update to download.
+    /// </param>
+    /// <returns>
+    ///     A task that completes with the updated <see cref="UpdateContext" />.
+    /// </returns>
+    Task<UpdateContext> DownloadProductAsync(NewProduct product)
+    {
+        return DownloadProductAsync(product, CancellationToken.None);
+    }
+
     /// <summary>
     ///     Applies the specified product update (e.g., install/patch/replace) and updates the current context accordingly.
     /// </summary>

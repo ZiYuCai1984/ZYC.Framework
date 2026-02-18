@@ -9,7 +9,12 @@ public class PackIconMaterialConverter : ConverterBase
 {
     public override object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        var s = value?.ToString() ?? "";
+        if (value == null)
+        {
+            return null!;
+        }
+
+        var s = value.ToString()!;
         return PackIconMaterialTools.CreateIcon(s);
     }
 }

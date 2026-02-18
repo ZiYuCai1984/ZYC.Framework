@@ -18,7 +18,7 @@ using ZYC.CoreToolkit.Extensions.Settings;
 namespace ZYC.Automation;
 
 [RegisterSingleInstanceAs(typeof(AppContext), typeof(IAppContext))]
-internal partial class AppContext : Application, IAppContext
+internal partial class AppContext : IAppContext
 {
     public AppContext(
         AppState appState,
@@ -27,6 +27,8 @@ internal partial class AppContext : Application, IAppContext
         IAppLogger<AppContext> logger,
         AppConfig appConfig)
     {
+        InitializeComponent();
+
         AppState = appState;
         LifetimeScope = lifetimeScope;
         Modules = modules;

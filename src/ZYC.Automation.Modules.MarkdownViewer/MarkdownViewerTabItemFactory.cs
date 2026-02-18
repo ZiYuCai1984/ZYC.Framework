@@ -11,6 +11,8 @@ internal class MarkdownViewerTabItemFactory : ITabItemFactory
 {
     public bool IsSingle => false;
 
+    public int Priority => 0;
+
     public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {
         await Task.CompletedTask;

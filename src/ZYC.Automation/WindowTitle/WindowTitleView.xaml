@@ -7,8 +7,8 @@
              xmlns:converters="clr-namespace:ZYC.Automation.Core.Converters;assembly=ZYC.Automation.Core"
              xmlns:windowTitle="clr-namespace:ZYC.Automation.WindowTitle"
              xmlns:quickBar="clr-namespace:ZYC.Automation.Abstractions.QuickBar;assembly=ZYC.Automation.Abstractions"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:core="clr-namespace:ZYC.Automation.Core;assembly=ZYC.Automation.Core"
+             xmlns:mainMenu="clr-namespace:ZYC.Automation.MainMenu"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="OnWindowTitleViewLoaded"
@@ -16,21 +16,27 @@
              Visibility="{Binding WindowTitleConfig.IsVisible,Converter={converters:BoolToVisibilityConverter}}"
              Background="{DynamicResource MahApps.Brushes.Validation2}"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid Margin="2 0 0 0 ">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ItemsControl HorizontalAlignment="Left"
-                      x:Name="QuickMenuTitleItemsControl"
+        <core:Component Type="mainMenu:MainMenuView" />
+        <Grid Margin="2 0 0 0 "
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl HorizontalAlignment="Left"
                       ItemsSource="{Binding QuickMenuTitleItems, RelativeSource={RelativeSource AncestorType=windowTitle:WindowTitleView}}">
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type quickBar:QuickBarItemBase}">
-                    <Button Command="{Binding Command}"
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type quickBar:QuickBarItemBase}">
+                        <Button Command="{Binding Command}"
                             Background="Transparent"
                             BorderBrush="Transparent">
-                        <core:HybridIcon HorizontalAlignment="Center"
+                            <core:HybridIcon HorizontalAlignment="Center"
                                          VerticalAlignment="Center"
                                          HorizontalContentAlignment="Stretch"
                                          VerticalContentAlignment="Stretch"
@@ -38,31 +44,31 @@
                                          Height="16"
                                          FontSize="12"
                                          Icon="{Binding Icon}" />
-                    </Button>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type quickBar:QuickBarItemSeparator}">
-                    <Separator Width="20"
+                        </Button>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type quickBar:QuickBarItemSeparator}">
+                        <Separator Width="20"
                                Margin="8 0 ">
-                        <Separator.LayoutTransform>
-                            <TransformGroup>
-                                <TransformGroup.Children>
-                                    <TransformCollection>
-                                        <RotateTransform Angle="90" />
-                                    </TransformCollection>
-                                </TransformGroup.Children>
-                            </TransformGroup>
-                        </Separator.LayoutTransform>
-                    </Separator>
-                </DataTemplate>
-            </ItemsControl.Resources>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"
+                            <Separator.LayoutTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <TransformCollection>
+                                            <RotateTransform Angle="90" />
+                                        </TransformCollection>
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Separator.LayoutTransform>
+                        </Separator>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <Grid Grid.Column="0"
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <!--<Grid Grid.Column="0"
               Grid.ColumnSpan="3"
               VerticalAlignment="Center"
               HorizontalAlignment="Center"
@@ -74,24 +80,24 @@
                 <Run Text="{x:Static system:Environment.UserName}" />
                 <Run Text="]" />
             </TextBlock>
-        </Grid>
+        </Grid>-->
 
-        <ItemsControl Grid.Column="2"
+            <ItemsControl Grid.Column="2"
                       x:Name="ItemsControl">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-                    <Button Command="{Binding Command}"
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                        <Button Command="{Binding Command}"
                             Visibility="{Binding IsVisible,Converter={converters:BoolToVisibilityConverter}}"
                             Background="Transparent"
                             BorderBrush="Transparent">
-                        <core:HybridIcon Icon="{Binding Icon}"
+                            <core:HybridIcon Icon="{Binding Icon}"
                                          HorizontalContentAlignment="Stretch"
                                          VerticalContentAlignment="Stretch"
                                          HorizontalAlignment="Center"
@@ -99,10 +105,10 @@
                                          FontSize="12"
                                          Width="16"
                                          Height="16" />
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
-
 </UserControl>

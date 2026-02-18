@@ -10,25 +10,29 @@ namespace ZYC.Automation.Tab.BuildIn;
 [Register]
 internal class SimpleTabItemFactory : ITabItemFactory
 {
+    public int Priority => 0;
+
     public SimpleTabItemFactory(
         ILifetimeScope lifetimeScope,
         SimpleTabItemFactoryInfo tabItemFactoryInfo,
-        IMainMenuManager mainMenuManager)
+        IExtensionsMainMenuItemsProvider extensionsMainMenuItemsProvider)
     {
         LifetimeScope = lifetimeScope;
         TabItemFactoryInfo = tabItemFactoryInfo;
+        ExtensionsMainMenuItemsProvider = extensionsMainMenuItemsProvider;
 
-        mainMenuManager.RegisterItem(
+        ExtensionsMainMenuItemsProvider.RegisterSubItem(
             new MainMenuItem(
                 MainMenuItemInfo.Title,
                 MainMenuItemInfo.Icon,
                 lifetimeScope.CreateNavigateCommand(TabItemInfo.Uri),
-                MainMenuAnchors.Extension, MainMenuItemInfo.Localization));
+                "Simple", MainMenuItemInfo.Localization));
     }
 
     private ILifetimeScope LifetimeScope { get; }
 
     private SimpleTabItemFactoryInfo TabItemFactoryInfo { get; }
+    private IExtensionsMainMenuItemsProvider ExtensionsMainMenuItemsProvider { get; }
 
     private SimpleMainMenuItemInfo MainMenuItemInfo => TabItemFactoryInfo.MainMenuItemInfo;
 

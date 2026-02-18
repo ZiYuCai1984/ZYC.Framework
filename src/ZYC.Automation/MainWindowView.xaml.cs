@@ -14,7 +14,6 @@ namespace ZYC.Automation;
 internal partial class MainWindowView : IRootGrid
 {
     public MainWindowView(
-        IToastManager toastManager,
         ILifetimeScope lifetimeScope,
         TaskbarContextMenu taskbarContextMenu)
     {
@@ -22,12 +21,6 @@ internal partial class MainWindowView : IRootGrid
         TaskbarContextMenu = taskbarContextMenu;
 
         InitializeComponent();
-
-        if (!lifetimeScope.TryResolve<ISettingsManager>(out _))
-        {
-            toastManager.PromptMessage(
-                ToastMessage.Warn("Missing Settings module,some features don't work properly !!"));
-        }
     }
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Local
@@ -51,6 +44,13 @@ internal partial class MainWindowView : IRootGrid
         }
 
         FirstRending = false;
+
+        if (!LifetimeScope.TryResolve<ISettingsManager>(out _))
+        {
+            LifetimeScope.Resolve<IToastManager>().PromptMessage(
+                ToastMessage.Warn("Missing Settings module,some features don't work properly !!"));
+        }
+
 
         LifetimeScope.PublishEvent(new MainWindowLoadedEvent());
     }

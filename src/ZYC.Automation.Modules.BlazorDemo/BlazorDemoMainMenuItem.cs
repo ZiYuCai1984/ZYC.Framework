@@ -15,7 +15,6 @@ internal class BlazorDemoMainMenuItem : MainMenuItem
         {
             Title = BlazorDemoModuleConstants.Title,
             Icon = BlazorDemoModuleConstants.Icon,
-            Anchor = MainMenuAnchors.Default,
             Localization = false
         };
 

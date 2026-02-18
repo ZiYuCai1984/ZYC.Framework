@@ -7,6 +7,9 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
 namespace ZYC.Automation.Modules.Secrets;
 
+
+//TODO-zyc Pending move to extended modules
+
 [Register]
 internal class PasswordGeneratorTabItem : TabItemInstanceBase<PasswordGeneratorView>
 {
