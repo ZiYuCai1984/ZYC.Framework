@@ -12,13 +12,18 @@
                Title="{localizations:L Error}"
                DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <page:PageBase.HeaderAdditionContent>
-        <Grid HorizontalAlignment="Right"
-              VerticalAlignment="Center">
+        <StackPanel HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <buttons:IconButton Text="{Binding ErrorViewWrapSwitchCommand.Text}"
+                                Kind="Wrap"
+                                Command="{Binding ErrorViewWrapSwitchCommand}"
+                                Margin="0 0 8 0"/>
             <buttons:IconButton Text="Copy"
                                 Kind="ContentCopy"
                                 Command="{Binding CopyAndNotifyCommand}"
                                 CommandParameter="{Binding Exception}" />
-        </Grid>
+        </StackPanel>
     </page:PageBase.HeaderAdditionContent>
     <Grid Margin="0 8"
           x:Name="Grid" />

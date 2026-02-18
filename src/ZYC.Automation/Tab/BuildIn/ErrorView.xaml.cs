@@ -9,11 +9,16 @@ namespace ZYC.Automation.Tab.BuildIn;
 [RegisterAs(typeof(ErrorView), typeof(IErrorView))]
 internal partial class ErrorView : IErrorView
 {
-    public ErrorView(Exception exception, ILifetimeScope lifetimeScope, CopyAndNotifyCommand copyAndNotifyCommand)
+    public ErrorView(
+        Exception exception, 
+        ILifetimeScope lifetimeScope, 
+        CopyAndNotifyCommand copyAndNotifyCommand, 
+        ErrorViewWrapSwitchCommand errorViewWrapSwitchCommand)
     {
         Exception = exception;
         LifetimeScope = lifetimeScope;
         CopyAndNotifyCommand = copyAndNotifyCommand;
+        ErrorViewWrapSwitchCommand = errorViewWrapSwitchCommand;
 
         InitializeComponent();
     }
@@ -23,6 +28,8 @@ internal partial class ErrorView : IErrorView
     private ILifetimeScope LifetimeScope { get; }
 
     public CopyAndNotifyCommand CopyAndNotifyCommand { get; }
+
+    public ErrorViewWrapSwitchCommand ErrorViewWrapSwitchCommand { get; }
 
     protected override void InternalOnLoaded()
     {
