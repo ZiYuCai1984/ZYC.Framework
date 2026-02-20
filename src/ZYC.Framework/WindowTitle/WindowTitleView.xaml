@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="ZYC.Framework.WindowTitle.WindowTitleView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+             xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+             xmlns:mainMenu="clr-namespace:ZYC.Framework.MainMenu"
+             xmlns:windowTitle="clr-namespace:ZYC.Framework.WindowTitle"
+             xmlns:quickBar="clr-namespace:ZYC.Framework.Abstractions.QuickBar;assembly=ZYC.Framework.Abstractions"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="OnWindowTitleViewLoaded"
+             MouseDown="OnWindowTitleViewMouseDown"
+             Visibility="{Binding WindowTitleConfig.IsVisible,Converter={converters:BoolToVisibilityConverter}}"
+             Background="{DynamicResource MahApps.Brushes.Validation2}"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <core:Component Type="mainMenu:MainMenuView" />
+        <Grid Margin="2 0 0 0 "
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl HorizontalAlignment="Left"
+                          ItemsSource="{Binding QuickMenuTitleItems, RelativeSource={RelativeSource AncestorType=windowTitle:WindowTitleView}}">
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type quickBar:QuickBarItemBase}">
+                        <Button Command="{Binding Command}"
+                                Background="Transparent"
+                                BorderBrush="Transparent">
+                            <core:HybridIcon HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             HorizontalContentAlignment="Stretch"
+                                             VerticalContentAlignment="Stretch"
+                                             Width="16"
+                                             Height="16"
+                                             FontSize="12"
+                                             Icon="{Binding Icon}" />
+                        </Button>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type quickBar:QuickBarItemSeparator}">
+                        <Separator Width="20"
+                                   Margin="8 0 ">
+                            <Separator.LayoutTransform>
+                                <TransformGroup>
+                                    <TransformGroup.Children>
+                                        <TransformCollection>
+                                            <RotateTransform Angle="90" />
+                                        </TransformCollection>
+                                    </TransformGroup.Children>
+                                </TransformGroup>
+                            </Separator.LayoutTransform>
+                        </Separator>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <ItemsControl Grid.Column="2"
+                          x:Name="ItemsControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                        <Button Command="{Binding Command}"
+                                Visibility="{Binding IsVisible,Converter={converters:BoolToVisibilityConverter}}"
+                                Background="Transparent"
+                                BorderBrush="Transparent">
+                            <core:HybridIcon Icon="{Binding Icon}"
+                                             HorizontalContentAlignment="Stretch"
+                                             VerticalContentAlignment="Stretch"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             FontSize="12"
+                                             Width="16"
+                                             Height="16" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>

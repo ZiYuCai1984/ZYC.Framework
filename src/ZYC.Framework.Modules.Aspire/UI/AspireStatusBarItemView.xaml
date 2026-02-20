@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="ZYC.Framework.Modules.Aspire.UI.AspireStatusBarItemView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+             xmlns:bindings="clr-namespace:ZYC.Framework.Core.Bindings;assembly=ZYC.Framework.Core"
+             xmlns:ui="clr-namespace:ZYC.Framework.Modules.Aspire.UI"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/BottomRightDropDownButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <mah:DropDownButton
+        Background="Transparent"
+        BorderBrush="Transparent"
+        ItemsSource="{Binding MainMenuItems}">
+        <mah:DropDownButton.Content>
+            <StackPanel Orientation="Horizontal">
+                <core:HybridIcon HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Width="16"
+                                 Height="16"
+                                 Icon="{x:Static ui:AspireStatusBarItemView.Icon}" />
+                <TextBlock Text="{bindings:LBinding AspireServiceStatus.Status}"
+                           Margin="8 0 4 0"
+                           FontWeight="SemiBold" />
+            </StackPanel>
+        </mah:DropDownButton.Content>
+        <mah:DropDownButton.ItemContainerStyle>
+            <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}"
+                   TargetType="{x:Type MenuItem}">
+                <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                <Setter Property="Icon"
+                        Value="{Binding Icon,Converter={converters:HybridIconConverter}}" />
+                <Setter Property="Command" Value="{Binding  Command}" />
+                <Setter Property="Header">
+                    <Setter.Value>
+                        <MultiBinding Converter="{converters:LocalizationMultiConverter}">
+                            <Binding Path="Title" />
+                            <Binding Path="Localization" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </mah:DropDownButton.ItemContainerStyle>
+    </mah:DropDownButton>
+
+</UserControl>

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ZYC.Framework.Modules.TaskManager.UI.TaskManagerStatusBarItemView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands;assembly=ZYC.Framework.Core"
+             xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Button Background="Transparent"
+            BorderBrush="Transparent"
+            Command="{markupEx:LifetimeScopeResolve commands:NavigateCommand}"
+            CommandParameter="{Binding Uri}">
+        <mah:Badged Badge="{Binding RunningTaskNum}"
+                    BadgePlacementMode="TopLeft">
+            <iconPacks:PackIconMaterial Kind="DnsOutline"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Width="16"
+                                        Height="16" />
+        </mah:Badged>
+    </Button>
+</UserControl>

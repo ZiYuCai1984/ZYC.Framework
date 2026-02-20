@@ -1,1 +1,1 @@
-dotnet run --project src/ZYC.Automation.Build.NuGet/ZYC.Automation.Build.NuGet.csproj -c release
+dotnet run --project src/ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj -c release

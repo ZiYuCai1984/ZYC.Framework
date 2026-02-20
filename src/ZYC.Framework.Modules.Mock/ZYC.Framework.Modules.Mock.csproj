@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+    <PackageReference Include="MahApps.Metro" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Aspire.Abstractions\ZYC.Framework.Modules.Aspire.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Language.Abstractions\ZYC.Framework.Modules.Language.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Mock.Abstractions\ZYC.Framework.Modules.Mock.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Secrets.Abstractions\ZYC.Framework.Modules.Secrets.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.TaskManager.Abstractions\ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Thirdparty\ZYC.MdXaml\ZYC.MdXaml.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.NuGet.Abstractions\ZYC.Framework.Modules.NuGet.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.TaskManager.Abstractions\ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="NuGet.Frameworks" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

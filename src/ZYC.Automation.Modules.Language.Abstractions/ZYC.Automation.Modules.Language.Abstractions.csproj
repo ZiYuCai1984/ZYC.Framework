@@ -1,6 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\ZYC.Automation.Abstractions\ZYC.Automation.Abstractions.csproj" />
-    <ProjectReference Include="..\ZYC.Automation.Modules.Translator.Abstractions\ZYC.Automation.Modules.Translator.Abstractions.csproj" />
-  </ItemGroup>
-</Project>

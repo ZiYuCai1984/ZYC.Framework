@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableWpf>false</EnableWpf>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <OutputPath>../_bin_build</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tools.InnoSetup" />
+    <PackageReference Include="ZYC.CoreToolkit" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="packages\**\*.*" />
+    <None Include="packages\**\*.*" />
+  </ItemGroup>
+
+</Project>

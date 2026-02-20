@@ -1,0 +1,22 @@
+﻿<page:PageBase x:Class="ZYC.Framework.Modules.Language.UI.LanguageView"
+               x:ClassModifier="internal"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
+               xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
+               xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
+               xmlns:abstractions="clr-namespace:ZYC.Framework.Modules.Translator.Abstractions;assembly=ZYC.Framework.Modules.Translator.Abstractions"
+               mc:Ignorable="d"
+               d:DesignHeight="450" d:DesignWidth="800"
+               Title="{localizations:L Language}"
+               DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <StackPanel>
+        <TextBlock Text="{localizations:L Select language}"
+                   Margin="0 8 0 0" />
+        <ComboBox Margin="0 8 0 0"
+                  SelectedItem="{Binding LanguageType}"
+                  ItemsSource="{markupEx:EnumBindingSource {x:Type abstractions:LanguageType}}" />
+    </StackPanel>
+</page:PageBase>

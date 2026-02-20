@@ -1,1 +1,1 @@
-dotnet run --project src/ZYC.Automation.Build.InnoSetup/ZYC.Automation.Build.InnoSetup.csproj -c release
+dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c release

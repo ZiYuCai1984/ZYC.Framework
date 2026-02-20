@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="ZYC.Framework.Modules.Mock.UI.TestWorkspaceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:commands="clr-namespace:ZYC.Framework.Modules.Mock.Commands"
+             xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MockResourceDictionary.xaml" />
+                <ResourceDictionary>
+                    <x:Array x:Key="NumItems" Type="{x:Type system:Int32}">
+                        <system:Int32>1</system:Int32>
+                        <system:Int32>2</system:Int32>
+                        <system:Int32>3</system:Int32>
+                        <system:Int32>4</system:Int32>
+                        <system:Int32>5</system:Int32>
+                        <system:Int32>6</system:Int32>
+                        <system:Int32>7</system:Int32>
+                        <system:Int32>15</system:Int32>
+                    </x:Array>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock Text="Merge all workspace" />
+            <Button Content="Merge all workspace"
+                    Command="{markupEx:LifetimeScopeResolve commands:MergeAllWorkspaceCommand}" />
+
+
+            <TextBlock Text="Create Workspace(Balanced)" />
+            <ItemsControl ItemsSource="{StaticResource NumItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CommandParameter="{Binding}">
+                            <Button.Command>
+                                <markupEx:LifetimeScopeResolve Type="{x:Type commands:CreateWorkspaceCommand}">
+                                    <markupEx:LifetimeScopeResolve.Parameters>
+                                        <markupEx:AutofacCtorParam Type="{x:Type commands:CreateWorkspaceOptions}"
+                                                                   Value="{x:Static commands:CreateWorkspaceOptions.Balanced}" />
+                                    </markupEx:LifetimeScopeResolve.Parameters>
+                                </markupEx:LifetimeScopeResolve>
+                            </Button.Command>
+                            <TextBlock Text="{Binding }"
+                                       Margin="0" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <TextBlock Text="Create Workspace(Recursive)" />
+            <ItemsControl ItemsSource="{StaticResource NumItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                CommandParameter="{Binding}">
+                            <Button.Command>
+                                <markupEx:LifetimeScopeResolve Type="{x:Type commands:CreateWorkspaceCommand}">
+                                    <markupEx:LifetimeScopeResolve.Parameters>
+                                        <markupEx:AutofacCtorParam Type="{x:Type commands:CreateWorkspaceOptions}"
+                                                                   Value="{x:Static commands:CreateWorkspaceOptions.Recursive}" />
+                                    </markupEx:LifetimeScopeResolve.Parameters>
+                                </markupEx:LifetimeScopeResolve>
+                            </Button.Command>
+                            <TextBlock Text="{Binding }"
+                                       Margin="0" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <TextBlock Text="Create Workspace(Horizontal)" />
+            <ItemsControl ItemsSource="{StaticResource NumItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CommandParameter="{Binding}">
+                            <Button.Command>
+                                <markupEx:LifetimeScopeResolve Type="{x:Type commands:CreateWorkspaceCommand}">
+                                    <markupEx:LifetimeScopeResolve.Parameters>
+                                        <markupEx:AutofacCtorParam Type="{x:Type commands:CreateWorkspaceOptions}"
+                                                                   Value="{x:Static commands:CreateWorkspaceOptions.Horizontal}" />
+                                    </markupEx:LifetimeScopeResolve.Parameters>
+                                </markupEx:LifetimeScopeResolve>
+                            </Button.Command>
+                            <TextBlock Text="{Binding }"
+                                       Margin="0" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <TextBlock Text="Create Workspace(Vertical)" />
+            <ItemsControl ItemsSource="{StaticResource NumItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CommandParameter="{Binding}">
+                            <Button.Command>
+                                <markupEx:LifetimeScopeResolve Type="{x:Type commands:CreateWorkspaceCommand}">
+                                    <markupEx:LifetimeScopeResolve.Parameters>
+                                        <markupEx:AutofacCtorParam Type="{x:Type commands:CreateWorkspaceOptions}"
+                                                                   Value="{x:Static commands:CreateWorkspaceOptions.Vertical}" />
+                                    </markupEx:LifetimeScopeResolve.Parameters>
+                                </markupEx:LifetimeScopeResolve>
+                            </Button.Command>
+                            <TextBlock Text="{Binding }"
+                                       Margin="0" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+
+    </ScrollViewer>
+</UserControl>

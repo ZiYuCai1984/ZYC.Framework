@@ -1,0 +1,7 @@
+﻿@using ZYC.Framework.Modules.BlazorDemo.Components.Layout
+<Router AppAssembly="typeof(Module).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)"/>
+        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+    </Found>
+</Router>
