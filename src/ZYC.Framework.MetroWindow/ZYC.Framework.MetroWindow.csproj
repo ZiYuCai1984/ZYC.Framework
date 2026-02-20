@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+  </ItemGroup>
+</Project>

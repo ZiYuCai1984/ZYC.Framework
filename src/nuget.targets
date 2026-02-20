@@ -102,7 +102,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="WPFHexaEditor" Version="2.1.7" />
+    <PackageReference Update="WPFHexaEditor" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -147,10 +147,12 @@
     <PackageReference Update="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="ModelContextProtocol.AspNetCore" Version="0.8.0-preview.1" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Update="ModelContextProtocol.AspNetCore" Version="0.8.0-preview.1" />
+    <PackageReference Update="Namotion.Reflection" Version="3.4.3" />
   </ItemGroup>
 
 </Project>

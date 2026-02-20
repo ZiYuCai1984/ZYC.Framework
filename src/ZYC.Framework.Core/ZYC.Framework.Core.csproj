@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" />
+    <PackageReference Include="ZYC.CoreToolkit" />
+    <PackageReference Include="AvalonEdit" />
+    <PackageReference Include="Emoji.Wpf" />
+    <PackageReference Include="System.Reactive" />
+    <PackageReference Include="SharpVectors" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

@@ -10,6 +10,7 @@
     <NoWarn>$(NoWarn);NETSDK1206</NoWarn>
     <NoWarn>$(NoWarn);CSS102</NoWarn>
     <NoWarn>$(NoWarn);CS8620</NoWarn>
+    <NoWarn>$(NoWarn);NETSDK1057</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

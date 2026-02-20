@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <EnableWpf>false</EnableWpf>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <OutputPath>../_bin_build</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="SharedSources\**\*.*" />
+    <None Include="SharedSources\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.NuGet.Abstractions\ZYC.Framework.Modules.NuGet.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

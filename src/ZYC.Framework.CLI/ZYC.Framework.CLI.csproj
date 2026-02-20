@@ -1,0 +1,47 @@
+﻿<Project>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+
+    
+  <PropertyGroup>
+    <!--!WARNING Since other modules depend on wpf, this is the only way here-->
+    <EnableWpf>true</EnableWpf>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!--!WARNING For debug-->
+    <!--<OutputPath>../_bin_dotnettool</OutputPath>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="DotnetToolSettings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="ZYC.CoreToolkit" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Settings" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>zyc</ToolCommandName>
+  </PropertyGroup>
+
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <!--!WARNING Bypass verification by manually importing the SDK -->
+  <Target Name="_PackToolValidation" Condition="'$(PackAsTool)' == 'true'" />
+
+</Project>

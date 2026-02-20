@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\ZYC.Automation.Abstractions\ZYC.Automation.Abstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ZYC.CoreToolkit.Abstractions" />
-  </ItemGroup>
-</Project>

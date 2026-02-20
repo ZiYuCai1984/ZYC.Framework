@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />
+
+
+  <PropertyGroup>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>5cd4c3bf-cddc-4cf4-80a1-7d64205a734e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" IsAspireProjectResource="false" />
+    <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" IsAspireProjectResource="false" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Aspire.Abstractions\ZYC.Framework.Modules.Aspire.Abstractions.csproj" IsAspireProjectResource="false" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.Settings.Abstractions\ZYC.Framework.Modules.Settings.Abstractions.csproj" IsAspireProjectResource="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+</Project>
