@@ -7,23 +7,23 @@
 </p>
 
 <p align="center">
-  <img src="./docs/images/app.png" alt="ZYC.Automation Logo" width="120" />
+  <img src="./docs/images/app.png" alt="ZYC.Framework Logo" width="120" />
 </p>
 
-<h1 align="center">ZYC.Automation</h1>
+<h1 align="center">ZYC.Framework</h1>
 
 <p align="center">
   A high-performance, modular, and extensible desktop automation framework built with <b>.NET 10</b> and <b>WPF</b>.
 </p>
 
 <p align="center">
-  <a href="https://www.nuget.org/packages/ZYC.Automation.Alpha">
-    <img src="https://img.shields.io/nuget/v/ZYC.Automation.Alpha?include_prereleases=true&logo=nuget" alt="NuGet Version" />
+  <a href="https://www.nuget.org/packages/ZYC.Framework.Alpha">
+    <img src="https://img.shields.io/nuget/v/ZYC.Framework.Alpha?include_prereleases=true&logo=nuget" alt="NuGet Version" />
   </a>
-  <a href="https://www.nuget.org/packages/ZYC.Automation.Alpha">
-    <img src="https://img.shields.io/nuget/dt/ZYC.Automation.Alpha?logo=nuget&label=Downloads" alt="NuGet Downloads" />
+  <a href="https://www.nuget.org/packages/ZYC.Framework.Alpha">
+    <img src="https://img.shields.io/nuget/dt/ZYC.Framework.Alpha?logo=nuget&label=Downloads" alt="NuGet Downloads" />
   </a>
-  <a href="https://raw.githubusercontent.com/ZiYuCai1984/Temp/refs/heads/main/ZYC.Automation.Setup.exe">
+  <a href="https://raw.githubusercontent.com/ZiYuCai1984/Temp/refs/heads/main/ZYC.Framework.Setup.exe">
     <img src="https://img.shields.io/badge/Download-Setup-blue?logo=windows&logoColor=white&label=Download%20Demo%20Installer" alt="Download Demo Installer" />
   </a>
   <img src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white" alt=".NET 10" />
@@ -32,11 +32,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ZiYuCai1984/ZYC.Automation/actions/workflows/publish-nuget-manual.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Automation/publish-nuget-manual.yml?branch=main&label=build&logo=github" alt="NuGet manual workflow" />
+  <a href="https://github.com/ZiYuCai1984/ZYC.Framework/actions/workflows/publish-nuget-manual.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-manual.yml?branch=main&label=build&logo=github" alt="NuGet manual workflow" />
   </a>
-  <a href="https://github.com/ZiYuCai1984/ZYC.Automation/actions/workflows/publish-nuget-nightly.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Automation/publish-nuget-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="NuGet nightly workflow" />
+  <a href="https://github.com/ZiYuCai1984/ZYC.Framework/actions/workflows/publish-nuget-nightly.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="NuGet nightly workflow" />
   </a>
 </p>
 
@@ -44,7 +44,7 @@
 
 ## 📖 Overview
 
-**ZYC.Automation** is a modern desktop automation solution that combines the expressive UI capabilities of **WPF** with the latest features of **.NET 10**. It is designed to simplify the development of complex automation systems through a modular architecture.
+**ZYC.Framework** is a modern desktop automation solution that combines the expressive UI capabilities of **WPF** with the latest features of **.NET 10**. It is designed to simplify the development of complex automation systems through a modular architecture.
 
 The project deeply integrates **.NET Aspire** for distributed application orchestration, and supports a hybrid approach with **Blazor** and **WebView2**, so you can choose between a Web-based UI and a native desktop experience as needed.
 
@@ -136,7 +136,7 @@ Please refer to the detailed guide:
 Install the core package via NuGet:
 
 ```bash
-dotnet add package ZYC.Automation.Alpha --version [version]
+dotnet add package ZYC.Framework.Alpha --version [version]
 ````
 
 ---
@@ -144,37 +144,37 @@ dotnet add package ZYC.Automation.Alpha --version [version]
 ## 🏗️ Project Structure
 
 ```text
-ZYC.Automation
+ZYC.Framework
 ├── src
-│   ├── ZYC.Automation                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Automation.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Automation.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Automation.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Automation.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Automation.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Automation.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Automation.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Automation.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Automation.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Automation.Modules.*               # Feature modules
-│   │   ├── ZYC.Automation.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Automation.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Automation.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Automation.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Automation.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Automation.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Automation.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Automation.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Automation.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Automation.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Automation.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Automation.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Automation.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Automation.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Automation.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Automation.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                           # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Automation.Terminal           # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
+│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
+│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
+│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
+│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
+│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
+│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
+│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
+│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
+│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
+│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
+│   ├── ZYC.Framework.Modules.*               # Feature modules
+│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
+│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
+│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
+│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
+│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
+│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
+│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
+│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
+│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
+│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
+│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
+│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
+│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
+│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
+│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
+│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
+│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
+│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
 │       ├── ZYC.MdXaml                        # Markdown renderer + extensions
 │       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
 ```

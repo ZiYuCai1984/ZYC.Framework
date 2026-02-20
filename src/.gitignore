@@ -18,11 +18,11 @@ temp/
 
 logs/
 
-ZYC.Automation.Alpha/
+ZYC.Framework.Alpha/
 
 
-ZYC.Automation.Modules.AAA/
-ZYC.Automation.Modules.AAA.Abstractions/
+ZYC.Framework.Modules.AAA/
+ZYC.Framework.Modules.AAA.Abstractions/
 
 
 db/

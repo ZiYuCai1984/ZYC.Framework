@@ -1,17 +1,17 @@
-# 🚀 Quick Start: Getting Started with ZYC.Automation Host
+# 🚀 Quick Start: Getting Started with ZYC.Framework Host
 
-This guide will walk you through creating a **ZYC.Automation Host** project from scratch. You will learn how to integrate the framework via NuGet and use the modular system (Module + UserControl) to mount your custom UI into the host environment. 🛠️
+This guide will walk you through creating a **ZYC.Framework Host** project from scratch. You will learn how to integrate the framework via NuGet and use the modular system (Module + UserControl) to mount your custom UI into the host environment. 🛠️
 
 ---
 
 ## 1. 🧱 Project Setup & Prerequisites
 
 1. **Create Project**: Create a new **WPF Application** targeting **.NET 10** (e.g., name it `WpfApp1`). ✨
-2. **Add NuGet Package**: Install the core framework package `ZYC.Automation.Alpha` via NuGet Package Manager. 📦
+2. **Add NuGet Package**: Install the core framework package `ZYC.Framework.Alpha` via NuGet Package Manager. 📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Automation.Alpha" Version="1.0.1" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.0." />
 </ItemGroup>
 ```
 
@@ -33,8 +33,8 @@ To ensure the host correctly identifies and loads the abstraction interfaces, ma
 
 ```xml
 <ItemGroup>
-  <Reference Include="ZYC.Automation.Abstractions">
-    <HintPath>$(OutputPath)ZYC.Automation.Abstractions.dll</HintPath>
+  <Reference Include="ZYC.Framework.Abstractions">
+    <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
   </Reference>
 </ItemGroup>
 ```
@@ -47,7 +47,7 @@ Create a `Module.cs` file in your project root. This class acts as the "brain" o
 
 ```csharp
 using Autofac;
-using ZYC.Automation.Abstractions.Tab;
+using ZYC.Framework.Abstractions.Tab;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac;
 

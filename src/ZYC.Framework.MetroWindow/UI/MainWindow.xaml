@@ -1,0 +1,40 @@
+﻿<!-- ReSharper disable once Xaml.PathError -->
+<mah:MetroWindow x:Class="ZYC.Framework.MetroWindow.UI.MainWindow"
+                 x:ClassModifier="internal"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+                 xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+                 xmlns:controlzex="urn:controlzex"
+                 mc:Ignorable="d"
+                 Title="{Binding AppConfig.Title,ElementName=Root}"
+                 MinHeight="{Binding AppConfig.MinHeight,ElementName=Root}"
+                 MinWidth="{Binding AppConfig.MinWidth,ElementName=Root}"
+                 Height="{Binding DesktopWindowStateHeightValue,Mode=TwoWay,ElementName=Root}"
+                 Width="{Binding DesktopWindowStateWidthValue,Mode=TwoWay,ElementName=Root}"
+                 Left="{Binding DesktopWindowState.Left,Mode=TwoWay,ElementName=Root}"
+                 Top="{Binding DesktopWindowState.Top,Mode=TwoWay,ElementName=Root}"
+                 Topmost="{Binding DesktopWindowState.Topmost,Mode=TwoWay,ElementName=Root}"
+                 IsEnabled="{Binding DesktopWindowState.IsFrozen,Mode=TwoWay,Converter={converters:BoolInvertConverter},ElementName=Root}"
+                 WindowState="{Binding WindowStateValue,Mode=TwoWay,ElementName=Root}"
+                 ShowInTaskbar="{Binding AppConfig.ShowInTaskbar,ElementName=Root}"
+                 ShowIconOnTitleBar="False"
+                 TitleBarHeight="0"
+                 BorderThickness="1"
+                 SnapsToDevicePixels="True"
+                 Icon="{x:Static core:IconTools.IconImageSource}"
+                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 x:Name="Root"
+                 DataContext="{Binding RelativeSource={RelativeSource Self},Path=LifetimeScope}"
+                 Loaded="OnMainWindowLoaded">
+    <mah:MetroWindow.CornerPreference>
+        <MultiBinding Converter="{converters:EnumForceConverter}">
+            <Binding Path="AppConfig.CornerPreference"
+                     ElementName="Root" />
+            <Binding Source="{x:Type controlzex:WindowCornerPreference}" />
+        </MultiBinding>
+    </mah:MetroWindow.CornerPreference>
+</mah:MetroWindow>

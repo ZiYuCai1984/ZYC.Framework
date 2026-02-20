@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<DotNetCliTool Version="1">
-  <Commands>
-    <Command Name="zyc" EntryPoint="ZYC.Automation.CLI.dll" Runner="dotnet" />
-  </Commands>
-</DotNetCliTool>

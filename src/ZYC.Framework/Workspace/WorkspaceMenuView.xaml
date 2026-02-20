@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="ZYC.Framework.Workspace.WorkspaceMenuView"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+             xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="OnWorkspaceMenuViewLoaded"
+             x:Name="Root"
+             Visibility="{Binding IsWorkspaceMenuVisible,Converter={converters:BoolToVisibilityConverter}}"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <mah:DropDownButton BorderBrush="Transparent"
+                        ItemsSource="{Binding WorkspaceMenuItems}"
+                        Padding="0"
+                        Click="OnDropDownButtonClick">
+        <mah:DropDownButton.Content>
+            <wpf:TextBlock FontSize="16"
+                           Margin="0 0 1 3"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Text="{Binding WorkspaceNode.Index,Converter={converters:DigitsToEmojiConverter}}" />
+        </mah:DropDownButton.Content>
+        <mah:DropDownButton.ItemContainerStyle>
+            <Style BasedOn="{StaticResource {x:Type MenuItem}}"
+                   TargetType="{x:Type MenuItem}">
+                <Setter Property="Icon"
+                        Value="{Binding Icon,Converter={converters:PackIconMaterialConverter}}" />
+                <Setter Property="Command" Value="{Binding  Command}" />
+                <Setter Property="CommandParameter"
+                        Value="{Binding DataContext.WorkspaceNode,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Setter Property="Header">
+                    <Setter.Value>
+                        <MultiBinding Converter="{converters:LocalizationMultiConverter}">
+                            <Binding Path="Title" />
+                            <Binding Path="Localization" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </mah:DropDownButton.ItemContainerStyle>
+    </mah:DropDownButton>
+</UserControl>

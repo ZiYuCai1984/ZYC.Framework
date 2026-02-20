@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <EnableWpf>false</EnableWpf>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <OutputPath>../_bin_build</OutputPath>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="Template\ZYC.Framework.Modules.Chronosynchronicity.Abstractions\ZYC.Framework.Modules.Chronosynchronicity.Abstractions.csproj" />
+    <None Include="Template\ZYC.Framework.Modules.Chronosynchronicity\ZYC.Framework.Modules.Chronosynchronicity.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+  </ItemGroup>
+
+</Project>

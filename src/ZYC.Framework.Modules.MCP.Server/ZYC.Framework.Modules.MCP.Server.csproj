@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.MCP.Server.Abstractions\ZYC.Framework.Modules.MCP.Server.Abstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="Namotion.Reflection" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+    <PackageReference Include="ModelContextProtocol.AspNetCore" />    
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

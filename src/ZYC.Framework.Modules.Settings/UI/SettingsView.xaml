@@ -1,0 +1,173 @@
+﻿<page:PageBase x:Class="ZYC.Framework.Modules.Settings.UI.SettingsView"
+               x:ClassModifier="internal"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
+               xmlns:system="clr-namespace:System;assembly=System.Runtime"
+               xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+               xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+               xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+               xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
+               xmlns:bindings="clr-namespace:ZYC.Framework.Core.Bindings;assembly=ZYC.Framework.Core"
+               xmlns:abstractions="clr-namespace:ZYC.Framework.Modules.Settings.Abstractions;assembly=ZYC.Framework.Modules.Settings.Abstractions"
+               xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+               xmlns:ui="clr-namespace:ZYC.Framework.Modules.Settings.UI"
+               mc:Ignorable="d"
+               d:DesignHeight="450"
+               d:DesignWidth="800"
+               Title="{localizations:L Settings}"
+               DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <page:PageBase.HeaderAdditionContent>
+        <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                 Width="256"
+                 Height="24"
+                 HorizontalAlignment="Right"
+                 mah:TextBoxHelper.Watermark="{localizations:L Search config}"
+                 Style="{DynamicResource MahApps.Styles.TextBox.Search}" />
+    </page:PageBase.HeaderAdditionContent>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Margin="0 8 0 0">
+            <ItemsControl x:Name="ItemsControl"
+                          ItemsSource="{Binding SettingGroupsCollectionView}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                            <wpf:TextBlock VerticalAlignment="Center"
+                                           FontWeight="SemiBold">
+                                <Run Text="{Binding Name,Mode=OneWay}" />
+                            </wpf:TextBlock>
+                            <ItemsControl ItemsSource="{Binding SettingItems}"
+                                          Margin="16 8">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="8"
+                                                        VerticalAlignment="Center"
+                                                        Background="Transparent"
+                                                        ToolTip="{bindings:LBinding Description}">
+                                                <wpf:TextBlock Text="{Binding Name}"
+                                                               Margin="0 0 8 0"
+                                                               VerticalAlignment="Center" />
+                                            </StackPanel>
+                                            <ContentPresenter Content="{Binding Value}"
+                                                              Margin="8">
+                                                <ContentPresenter.Resources>
+                                                    <DataTemplate DataType="{x:Type system:Boolean}">
+                                                        <mah:ToggleSwitch IsOn="{Binding .}"
+                                                                          Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                                          Toggled="OnSwitchToggled" />
+                                                    </DataTemplate>
+
+                                                    <DataTemplate DataType="{x:Type abstractions:MultilineText}">
+                                                        <TextBox Text="{Binding Text,Mode=OneWay}"
+                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                                 LostFocus="OnTextBoxLostFocus"
+                                                                 KeyDown="OnTextBoxKeyDown"
+                                                                 Height="128"
+                                                                 MinHeight="128"
+                                                                 VerticalScrollBarVisibility="Visible"
+                                                                 HorizontalScrollBarVisibility="Disabled"
+                                                                 TextWrapping="Wrap"
+                                                                 AutoWordSelection="True" />
+                                                    </DataTemplate>
+
+                                                    <DataTemplate DataType="{x:Type system:String}">
+                                                        <TextBox Text="{Binding .}"
+                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                                 LostFocus="OnTextBoxLostFocus"
+                                                                 KeyDown="OnTextBoxKeyDown" />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type system:Int32}">
+                                                        <TextBox Text="{Binding .}"
+                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                                 LostFocus="OnTextBoxLostFocus"
+                                                                 KeyDown="OnTextBoxKeyDown" />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type system:Double}">
+                                                        <TextBox Text="{Binding .}"
+                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                                 LostFocus="OnTextBoxLostFocus"
+                                                                 KeyDown="OnTextBoxKeyDown" />
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type system:Array}">
+                                                        <StackPanel>
+                                                            <DockPanel Margin="0 0 0 4">
+                                                                <Button DockPanel.Dock="Right"
+                                                                        Margin="8 0 0 0"
+                                                                        Width="32">
+                                                                    <iconPacks:PackIconMaterial Kind="Plus"
+                                                                            HorizontalAlignment="Center"
+                                                                            VerticalAlignment="Center"
+                                                                            Width="8"
+                                                                            Height="8" />
+                                                                </Button>
+                                                                <TextBox
+                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=2}}"
+                                                                    LostFocus="OnNewArrayItemTextBoxLostFocus"
+                                                                    KeyDown="OnNewArrayItemTextBoxKeyDown" />
+                                                            </DockPanel>
+                                                            <ItemsControl ItemsSource="{Binding .}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <DockPanel Margin="0 0 0 4">
+                                                                            <Button DockPanel.Dock="Right"
+                                                                                    Padding="0"
+                                                                                    Margin="8 0 0 0"
+                                                                                    Width="32"
+                                                                                    ui:SettingsView.ArrayDeleteTarget="{Binding .}"
+                                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
+                                                                                    Click="OnDeleteArrayItemButtonClick">
+                                                                                <iconPacks:PackIconMaterial
+                                                                                    Kind="TrashCanOutline"
+                                                                                    HorizontalAlignment="Center"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Width="16"
+                                                                                    Height="16" />
+                                                                            </Button>
+                                                                            <wpf:TextBox Text="{Binding .}"
+                                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
+                                                                                    IsReadOnly="True"
+                                                                                    IsEnabled="False" />
+                                                                        </DockPanel>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                    <DataTemplate DataType="{x:Type system:Enum}">
+                                                        <ComboBox
+                                                            ItemsSource="{Binding .,Converter={converters:EnumToItemSourceConverter}}"
+                                                            Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                                            SelectedItem="{Binding .}"
+                                                            SelectionChanged="OnSelectionChanged">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <wpf:TextBlock Text="{Binding .}" />
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
+                                                    </DataTemplate>
+                                                </ContentPresenter.Resources>
+                                            </ContentPresenter>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!--!WARNING Binding ElementName directly to ItemControl's Items.Count seems reasonable here. However, on the first launch, when loading in the background, the binding will fail due to the visual tree loading order.-->
+        <page:NoItemView
+            Visibility="{Binding CollectionViewCount,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
+    </Grid>
+
+</page:PageBase>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Microsoft.Web.WebView2" />
+    <PackageReference Include="ZYC.CoreToolkit" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.WebView2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Thirdparty\ZYC.Titanium.Web.Proxy\ZYC.Titanium.Web.Proxy.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+  </ItemGroup>
+</Project>

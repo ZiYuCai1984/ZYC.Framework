@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <!--!WARNING Referenced by <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />, so it cannot be placed in nuget.targets-->
-  <!--!WARNING Shound also change version in ZYC.Automation.Modules.Aspire/AspireManager.Environment.cs-->
+  <!--!WARNING Shound also change version in ZYC.Framework.Modules.Aspire/AspireManager.Environment.cs-->
   <PropertyGroup>
     <V_Aspire>13.1.1</V_Aspire>
   </PropertyGroup>

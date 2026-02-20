@@ -1,0 +1,19 @@
+﻿<Window x:Class="ZYC.Framework.Overlay.OverlayWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:overlay="clr-namespace:ZYC.Framework.Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        ShowActivated="False"
+        Topmost="False"
+        Focusable="False">
+    <overlay:SpotlightMask x:Name="Mask"
+                           IsOpen="True"
+                           MaskBrush="#77000000"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch" />
+</Window>
