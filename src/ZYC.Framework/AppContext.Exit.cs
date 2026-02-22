@@ -66,16 +66,23 @@ internal partial class AppContext
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        base.OnExit(e);
-
-        Exit?.Invoke(this, e);
-
-        SaveAllConfig();
-        SaveAllState();
-
-        foreach (var module in Modules)
+        try
         {
-            await module.UnloadAsync(LifetimeScope);
+            base.OnExit(e);
+
+            Exit?.Invoke(this, e);
+
+            SaveAllConfig();
+            SaveAllState();
+
+            foreach (var module in Modules)
+            {
+                await module.UnloadAsync(LifetimeScope);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
         }
     }
 
