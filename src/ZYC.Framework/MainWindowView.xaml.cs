@@ -10,8 +10,8 @@ using ZYC.Framework.Taskbar;
 
 namespace ZYC.Framework;
 
-[RegisterSingleInstanceAs(typeof(MainWindowView), typeof(IRootGrid))]
-internal partial class MainWindowView : IRootGrid
+[RegisterSingleInstanceAs(typeof(MainWindowView), typeof(IRootGrid), typeof(IRootAdornerLayer))]
+internal partial class MainWindowView : IRootGrid, IRootAdornerLayer
 {
     public MainWindowView(
         ILifetimeScope lifetimeScope,
@@ -23,18 +23,21 @@ internal partial class MainWindowView : IRootGrid
         InitializeComponent();
     }
 
-    // ReSharper disable once UnusedAutoPropertyAccessor.Local
     private ILifetimeScope LifetimeScope { get; }
 
     private TaskbarContextMenu TaskbarContextMenu { get; }
 
     private bool FirstRending { get; set; } = true;
 
+    public object GetRootAdornerLayer()
+    {
+        return AdornerDecorator.AdornerLayer;
+    }
+
     public object GetRootGrid()
     {
         return RootGrid;
     }
-
 
     private void OnMainWindowViewLoaded(object sender, RoutedEventArgs e)
     {

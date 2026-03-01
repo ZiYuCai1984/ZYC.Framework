@@ -12,7 +12,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="OnMainWindowViewLoaded"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <AdornerDecorator>
+    <AdornerDecorator x:Name="AdornerDecorator">
         <Grid x:Name="RootGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

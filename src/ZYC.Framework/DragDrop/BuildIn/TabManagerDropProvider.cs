@@ -46,7 +46,7 @@ internal class TabManagerDropProvider : IDropActionProvider
                             return;
                         }
 
-                        Debug.WriteLine($"Drag {fromWorkspace.Id} -> {context.WorkspaceId}");
+                        Debug.WriteLine($"Drag move {fromWorkspace.Id} -> {context.WorkspaceId}");
 
                         TabManager.MoveTabItemInstance(instance, fromWorkspace.Id, context.WorkspaceId);
                     }
