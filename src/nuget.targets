@@ -13,7 +13,7 @@
   <!--<Import Project="$(USERPROFILE)\.nuget\packages\ZYC.CoreToolkit\$(V_ZYC_CoreToolkit)\nuget.targets"></Import>-->
 
   <PropertyGroup>
-    <V_Microsoft_Web_WebView2>1.0.3712-prerelease</V_Microsoft_Web_WebView2>
+    <V_Microsoft_Web_WebView2>1.0.3800.47</V_Microsoft_Web_WebView2>
   </PropertyGroup>
 
   <ItemGroup>
