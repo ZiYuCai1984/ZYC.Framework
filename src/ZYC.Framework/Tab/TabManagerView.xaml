@@ -132,11 +132,12 @@
                             <Setter.Value>
                                 <DataTemplate>
                                     <Grid Background="Transparent"
-                                          MouseDown="OnTabHeaderMouseDown">
+                                          MouseDown="OnTabHeaderMouseDown"
+                                          Loaded="OnTabItemHeaderLoaded">
                                         <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <ContextMenu.ItemsSource>
-                                                    <tab:TabItemHeaderContextMenuItemsResolve />
+                                                    <tab:TabItemHeaderContextMenuItemsResolver />
                                                 </ContextMenu.ItemsSource>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
