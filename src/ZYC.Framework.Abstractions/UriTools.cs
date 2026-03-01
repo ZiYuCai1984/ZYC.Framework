@@ -22,6 +22,14 @@ public static class UriTools
         return builder.Uri;
     }
 
+    /// <summary>
+    ///     Creates an application URI from a host and path.
+    /// </summary>
+    /// <param name="scheme">The scheme.</param>
+    /// <param name="host">The host name.</param>
+    /// <param name="path">The path segment.</param>
+    /// <param name="query">The query.</param>
+    /// <returns>The constructed URI.</returns>
     public static Uri CreateUri(string scheme, string host = "", string path = "", string query = "")
     {
         var builder = new UriBuilder
@@ -156,6 +164,13 @@ public static class UriTools
         return Uri.TryCreate(raw, UriKind.Absolute, out var u) ? u.ToString() : null;
     }
 
+    /// <summary>
+    ///     Performs a basic heuristic check to determine if a string starts with a Windows-style drive specifier.
+    /// </summary>
+    /// <param name="s">The string to evaluate.</param>
+    /// <returns>
+    ///     True if the string starts with a letter followed by a colon (e.g., "C:"); otherwise, false.
+    /// </returns>
     public static bool LooksLikeWindowsPath(string s)
     {
         return s.Length >= 2 && char.IsLetter(s[0]) && s[1] == ':';

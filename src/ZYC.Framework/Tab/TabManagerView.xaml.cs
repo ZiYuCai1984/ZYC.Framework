@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Event;
@@ -26,6 +27,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
     private StarCommand? _starCommand;
 
     public TabManagerView(
+        ILogger<TabManagerView> logger,
         IEventAggregator eventAggregator,
         WorkspaceNode workspaceNode,
         Func<WorkspaceNode, Task> disposeTabManagerViewAsyncFunc,
@@ -34,6 +36,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
         ITabManager tabManager,
         CloseTabItemCommand closeTabItemCommand)
     {
+        Logger = logger;
         EventAggregator = eventAggregator;
         WorkspaceNode = workspaceNode;
         DisposeTabManagerViewAsyncFunc = disposeTabManagerViewAsyncFunc;
@@ -71,6 +74,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
     }
 
 
+    private ILogger<TabManagerView> Logger { get; }
     private IEventAggregator EventAggregator { get; }
 
     private Func<WorkspaceNode, Task> DisposeTabManagerViewAsyncFunc { get; }

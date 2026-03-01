@@ -128,15 +128,18 @@
                 <TabControl.Resources>
                     <Style TargetType="TabItem">
                         <Setter Property="Content" Value="{Binding View}" />
+                        <!--<EventSetter Event="Loaded" Handler="OnTabItemHeaderLoaded"/>-->
                         <Setter Property="HeaderTemplate">
                             <Setter.Value>
                                 <DataTemplate>
                                     <Grid Background="Transparent"
-                                          MouseDown="OnTabHeaderMouseDown">
+                                          MouseDown="OnTabHeaderMouseDown"
+                                          Loaded="OnTabItemHeaderLoaded">
+                                        <!--Loaded="OnTabItemHeaderLoaded"-->
                                         <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <ContextMenu.ItemsSource>
-                                                    <tab:TabItemHeaderContextMenuItemsResolve />
+                                                    <tab:TabItemHeaderContextMenuItemsResolver />
                                                 </ContextMenu.ItemsSource>
                                             </ContextMenu>
                                         </Grid.ContextMenu>

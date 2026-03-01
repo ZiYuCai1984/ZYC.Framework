@@ -6,6 +6,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations"
              xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx"
+             xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid VerticalAlignment="Center"
