@@ -5,7 +5,7 @@ using ZYC.Framework.Core.Resources;
 
 namespace ZYC.Framework.Tab;
 
-internal class TabItemHeaderContextMenuItemsResolve : MarkupExtension
+internal class TabItemHeaderContextMenuItemsResolver : MarkupExtension
 {
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
