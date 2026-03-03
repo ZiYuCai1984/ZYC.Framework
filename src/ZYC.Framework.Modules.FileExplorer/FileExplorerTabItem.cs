@@ -20,7 +20,15 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
         MutableTabReference tabReference) : base(lifetimeScope, tabReference)
     {
         TabManager = tabManager;
+
+        if (lifetimeScope.TryResolve<IRecentPathMainMenuItemsProvider>(out var provider))
+        {
+            provider.AddRecentPath(tabReference.Uri.LocalPath);
+            RecentPathMainMenuItemsProvider = provider;
+        }
     }
+
+    private IRecentPathMainMenuItemsProvider? RecentPathMainMenuItemsProvider { get; }
 
     private MutableTabReference MutableTabReference => (MutableTabReference)TabReference;
 
@@ -32,7 +40,6 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
 
 
     private ITabManager TabManager { get; }
-
 
     public override bool Localization => false;
 
@@ -55,6 +62,7 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
         }
 
         OnPropertyChanged(nameof(Title));
+        RecentPathMainMenuItemsProvider?.AddRecentPath(newUri.LocalPath);
         await TabManager.TabInternalNavigatingAsync(oldUri, newUri);
     }
 

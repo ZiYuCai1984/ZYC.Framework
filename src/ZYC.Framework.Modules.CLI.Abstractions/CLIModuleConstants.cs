@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.CLI.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class CLIModuleConstants
 {
     public const string Host = "cli";

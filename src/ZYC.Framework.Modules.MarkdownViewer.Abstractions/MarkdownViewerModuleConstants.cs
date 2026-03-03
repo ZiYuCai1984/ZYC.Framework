@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.MarkdownViewer.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class MarkdownViewerModuleConstants
 {
     public static string Host => "md";

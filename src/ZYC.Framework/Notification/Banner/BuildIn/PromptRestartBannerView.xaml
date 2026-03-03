@@ -35,7 +35,7 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="0"
-                        Command="{Binding CloseBannerCommand}">
+                        Command="{Binding CloseNotificationCommand}">
                     <iconPacks:PackIconMaterial Kind="Close"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"

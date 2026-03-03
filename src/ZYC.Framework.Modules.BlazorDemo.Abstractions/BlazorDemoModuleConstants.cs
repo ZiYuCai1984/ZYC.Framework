@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.BlazorDemo.Abstractions;
 
+#pragma warning disable CS1591
+
 // ReSharper disable once StringLiteralTypo
 
 public static class BlazorDemoModuleConstants

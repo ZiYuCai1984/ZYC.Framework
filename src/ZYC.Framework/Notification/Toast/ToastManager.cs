@@ -72,10 +72,9 @@ internal class ToastManager : IToastManager
         });
     }
 
-
-    public void PromptCopied()
+    public void PromptCopied(string text)
     {
-        Prompt<PromptCopiedToastView>();
+        Prompt<PromptCopiedToastView>(text);
     }
 
     public void PromptException(Exception exception)

@@ -18,12 +18,12 @@ public class NotificationBase : UserControl, INotification
 
         DataContext = this;
 
-        CloseBannerCommand = new RelayCommand(_ => true, _ => CloseNow());
+        CloseNotificationCommand = new RelayCommand(_ => true, _ => CloseNow());
     }
 
     private Storyboard? FadeOutStoryboard { get; set; }
 
-    public ICommand CloseBannerCommand { get; }
+    public ICommand CloseNotificationCommand { get; }
 
     public event EventHandler? Closed;
 
