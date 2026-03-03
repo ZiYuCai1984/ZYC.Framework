@@ -189,7 +189,7 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
         try
         {
             var dllPath = Path.Combine(
-                AppContext.GetMainAppDirectory(),
+                AppContext.GetCurrentDirectory(),
                 "runtimes",
                 "win-x64",
                 "native",
