@@ -25,8 +25,8 @@ public class CopyAndNotifyCommand : AsyncCommandBase
             return;
         }
 
-        Clipboard.SetText(value);
-        ToastManager.PromptCopied();
+        ClipboardTools.SetText(value);
+        ToastManager.PromptCopied(value);
     }
 
     public override bool CanExecute(object? parameter)

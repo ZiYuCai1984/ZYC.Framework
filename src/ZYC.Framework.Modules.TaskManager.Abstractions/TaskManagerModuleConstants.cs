@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.TaskManager.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class TaskManagerModuleConstants
 {
     public const string Icon = "DnsOutline";

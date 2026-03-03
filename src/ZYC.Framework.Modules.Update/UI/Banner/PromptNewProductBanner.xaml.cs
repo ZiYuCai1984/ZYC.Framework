@@ -24,7 +24,7 @@ internal partial class PromptNewProductBanner : IBanner
 
         NavigateCommand = new ActionCommand(_ =>
         {
-            CloseBannerCommand.Execute(null);
+            CloseNotificationCommand.Execute(null);
             navigateCommand.Execute(UpdateModuleConstants.Uri);
         });
 

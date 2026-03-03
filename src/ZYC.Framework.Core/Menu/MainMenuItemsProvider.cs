@@ -24,7 +24,7 @@ public abstract class MainMenuItemsProvider : IMainMenuItemsProvider
             //ignore
         });
 
-    public IMainMenuItem[] SubItems => _subItems.ToArray();
+    public virtual IMainMenuItem[] SubItems => _subItems.ToArray();
 
     public virtual string Title => Info.Title;
 

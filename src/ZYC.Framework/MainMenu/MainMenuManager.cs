@@ -75,7 +75,7 @@ internal class MainMenuManager : IMainMenuManager
     {
         if (item.SubItems.Length == 0)
         {
-            return item;
+            return new MainMenuItemWrapper(item, []);
         }
 
         var groups = item.SubItems
