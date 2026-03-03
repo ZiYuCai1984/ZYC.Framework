@@ -20,10 +20,10 @@ internal class Module : ModuleBase
 
         var appContext = lifetimeScope.Resolve<IAppContext>();
 
-
         NativeDllLoaderTools.LoadFrom(
             Path.Combine(
-                appContext.GetMainAppDirectory(),
+                //!WARNING Using appContext.GetMainAppDirectory() here will cause the application to fail during the update apply !!
+                appContext.GetCurrentDirectory(),
                 "runtimes",
                 "win10-x64",
                 "native",
@@ -31,7 +31,7 @@ internal class Module : ModuleBase
 
         NativeDllLoaderTools.LoadFrom(
             Path.Combine(
-                appContext.GetMainAppDirectory(),
+                appContext.GetCurrentDirectory(),
                 "runtimes",
                 "win-x64",
                 "native",
