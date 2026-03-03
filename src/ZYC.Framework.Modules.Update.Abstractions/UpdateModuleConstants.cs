@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.Update.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class UpdateModuleConstants
 {
     public const string Icon = "Update";

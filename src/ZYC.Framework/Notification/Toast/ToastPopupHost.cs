@@ -59,10 +59,10 @@ internal class ToastPopupHost : NotificationPopupHost
         }
 
         // Pick a Visual on the same monitor to read DPI (PlacementTarget is the most reliable).
-        var v = (Visual)(popup.PlacementTarget
-                         ?? popup.Child
-                         ?? StatusBarView as Visual
-                         ?? Application.Current.MainWindow)!;
+        var v = (popup.PlacementTarget
+                 ?? popup.Child
+                 ?? StatusBarView as Visual
+                 ?? Application.Current.MainWindow)!;
 
         var dpi = VisualTreeHelper.GetDpi(v);
         var marginX = EdgeMargin * dpi.DpiScaleX;

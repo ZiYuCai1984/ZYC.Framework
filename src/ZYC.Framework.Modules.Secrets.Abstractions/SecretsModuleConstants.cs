@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.Secrets.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class SecretsModuleConstants
 {
     public const string Icon = "🔑";

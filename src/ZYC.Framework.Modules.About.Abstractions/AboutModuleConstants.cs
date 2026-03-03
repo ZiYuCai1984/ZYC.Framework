@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.About.Abstractions;
 
+#pragma warning disable CS1591
+
 public static class AboutModuleConstants
 {
     public const string Icon = "InformationOutline";

@@ -1,5 +1,7 @@
 ﻿using ZYC.Framework.Abstractions;
 
+#pragma warning disable CS1591
+
 // ReSharper disable once CheckNamespace
 namespace ZYC.Framework.Modules.Chronosynchronicity.Abstractions;
 

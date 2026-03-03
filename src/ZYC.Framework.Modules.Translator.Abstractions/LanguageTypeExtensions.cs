@@ -1,7 +1,15 @@
 ﻿namespace ZYC.Framework.Modules.Translator.Abstractions;
 
+/// <summary>
+///     Provides extension methods for the <see cref="LanguageType" /> enumeration.
+/// </summary>
 public static class LanguageTypeExtensions
 {
+    /// <summary>
+    ///     Converts a <see cref="LanguageType" /> value to its localized display name.
+    /// </summary>
+    /// <param name="language">The language type value.</param>
+    /// <returns>A string representing the human-readable name of the language.</returns>
     public static string ToDisplayName(this LanguageType language)
     {
         return language switch

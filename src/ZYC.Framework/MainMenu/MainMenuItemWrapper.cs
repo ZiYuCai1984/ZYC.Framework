@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using ZYC.CoreToolkit;
 using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Core;
 
@@ -33,12 +34,30 @@ internal class MainMenuItemWrapper : IMainMenuItem, INotifyPropertyChanged, IDis
                     nameof(IMainMenuItem.IsHidden))
                 .Subscribe(_ => OnPropertyChanged(nameof(IsHidden)))
                 .DisposeWith(CompositeDisposable);
+
+            e.ObserveProperty(
+                    nameof(IMainMenuItem.SubItems))
+                .Subscribe(_ =>
+                {
+                    var ori = SubItems;
+
+                    //!WARNING When an external entity actively adjusts its own SubItem, the external entity should take precedence.
+                    //bug All the child items below will lose their MainMenuItemWrapper.
+                    SubItems = original.SubItems;
+                    OnPropertyChanged(nameof(SubItems));
+
+                    foreach (var item in ori)
+                    {
+                        item.TryDispose();
+                    }
+
+                })
+                .DisposeWith(CompositeDisposable);
         }
     }
 
     public CompositeDisposable CompositeDisposable { get; } = new();
 
-    //TODO-zyc call try dispose outside
     public void Dispose()
     {
         CompositeDisposable.Dispose();
@@ -58,7 +77,7 @@ internal class MainMenuItemWrapper : IMainMenuItem, INotifyPropertyChanged, IDis
 
     public bool IsHidden => _original.IsHidden;
 
-    public IMainMenuItem[] SubItems { get; }
+    public IMainMenuItem[] SubItems { get; private set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

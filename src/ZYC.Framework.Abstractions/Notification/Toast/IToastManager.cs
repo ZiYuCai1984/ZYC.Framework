@@ -21,7 +21,8 @@ public interface IToastManager
     /// <summary>
     ///     Displays a predefined toast indicating that content has been successfully copied.
     /// </summary>
-    void PromptCopied();
+    /// <param name="text">Copied text</param>
+    void PromptCopied(string text);
 
     /// <summary>
     ///     Displays a toast notification containing error details from an exception.

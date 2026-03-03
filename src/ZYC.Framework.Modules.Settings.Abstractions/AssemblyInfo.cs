@@ -4,9 +4,7 @@
 
 namespace ZYC.Framework.Modules.Settings.Abstractions;
 
-/// <summary>
-///     Provides assembly-level metadata for the settings abstractions.
-/// </summary>
+#pragma warning disable CS1591
 public static class AssemblyInfo
 {
 }

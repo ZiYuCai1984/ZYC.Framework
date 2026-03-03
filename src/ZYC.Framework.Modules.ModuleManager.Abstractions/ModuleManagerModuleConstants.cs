@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Modules.ModuleManager.Abstractions;
 
+#pragma warning disable CS1591
+
 // ReSharper disable MemberHidesStaticFromOuterClass
 public static class ModuleManagerModuleConstants
 {

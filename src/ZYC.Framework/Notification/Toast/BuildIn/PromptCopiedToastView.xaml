@@ -8,7 +8,9 @@
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:toast="clr-namespace:ZYC.Framework.Core.Notification.Toast;assembly=ZYC.Framework.Core"
                  mc:Ignorable="d"
-                 d:DesignHeight="450" d:DesignWidth="800">
+                 MaxHeight="256"
+                 d:DesignHeight="450" 
+                 d:DesignWidth="800">
     <!--!WARNING Design by chatgpt 5.2 -->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,21 +23,29 @@
                                     Kind="ClipboardCheckOutline"
                                     Width="18"
                                     Height="18"
-                                    VerticalAlignment="Center"
-                                    Opacity="0.9" />
-        <TextBlock Grid.Column="2"
-                   Text="{localizations:L Copied to clipboard.}"
-                   VerticalAlignment="Center"
-                   TextWrapping="Wrap"
-                   FontSize="13"
-                   Opacity="0.95" />
-        <Button Grid.Column="3"
+                                    Opacity="0.9" 
+                                    VerticalAlignment="Top"
+                                    Margin="0 2 0 0"/>
+
+        <StackPanel Grid.Column="2">
+            <TextBlock Text="{localizations:L Copied to clipboard.}"
+                       TextWrapping="Wrap"
+                       FontSize="13"
+                       Opacity="0.95" />
+            <TextBlock Text="{Binding CopiedText}"
+                       TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis"
+                       FontSize="13"
+                       Opacity="0.95" />
+        </StackPanel>
+
+        <!--<Button Grid.Column="3"
                 Width="28"
                 Height="28"
                 Padding="0"
                 Background="Transparent"
                 BorderThickness="0"
-                Command="{Binding CloseBannerCommand}"
+                Command="{Binding CloseNotificationCommand}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center">
             <Button.Template>
@@ -65,6 +75,6 @@
                                         Width="14"
                                         Height="14"
                                         Opacity="0.85" />
-        </Button>
+        </Button>-->
     </Grid>
 </toast:ToastBase>
