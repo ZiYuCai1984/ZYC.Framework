@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Interop;
+using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.Framework.Abstractions;
 using WindowState = System.Windows.WindowState;
@@ -74,6 +75,9 @@ internal partial class MainWindow : IMainWindow
     {
         //!WARNING Centralize the exit code into AppContext
         e.Cancel = true;
+
+        var appContext = LifetimeScope.Resolve<IAppContext>();
+        appContext.ExitProcess();
     }
 
     private void OnAppContextExiting(object? sender, CancelEventArgsEx e)

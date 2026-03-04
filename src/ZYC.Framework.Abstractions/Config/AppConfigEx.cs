@@ -1,5 +1,7 @@
 ﻿namespace ZYC.Framework.Abstractions.Config;
 
+#pragma warning disable CS1591
+
 public static class AppConfigEx
 {
     public static bool GetIsDebugItemVisible(this AppConfig config)

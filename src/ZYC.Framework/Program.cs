@@ -29,6 +29,7 @@ internal partial class Program
 {
     private static void StartApp()
     {
+        //TODO-zyc The design is flawed and needs to be modified to support switching between multiple versions.
         var mainAppFolder = AppContext.GetMainAppDirectory();
 
         var appState = SettingsTools.GetFromFolder<AppState>(
