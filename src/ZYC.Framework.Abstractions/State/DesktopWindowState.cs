@@ -2,6 +2,8 @@
 
 namespace ZYC.Framework.Abstractions.State;
 
+#pragma warning disable CS1591
+
 public class DesktopWindowState : IState
 {
     public int Width { get; set; } = 800;

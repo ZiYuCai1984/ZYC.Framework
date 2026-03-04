@@ -15,4 +15,11 @@ public static class NativeMethods
 
     [DllImport("user32")]
     public static extern int RegisterWindowMessage(string message);
+
+
+    public const int WM_CLOSE = 0x0010;
+
+    public const int SC_CLOSE = 0xF060;
+
+    public const int WM_SYSCOMMAND = 0x0112;
 }

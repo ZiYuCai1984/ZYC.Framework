@@ -5,7 +5,7 @@ namespace ZYC.Framework.Modules.ModuleManager.Abstractions.Event;
 /// <summary>
 ///     Represents a request to disable a module.
 /// </summary>
-public class DisableModuleEvent
+public sealed class DisableModuleEvent
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="DisableModuleEvent" /> class.

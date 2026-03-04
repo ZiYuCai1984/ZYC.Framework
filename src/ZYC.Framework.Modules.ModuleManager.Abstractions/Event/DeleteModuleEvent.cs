@@ -5,7 +5,7 @@ namespace ZYC.Framework.Modules.ModuleManager.Abstractions.Event;
 /// <summary>
 ///     Represents a request to delete a module.
 /// </summary>
-public class DeleteModuleEvent
+public sealed class DeleteModuleEvent
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeleteModuleEvent" /> class.

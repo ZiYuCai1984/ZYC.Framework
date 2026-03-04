@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Diagnostics;
+using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -113,26 +114,39 @@ internal partial class MainWindow
 
     private IntPtr ActivateWindowHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
-        if (msg != NativeMethods.WM_SHOWME)
+        if (msg == NativeMethods.WM_SHOWME)
         {
-            return hwnd;
+            handled = true;
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (WindowState == WindowState.Minimized)
+                {
+                    WindowState = WindowState.Normal;
+                }
+
+                Show();
+                Activate();
+            }));
         }
 
-        WindowState = WindowState.Normal;
-        Activate();
-        return hwnd;
+        return IntPtr.Zero;
     }
+
 
     private void OnMainWindowLoaded(object sender, RoutedEventArgs e)
     {
         DebuggerTools.CheckCalledOnce();
 
-        ((HwndSource)PresentationSource.FromVisual(this)!)
-            .AddHook(ActivateWindowHook);
 
+        var hwndSource = (HwndSource)PresentationSource.FromVisual(this)!;
+        hwndSource.AddHook(ActivateWindowHook);
 
         var appContext = LifetimeScope.Resolve<IAppContext>();
         appContext.Exiting += OnAppContextExiting;
+
+        var h = new WindowInteropHelper(this).Handle;
+        Trace.WriteLine($"LOADED THIS: 0x{h.ToInt64():X} Title={Title} ShowInTaskbar={ShowInTaskbar}");
     }
 
     public static void SetMenuDropAlignmentRight()

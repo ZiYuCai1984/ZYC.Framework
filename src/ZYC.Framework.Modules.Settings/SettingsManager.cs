@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using Autofac;
+using Namotion.Reflection;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -150,15 +151,17 @@ public partial class SettingsManager : ISettingsManager
     }
 
 
-    private static string? ResolveDescription(PropertyInfo property)
+    private string ResolveDescription(PropertyInfo property)
     {
-        var attribute = property.GetCustomAttribute<DescriptionAttribute>();
-        if (attribute == null)
+        try
         {
-            return null;
+            return property.GetXmlDocsSummary();
         }
-
-        return attribute.Value;
+        catch (Exception e)
+        {
+            Logger.Error(e);
+            return "";
+        }
     }
 
 

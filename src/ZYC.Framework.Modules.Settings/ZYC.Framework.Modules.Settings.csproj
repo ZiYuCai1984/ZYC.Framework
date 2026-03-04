@@ -10,5 +10,6 @@
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Settings" />
     <PackageReference Include="MahApps.Metro" />
     <PackageReference Include="Emoji.Wpf" />
+    <PackageReference Include="Namotion.Reflection" />
   </ItemGroup>
 </Project>

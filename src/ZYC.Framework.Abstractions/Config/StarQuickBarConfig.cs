@@ -3,6 +3,8 @@ using ZYC.Framework.Abstractions.Config.Attributes;
 
 namespace ZYC.Framework.Abstractions.Config;
 
+#pragma warning disable CS1591
+
 [Hidden]
 public class StarQuickBarConfig : IConfig
 {

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Event raised when the Aspire service status changes.
 /// </summary>
-public class AspireServiceStatusChangedEvent
+public sealed class AspireServiceStatusChangedEvent
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="AspireServiceStatusChangedEvent" /> class.
