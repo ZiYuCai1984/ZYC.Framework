@@ -11,7 +11,7 @@ internal class StopServerMainMenuItem : MainMenuItem
     {
         Info = new MenuItemInfo
         {
-            Title = "Stop server",
+            Title = "Stop Server",
             Icon = "PauseCircleOutline"
         };
 

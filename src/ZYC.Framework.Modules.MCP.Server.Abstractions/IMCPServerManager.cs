@@ -1,8 +1,11 @@
-﻿namespace ZYC.Framework.Modules.MCP.Server.Abstractions;
+﻿using ZYC.Framework.Abstractions.MCP;
+
+namespace ZYC.Framework.Modules.MCP.Server.Abstractions;
 
 /// <summary>
 ///     MCP Server Manager
 /// </summary>
+[ExposeToMCP]
 public interface IMCPServerManager
 {
     /// <summary>

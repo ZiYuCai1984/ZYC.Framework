@@ -5,10 +5,10 @@ using ZYC.Framework.Core.Tab;
 
 namespace ZYC.Framework.Tab.BuildIn;
 
-[RegisterAs(typeof(NotFoundTabItemInstance), typeof(INotFoundTabItemInstance))]
-internal class NotFoundTabItemInstance : TabItemInstanceBase<NotFoundView>, INotFoundTabItemInstance
+[RegisterAs(typeof(NotFoundTabItem), typeof(INotFoundTabItem))]
+internal class NotFoundTabItem : TabItemInstanceBase<NotFoundView>, INotFoundTabItem
 {
-    public NotFoundTabItemInstance(ILifetimeScope lifetimeScope, TabReference tabReference) : base(lifetimeScope, tabReference)
+    public NotFoundTabItem(ILifetimeScope lifetimeScope, TabReference tabReference) : base(lifetimeScope, tabReference)
     {
         
     }

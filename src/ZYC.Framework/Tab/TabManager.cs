@@ -1,8 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using Autofac;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Autofac;
+using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
@@ -290,6 +291,8 @@ internal partial class TabManager : ITabManager
 
     public async Task RestoreStateAsync()
     {
+        DebuggerTools.CheckCalledOnce();
+
         var kvs = ParallelWorkspaceManager.GetWorkspaceDictionary();
 
         foreach (var kv in kvs)
@@ -341,6 +344,8 @@ internal partial class TabManager : ITabManager
         TabItemLockState.TabItems = newReferences.ToArray();
 
         #endregion
+
+        InvokeTabItemsRestoreCompletedEvent();
     }
 
     public void SetFocusedTabItemInstance(Guid workspaceId, ITabItemInstance? instance)
@@ -458,7 +463,7 @@ internal partial class TabManager : ITabManager
 
             if (instance == null)
             {
-                instance = LifetimeScope.Resolve<NotFoundTabItemInstance>(
+                instance = LifetimeScope.Resolve<NotFoundTabItem>(
                     new TypedParameter(typeof(TabReference), new TabReference(uri)));
                 AttachTabItemInstance(workspaceId, instance);
             }
@@ -467,7 +472,7 @@ internal partial class TabManager : ITabManager
         {
             Logger.Error(e);
 
-            instance = LifetimeScope.Resolve<ErrorTabItemInstance>(
+            instance = LifetimeScope.Resolve<ErrorTabItem>(
                 new TypedParameter(typeof(Exception), e),
                 new TypedParameter(typeof(TabReference), new TabReference(uri)));
             AttachTabItemInstance(workspaceId, instance);

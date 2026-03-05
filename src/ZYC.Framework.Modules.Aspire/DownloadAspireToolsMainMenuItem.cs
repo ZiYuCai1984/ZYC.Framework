@@ -11,7 +11,7 @@ internal class DownloadAspireToolsMainMenuItem : MainMenuItem
     {
         Info = new MenuItemInfo
         {
-            Title = "Download aspire tools",
+            Title = "Download Aspire Tools",
             Icon = "MonitorArrowDown"
         };
 
