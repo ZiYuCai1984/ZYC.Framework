@@ -1,14 +1,20 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.WebView2;
+using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.WebView2;
 
 public abstract class CycleWebViewHostBase : WebViewHostBase
 {
-    protected CycleWebViewHostBase(ILifetimeScope lifetimeScope) : base(lifetimeScope)
+    protected CycleWebViewHostBase(ILifetimeScope lifetimeScope, ILogger<CycleWebViewHostBase> logger) : base(
+        lifetimeScope)
     {
+        Logger = logger;
     }
+
+    private ILogger<CycleWebViewHostBase> Logger { get; }
 
     public abstract string BaseUri { get; set; }
 
@@ -32,15 +38,22 @@ public abstract class CycleWebViewHostBase : WebViewHostBase
     protected override async void InternalOnNavigationCompleted(object? sender,
         CoreWebView2NavigationCompletedEventArgs args)
     {
-        await Task.Delay(PostNavigationDelayMs);
-
-        if (CoreWebView2.Source != BaseUri)
+        try
         {
-            await NavigateAsync(BaseUri);
-            return;
-        }
+            await Task.Delay(PostNavigationDelayMs);
 
-        await OnBaseUriReachedAsync();
+            if (CoreWebView2.Source != BaseUri)
+            {
+                await NavigateAsync(BaseUri);
+                return;
+            }
+
+            await OnBaseUriReachedAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+        }
     }
 
 
