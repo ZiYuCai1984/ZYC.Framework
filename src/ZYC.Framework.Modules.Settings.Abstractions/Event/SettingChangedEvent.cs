@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a setting change event scoped to a module.
 /// </summary>
-public class SettingChangedEvent<T>
+public sealed class SettingChangedEvent<T>
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingChangedEvent{T}" /> class.

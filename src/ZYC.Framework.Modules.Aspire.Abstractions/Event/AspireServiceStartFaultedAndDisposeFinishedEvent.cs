@@ -3,7 +3,7 @@
 /// <summary>
 ///     Event raised when Aspire startup fails and disposal is complete.
 /// </summary>
-public class AspireServiceStartFaultedAndDisposeFinishedEvent
+public sealed class AspireServiceStartFaultedAndDisposeFinishedEvent
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="AspireServiceStartFaultedAndDisposeFinishedEvent" /> class.

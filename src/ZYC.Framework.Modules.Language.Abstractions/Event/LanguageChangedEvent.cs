@@ -3,6 +3,6 @@
 /// <summary>
 ///     Event raised when the current language changes.
 /// </summary>
-public class LanguageChangedEvent
+public sealed class LanguageChangedEvent
 {
 }

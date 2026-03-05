@@ -5,7 +5,7 @@ namespace ZYC.Framework.Modules.ModuleManager.Abstractions.Event;
 /// <summary>
 ///     Represents a request to enable a module.
 /// </summary>
-public class EnableModuleEvent
+public sealed class EnableModuleEvent
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="EnableModuleEvent" /> class.
