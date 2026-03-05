@@ -1,37 +1,28 @@
 ﻿using ZYC.CoreToolkit.Abstractions.Settings;
+using ZYC.Framework.Abstractions.MCP;
 
 namespace ZYC.Framework.Modules.Settings.Abstractions;
 
 /// <summary>
 ///     Manages application settings, states, and secrets.
 /// </summary>
-public interface ISettingsManager
+[ExposeToMCP]
+public partial interface ISettingsManager
 {
-    /// <summary>
-    ///     Creates setting groups for the specified configurations.
-    /// </summary>
-    /// <typeparam name="T">The configuration type.</typeparam>
-    /// <param name="configs">The configuration instances.</param>
-    /// <returns>The created setting groups.</returns>
-    SettingGroup[] CreateSettingGroups<T>(T[] configs) where T : IConfig;
-
     /// <summary>
     ///     Brings the specified configuration type into view.
     /// </summary>
     /// <param name="configType">The configuration type.</param>
+    [ExposeToMCP(RequiresUIThread = true)]
     void BringIntoView(Type configType);
 
     /// <summary>
     ///     Brings the specified configuration type into view.
     /// </summary>
     /// <typeparam name="T">The configuration type.</typeparam>
+    [ExposeToMCP(RequiresUIThread = true)]
     void BringIntoView<T>();
 
-    /// <summary>
-    ///     Sets the settings view instance.
-    /// </summary>
-    /// <param name="settingsView">The settings view instance.</param>
-    internal void SetSettingsView(ISettingsView? settingsView);
 
     /// <summary>
     ///     Gets setting groups that are not hidden.
@@ -79,4 +70,23 @@ public interface ISettingsManager
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task ResetSecretsAsync();
+}
+
+public partial interface ISettingsManager
+{
+    /// <summary>
+    ///     Sets the settings view instance.
+    /// </summary>
+    /// <param name="settingsView">The settings view instance.</param>
+    [MCPIgnore]
+    internal void SetSettingsView(ISettingsView? settingsView);
+
+    /// <summary>
+    ///     Creates setting groups for the specified configurations.
+    /// </summary>
+    /// <typeparam name="T">The configuration type.</typeparam>
+    /// <param name="configs">The configuration instances.</param>
+    /// <returns>The created setting groups.</returns>
+    [MCPIgnore]
+    SettingGroup[] CreateSettingGroups<T>(T[] configs) where T : IConfig;
 }

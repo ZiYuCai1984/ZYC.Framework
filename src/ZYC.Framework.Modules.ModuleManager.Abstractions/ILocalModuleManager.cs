@@ -1,10 +1,12 @@
 ﻿using ZYC.CoreToolkit.Abstractions.Autofac;
+using ZYC.Framework.Abstractions.MCP;
 
 namespace ZYC.Framework.Modules.ModuleManager.Abstractions;
 
 /// <summary>
 ///     Manages locally installed modules and their dependencies.
 /// </summary>
+[ExposeToMCP]
 public interface ILocalModuleManager
 {
     /// <summary>
@@ -73,9 +75,9 @@ public interface ILocalModuleManager
     /// </summary>
     /// <param name="moduleInfo">The module to check.</param>
     /// <returns><c>true</c> if the module is pending deletion; otherwise, <c>false</c>.</returns>
-    bool IsMoudlePendingDelete(IModuleInfo moduleInfo)
+    bool IsModulePendingDelete(IModuleInfo moduleInfo)
     {
-        return IsMoudlePendingDelete(moduleInfo.ModuleAssemblyName);
+        return IsModulePendingDelete(moduleInfo.ModuleAssemblyName);
     }
 
     /// <summary>
@@ -83,5 +85,5 @@ public interface ILocalModuleManager
     /// </summary>
     /// <param name="moduleAssemblyName">The module assembly name.</param>
     /// <returns><c>true</c> if the module is pending deletion; otherwise, <c>false</c>.</returns>
-    bool IsMoudlePendingDelete(string moduleAssemblyName);
+    bool IsModulePendingDelete(string moduleAssemblyName);
 }

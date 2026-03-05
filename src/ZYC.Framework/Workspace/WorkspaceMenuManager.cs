@@ -28,7 +28,7 @@ internal class WorkspaceMenuManager : IWorkspaceMenuManager
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
-                "ToggleOrientation",
+                "Toggle Orientation",
                 toggleOrientationCommand,
                 nameof(PackIconMaterialKind.OrbitVariant)));
 
@@ -46,13 +46,13 @@ internal class WorkspaceMenuManager : IWorkspaceMenuManager
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
-                "SplitVertical",
+                "Split Vertical",
                 splitVerticalCommand,
                 nameof(PackIconMaterialKind.FlipVertical)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
-                "SplitHorizontal",
+                "Split Horizontal",
                 splitHorizontalCommand,
                 nameof(PackIconMaterialKind.FlipHorizontal)));
 

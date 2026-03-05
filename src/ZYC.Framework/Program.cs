@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Autofac;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.Encodings.Web;
@@ -6,10 +9,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Windows;
-using Autofac;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using ZYC.CoreToolkit;
+using ZYC.CoreToolkit.Extensions.Autofac;
 using ZYC.CoreToolkit.Extensions.Settings;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
@@ -17,6 +18,7 @@ using ZYC.Framework.Abstractions.State;
 using ZYC.Framework.CLI;
 using ZYC.Framework.Core;
 using ZYC.Framework.Core.Localizations;
+using ZYC.Framework.Tab.BuildIn;
 using ZYC.Framework.WebView2;
 using AssemblyInfo = ZYC.Framework.Core.AssemblyInfo;
 using ModuleNameTools = ZYC.CoreToolkit.Extensions.Settings.ModuleNameTools;
@@ -173,6 +175,10 @@ internal partial class Program
             pendingDeleteState,
             startupLogger);
 
+
+        var moduleLoadErrorInfoList = new List<ModuleLoadErrorInfo>();
+
+
         var container = builder.Build();
         foreach (var module in modules)
         {
@@ -181,7 +187,17 @@ internal partial class Program
                 continue;
             }
 
-            module.LoadAsync(container).Wait();
+            try
+            {
+                module.LoadAsync(container).Wait();
+            }
+            catch (Exception e)
+            {
+                moduleLoadErrorInfoList.Add(
+                    new ModuleLoadErrorInfo(module,
+                        e,
+                        nameof(ModuleBase.LoadAsync)));
+            }
         }
 
         foreach (var module in modules)
@@ -191,13 +207,28 @@ internal partial class Program
                 continue;
             }
 
-            module.AfterLoadedAsync(container).Wait();
+            try
+            {
+                module.AfterLoadedAsync(container).Wait();
+            }
+            catch (Exception e)
+            {
+                moduleLoadErrorInfoList.Add(
+                    new ModuleLoadErrorInfo(module,
+                        e,
+                        nameof(ModuleBase.AfterLoadedAsync)));
+            }
         }
+
 
         L.SetLifetimeScope(container);
 
         var app = container.Resolve<AppContext>();
         ReactiveExtensions.SetSynchronizationContext(app.GetUISynchronizationContext());
+
+        container.RegisterTabItemFactory<ModuleLoadTabItemFactory>();
+        container.Resolve<IModuleLoadInfoManager>().
+            SetLoadErrorInfos(moduleLoadErrorInfoList.ToArray());
 
         var mainWindowView = container.Resolve<MainWindowView>();
         var mainWindow = container.Resolve<IMainWindow>();

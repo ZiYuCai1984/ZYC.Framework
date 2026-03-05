@@ -16,8 +16,16 @@ internal partial class TabManagerView
     {
         var raw = cb.Text;
 
+        string? uri = null;
+        try
+        {
+            uri = UriTools.NormalizeUri(raw);
+        }
+        catch
+        {
+            //ignore
+        }
 
-        var uri = UriTools.NormalizeUri(raw);
         if (uri is null)
         {
             return;
@@ -33,45 +41,66 @@ internal partial class TabManagerView
 
     private async void OnUriComboBoxKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter)
+        try
         {
-            return;
+            if (e.Key != Key.Enter)
+            {
+                return;
+            }
+
+            e.Handled = true;
+
+            await CommitAndNavigateAsync((ComboBox)sender);
         }
-
-        e.Handled = true;
-
-        await CommitAndNavigateAsync((ComboBox)sender);
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+        }
     }
 
     private async void OnGoButtonClick(object sender, RoutedEventArgs e)
     {
-        await CommitAndNavigateAsync(UriComboBox);
+        try
+        {
+            await CommitAndNavigateAsync(UriComboBox);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+        }
     }
 
     private async void OnUriComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_suppressSelectionChanged)
-        {
-            return;
-        }
-
-        var cb = (ComboBox)sender;
-        if (cb.SelectedItem is null)
-        {
-            return;
-        }
-
         try
         {
-            _suppressSelectionChanged = true;
+            if (_suppressSelectionChanged)
+            {
+                return;
+            }
 
-            cb.Text = cb.SelectedItem.ToString();
+            var cb = (ComboBox)sender;
+            if (cb.SelectedItem is null)
+            {
+                return;
+            }
 
-            await CommitAndNavigateAsync(cb);
+            try
+            {
+                _suppressSelectionChanged = true;
+
+                cb.Text = cb.SelectedItem.ToString();
+
+                await CommitAndNavigateAsync(cb);
+            }
+            finally
+            {
+                _suppressSelectionChanged = false;
+            }
         }
-        finally
+        catch (Exception ex)
         {
-            _suppressSelectionChanged = false;
+            Logger.Error(ex);
         }
     }
 

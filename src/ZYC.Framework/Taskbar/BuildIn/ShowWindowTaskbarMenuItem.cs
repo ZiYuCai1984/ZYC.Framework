@@ -14,7 +14,7 @@ internal class ShowWindowTaskbarMenuItem : ITaskbarMenuItem
         ShowWindowCommand = showWindowCommand;
         Info = new MenuItemInfo
         {
-            Title = "Show window"
+            Title = "Show Window"
         };
     }
 

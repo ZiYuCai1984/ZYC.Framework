@@ -10,7 +10,7 @@ public static class BlazorDemoModuleConstants
 {
     public const string Host = "blazordemo";
 
-    public const string Title = "BlazorDemo";
+    public const string Title = "Blazor Demo";
 
     public const string Icon = Base64IconResources.Blazor;
 

@@ -113,7 +113,7 @@ internal class LocalModuleManager : ILocalModuleManager
         return ModuleConfig.DisabledAssemblyNames.Contains(moduleAssemblyName);
     }
 
-    public bool IsMoudlePendingDelete(string moduleAssemblyName)
+    public bool IsModulePendingDelete(string moduleAssemblyName)
     {
         return PendingDeleteManager.Contains(moduleAssemblyName);
     }

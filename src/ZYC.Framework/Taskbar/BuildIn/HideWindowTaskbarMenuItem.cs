@@ -14,7 +14,7 @@ internal class HideWindowTaskbarMenuItem : ITaskbarMenuItem
         HideWindowCommand = showWindowCommand;
         Info = new MenuItemInfo
         {
-            Title = "Hide window"
+            Title = "Hide Window"
         };
     }
 

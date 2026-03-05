@@ -83,6 +83,8 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
 
     public async Task InitializeAsync(CancellationToken ct = default)
     {
+        DebuggerTools.CheckCalledOnce();
+
         var loaded = await _store.LoadAllAsync(ct);
         var changed = new List<TaskRecord>(loaded.Count);
 

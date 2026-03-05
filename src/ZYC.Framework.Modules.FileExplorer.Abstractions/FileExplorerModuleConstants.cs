@@ -6,7 +6,7 @@ public static class FileExplorerModuleConstants
 {
     public const string Icon = "FolderOutline";
 
-    public const string MenuTitle = "FileExplorer";
+    public const string MenuTitle = "File Explorer";
 
     public const string Host = "file";
 

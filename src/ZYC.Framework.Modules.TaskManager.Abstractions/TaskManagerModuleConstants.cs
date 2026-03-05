@@ -10,7 +10,7 @@ public static class TaskManagerModuleConstants
 
     public const string Host = "taskmanager";
 
-    public const string Title = "TaskManager";
+    public const string Title = "Task Manager";
 
     public static Uri Uri => UriTools.CreateAppUri(Host);
 }

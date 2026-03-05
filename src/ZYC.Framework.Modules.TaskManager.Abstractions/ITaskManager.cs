@@ -1,17 +1,13 @@
-﻿namespace ZYC.Framework.Modules.TaskManager.Abstractions;
+﻿using ZYC.Framework.Abstractions.MCP;
+
+namespace ZYC.Framework.Modules.TaskManager.Abstractions;
 
 /// <summary>
 ///     Provides task management operations.
 /// </summary>
-public interface ITaskManager
+[ExposeToMCP]
+public partial interface ITaskManager
 {
-    /// <summary>
-    ///     Initializes the task manager.
-    /// </summary>
-    /// <param name="ct">The cancellation token.</param>
-    /// <returns>The async operation.</returns>
-    internal Task InitializeAsync(CancellationToken ct = default);
-
     /// <summary>
     ///     Enqueues a new task.
     /// </summary>
@@ -70,4 +66,15 @@ public interface ITaskManager
     /// <param name="ct">The cancellation token.</param>
     /// <returns>The cleared task identifiers.</returns>
     Task<Guid[]> ClearUpTasksAsync(CancellationToken ct = default);
+}
+
+public partial interface ITaskManager
+{
+    /// <summary>
+    ///     Initializes the task manager.
+    /// </summary>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>The async operation.</returns>
+    [MCPIgnore]
+    internal Task InitializeAsync(CancellationToken ct = default);
 }
