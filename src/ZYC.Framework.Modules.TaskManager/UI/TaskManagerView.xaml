@@ -19,7 +19,7 @@
                mc:Ignorable="d"
                d:DesignHeight="450" d:DesignWidth="800"
                Loaded="OnTaskManagerViewLoaded"
-               Title="{localizations:L TaskManager}"
+               Title="{localizations:L Task Manager}"
                DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <page:PageBase.HeaderAdditionContent>
         <StackPanel VerticalAlignment="Center"

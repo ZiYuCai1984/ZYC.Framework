@@ -14,7 +14,7 @@ internal class ResetAllMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Icon = "RestoreAlert",
-            Title = "ResetAll",
+            Title = "Reset All",
             Anchor = SettingMainMenuAnchors.Other,
             Priority = 10
         };

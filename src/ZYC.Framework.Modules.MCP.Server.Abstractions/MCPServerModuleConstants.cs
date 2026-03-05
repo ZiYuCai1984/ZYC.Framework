@@ -8,7 +8,7 @@ public static class MCPServerModuleConstants
 {
     public const string Host = "mcp";
 
-    public const string Title = "MCPServer";
+    public const string Title = "MCP";
 
     public const string Icon = Base64IconResources.MCP;
 

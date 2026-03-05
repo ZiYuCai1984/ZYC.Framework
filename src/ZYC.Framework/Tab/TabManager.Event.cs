@@ -1,4 +1,5 @@
-﻿using ZYC.Framework.Abstractions.Event;
+﻿using ZYC.CoreToolkit;
+using ZYC.Framework.Abstractions.Event;
 using ZYC.Framework.Abstractions.Tab;
 
 namespace ZYC.Framework.Tab;
@@ -21,6 +22,12 @@ internal partial class TabManager
         EventAggregator.Publish(new TabItemClosedEvent(workspaceId, instance));
     }
 
+    public void InvokeTabItemsRestoreCompletedEvent()
+    {
+        DebuggerTools.CheckCalledOnce();
+
+        EventAggregator.Publish(new TabItemsRestoreCompletedEvent());
+    }
 
     private void InvokeTabItemsMovedEvent(
         Guid fromWorkspaceId,

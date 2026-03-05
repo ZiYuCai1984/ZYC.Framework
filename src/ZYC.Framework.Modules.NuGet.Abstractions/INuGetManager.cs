@@ -1,11 +1,13 @@
 ﻿using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using ZYC.Framework.Abstractions.MCP;
 
 namespace ZYC.Framework.Modules.NuGet.Abstractions;
 
 /// <summary>
 ///     Provides NuGet package operations for modules.
 /// </summary>
+[ExposeToMCP]
 public interface INuGetManager
 {
     /// <summary>

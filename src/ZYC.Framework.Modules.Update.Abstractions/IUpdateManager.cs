@@ -1,4 +1,6 @@
-﻿namespace ZYC.Framework.Modules.Update.Abstractions;
+﻿using ZYC.Framework.Abstractions.MCP;
+
+namespace ZYC.Framework.Modules.Update.Abstractions;
 
 /// <summary>
 ///     Provides high-level operations for managing product updates, including fetching update metadata,
@@ -9,6 +11,7 @@
 ///     the latest known update state. Methods returning <see cref="UpdateContext" /> should return the
 ///     updated context after the operation completes.
 /// </remarks>
+[ExposeToMCP]
 public interface IUpdateManager
 {
     /// <summary>

@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Interop;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -27,10 +27,12 @@ internal partial class MainWindow
     );
 
     public MainWindow(
+        ILogger<MainWindow> logger,
         AppConfig appConfig,
         ILifetimeScope lifetimeScope,
         DesktopWindowState desktopWindowState)
     {
+        Logger = logger;
         AppConfig = appConfig;
         DesktopWindowState = desktopWindowState;
 
@@ -96,6 +98,7 @@ internal partial class MainWindow
     }
 
 
+    private ILogger<MainWindow> Logger { get; }
     public AppConfig AppConfig { get; }
 
     public DesktopWindowState DesktopWindowState { get; }
@@ -144,22 +147,26 @@ internal partial class MainWindow
 
         var appContext = LifetimeScope.Resolve<IAppContext>();
         appContext.Exiting += OnAppContextExiting;
-
-        var h = new WindowInteropHelper(this).Handle;
-        Trace.WriteLine($"LOADED THIS: 0x{h.ToInt64():X} Title={Title} ShowInTaskbar={ShowInTaskbar}");
     }
 
-    public static void SetMenuDropAlignmentRight()
+    public void SetMenuDropAlignmentRight()
     {
-        var ifLeft = SystemParameters.MenuDropAlignment;
-        if (!ifLeft)
+        try
         {
-            return;
-        }
+            var ifLeft = SystemParameters.MenuDropAlignment;
+            if (!ifLeft)
+            {
+                return;
+            }
 
-        var t = typeof(SystemParameters);
-        var field = t.GetField("_menuDropAlignment",
-            BindingFlags.NonPublic | BindingFlags.Static);
-        field?.SetValue(null, false);
+            var t = typeof(SystemParameters);
+            var field = t.GetField("_menuDropAlignment",
+                BindingFlags.NonPublic | BindingFlags.Static);
+            field?.SetValue(null, false);
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e);
+        }
     }
 }

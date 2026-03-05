@@ -11,7 +11,7 @@ internal class StartServerMainMenuItem : MainMenuItem
     {
         Info = new MenuItemInfo
         {
-            Title = "Start server",
+            Title = "Start Server",
             Icon = "PlayCircleOutline"
         };
 

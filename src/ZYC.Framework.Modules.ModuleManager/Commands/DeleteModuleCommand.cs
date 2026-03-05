@@ -21,7 +21,7 @@ internal class DeleteModuleCommand : CommandBase
     public override bool CanExecute(object? parameter)
     {
         var module = (IModuleInfo)parameter!;
-        return !LocalModuleManager.IsMoudlePendingDelete(module);
+        return !LocalModuleManager.IsModulePendingDelete(module);
     }
 
     protected override void InternalExecute(object? parameter)

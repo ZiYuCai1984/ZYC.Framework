@@ -8,11 +8,11 @@ namespace ZYC.Framework.Tab.BuildIn;
 ///     !WARNING To keep the structure simple and less prone to errors, it does not inherit from TabItemInstanceBase
 /// </summary>
 [Register]
-internal class ErrorTabItemInstance : ITabItemInstance
+internal class ErrorTabItem : ITabItemInstance
 {
     private object? _view;
 
-    public ErrorTabItemInstance(TabReference tabReference, Exception exception, ILifetimeScope lifetimeScope)
+    public ErrorTabItem(TabReference tabReference, Exception exception, ILifetimeScope lifetimeScope)
     {
         TabReference = tabReference;
         Exception = exception;

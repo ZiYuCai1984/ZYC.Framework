@@ -10,7 +10,7 @@ public static class SettingsModuleConstants
 
     public const string Host = "settings";
 
-    public const string Title = "ApplicationSettings";
+    public const string Title = "Application Settings";
 
     public static Uri Uri => UriTools.CreateAppUri(Host);
 }
