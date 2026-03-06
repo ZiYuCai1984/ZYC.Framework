@@ -13,5 +13,5 @@ public class HamburgerMenuConfig : IConfig
     /// <summary>
     ///     Gets or sets a value indicating whether the hamburger menu is visible in the user interface.
     /// </summary>
-    public bool IsVisible { get; set; } = false;
+    public bool IsVisible { get; set; } = true;
 }
