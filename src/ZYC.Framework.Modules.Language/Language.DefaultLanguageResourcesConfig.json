@@ -104,7 +104,8 @@
       "Show Window": "ウィンドウを表示",
       "Hide Window": "ウィンドウを非表示",
       "Freeze": "フリーズ",
-      "Unfreeze": "フリーズ解除"
+      "Unfreeze": "フリーズ解除",
+      "Go to update page": "アップデートページへ移動"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -210,7 +211,8 @@
       "Show Window": "显示窗口",
       "Hide Window": "隐藏窗口",
       "Freeze": "冻结",
-      "Unfreeze": "解除冻结"
+      "Unfreeze": "解除冻结",
+      "Go to update page": "前往更新页面"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -316,7 +318,8 @@
       "Show Window": "顯示視窗",
       "Hide Window": "隱藏視窗",
       "Freeze": "凍結",
-      "Unfreeze": "解除凍結"
+      "Unfreeze": "解除凍結",
+      "Go to update page": "前往更新頁面"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -422,7 +425,8 @@
       "Show Window": "창 표시",
       "Hide Window": "창 숨기기",
       "Freeze": "고정",
-      "Unfreeze": "고정 해제"
+      "Unfreeze": "고정 해제",
+      "Go to update page": "업데이트 페이지로 이동"
     }
   }
 }

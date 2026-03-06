@@ -16,9 +16,6 @@ internal class FileMainMenuItemsProvider : MainMenuItemsProvider, IFileMainMenuI
             Icon = null,
             Priority = MainMenuPriority.File
         };
-
-        RegisterSubItem<RestartMainMenuItem>();
-        RegisterSubItem<ExitMainMenuItem>();
     }
 
     public override MenuItemInfo Info { get; }

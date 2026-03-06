@@ -27,7 +27,7 @@ internal class Module : ModuleBase
     {
         await Task.CompletedTask;
 
-        lifetimeScope.SubscribeEvent<MainWindowLoadedEvent>(_ =>
+        lifetimeScope.SubscribeEvent<TabManagerRestoreCompleted>(_ =>
         {
             var updateConfig = lifetimeScope.Resolve<UpdateConfig>();
             if (!updateConfig.CheckAtStartup)

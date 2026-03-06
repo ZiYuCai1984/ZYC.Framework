@@ -19,6 +19,5 @@ public class MockConfig : IConfig
     /// <summary>
     ///     Gets or sets mock main menu visible.
     /// </summary>
-    [MultilineText]
     public bool IsMainMenuVisible { get; set; } = true;
 }
