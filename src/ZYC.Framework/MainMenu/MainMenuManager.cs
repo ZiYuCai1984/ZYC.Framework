@@ -71,7 +71,7 @@ internal class MainMenuManager : IMainMenuManager
         return groupedItems;
     }
 
-    private static IMainMenuItem SortSubItemsRecursively(IMainMenuItem item)
+    public static IMainMenuItem SortSubItemsRecursively(IMainMenuItem item)
     {
         if (item.SubItems.Length == 0)
         {

@@ -14,7 +14,7 @@
                         "**/_bin_build/**",
                         "**/obj/**",
                         "**/_obj/**",
-                        "**/ZYC.Automation.Build.*/**/*.csproj"
+                        "**/ZYC.Framework.Build.*/**"
                     ]
                 }
             ],
@@ -25,15 +25,31 @@
         "content": [
             {
                 "files": [
-                    "**/*.yml",
-                    "index.md"
+                    "index.md",
+                    "README*.md",
+                    "LICENSE",
+                    "docs/**.md",
+                    "_api/**.yml"
                 ],
                 "exclude": [
-                    "_site/**"
+                    "_site/**",
+                    "**/bin/**",
+                    "**/obj/**"
                 ]
             }
         ],
-        "output": "./_site",
+        "resource": [
+            {
+                "files": [
+                    "docs/images/**"
+                ],
+                "exclude": [
+                    "_site/**",
+                    "_api/**"
+                ]
+            }
+        ],
+        "output": "_site",
         "template": [
             "default"
         ]

@@ -8,21 +8,33 @@ using ZYC.Framework.Abstractions.MainMenu;
 namespace ZYC.Framework.MainMenu;
 
 [RegisterSingleInstance]
-public partial class MainMenuView : INotifyPropertyChanged
+internal partial class MainMenuView : INotifyPropertyChanged
 {
-    public MainMenuView(IMainMenuManager mainMenuManager, MainMenuConfig mainMenuConfig)
+    public MainMenuView(
+        IHamburgerMenuManager hamburgerMenuManager,
+        IMainMenuManager mainMenuManager, 
+        MainMenuConfig mainMenuConfig, 
+        HamburgerMenuConfig hamburgerMenuConfig)
     {
+        HamburgerMenuManager = hamburgerMenuManager;
         MainMenuManager = mainMenuManager;
+
         MainMenuConfig = mainMenuConfig;
+        HamburgerMenuConfig = hamburgerMenuConfig;
 
         InitializeComponent();
     }
 
+    private IHamburgerMenuManager HamburgerMenuManager { get; }
     private IMainMenuManager MainMenuManager { get; }
 
     public MainMenuConfig MainMenuConfig { get; }
 
+    public HamburgerMenuConfig HamburgerMenuConfig { get; }
+
     public IMainMenuItem?[] MainMenuItems { get; set; } = [];
+
+    public IMainMenuItem?[] HamburgerMenuItems { get; set; } = [];
 
     private bool FirstRending { get; set; } = true;
 
@@ -37,9 +49,11 @@ public partial class MainMenuView : INotifyPropertyChanged
 
         FirstRending = false;
 
-
         MainMenuItems = MainMenuManager.GetSortedItems();
         OnPropertyChanged(nameof(MainMenuItems));
+
+        HamburgerMenuItems = HamburgerMenuManager.GetSortedItems();
+        OnPropertyChanged(nameof(HamburgerMenuItems));
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
