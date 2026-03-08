@@ -1,8 +1,8 @@
-﻿using Autofac;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -57,7 +57,7 @@ internal partial class TabManager : ITabManager
     private IReadOnlyDictionary<Guid, WorkspaceNode> WorkspaceDictionary =>
         ParallelWorkspaceManager.GetWorkspaceDictionary();
 
-    private IList<ITabItemInstance> TabItemInstances { get; } = new List<ITabItemInstance>();
+    private HashSet<ITabItemInstance> TabItemInstances { get; } = new();
 
     private ITabItemFactory[] TabItemFactories => TabItemFactoryManager.GetTabItemFactories();
 
@@ -80,6 +80,7 @@ internal partial class TabManager : ITabManager
         if (!WorkspaceTabItemInstanceListDictionary.ContainsKey(fromWorkspace))
         {
             //ignore
+            Debugger.Break();
         }
         else
         {
@@ -106,7 +107,8 @@ internal partial class TabManager : ITabManager
 
         if (!WorkspaceTabItemInstanceListDictionary.ContainsKey(fromWorkspace))
         {
-            //ignore
+            //ignore(why ??)
+            //Debugger.Break();
         }
         else
         {
@@ -129,6 +131,52 @@ internal partial class TabManager : ITabManager
             }
 
             InvokeTabItemsMovedEvent(from, to, targetItems);
+        }
+    }
+
+
+    public void MoveTabItemInstance(ITabItemInstance source, ITabItemInstance target, TabInsertPosition position)
+    {
+        var sourceWorkspace = GetTabItemInstanceWorkspace(source);
+        var targetWorkspace = GetTabItemInstanceWorkspace(target);
+
+
+        if (sourceWorkspace.Id != targetWorkspace.Id)
+        {
+            DetachTabItemInstance(sourceWorkspace.Id, source);
+
+            var insertIndex = WorkspaceTabItemInstanceListDictionary[targetWorkspace].IndexOf(target);
+            if (position == TabInsertPosition.After)
+            {
+                ++insertIndex;
+            }
+
+
+            AttachTabItemInstance(targetWorkspace.Id, source, insertIndex);
+
+            SetFocusedTabItemInstance(targetWorkspace.Id, source);
+            InvokeTabItemsMovedEvent(sourceWorkspace.Id, targetWorkspace.Id, [source], insertIndex);
+        }
+        else
+        {
+            //Internal move
+            var workspaceId = sourceWorkspace.Id;
+
+            WorkspaceTabItemInstanceListDictionary[sourceWorkspace].Remove(source);
+
+            var insertIndex = WorkspaceTabItemInstanceListDictionary[sourceWorkspace].IndexOf(target);
+            if (position == TabInsertPosition.After)
+            {
+                ++insertIndex;
+            }
+
+            WorkspaceTabItemInstanceListDictionary[sourceWorkspace].Insert(insertIndex, source);
+
+            var navigationState = GetNavigationState(workspaceId);
+            navigationState.TabItems = GetTabItemUris(workspaceId);
+
+            SetFocusedTabItemInstance(workspaceId, source);
+            InvokeTabItemsMovedEvent(workspaceId, workspaceId, [source], insertIndex);
         }
     }
 
@@ -167,7 +215,7 @@ internal partial class TabManager : ITabManager
             return kv.Key;
         }
 
-        throw new InvalidOperationException();
+        throw new InvalidOperationException($"No workspace node found for the tab item instance: {instance.Id}");
     }
 
 
@@ -485,7 +533,7 @@ internal partial class TabManager : ITabManager
         return instance;
     }
 
-    private void AttachTabItemInstance(Guid workspaceId, ITabItemInstance instance)
+    private void AttachTabItemInstance(Guid workspaceId, ITabItemInstance instance, int? insertIndex = null)
     {
         var workspace = WorkspaceDictionary[workspaceId];
 
@@ -494,7 +542,15 @@ internal partial class TabManager : ITabManager
             WorkspaceTabItemInstanceListDictionary.Add(workspace, new List<ITabItemInstance>());
         }
 
-        WorkspaceTabItemInstanceListDictionary[workspace].Add(instance);
+        if (insertIndex == null)
+        {
+            WorkspaceTabItemInstanceListDictionary[workspace].Add(instance);
+        }
+        else
+        {
+            WorkspaceTabItemInstanceListDictionary[workspace].Insert(insertIndex.Value, instance);
+        }
+
         TabItemInstances.Add(instance);
 
         var navigationState = GetNavigationState(workspaceId);
@@ -561,25 +617,9 @@ internal partial class TabManager : ITabManager
         return GetNavigationState(workspaceId);
     }
 
-    private WorkspaceNode GetWorkspaceFromTabItemInstance(ITabItemInstance instance)
-    {
-        foreach (var kv in WorkspaceTabItemInstanceListDictionary)
-        {
-            if (!kv.Value.Contains(instance))
-            {
-                continue;
-            }
-
-            return kv.Key;
-        }
-
-        Debugger.Break();
-        throw new InvalidOperationException("");
-    }
-
     private Guid GetWorkspaceIdFromTabItemInstance(ITabItemInstance instance)
     {
-        var workspace = GetWorkspaceFromTabItemInstance(instance);
+        var workspace = GetTabItemInstanceWorkspace(instance);
         return workspace.Id;
     }
 }

@@ -32,8 +32,9 @@ internal partial class TabManager
     private void InvokeTabItemsMovedEvent(
         Guid fromWorkspaceId,
         Guid toWorkspaceId,
-        ITabItemInstance[] instances)
+        ITabItemInstance[] instances, 
+        int? insertIndex = null)
     {
-        EventAggregator.Publish(new TabItemsMovedEvent(fromWorkspaceId, toWorkspaceId, instances));
+        EventAggregator.Publish(new TabItemsMovedEvent(fromWorkspaceId, toWorkspaceId, instances, insertIndex));
     }
 }
