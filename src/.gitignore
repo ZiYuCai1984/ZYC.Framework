@@ -5,6 +5,7 @@
 *.pdb
 *.deps.json
 *.binlog
+*.ps
 
 _temp.sln
 
