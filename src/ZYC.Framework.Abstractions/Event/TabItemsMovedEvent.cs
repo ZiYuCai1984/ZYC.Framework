@@ -13,14 +13,20 @@ public sealed class TabItemsMovedEvent
     /// <param name="fromWorkspaceId">The unique identifier of the source workspace.</param>
     /// <param name="toWorkspaceId">The unique identifier of the destination workspace.</param>
     /// <param name="tabItems">An array of tab item instances being moved.</param>
+    /// <param name="insertIndex">
+    ///     The zero-based index where the items are inserted in the destination workspace, or null if
+    ///     appended.
+    /// </param>
     public TabItemsMovedEvent(
         Guid fromWorkspaceId,
         Guid toWorkspaceId,
-        ITabItemInstance[] tabItems)
+        ITabItemInstance[] tabItems,
+        int? insertIndex = null)
     {
         FromWorkspaceId = fromWorkspaceId;
         ToWorkspaceId = toWorkspaceId;
         TabItems = tabItems;
+        InsertIndex = insertIndex;
     }
 
     /// <summary>
@@ -37,4 +43,9 @@ public sealed class TabItemsMovedEvent
     ///     Gets the collection of tab item instances involved in the move.
     /// </summary>
     public ITabItemInstance[] TabItems { get; }
+
+    /// <summary>
+    ///     Gets the specific index in the destination workspace where the items were inserted.
+    /// </summary>
+    public int? InsertIndex { get; }
 }

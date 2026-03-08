@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -14,6 +16,7 @@ namespace ZYC.Framework.Tab;
 
 internal partial class TabManagerView
 {
+    private readonly Dictionary<FrameworkElement, TabHeaderDragState> _tabHeaderDragStates = new();
     private AdornerLayer? _rootAdornerLayer;
 
     private FrameworkElement? _rootGrid;
@@ -26,6 +29,7 @@ internal partial class TabManagerView
 
     private static object DragDropLock { get; } = new();
 
+
     /// <summary>
     ///     !WARNING Need to use Win32 to get the coordinates because Mouse.GetPosition might not update during DragDrop.
     /// </summary>
@@ -37,6 +41,13 @@ internal partial class TabManagerView
     private void OnTabItemHeaderLoaded(object sender, RoutedEventArgs e)
     {
         var element = (FrameworkElement)sender;
+
+        DetachTabHeaderState(element);
+
+        var state = new TabHeaderDragState();
+        _tabHeaderDragStates[element] = state;
+
+        var compositeDisposable = state.CompositeDisposable;
 
         var container = RootGrid;
 
@@ -63,7 +74,7 @@ internal partial class TabManagerView
                     Math.Abs(pt.Y - startPt.Y) >= SystemParameters.MinimumVerticalDragDistance)
                 .Take(1));
 
-        var sub = dragStart
+        dragStart
             .ObserveOnUI()
             .Subscribe(_ =>
             {
@@ -78,9 +89,183 @@ internal partial class TabManagerView
                 }
 
                 StartDrag(container, element, tabItemInstance);
-            });
+            }).DisposeWith(compositeDisposable);
 
-        element.Unloaded += (_, _) => sub.Dispose();
+
+        var dragEnter = Observable.FromEventPattern<DragEventHandler, DragEventArgs>(
+            h => element.DragEnter += h,
+            h => element.DragEnter -= h);
+
+        var dragOver = Observable.FromEventPattern<DragEventHandler, DragEventArgs>(
+            h => element.DragOver += h,
+            h => element.DragOver -= h);
+
+        var dragLeave = Observable.FromEventPattern<DragEventHandler, DragEventArgs>(
+            h => element.DragLeave += h,
+            h => element.DragLeave -= h);
+
+        var drop = Observable.FromEventPattern<DragEventHandler, DragEventArgs>(
+            h => element.Drop += h,
+            h => element.Drop -= h);
+
+        dragEnter
+            .Merge(dragOver)
+            .ObserveOnUI()
+            .Subscribe(ep =>
+            {
+                UpdateTabHeaderDropAdorner(element, ep.EventArgs);
+            })
+            .DisposeWith(compositeDisposable);
+
+
+        dragLeave
+            .ObserveOnUI()
+            .Subscribe(_ =>
+            {
+                ClearTabHeaderDropAdorner(element);
+            })
+            .DisposeWith(compositeDisposable);
+
+
+        drop
+            .ObserveOnUI()
+            .Subscribe(ep =>
+            {
+                var args = ep.EventArgs;
+                args.Handled = true;
+
+                try
+                {
+                    ClearTabHeaderDropAdorner(element);
+
+                    if (!args.Data.GetDataPresent(typeof(ITabItemInstance)))
+                    {
+                        return;
+                    }
+
+                    if (element.DataContext is not ITabItemInstance target)
+                    {
+                        return;
+                    }
+
+                    var source = (ITabItemInstance)args.Data.GetData(typeof(ITabItemInstance))!;
+                    if (ReferenceEquals(source, target))
+                    {
+                        return;
+                    }
+
+                    var insertPosition = GetTabInsertPosition(
+                        element,
+                        args.GetPosition(element).X);
+
+                    TabManager.MoveTabItemInstance(source, target, insertPosition);
+                }
+                finally
+                {
+                    ClearTabHeaderDropAdorner(element);
+                }
+            })
+            .DisposeWith(compositeDisposable);
+
+
+        element.Unloaded += (_, _) => compositeDisposable.Dispose();
+    }
+
+    private void UpdateTabHeaderDropAdorner(FrameworkElement element, DragEventArgs args)
+    {
+        if (!args.Data.GetDataPresent(typeof(ITabItemInstance)))
+        {
+            args.Effects = DragDropEffects.None;
+            ClearTabHeaderDropAdorner(element);
+            args.Handled = true;
+            return;
+        }
+
+        if (element.DataContext is not ITabItemInstance target)
+        {
+            args.Effects = DragDropEffects.None;
+            ClearTabHeaderDropAdorner(element);
+            args.Handled = true;
+            return;
+        }
+
+        var source = (ITabItemInstance)args.Data.GetData(typeof(ITabItemInstance))!;
+        if (ReferenceEquals(source, target))
+        {
+            args.Effects = DragDropEffects.None;
+            ClearTabHeaderDropAdorner(element);
+            args.Handled = true;
+            return;
+        }
+
+        var insertPosition = GetTabInsertPosition(
+            element,
+            args.GetPosition(element).X);
+
+        ShowTabHeaderDropAdorner(element, insertPosition);
+
+        args.Effects = DragDropEffects.Move;
+        args.Handled = true;
+    }
+
+    private static TabInsertPosition GetTabInsertPosition(FrameworkElement element, double x)
+    {
+        return x < element.ActualWidth / 2.0
+            ? TabInsertPosition.Before
+            : TabInsertPosition.After;
+    }
+
+    private void ShowTabHeaderDropAdorner(FrameworkElement element, TabInsertPosition insertPosition)
+    {
+        if (!_tabHeaderDragStates.TryGetValue(element, out var state))
+        {
+            return;
+        }
+
+        state.AdornerLayer ??= AdornerLayer.GetAdornerLayer(element);
+        if (state.AdornerLayer == null)
+        {
+            return;
+        }
+
+        if (state.Adorner == null)
+        {
+            state.Adorner = new TabInsertAdorner(element);
+            state.AdornerLayer.Add(state.Adorner);
+        }
+
+        state.Adorner.Update(insertPosition);
+    }
+
+    private void ClearTabHeaderDropAdorner(FrameworkElement element)
+    {
+        if (!_tabHeaderDragStates.TryGetValue(element, out var state))
+        {
+            return;
+        }
+
+        if (state.AdornerLayer != null && state.Adorner != null)
+        {
+            state.AdornerLayer.Remove(state.Adorner);
+            state.Adorner = null;
+        }
+    }
+
+    private void DetachTabHeaderState(FrameworkElement element)
+    {
+        if (!_tabHeaderDragStates.TryGetValue(element, out var state))
+        {
+            return;
+        }
+
+        if (state.AdornerLayer != null && state.Adorner != null)
+        {
+            state.AdornerLayer.Remove(state.Adorner);
+            state.Adorner = null;
+        }
+
+        state.CompositeDisposable.Dispose();
+        _tabHeaderDragStates.Remove(element);
     }
 
     private void StartDrag(FrameworkElement container, FrameworkElement element, ITabItemInstance tabItemInstance)
@@ -150,6 +335,15 @@ internal partial class TabManagerView
 
             adorner.UpdatePosition(left, top);
         }
+    }
+
+    private sealed class TabHeaderDragState
+    {
+        public CompositeDisposable CompositeDisposable { get; } = new();
+
+        public AdornerLayer? AdornerLayer { get; set; }
+
+        public TabInsertAdorner? Adorner { get; set; }
     }
 
     private struct POINT
