@@ -2,6 +2,7 @@
   <ItemGroup>
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
     <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Fxc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
@@ -14,9 +15,17 @@
     <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Shaders\crt.fx" />
+    <Resource Include="Shaders\crt.fx" />
+  </ItemGroup>
+  <Target BeforeTargets="Build" Name="BuildShader" Condition="!Exists('./Shaders/crt.ps')">
+    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/crt.ps Shaders/crt.fx" />
+  </Target>
 </Project>

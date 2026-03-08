@@ -9,6 +9,13 @@
     <PackageReference Update="ZYC.CoreToolkit.Extensions.WebView2" Version="$(V_ZYC_CoreToolkit)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="ZYC.CoreToolkit.Extensions.Fxc" Version="$(V_ZYC_CoreToolkit_Extensions_Fxc)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+
   <!--!WARNING The value of $(NuGetPackageRoot) is inconsistent between the restore and build (it is empty during restore), $(NuGetPackageRoot) cannot be used here. !!-->
   <!--<Import Project="$(USERPROFILE)\.nuget\packages\ZYC.CoreToolkit\$(V_ZYC_CoreToolkit)\nuget.targets"></Import>-->
 
@@ -118,7 +125,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="PropertyChanged.Fody" Version="4.1.0" >
+    <PackageReference Update="PropertyChanged.Fody" Version="4.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
