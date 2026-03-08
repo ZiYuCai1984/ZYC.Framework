@@ -136,4 +136,16 @@ public partial interface ITabManager
     /// <param name="instance">The tab item instance to focus.</param>
     [MCPIgnore]
     void SetFocusedTabItemInstance(Guid workspaceId, ITabItemInstance? instance);
+
+    /// <summary>
+    ///     Moves a specific tab item instance to a new position relative to a target tab item.
+    /// </summary>
+    /// <param name="source">The tab item instance that is being moved.</param>
+    /// <param name="target">The reference tab item instance used to determine the new location.</param>
+    /// <param name="position">The insertion mode (e.g., before or after) relative to the target tab.</param>
+    [MCPIgnore]
+    void MoveTabItemInstance(
+        ITabItemInstance source,
+        ITabItemInstance target,
+        TabInsertPosition position);
 }

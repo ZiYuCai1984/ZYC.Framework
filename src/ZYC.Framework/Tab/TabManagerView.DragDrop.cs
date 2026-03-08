@@ -1,9 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using Autofac;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Tab;
@@ -26,6 +30,7 @@ internal partial class TabManagerView
 
     private static object DragDropLock { get; } = new();
 
+
     /// <summary>
     ///     !WARNING Need to use Win32 to get the coordinates because Mouse.GetPosition might not update during DragDrop.
     /// </summary>
@@ -36,6 +41,8 @@ internal partial class TabManagerView
 
     private void OnTabItemHeaderLoaded(object sender, RoutedEventArgs e)
     {
+        var compositeDisposable = new CompositeDisposable();
+
         var element = (FrameworkElement)sender;
 
         var container = RootGrid;
@@ -63,7 +70,7 @@ internal partial class TabManagerView
                     Math.Abs(pt.Y - startPt.Y) >= SystemParameters.MinimumVerticalDragDistance)
                 .Take(1));
 
-        var sub = dragStart
+        dragStart
             .ObserveOnUI()
             .Subscribe(_ =>
             {
@@ -78,9 +85,9 @@ internal partial class TabManagerView
                 }
 
                 StartDrag(container, element, tabItemInstance);
-            });
+            }).DisposeWith(compositeDisposable);
 
-        element.Unloaded += (_, _) => sub.Dispose();
+        element.Unloaded += (_, _) => compositeDisposable.Dispose();
     }
 
     private void StartDrag(FrameworkElement container, FrameworkElement element, ITabItemInstance tabItemInstance)
@@ -150,6 +157,43 @@ internal partial class TabManagerView
 
             adorner.UpdatePosition(left, top);
         }
+    }
+
+    private void OnDropBorderLoaded(object sender, RoutedEventArgs e)
+    {
+        var border = (Border)sender;
+        var insertPosition = (TabInsertPosition)border.Tag;
+        var target = (ITabItemInstance)border.DataContext;
+
+
+        border.DragEnter += (_, _) =>
+        {
+            border.BorderBrush = Brushes.Black;
+        };
+
+        border.DragLeave += (_, _) =>
+        {
+            border.BorderBrush = Brushes.Transparent;
+        };
+
+        border.Drop += (_, args) =>
+        {
+            border.BorderBrush = Brushes.Transparent;
+
+            var source = (ITabItemInstance)args.Data.GetData(typeof(ITabItemInstance))!;
+            if (source == target)
+            {
+                return;
+            }
+
+            args.Handled = true;
+            TabManager.MoveTabItemInstance(source, target, insertPosition);
+        };
+
+        //TODO-zyc Temp code OnDropBorderLoaded
+        border.Unloaded += (_, _) =>
+        {
+        };
     }
 
     private struct POINT

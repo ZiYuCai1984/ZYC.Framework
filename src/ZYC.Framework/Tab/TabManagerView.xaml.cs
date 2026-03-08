@@ -75,6 +75,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
 
     private ILogger<TabManagerView> Logger { get; }
+
     private IEventAggregator EventAggregator { get; }
 
     private Func<WorkspaceNode, Task> DisposeTabManagerViewAsyncFunc { get; }
@@ -139,21 +140,14 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
     private void OnTabItemsMoved(TabItemsMovedEvent e)
     {
-        if (e.ToWorkspaceId == WorkspaceNode.Id)
+        if (e.FromWorkspaceId != WorkspaceNode.Id
+            && e.ToWorkspaceId != WorkspaceNode.Id)
         {
-            foreach (var instance in e.TabItems)
-            {
-                if (!TabItemSource.Contains(instance))
-                {
-                    TabItemSource.Add(instance);
-                }
-                else
-                {
-                    Debugger.Break();
-                }
-            }
+            return;
         }
-        else if (e.FromWorkspaceId == WorkspaceNode.Id)
+
+
+        if (e.FromWorkspaceId == WorkspaceNode.Id)
         {
             foreach (var instance in e.TabItems)
             {
@@ -167,9 +161,42 @@ internal partial class TabManagerView : INotifyPropertyChanged
                 }
             }
         }
-        else
+
+
+        if (e.ToWorkspaceId == WorkspaceNode.Id)
         {
-            return;
+            if (e.InsertIndex == null)
+            {
+                foreach (var instance in e.TabItems)
+                {
+                    if (!TabItemSource.Contains(instance))
+                    {
+                        TabItemSource.Add(instance);
+                    }
+                    else
+                    {
+                        Debugger.Break();
+                    }
+                }
+            }
+            else
+            {
+                var items = e.TabItems.Reverse();
+                foreach (var instance in items)
+                {
+                    if (!TabItemSource.Contains(instance))
+                    {
+                        TabItemSource.Insert(e.InsertIndex.Value, instance);
+                    }
+                    else
+                    {
+                        Debugger.Break();
+                    }
+                }
+            }
+
+            //!WARNING When moving TabItems within the same workspace, the focus is initially set to empty, then to the default value. Therefore, it is set again here to override this.
+            FocusedTabItemInstance = e.TabItems.Last();
         }
 
 
