@@ -13,7 +13,6 @@
              xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              xmlns:tab="clr-namespace:ZYC.Framework.Tab"
-             xmlns:abstractionsTab="clr-namespace:ZYC.Framework.Abstractions.Tab;assembly=ZYC.Framework.Abstractions"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Root"
@@ -135,7 +134,8 @@
                                 <DataTemplate>
                                     <Grid Background="Transparent"
                                           MouseDown="OnTabHeaderMouseDown"
-                                          Loaded="OnTabItemHeaderLoaded">
+                                          Loaded="OnTabItemHeaderLoaded"
+                                          AllowDrop="True">
                                         <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <ContextMenu.ItemsSource>
@@ -210,24 +210,6 @@
                                             <Border />
                                         </DockPanel>
 
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-                                            <Border BorderThickness="2 0 0 0"
-
-                                                    Background="Transparent"
-                                                    AllowDrop="True"
-                                                    Tag="{x:Static abstractionsTab:TabInsertPosition.Before}"
-                                                    Loaded="OnDropBorderLoaded" />
-                                            <Border Grid.Column="1"
-                                                    BorderThickness="0 0 2 0"
-                                                    Background="Transparent"
-                                                    AllowDrop="True"
-                                                    Tag="{x:Static abstractionsTab:TabInsertPosition.After}"
-                                                    Loaded="OnDropBorderLoaded" />
-                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </Setter.Value>
