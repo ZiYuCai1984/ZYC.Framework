@@ -196,7 +196,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
             }
 
             //!WARNING When moving TabItems within the same workspace, the focus is initially set to empty, then to the default value. Therefore, it is set again here to override this.
-            FocusedTabItemInstance = e.TabItems.Last();
+            FocusedTabItemInstance = e.TabItems.LastOrDefault();
         }
 
 
