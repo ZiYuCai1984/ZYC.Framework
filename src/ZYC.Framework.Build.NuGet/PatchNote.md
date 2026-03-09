@@ -6,30 +6,28 @@
 
 ## 🆕 New Features
 
-* Added **Microsoft.Extensions.Logging** support across the codebase, including:
-
-  * log4net adapter
-  * compatibility extensions for existing logging infrastructure
-* Introduced unified logging integration via **ILoggerFactory** and **ILogger<>**, backed by log4net
+* Added **tab drag & drop** support for improved workspace interaction
+* Added **tab item drag sort** support to make tab reordering more intuitive
+* Added a new **Recent Path** feature for quicker navigation to previously used locations
+* Introduced a **hamburger menu** entry point to improve main window navigation
+* Added a **test shader / mock shader** setup for shader-related development and experiments
 
 ---
 
 ## 🛠 Improvements
 
-* Updated DI registrations to consistently provide `ILoggerFactory` and `ILogger<>`
-* Refactored **CLIView** and **NuGetModuleManagerView** to:
+* Improved overall **tab management and interaction flow**
+* Migrated and reorganized **external modules** for a cleaner module structure
+* Continued refinement of desktop UI interaction patterns and menu organization
+* General internal cleanup and feature integration work across the framework
 
-  * Use injected loggers
-  * Integrate busy window / busy state handling
-* Improved tab management logic and removed obsolete or redundant code
-* Centralized and cleaned up **NuGet package references and MSBuild targets**
-* General code cleanup and improved dependency injection patterns
 
 ---
 
 ## 🐛 Bug Fixes
 
-* N/A (no user-facing bug fixes in this release)
+* Fixed an issue where the application **could not be closed from the taskbar**
+* Fixed an **address string crash** issue
 
 ---
 
