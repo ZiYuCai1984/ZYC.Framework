@@ -38,6 +38,8 @@ public abstract class MainMenuItemsProvider : IMainMenuItemsProvider
 
     public virtual bool IsHidden { get; set; }
 
+    public virtual string InputGestureText { get; set; } = "";
+
     public void RegisterSubItem<T>() where T : IMainMenuItem
     {
         RegisterSubItem(LifetimeScope.Resolve<T>());

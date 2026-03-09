@@ -13,7 +13,8 @@ internal class ExitMainMenuItem : MainMenuItem
         {
             Title = "Exit",
             Icon = "ExitToApp",
-            Anchor = FileMainMenuAnchors.Exit
+            Anchor = FileMainMenuAnchors.Exit,
+            InputGestureText = "Alt + F4"
         };
 
         Command = exitProcessCommand;
