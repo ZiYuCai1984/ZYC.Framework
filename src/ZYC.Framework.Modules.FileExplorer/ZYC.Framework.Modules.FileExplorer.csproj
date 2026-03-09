@@ -2,7 +2,6 @@
   <PropertyGroup>
     <UseWinform>true</UseWinform>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />

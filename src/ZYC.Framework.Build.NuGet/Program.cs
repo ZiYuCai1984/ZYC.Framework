@@ -26,7 +26,7 @@ public class Program
         var csprojFiles = GetCsprojFilePaths(BuildEnvironment.RootFolder);
 
 
-        await IOTools.ClearPathAsync(BuildEnvironment.OutputPath);
+        await IOTools.ClearPathAsync(BuildEnvironment.SettingsDirectoryPath);
 
 
         var tempSlnFile = "_temp.sln";
@@ -42,7 +42,6 @@ public class Program
         }
 
 
-        IOTools.DeleteDirectoryIfExists(BuildEnvironment.AlternatePath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.LogPath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.ProductPackagePath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.NuGetCachePath);

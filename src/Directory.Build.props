@@ -35,7 +35,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>$(MSBuildThisFileDirectory)_bin/</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)_bin/$(Version)/</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
@@ -70,9 +70,39 @@
   <ItemGroup Condition="'$(EnableFody)' == 'true'">
     <None Include="$(MSBuildThisFileDirectory)FodyWeavers.xml"
           Link="FodyWeavers.xml" />
-
     <PackageReference Include="PropertyChanged.Fody" />
   </ItemGroup>
+
+
+
+
+  <PropertyGroup>
+    <Enable_Target_CopyJsonToSettingsOutput>false</Enable_Target_CopyJsonToSettingsOutput>
+    <Enable_Target_CopyDebugJsonToSettingsOutput>false</Enable_Target_CopyDebugJsonToSettingsOutput>
+    <SettingsJsonOutputDir>$([System.IO.Path]::GetFullPath('$(OutputPath)..\'))</SettingsJsonOutputDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <JsonFiles Include="*.json" />
+    <!--<JsonFiles Include="**\*.json" />-->
+  </ItemGroup>
+
+
+  <Target Name="CopyJsonToSettingsOutput"
+          AfterTargets="Build"
+          Condition="'$(Enable_Target_CopyJsonToSettingsOutput)' == 'true'">
+    <Copy SourceFiles="@(JsonFiles)"
+          DestinationFiles="@(JsonFiles->'$(SettingsJsonOutputDir)\%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyDebugJsonToSettingsOutput"
+          AfterTargets="Build"
+          Condition="'$(Configuration)' == 'Debug' and '$(Enable_Target_CopyDebugJsonToSettingsOutput)' == 'true'">
+    <Copy SourceFiles="@(JsonFiles)"
+          DestinationFiles="@(JsonFiles->'$(SettingsJsonOutputDir)\%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
 
 
 </Project>

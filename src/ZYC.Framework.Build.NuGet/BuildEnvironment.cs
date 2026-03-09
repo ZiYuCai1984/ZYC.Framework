@@ -9,15 +9,15 @@ public static class BuildEnvironment
 {
     public static string RootFolder => GetProjectRootFolderPath();
 
-    public static string OutputPath => Path.Combine(RootFolder, "_bin\\");
+    public static string SettingsDirectoryPath => Path.Combine(RootFolder, "_bin\\");
+
+    public static string OutputPath => Path.Combine(SettingsDirectoryPath, $"{ProductInfo.Version}\\");
 
     public static string ObfuscarConfigFile => $"{OutputPath}Obfuscar.xml";
 
     public static string ObfuscarPath => Path.Combine(OutputPath, "Obfuscar");
 
-    public static string AlternatePath => Path.Combine(OutputPath, "Alternate");
-
-    public static string LogPath => Path.Combine(OutputPath, "Logs");
+    public static string LogPath => Path.Combine(SettingsDirectoryPath, "logs");
 
     public static string ProductPackageId => ProductInfo.PackageId;
 

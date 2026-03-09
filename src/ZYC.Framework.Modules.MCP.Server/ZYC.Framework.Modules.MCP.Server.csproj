@@ -9,9 +9,4 @@
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
     <PackageReference Include="ModelContextProtocol.AspNetCore" />    
   </ItemGroup>
-  <ItemGroup>
-    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>

@@ -133,7 +133,7 @@ internal class NuGetManager : INuGetManager, IDisposable
 
     public string GetCachePath()
     {
-        return Path.Combine(AppContext.GetMainAppDirectory(), NuGetConfig.CacheFolder);
+        return Path.Combine(AppContext.GetSettingsDirectory(), NuGetConfig.CacheFolder);
     }
 
     public async Task DownloadPackageAndDependenciesRecursiveAsync(

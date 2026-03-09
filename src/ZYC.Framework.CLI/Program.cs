@@ -18,7 +18,7 @@ internal class Program
     public static async Task<int> Main(string[] args)
     {
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-
+        //TODO-zyc Pending refactor(CLI)
         var rootCommand = new RootCommand($"Command line tool for {ProductInfo.ProductName}");
         var optionRegister = new CommandLineOptionRegister(rootCommand);
 

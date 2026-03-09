@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
+﻿using Autofac;
+using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
-using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
 using ZYC.CoreToolkit.Extensions.Autofac;
@@ -113,74 +113,45 @@ internal partial class AppContext : IAppContext
         return Path.GetTempPath();
     }
 
-    string IAppContext.GetMainAppDirectory()
-    {
-        return GetMainAppDirectory();
-    }
-
-    string IAppContext.GetAlternateAppDirectory()
-    {
-        return GetAlternateAppDirectory();
-    }
-
     string IAppContext.GetProcessFileName()
     {
         return GetProcessFileName();
     }
 
-    public string GetDefaultWebView2UserDataFolder()
-    {
-        return Path.Combine(GetMainAppDirectory(), $"{GetProcessFileName()}.WebView2");
-    }
-
-    bool IAppContext.IsSelfAlternate()
-    {
-        return IsSelfAlternate();
-    }
-
 
     public void SaveAllConfig()
     {
-        var mainAppFolder = GetMainAppDirectory();
+        var settingsFolder = GetSettingsDirectory();
 
         var configs = LifetimeScope.Resolve<IConfig[]>();
         foreach (var config in configs)
         {
-            SettingsTools.SetToFolderGeneric(mainAppFolder, config);
+            SettingsTools.SetToFolderGeneric(settingsFolder, config);
         }
     }
 
     public void SaveAllState()
     {
-        var mainAppFolder = GetMainAppDirectory();
+        var settingsFolder = GetSettingsDirectory();
 
         var states = LifetimeScope.Resolve<IState[]>();
         foreach (var state in states)
         {
-            SettingsTools.SetToFolderGeneric(mainAppFolder, state);
+            SettingsTools.SetToFolderGeneric(settingsFolder, state);
         }
-    }
-
-    public void SwitchStartupTarget()
-    {
-        StartupTarget target;
-
-        if (!IsSelfAlternate())
-        {
-            target = StartupTarget.Alternate;
-        }
-        else
-        {
-            target = StartupTarget.Main;
-        }
-
-        AppState.StartupTarget = target;
-        Logger.Warn($"Switch startup target -> {target.ToString()}");
     }
 
     string IAppContext.GetArgumentString()
     {
         return GetArgumentString();
+    }
+
+    public void UpdateStartupVersion(string version)
+    {
+        AppState.StartupVersion = version;
+        Logger.Warn($"Switch startup version -> {version}");
+
+        SettingsTools.SetToFolderGeneric(GetSettingsDirectory(), AppState);
     }
 
     public SynchronizationContext GetUISynchronizationContext()
@@ -234,6 +205,15 @@ internal partial class AppContext : IAppContext
         return await taskCompletionSource.Task;
     }
 
+    string IAppContext.GetSettingsDirectory()
+    {
+        return GetSettingsDirectory();
+    }
+
+    public string GetDefaultWebView2UserDataFolder()
+    {
+        return Path.Combine(GetSettingsDirectory(), $"{GetProcessFileName()}.WebView2");
+    }
 
     public static string GetArgumentString()
     {
@@ -242,27 +222,17 @@ internal partial class AppContext : IAppContext
         return argumentString;
     }
 
-    public static string GetAlternateAppDirectory()
-    {
-        var main = GetMainAppDirectory();
-        return Path.Combine(main, AlternateFolderName);
-    }
-
     public static string GetCurrentDirectory()
     {
         return IOTools.GetExecutingFolder();
     }
 
-    public static string GetMainAppDirectory()
+
+    public static string GetSettingsDirectory()
     {
         var current = GetCurrentDirectory();
 
         var directory = new DirectoryInfo(current);
-        if (directory.Name != AlternateFolderName)
-        {
-            return directory.FullName;
-        }
-
         return directory.Parent!.FullName;
     }
 
@@ -299,5 +269,10 @@ internal partial class AppContext : IAppContext
 
 
         return null;
+    }
+
+    public static string GetMainAppDirectory()
+    {
+        throw new NotImplementedException();
     }
 }

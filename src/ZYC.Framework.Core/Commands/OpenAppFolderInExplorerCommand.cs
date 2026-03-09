@@ -16,7 +16,7 @@ public class OpenAppFolderInExplorerCommand : CommandBase
 
     protected override void InternalExecute(object? parameter)
     {
-        var dir = AppContext.GetMainAppDirectory();
+        var dir = AppContext.GetCurrentDirectory();
         Process.Start("explorer.exe", dir);
     }
 }
