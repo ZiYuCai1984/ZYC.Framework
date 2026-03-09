@@ -77,6 +77,8 @@ internal class MainMenuItemWrapper : IMainMenuItem, INotifyPropertyChanged, IDis
 
     public bool IsHidden => _original.IsHidden;
 
+    public string InputGestureText => _original.InputGestureText;
+
     public IMainMenuItem[] SubItems { get; private set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;

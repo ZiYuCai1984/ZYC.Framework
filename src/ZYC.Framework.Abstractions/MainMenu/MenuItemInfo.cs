@@ -33,4 +33,10 @@ public class MenuItemInfo
     ///     should be processed through a localization provider.
     /// </summary>
     public bool Localization { get; set; } = true;
+
+    /// <summary>
+    ///     Gets the text string describing a keyboard shortcut or input gesture.
+    ///     Example: "Ctrl+C" or "Alt+F4".
+    /// </summary>
+    public string InputGestureText { get; set; } = "";
 }

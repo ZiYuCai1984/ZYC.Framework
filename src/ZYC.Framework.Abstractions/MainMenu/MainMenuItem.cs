@@ -24,13 +24,15 @@ public class MainMenuItem : IMainMenuItem
     /// <param name="anchor">The unique identifier for the menu's position or deep linking.</param>
     /// <param name="localization">Whether the title should be translated.</param>
     /// <param name="priority">The sorting weight (defaults to 0).</param>
+    /// <param name="inputGestureText">The keyboard shortcut or input gesture.</param>
     public MainMenuItem(
         string title,
         string? icon,
         ICommand command,
         string anchor = "",
         bool localization = true,
-        int priority = 0)
+        int priority = 0,
+        string inputGestureText = "")
     {
         Info = new MenuItemInfo
         {
@@ -38,7 +40,8 @@ public class MainMenuItem : IMainMenuItem
             Icon = icon,
             Anchor = anchor,
             Localization = localization,
-            Priority = priority
+            Priority = priority,
+            InputGestureText = inputGestureText
         };
 
         Command = command;
@@ -88,4 +91,10 @@ public class MainMenuItem : IMainMenuItem
     ///     Gets or sets a value indicating whether the menu item is currently hidden.
     /// </summary>
     public virtual bool IsHidden { get; set; }
+
+    /// <summary>
+    ///     Gets the text string describing a keyboard shortcut or input gesture.
+    ///     Example: "Ctrl+C" or "Alt+F4".
+    /// </summary>
+    public virtual string InputGestureText => Info.InputGestureText;
 }
