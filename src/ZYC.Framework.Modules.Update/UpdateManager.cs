@@ -104,20 +104,10 @@ internal class UpdateManager : IUpdateManager
                 product.PackageId,
                 product.Version);
 
-            string extractFolder;
-
-            if (AppContext.IsSelfMain())
-            {
-                extractFolder = AppContext.GetAlternateAppDirectory();
-            }
-
-            else
-            {
-                extractFolder = AppContext.GetMainAppDirectory();
-            }
+            var extractFolder = Path.Combine(AppContext.GetSettingsDirectory(), product.Version);
 
             await ZipTools.UnpackZipAsync(productZip, extractFolder);
-            AppContext.SwitchStartupTarget();
+            AppContext.UpdateStartupVersion(product.Version);
 
             return await UpdateUpdateContextAsync(UpdateStatus.RestartPending, product, CancellationToken.None);
         }

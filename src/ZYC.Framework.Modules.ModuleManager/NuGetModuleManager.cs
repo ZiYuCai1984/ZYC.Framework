@@ -131,7 +131,7 @@ internal class NuGetModuleManager : INuGetModuleManager
     public string GetNuGetModuleAssetsJsonPath()
     {
         return Path.Combine(
-            AppContext.GetMainAppDirectory(),
+            AppContext.GetSettingsDirectory(),
             ProductInfoExtended.NuGetModuleAssetsJsonFile);
     }
 

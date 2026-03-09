@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="log4net" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
@@ -9,10 +12,5 @@
     <ProjectReference Include="..\ZYC.Framework.Modules.Log.Abstractions\ZYC.Framework.Modules.Log.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.ModuleManager.Abstractions\ZYC.Framework.Modules.ModuleManager.Abstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

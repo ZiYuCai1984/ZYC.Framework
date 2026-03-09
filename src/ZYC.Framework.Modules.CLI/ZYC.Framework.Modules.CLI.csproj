@@ -6,12 +6,5 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

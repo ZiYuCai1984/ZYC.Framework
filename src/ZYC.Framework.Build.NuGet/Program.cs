@@ -26,7 +26,7 @@ public class Program
         var csprojFiles = GetCsprojFilePaths(BuildEnvironment.RootFolder);
 
 
-        await IOTools.ClearPathAsync(BuildEnvironment.OutputPath);
+        await IOTools.ClearPathAsync(BuildEnvironment.SettingsDirectoryPath);
 
 
         var tempSlnFile = "_temp.sln";
@@ -42,7 +42,6 @@ public class Program
         }
 
 
-        IOTools.DeleteDirectoryIfExists(BuildEnvironment.AlternatePath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.LogPath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.ProductPackagePath);
         IOTools.DeleteDirectoryIfExists(BuildEnvironment.NuGetCachePath);
@@ -145,6 +144,11 @@ public class Program
             TargetFramework = ProductInfoExtended.TargetFramework,
             Dependency =
             [
+                // !WARNING When restoring packages from a local source, this section may cause some dependencies to be missing during restore.
+                // Workarounds:
+                // 1. Temporarily disable/recompile this step (comment out the regeneration).
+                // 2. First restore all dependencies from nuget.org, then copy the restored
+                //    packages into the local source before performing the local restore.
                 new Dependency
                 {
                     Id = "ZYC.CoreToolkit",
@@ -156,7 +160,7 @@ public class Program
                     Id = "ZYC.CoreToolkit.Extensions.Autofac",
                     Version = BuildEnvironment.CoreToolkitVersion,
                     Exclude = "Build,Analyzers"
-                },
+                }
             ]
         };
 

@@ -120,7 +120,7 @@ public class AspireServiceEnvironment
         }
     }
 
-    public string AspireToolsFolder => Path.Combine(AppContext.GetMainAppDirectory(), "aspire-tools");
+    public string AspireToolsFolder => Path.Combine(AppContext.GetSettingsDirectory(), "aspire-tools");
 
     public string OrchestrationPackageName => "aspire.hosting.orchestration.win-x64";
 

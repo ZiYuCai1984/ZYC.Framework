@@ -83,7 +83,7 @@ public partial class SettingsManager : ISettingsManager
             throw new InvalidOperationException($"Can not find config <{typeof(T)}> !!");
         }
 
-        SettingsTools.SetToFolderGeneric(AppContext.GetMainAppDirectory(), targetConfig);
+        SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), targetConfig);
     }
 
     public Uri GetPageUri()
@@ -190,7 +190,7 @@ public partial class SettingsManager : ISettingsManager
             PublishSettingChangedEvent(
                 config.GetType(), oriConfig, config);
 
-            SettingsTools.SetToFolderGeneric(AppContext.GetMainAppDirectory(), config);
+            SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
         }
         catch (Exception e)
         {
@@ -229,7 +229,7 @@ public partial class SettingsManager : ISettingsManager
             PublishSettingChangedEvent(
                 config.GetType(), oriConfig, config);
 
-            SettingsTools.SetToFolderGeneric(AppContext.GetMainAppDirectory(), config);
+            SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
         }
         catch (Exception e)
         {

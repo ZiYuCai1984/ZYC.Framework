@@ -7,10 +7,9 @@ namespace ZYC.Framework.Modules.About.UI;
 [Register]
 internal partial class AboutView
 {
-    public AboutView(IAppContext appContext, IProduct product)
+    public AboutView(IProduct product)
     {
         CurrentProduct = product;
-        IsSelfAlternate = appContext.IsSelfAlternate();
 
         StackPanel.SetBinding(DataContextProperty, new Binding
         {
@@ -19,6 +18,4 @@ internal partial class AboutView
     }
 
     public IProduct CurrentProduct { get; }
-
-    public bool IsSelfAlternate { get; }
 }

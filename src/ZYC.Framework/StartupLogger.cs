@@ -18,7 +18,7 @@ internal class StartupLogger : IAppLogger
     }
 
     private static string LogDirectory { get; } = Path.Combine(
-        AppContext.GetMainAppDirectory(),
+        AppContext.GetSettingsDirectory(),
         "logs");
 
 
@@ -54,14 +54,8 @@ internal class StartupLogger : IAppLogger
             Directory.CreateDirectory(LogDirectory);
         }
 
-        var flag = StartupTarget.Main;
-        if (AppContext.IsSelfAlternate())
-        {
-            flag = StartupTarget.Alternate;
-        }
 
-        var logFileName = $"{flag}_startup_{DateTime.Now:yyyyMMdd_HHmmss}.log";
-
+        var logFileName = $"v{ProductInfo.Version}_startup_{DateTime.Now:yyyyMMdd_HHmmss}.log";
 
         var filePath = Path.Combine(LogDirectory, logFileName);
         if (!File.Exists(filePath))

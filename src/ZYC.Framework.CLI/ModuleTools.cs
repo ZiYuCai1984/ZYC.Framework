@@ -46,7 +46,7 @@ public static class ModuleTools
     }
 
     public static ModuleBase[] RegisterModules(
-        string appContextDirectory,
+        string settingsDirectory,
         ContainerBuilder builder,
         ModuleConfig moduleConfig,
         PendingFileOperationsState pendingFileOperationsState,
@@ -78,7 +78,7 @@ public static class ModuleTools
 
             var assembly = Assembly.LoadFrom(dllFile);
 
-            RegisterAllFromAssembly(appContextDirectory, builder, assembly);
+            RegisterAllFromAssembly(settingsDirectory, builder, assembly);
 
             var types = assembly.SafeGetTypes();
             foreach (var type in types)
@@ -126,7 +126,7 @@ public static class ModuleTools
 
 
         //TODO Refactoring is required(register nuget moodule from nuget cache)
-        var assetsJsonPath = Path.Combine(appContextDirectory, ProductInfoExtended.NuGetModuleAssetsJsonFile);
+        var assetsJsonPath = Path.Combine(settingsDirectory, ProductInfoExtended.NuGetModuleAssetsJsonFile);
         if (File.Exists(assetsJsonPath))
         {
             var assemblyFromNuGetCache =
@@ -136,7 +136,7 @@ public static class ModuleTools
 
             foreach (var assembly in assemblyFromNuGetCache)
             {
-                RegisterAllFromAssembly(appContextDirectory, builder, assembly);
+                RegisterAllFromAssembly(settingsDirectory, builder, assembly);
 
                 var types = assembly.SafeGetTypes();
                 foreach (var type in types)
@@ -173,13 +173,13 @@ public static class ModuleTools
     }
 
     public static void RegisterAllFromAssembly(
-        string appContextDirectory,
+        string settingsDirectory,
         ContainerBuilder builder,
         Assembly assembly,
         //!WARNING Design defeat !!
         Action<object>? registerAction = null)
     {
-        var folder = appContextDirectory;
+        var folder = settingsDirectory;
 
         Trace.WriteLine($"Register from {assembly.FullName}");
         AutofacTools.RegisterFromAssembly(builder, assembly);
