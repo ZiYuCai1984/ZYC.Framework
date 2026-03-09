@@ -16,7 +16,7 @@ internal sealed class JsonFileTaskStore : ITaskStore
 
     public JsonFileTaskStore(IAppContext appContext)
     {
-        _path = Path.Combine(appContext.GetMainAppDirectory(), "tasks.json");
+        _path = Path.Combine(appContext.GetSettingsDirectory(), "tasks.json");
         _jsonOptions = new JsonSerializerOptions
         {
             WriteIndented = true,

@@ -31,73 +31,48 @@ internal partial class Program
 {
     private static void StartApp()
     {
-        //TODO-zyc The design is flawed and needs to be modified to support switching between multiple versions.
-        var mainAppFolder = AppContext.GetMainAppDirectory();
+        var settingsDirectory = AppContext.GetSettingsDirectory();
 
         var appState = SettingsTools.GetFromFolder<AppState>(
-            mainAppFolder);
+            settingsDirectory);
 
-        if (appState.StartupTarget == StartupTarget.Main)
+        if (appState.StartupVersion == ProductInfo.Version)
         {
-            if (AppContext.IsSelfAlternate())
-            {
-                RestartToMainApp();
-            }
-            else
-            {
-                return;
-            }
         }
-        else if (appState.StartupTarget == StartupTarget.Alternate)
+        else
         {
-            if (!AppContext.IsSelfAlternate())
-            {
-                RestartToAlternateApp();
-            }
-            else
-            {
-                return;
-            }
+            RestartToSpecifiedVersion(appState.StartupVersion);
         }
-
-        throw new InvalidOperationException($"Unknown {nameof(StartupTarget)}:{appState.StartupTarget}");
     }
 
 
-    private static void RestartToMainApp()
+    private static void RestartToSpecifiedVersion(string version)
     {
         var fileName = AppContext.GetProcessFileName();
 
-        var mainAppFolder = AppContext.GetMainAppDirectory();
-        var mainAppPath = Path.Combine(mainAppFolder, fileName);
+        var settingsDirectory = AppContext.GetSettingsDirectory();
+        var targetAppFolder = Path.Combine(settingsDirectory, version);
+        var targetAppFile = Path.Combine(settingsDirectory, version, fileName);
 
-        Process.Start(
-            new ProcessStartInfo(mainAppPath,
-                AppContext.GetArgumentString())
-            {
-                WorkingDirectory = mainAppFolder
-            });
-
-        AppContext.FocusExitProcess();
-    }
-
-    private static void RestartToAlternateApp()
-    {
-        var fileName = AppContext.GetProcessFileName();
-        var folder = AppContext.GetAlternateAppDirectory();
-
-        var alternateAppPath = Path.Combine(folder,
-            fileName);
-
-        Process.Start(new ProcessStartInfo(
-            alternateAppPath,
-            AppContext.GetArgumentString())
+        if (IOTools.FileExists(targetAppFile))
         {
-            WorkingDirectory = folder
-        });
+            Process.Start(
+                new ProcessStartInfo(targetAppFile,
+                    AppContext.GetArgumentString())
+                {
+                    WorkingDirectory = targetAppFolder
+                });
 
-        AppContext.FocusExitProcess();
+            AppContext.FocusExitProcess();
+        }
+        else
+        {
+            MessageBoxTools.Warning(
+                $"Cannot start version '{version}'.\n\n" +
+                $"Executable not found:\n{targetAppFile}");
+        }
     }
+
 
     [STAThread]
     private static void Main()
@@ -129,27 +104,29 @@ internal partial class Program
             .As(typeof(ILogger<>));
 
 
-        var appContextDirectory = AppContext.GetMainAppDirectory();
+        var settingsDirectory = AppContext.GetSettingsDirectory();
 
 
-        ModuleTools.RegisterAllFromAssembly(appContextDirectory,
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
             typeof(Program).Assembly);
-        ModuleTools.RegisterAllFromAssembly(appContextDirectory,
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
             AssemblyInfo.GetAssembly());
-        ModuleTools.RegisterAllFromAssembly(appContextDirectory,
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
             typeof(WebViewHostBase).Assembly);
 
-        ModuleTools.RegisterAllFromAssembly(appContextDirectory,
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
             MetroWindow.AssemblyInfo.GetAssembly());
 
         ModuleConfig? moduleConfig = null;
         PendingFileOperationsState? pendingDeleteState = null;
 
-        ModuleTools.RegisterAllFromAssembly(appContextDirectory,
+
+
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
             typeof(ProductInfo).Assembly, obj =>
             {
@@ -169,7 +146,7 @@ internal partial class Program
 
         var startupLogger = StartupLogger.CreateInstance();
         var modules = ModuleTools.RegisterModules(
-            appContextDirectory,
+            settingsDirectory,
             builder,
             moduleConfig,
             pendingDeleteState,

@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
     <PackageReference Include="MahApps.Metro" />
@@ -14,12 +17,6 @@
     <ProjectReference Include="..\ZYC.Framework.Modules.TaskManager.Abstractions\ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="*.json" Condition="'$(Configuration)' == 'Debug'">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Remove="Shaders\crt.fx" />

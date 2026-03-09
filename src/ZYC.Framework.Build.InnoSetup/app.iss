@@ -29,12 +29,9 @@ DisableWelcomePage=yes
 DisableReadyPage=yes
 DisableProgramGroupPage=yes
 
-[Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"
-
 [Files]
 Source: "_bin\*"; DestDir: "{app}\"; Flags: ignoreversion recursesubdirs
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"
-Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#AppName}.exe"
+Name: "{group}\{#AppName}"; Filename: "{app}\{#Version}\{#AppName}.exe"
+Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#Version}\{#AppName}.exe"

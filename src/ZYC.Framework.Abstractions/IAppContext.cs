@@ -9,6 +9,12 @@ namespace ZYC.Framework.Abstractions;
 public partial interface IAppContext
 {
     /// <summary>
+    ///     Gets the settings directory.
+    /// </summary>
+    /// <returns>The settings directory path.</returns>
+    string GetSettingsDirectory();
+
+    /// <summary>
     ///     Gets the current working directory.
     /// </summary>
     /// <returns>The current directory path.</returns>
@@ -21,34 +27,10 @@ public partial interface IAppContext
     string GetTempPath();
 
     /// <summary>
-    ///     Gets the main application directory.
-    /// </summary>
-    /// <returns>The main application directory path.</returns>
-    string GetMainAppDirectory();
-
-    /// <summary>
-    ///     Gets the alternate application directory.
-    /// </summary>
-    /// <returns>The alternate application directory path.</returns>
-    string GetAlternateAppDirectory();
-
-    /// <summary>
     ///     Gets the current process file name.
     /// </summary>
     /// <returns>The process file name.</returns>
     string GetProcessFileName();
-
-    /// <summary>
-    ///     Gets the default WebView2 user data folder.
-    /// </summary>
-    /// <returns>The WebView2 user data folder path.</returns>
-    string GetDefaultWebView2UserDataFolder();
-
-    /// <summary>
-    ///     Gets whether the current app is running in the alternate location.
-    /// </summary>
-    /// <returns>True if running as alternate; otherwise, false.</returns>
-    bool IsSelfAlternate();
 
     /// <summary>
     ///     Saves all configuration data.
@@ -61,18 +43,10 @@ public partial interface IAppContext
     void SaveAllState();
 
     /// <summary>
-    ///     Gets whether the current app is the main instance.
+    ///     Gets the default WebView2 user data folder.
     /// </summary>
-    /// <returns>True if running as main; otherwise, false.</returns>
-    bool IsSelfMain()
-    {
-        return !IsSelfAlternate();
-    }
-
-    /// <summary>
-    ///     Switches the startup target between main and alternate.
-    /// </summary>
-    void SwitchStartupTarget();
+    /// <returns>The WebView2 user data folder path.</returns>
+    string GetDefaultWebView2UserDataFolder();
 
     /// <summary>
     ///     Gets the argument string used to launch the application.
@@ -92,18 +66,10 @@ public partial interface IAppContext
     void FocusExitProcess();
 
     /// <summary>
-    ///     Gets the current startup target.
+    ///     Update the startup version for main program.
     /// </summary>
-    /// <returns>The current startup target.</returns>
-    StartupTarget GetCurrentStartupTarget()
-    {
-        if (IsSelfMain())
-        {
-            return StartupTarget.Main;
-        }
-
-        return StartupTarget.Alternate;
-    }
+    /// <param name="productVersion"></param>
+    void UpdateStartupVersion(string productVersion);
 }
 
 public partial interface IAppContext

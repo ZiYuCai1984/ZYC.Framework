@@ -27,7 +27,7 @@ internal class FooLogger<T> : IAppLogger<T>
                 _log = LogManager.GetLogger(nameof(FooLogger<T>));
 
                 var app = LifetimeScope.Resolve<IAppContext>();
-                var fileName = $"{app.GetMainAppDirectory()}\\log4net.config";
+                var fileName = $"{app.GetSettingsDirectory()}\\log4net.config";
 
                 XmlConfigurator.Configure(new FileInfo(fileName));
             }

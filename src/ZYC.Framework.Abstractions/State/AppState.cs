@@ -7,5 +7,5 @@ namespace ZYC.Framework.Abstractions.State;
 
 public class AppState : IState
 {
-    [SkipReset] public StartupTarget StartupTarget { get; set; } = StartupTarget.Main;
+    [SkipReset] public string StartupVersion { get; set; } = ProductInfo.Version;
 }
