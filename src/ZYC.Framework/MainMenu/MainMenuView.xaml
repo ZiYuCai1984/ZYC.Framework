@@ -19,6 +19,7 @@
                     <Style TargetType="MenuItem"
                            BasedOn="{StaticResource MahApps.Styles.MenuItem}"
                            x:Key="MainMenuItemStyle">
+                        <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="ItemsSource" Value="{Binding SubItems}" />
                         <Setter Property="Visibility"

@@ -35,4 +35,6 @@ internal class MockMainMenuItem : IMainMenuItem
     public bool Localization => false;
 
     public bool IsHidden => false;
+
+    public string InputGestureText => "";
 }
