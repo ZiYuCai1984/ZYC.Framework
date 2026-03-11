@@ -3,14 +3,14 @@
 /// <summary>
 ///     Raised when a task faults.
 /// </summary>
-public sealed class ManagedTaskFaultedEvnet
+public sealed class ManagedTaskFaultedEvent
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ManagedTaskFaultedEvnet" /> class.
+    ///     Initializes a new instance of the <see cref="ManagedTaskFaultedEvent" /> class.
     /// </summary>
     /// <param name="snapshot">The task snapshot.</param>
     /// <param name="exception">The exception that caused the fault.</param>
-    public ManagedTaskFaultedEvnet(TaskRecord snapshot, Exception exception)
+    public ManagedTaskFaultedEvent(TaskRecord snapshot, Exception exception)
     {
         Snapshot = snapshot;
         Exception = exception;

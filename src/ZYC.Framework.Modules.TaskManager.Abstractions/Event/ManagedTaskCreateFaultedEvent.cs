@@ -3,13 +3,13 @@
 /// <summary>
 ///     Raised when task creation fails.
 /// </summary>
-public sealed class ManagedCreateFaultedEvent
+public sealed class ManagedTaskCreateFaultedEvent
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ManagedCreateFaultedEvent" /> class.
+    ///     Initializes a new instance of the <see cref="ManagedTaskCreateFaultedEvent" /> class.
     /// </summary>
     /// <param name="snapshot">The task snapshot.</param>
-    public ManagedCreateFaultedEvent(TaskRecord snapshot)
+    public ManagedTaskCreateFaultedEvent(TaskRecord snapshot)
     {
         Snapshot = snapshot;
     }
