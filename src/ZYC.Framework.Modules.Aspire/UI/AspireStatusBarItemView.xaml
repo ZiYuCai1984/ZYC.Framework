@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
              xmlns:bindings="clr-namespace:ZYC.Framework.Core.Bindings;assembly=ZYC.Framework.Core"
              xmlns:ui="clr-namespace:ZYC.Framework.Modules.Aspire.UI"
+             xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -16,6 +17,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/BottomRightDropDownButton.xaml" />
+                <ResourceDictionary>
+                    <shaders:GrayScaleEffect x:Key="GrayScaleEffect"/>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -29,7 +33,9 @@
                                  VerticalAlignment="Center"
                                  Width="16"
                                  Height="16"
-                                 Icon="{x:Static ui:AspireStatusBarItemView.Icon}" />
+                                 Icon="{x:Static ui:AspireStatusBarItemView.Icon}" 
+                                 Effect="{Binding IsIconGray,Converter={converters:BoolToObjectConverter TrueValue={StaticResource GrayScaleEffect},FalseValue={x:Null}}}">
+                </core:HybridIcon>
                 <TextBlock Text="{bindings:LBinding AspireServiceStatus.Status}"
                            Margin="8 0 4 0"
                            FontWeight="SemiBold" />

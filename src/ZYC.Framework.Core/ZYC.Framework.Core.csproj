@@ -13,4 +13,11 @@
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Shaders\GrayScale.ps" />
+    <Resource Include="Shaders\GrayScale.ps" />
+  </ItemGroup>
+  <Target BeforeTargets="Build" Name="BuildShader" Condition="!Exists('./Shaders/GrayScale.ps')">
+    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/GrayScale.ps Shaders/GrayScale.fx" />
+  </Target>
 </Project>

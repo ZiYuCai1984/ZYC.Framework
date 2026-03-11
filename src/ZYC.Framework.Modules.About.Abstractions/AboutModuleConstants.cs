@@ -10,7 +10,7 @@ public static class AboutModuleConstants
 
     public const string Host = "about";
 
-    public static string Title => $"About {ProductInfo.ProductName}";
+    public static string Title => $"{ProductInfo.ProductName} {ProductInfo.Version}";
 
     public static Uri Uri => UriTools.CreateAppUri(Host);
 }

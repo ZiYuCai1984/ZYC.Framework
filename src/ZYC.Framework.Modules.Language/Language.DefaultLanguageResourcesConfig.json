@@ -105,7 +105,10 @@
       "Hide Window": "ウィンドウを非表示",
       "Freeze": "フリーズ",
       "Unfreeze": "フリーズ解除",
-      "Go to update page": "アップデートページへ移動"
+      "Go to update page": "アップデートページへ移動",
+      "Already the latest version.": "すでに最新バージョンです。",
+      "Copied to clipboard.": "クリップボードにコピーしました。",
+      "Clear nuget http cache": "NuGet HTTP キャッシュをクリア"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -212,7 +215,10 @@
       "Hide Window": "隐藏窗口",
       "Freeze": "冻结",
       "Unfreeze": "解除冻结",
-      "Go to update page": "前往更新页面"
+      "Go to update page": "前往更新页面",
+      "Already the latest version.": "已经是最新版本。",
+      "Copied to clipboard.": "已复制到剪贴板。",
+      "Clear nuget http cache": "清除 NuGet HTTP 缓存"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -319,7 +325,10 @@
       "Hide Window": "隱藏視窗",
       "Freeze": "凍結",
       "Unfreeze": "解除凍結",
-      "Go to update page": "前往更新頁面"
+      "Go to update page": "前往更新頁面",
+      "Already the latest version.": "已經是最新版本。",
+      "Copied to clipboard.": "已複製到剪貼簿。",
+      "Clear nuget http cache": "清除 NuGet HTTP 快取"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -426,7 +435,10 @@
       "Hide Window": "창 숨기기",
       "Freeze": "고정",
       "Unfreeze": "고정 해제",
-      "Go to update page": "업데이트 페이지로 이동"
+      "Go to update page": "업데이트 페이지로 이동",
+      "Already the latest version.": "이미 최신 버전입니다.",
+      "Copied to clipboard.": "클립보드에 복사되었습니다.",
+      "Clear nuget http cache": "NuGet HTTP 캐시 지우기"
     }
   }
 }

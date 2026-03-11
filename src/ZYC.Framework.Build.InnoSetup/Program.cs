@@ -1,4 +1,5 @@
-﻿using ZYC.CoreToolkit;
+﻿using System.IO;
+using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions;
 using ZYC.CoreToolkit.Dotnet;
 using ProductInfo = ZYC.Framework.Abstractions.ProductInfo;
@@ -42,6 +43,17 @@ internal class Program
 
         IOTools.CopyFile(
             "./Output/ZYC.Framework.Setup.exe",
-            $"{IOTools.GetCallerDirectoryPath()}/ZYC.Framework.Setup.{ProductInfo.Version}.exe");
+            $"{GetProjectRootFolderPath()}/ZYC.Framework.Setup.{ProductInfo.Version}.exe");
+    }
+
+    /// <summary>
+    ///     src
+    /// </summary>
+    public static string GetProjectRootFolderPath()
+    {
+        var directoryPath = IOTools.GetCallerDirectoryPath();
+        var directoryInfo = new DirectoryInfo(directoryPath);
+        var path = directoryInfo.Parent!.FullName;
+        return path;
     }
 }

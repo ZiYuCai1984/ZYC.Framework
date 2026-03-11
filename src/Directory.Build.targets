@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -6,7 +6,7 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="./nuget.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)nuget.targets" />
 
 
 </Project>

@@ -18,6 +18,8 @@ internal partial class TaskbarContextMenu : ITaskbarMenuManager, IDisposable
         ILifetimeScope lifetimeScope,
         ShowWindowCommand showWindowCommand)
     {
+        InheritanceBehavior = InheritanceBehavior.SkipToThemeNext;
+
         ShowWindowCommand = showWindowCommand;
 
         InitializeComponent();
