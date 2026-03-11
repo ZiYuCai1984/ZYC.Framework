@@ -1,0 +1,71 @@
+
+<Solution>
+  <Folder Name="/Archived/" />
+  <Folder Name="/Build/">
+    <Project Path="ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj" />
+    <Project Path="ZYC.Framework.Build.NewModule/ZYC.Framework.Build.NewModule.csproj" />
+    <Project Path="ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj" />
+  </Folder>
+  <Folder Name="/Deprecated/" />
+  <Folder Name="/Modules/">
+    <Project Path="ZYC.Framework.Modules.About.Abstractions/ZYC.Framework.Modules.About.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.About/ZYC.Framework.Modules.About.csproj" />
+    <Project Path="ZYC.Framework.Modules.Aspire.Abstractions/ZYC.Framework.Modules.Aspire.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Aspire/ZYC.Framework.Modules.Aspire.csproj" />
+    <Project Path="ZYC.Framework.Modules.BlazorDemo.Abstractions/ZYC.Framework.Modules.BlazorDemo.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.BlazorDemo/ZYC.Framework.Modules.BlazorDemo.csproj" />
+    <Project Path="ZYC.Framework.Modules.CLI.Abstractions/ZYC.Framework.Modules.CLI.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.CLI/ZYC.Framework.Modules.CLI.csproj" />
+    <Project Path="ZYC.Framework.Modules.FileExplorer.Abstractions/ZYC.Framework.Modules.FileExplorer.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.FileExplorer.Features.Abstractions/ZYC.Framework.Modules.FileExplorer.Features.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.FileExplorer.Features/ZYC.Framework.Modules.FileExplorer.Features.csproj" />
+    <Project Path="ZYC.Framework.Modules.FileExplorer/ZYC.Framework.Modules.FileExplorer.csproj" />
+    <Project Path="ZYC.Framework.Modules.Language.Abstractions/ZYC.Framework.Modules.Language.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Language/ZYC.Framework.Modules.Language.csproj" />
+    <Project Path="ZYC.Framework.Modules.Log.Abstractions/ZYC.Framework.Modules.Log.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Log/ZYC.Framework.Modules.Log.csproj" />
+    <Project Path="ZYC.Framework.Modules.MCP.Server.Abstractions/ZYC.Framework.Modules.MCP.Server.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.MCP.Server/ZYC.Framework.Modules.MCP.Server.csproj" />
+    <Project Path="ZYC.Framework.Modules.Mock.Abstractions/ZYC.Framework.Modules.Mock.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Mock/ZYC.Framework.Modules.Mock.csproj" />
+    <Project Path="ZYC.Framework.Modules.ModuleManager.Abstractions/ZYC.Framework.Modules.ModuleManager.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.ModuleManager/ZYC.Framework.Modules.ModuleManager.csproj" />
+    <Project Path="ZYC.Framework.Modules.NuGet.Abstractions/ZYC.Framework.Modules.NuGet.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.NuGet/ZYC.Framework.Modules.NuGet.csproj" />
+    <Project Path="ZYC.Framework.Modules.Secrets.Abstractions/ZYC.Framework.Modules.Secrets.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Secrets/ZYC.Framework.Modules.Secrets.csproj" />
+    <Project Path="ZYC.Framework.Modules.Settings.Abstractions/ZYC.Framework.Modules.Settings.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Settings/ZYC.Framework.Modules.Settings.csproj" />
+    <Project Path="ZYC.Framework.Modules.TaskManager.Abstractions/ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.TaskManager/ZYC.Framework.Modules.TaskManager.csproj" />
+    <Project Path="ZYC.Framework.Modules.Translator.Abstractions/ZYC.Framework.Modules.Translator.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Translator/ZYC.Framework.Modules.Translator.csproj" />
+    <Project Path="ZYC.Framework.Modules.Update.Abstractions/ZYC.Framework.Modules.Update.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Update/ZYC.Framework.Modules.Update.csproj" />
+    <Project Path="ZYC.Framework.Modules.WebBrowser.Abstractions/ZYC.Framework.Modules.WebBrowser.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.WebBrowser/ZYC.Framework.Modules.WebBrowser.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../README.md" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="FodyWeavers.xml" />
+    <File Path="nuget.props" />
+    <File Path="nuget.targets" />
+    <File Path="version.props" />
+    <File Path="ZYC.Framework.slnx.DotSettings" />
+  </Folder>
+  <Folder Name="/Thirdparty/">
+    <Project Path="Thirdparty/ZYC.MdXaml/ZYC.MdXaml.csproj" />
+    <Project Path="Thirdparty/ZYC.Terminal/ZYC.Terminal.csproj" />
+    <Project Path="Thirdparty/ZYC.Titanium.Web.Proxy/ZYC.Titanium.Web.Proxy.csproj" />
+  </Folder>
+  <Project Path="ZYC.Framework.Abstractions/ZYC.Framework.Abstractions.csproj" />
+  <Project Path="ZYC.Framework.CLI/ZYC.Framework.CLI.csproj" />
+  <Project Path="ZYC.Framework.Core/ZYC.Framework.Core.csproj" />
+  <Project Path="ZYC.Framework.MetroWindow/ZYC.Framework.MetroWindow.csproj" />
+  <Project Path="ZYC.Framework.WebView2/ZYC.Framework.WebView2.csproj" />
+  <Project Path="ZYC.Framework/ZYC.Framework.csproj" />
+</Solution>
