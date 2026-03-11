@@ -13,7 +13,7 @@ internal class WorkspaceMenuManager : IWorkspaceMenuManager
         ILifetimeScope lifetimeScope,
         ToggleOrientationCommand toggleOrientationCommand,
         SwapCommand swapCommand,
-        ResetCommand resetCommand,
+        ResetLayoutCommand resetLayoutCommand,
         SplitVerticalCommand splitVerticalCommand,
         MergeCommand mergeCommand,
         SetFocusedWorkspaceCommand focusedWorkspaceCommand,
@@ -22,9 +22,9 @@ internal class WorkspaceMenuManager : IWorkspaceMenuManager
         LifetimeScope = lifetimeScope;
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(
-                "Reset",
-                resetCommand,
-                nameof(PackIconMaterialKind.Reload)));
+                "Reset Layout",
+                resetLayoutCommand,
+                nameof(PackIconMaterialKind.BorderNoneVariant)));
 
         WorkspaceMenuItems.Add(
             new WorkspaceMenuItem(

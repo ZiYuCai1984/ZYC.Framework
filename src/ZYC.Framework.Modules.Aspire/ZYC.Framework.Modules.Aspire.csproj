@@ -1,6 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project >
 
-  <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />
+  <Sdk Name="Aspire.AppHost.Sdk" Version="13.1.1" />
+
+  <PropertyGroup>
+    <GenerateTemporaryTargetAssemblyDebuggingInformation>true</GenerateTemporaryTargetAssemblyDebuggingInformation>
+  </PropertyGroup>
 
 
   <PropertyGroup>

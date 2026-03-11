@@ -1,18 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Media.Effects;
+using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.Modules.Mock.Shaders;
 
 internal sealed class CrtEffect : ShaderEffect
 {
-    // ReSharper disable once InconsistentNaming
-    private static readonly PixelShader _pixelShader = new()
-    {
-        UriSource = new Uri(
-            "/ZYC.Framework.Modules.Mock.Shaders;component/Shaders/crt.ps",
-            UriKind.Relative)
-    };
-
     public static readonly DependencyProperty InputProperty =
         RegisterPixelShaderSamplerProperty(
             nameof(Input), typeof(CrtEffect), 0);
@@ -49,7 +42,10 @@ internal sealed class CrtEffect : ShaderEffect
 
     public CrtEffect()
     {
-        PixelShader = _pixelShader;
+        PixelShader = new PixelShader
+        {
+            UriSource = UriTools.BuildShaderUri(typeof(CrtEffect))
+        };
 
         UpdateShaderValue(InputProperty);
         UpdateShaderValue(TimeProperty);

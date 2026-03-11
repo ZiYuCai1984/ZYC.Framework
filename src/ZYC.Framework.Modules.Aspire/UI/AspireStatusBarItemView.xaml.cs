@@ -37,6 +37,19 @@ internal partial class AspireStatusBarItemView : IDisposable, INotifyPropertyCha
 
     public AspireServiceStatus AspireServiceStatus => AspireServiceManager.GetStatusSnapshot();
 
+    public bool IsIconGray
+    {
+        get
+        {
+            if (AspireServiceStatus.Status == ServiceStatus.Running)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
     public void Dispose()
     {
         CompositeDisposable.Dispose();
@@ -47,6 +60,7 @@ internal partial class AspireStatusBarItemView : IDisposable, INotifyPropertyCha
     private void OnAspireServiceStatusChanged(AspireServiceStatusChangedEvent obj)
     {
         OnPropertyChanged(nameof(AspireServiceStatus));
+        OnPropertyChanged(nameof(IsIconGray));
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

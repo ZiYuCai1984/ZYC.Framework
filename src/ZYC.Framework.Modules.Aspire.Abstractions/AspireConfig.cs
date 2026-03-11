@@ -13,7 +13,7 @@ public class AspireConfig : IConfig
     /// <summary>
     ///     Gets or sets the source used to resolve Aspire binaries.
     /// </summary>
-    public AspireBinarySource AspireBinarySource { get; set; } = AspireBinarySource.ApplicationFolder;
+    public AspireBinarySource AspireBinarySource { get; set; } = AspireBinarySource.NuGetCache;
 
     /// <summary>
     ///     Gets or sets the custom path to the orchestration binary.
