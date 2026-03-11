@@ -381,7 +381,7 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
                     UpdateRecord(faulted);
                     await FlushAsync(CancellationToken.None);
 
-                    EventAggregator.Publish(new ManagedCreateFaultedEvent(faulted));
+                    EventAggregator.Publish(new ManagedTaskCreateFaultedEvent(faulted));
 
                     continue;
                 }
@@ -510,7 +510,7 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
             _tasks[faulted.Id].TrySetFaulted(ex);
             await FlushAsync(CancellationToken.None);
 
-            EventAggregator.Publish(new ManagedTaskFaultedEvnet(faulted, ex));
+            EventAggregator.Publish(new ManagedTaskFaultedEvent(faulted, ex));
         }
         finally
         {

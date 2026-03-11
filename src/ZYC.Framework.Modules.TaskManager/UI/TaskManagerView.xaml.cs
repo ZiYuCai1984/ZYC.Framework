@@ -51,7 +51,7 @@ internal sealed partial class TaskManagerView
     private bool FirstRending { get; set; } = true;
 
 
-    private void OnManagedCreateFaulted(ManagedCreateFaultedEvent obj)
+    private void OnManagedCreateFaulted(ManagedTaskCreateFaultedEvent obj)
     {
         UpdateSnapshot(obj.Snapshot);
         RefreshCollectionView();
@@ -83,7 +83,7 @@ internal sealed partial class TaskManagerView
         UpdateSnapshot(obj.Snapshot);
     }
 
-    private void OnManagedTaskFaulted(ManagedTaskFaultedEvnet obj)
+    private void OnManagedTaskFaulted(ManagedTaskFaultedEvent obj)
     {
         UpdateSnapshot(obj.Snapshot);
         RefreshCollectionView();
@@ -164,12 +164,12 @@ internal sealed partial class TaskManagerView
         RefreshCollectionView();
 
 
-        SubscribeEvent<ManagedCreateFaultedEvent>(OnManagedCreateFaulted);
+        SubscribeEvent<ManagedTaskCreateFaultedEvent>(OnManagedCreateFaulted);
         SubscribeEvent<ManagedTaskCanceledEvent>(OnManagedTaskCanceled);
         SubscribeEvent<ManagedTaskClearUpCompletedEvent>(OnManagedTaskClearUpCompleted);
         SubscribeEvent<ManagedTaskCompletedEvent>(OnManagedTaskCompleted);
         SubscribeEvent<ManagedTaskEnqueuedEvent>(OnManagedTaskEnqueued);
-        SubscribeEvent<ManagedTaskFaultedEvnet>(OnManagedTaskFaulted);
+        SubscribeEvent<ManagedTaskFaultedEvent>(OnManagedTaskFaulted);
         SubscribeEvent<ManagedTaskPausedEvent>(OnManagedTaskPaused);
         SubscribeEvent<ManagedTaskProgressChangedEvent>(OnManagedTaskProgrssChanged);
         SubscribeEvent<ManagedTaskResumedEvent>(OnManagedTaskResumed);

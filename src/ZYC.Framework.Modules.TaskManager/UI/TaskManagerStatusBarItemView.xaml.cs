@@ -19,12 +19,12 @@ internal partial class TaskManagerStatusBarItemView : IDisposable, INotifyProper
 
         InitializeComponent();
 
-        SubscribeEvent<ManagedCreateFaultedEvent>(OnManagedCreateFaulted);
+        SubscribeEvent<ManagedTaskCreateFaultedEvent>(OnManagedCreateFaulted);
         SubscribeEvent<ManagedTaskCanceledEvent>(OnManagedTaskCanceled);
         SubscribeEvent<ManagedTaskClearUpCompletedEvent>(OnManagedTaskClearUpCompleted);
         SubscribeEvent<ManagedTaskCompletedEvent>(OnManagedTaskCompleted);
         SubscribeEvent<ManagedTaskEnqueuedEvent>(OnManagedTaskEnqueued);
-        SubscribeEvent<ManagedTaskFaultedEvnet>(OnManagedTaskFaulted);
+        SubscribeEvent<ManagedTaskFaultedEvent>(OnManagedTaskFaulted);
         SubscribeEvent<ManagedTaskPausedEvent>(OnManagedTaskPaused);
         SubscribeEvent<ManagedTaskProgressChangedEvent>(OnManagedTaskProgrssChanged);
         SubscribeEvent<ManagedTaskResumedEvent>(OnManagedTaskResumed);
@@ -64,7 +64,7 @@ internal partial class TaskManagerStatusBarItemView : IDisposable, INotifyProper
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void OnManagedCreateFaulted(ManagedCreateFaultedEvent obj)
+    private void OnManagedCreateFaulted(ManagedTaskCreateFaultedEvent obj)
     {
         OnPropertyChanged(nameof(RunningTaskNum));
     }
@@ -100,7 +100,7 @@ internal partial class TaskManagerStatusBarItemView : IDisposable, INotifyProper
         //ignore
     }
 
-    private void OnManagedTaskFaulted(ManagedTaskFaultedEvnet obj)
+    private void OnManagedTaskFaulted(ManagedTaskFaultedEvent obj)
     {
         OnPropertyChanged(nameof(RunningTaskNum));
     }
