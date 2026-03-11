@@ -25,7 +25,7 @@ internal partial class MCPServerStatusBarItemView : IMCPServerManager
                 $"Running at http://localhost:{MCPServerConfig.Port}",
                 MCPServerModuleConstants.Icon, false));
         }
-        catch (Exception _)
+        catch (Exception)
         {
             //ignore
         }

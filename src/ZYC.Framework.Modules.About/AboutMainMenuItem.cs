@@ -15,7 +15,8 @@ internal class AboutMainMenuItem : MainMenuItem
         {
             Title = AboutModuleConstants.Title,
             Icon = AboutModuleConstants.Icon,
-            Anchor = AboutMainMenuAnchors.About
+            Anchor = AboutMainMenuAnchors.About,
+            Localization = false
         };
 
         Command = lifetimeScope.CreateNavigateCommand(AboutModuleConstants.Uri);

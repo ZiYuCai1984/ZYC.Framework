@@ -7,6 +7,9 @@ namespace ZYC.Framework.Build.NuGet;
 
 public static class BuildEnvironment
 {
+    /// <summary>
+    ///     src
+    /// </summary>
     public static string RootFolder => GetProjectRootFolderPath();
 
     public static string SettingsDirectoryPath => Path.Combine(RootFolder, "_bin\\");

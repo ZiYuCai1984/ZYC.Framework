@@ -19,10 +19,10 @@
     <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Shaders\crt.fx" />
-    <Resource Include="Shaders\crt.fx" />
+    <None Remove="Shaders\Crt.ps" />
+    <Resource Include="Shaders\Crt.ps" />
   </ItemGroup>
-  <Target BeforeTargets="Build" Name="BuildShader" Condition="!Exists('./Shaders/crt.ps')">
-    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/crt.ps Shaders/crt.fx" />
+  <Target BeforeTargets="Build" Name="BuildShader" Condition="!Exists('./Shaders/Crt.ps')">
+    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/Crt.ps Shaders/Crt.fx" />
   </Target>
 </Project>

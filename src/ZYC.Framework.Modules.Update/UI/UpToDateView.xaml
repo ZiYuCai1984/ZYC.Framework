@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Margin="0 64 0 0">
-            <TextBlock Text="{localizations:L Already the latest version !!}" />
+            <TextBlock Text="{localizations:L Already the latest version.}" />
         </StackPanel>
         <Border HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"

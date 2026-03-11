@@ -175,4 +175,22 @@ public static class UriTools
     {
         return s.Length >= 2 && char.IsLetter(s[0]) && s[1] == ':';
     }
+
+    /// <summary>
+    /// Constructs a Pack URI for a pixel shader resource based on the specified effect type.
+    /// </summary>
+    /// <param name="effectType">The Type of the effect class associated with the shader.</param>
+    /// <param name="shadersFolder">The project subfolder containing the compiled shader files. Defaults to "Shaders".</param>
+    /// <returns>A relative <see cref="Uri"/> pointing to the .ps resource within the assembly.</returns>
+    public static Uri BuildShaderUri(Type effectType, string shadersFolder = "Shaders")
+    {
+        var assemblyName = effectType.Assembly.GetName().Name!;
+        var shaderName = effectType.Name.EndsWith("Effect", StringComparison.Ordinal)
+            ? effectType.Name[..^"Effect".Length]
+            : effectType.Name;
+
+        return new Uri(
+            $"/{assemblyName};component/{shadersFolder}/{shaderName}.ps",
+            UriKind.Relative);
+    }
 }

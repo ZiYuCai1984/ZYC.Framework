@@ -42,6 +42,8 @@ internal partial class AppBusyWindow : IAppBusyWindow
 
     public AppBusyWindow()
     {
+        InheritanceBehavior = InheritanceBehavior.SkipToThemeNext;
+
         InitializeComponent();
         Loaded += OnLoaded;
     }

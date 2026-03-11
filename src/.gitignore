@@ -6,6 +6,7 @@
 *.deps.json
 *.binlog
 *.ps
+*_wpftmp.csproj
 
 _temp.sln
 
