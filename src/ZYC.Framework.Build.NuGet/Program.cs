@@ -3,6 +3,7 @@ using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Nuspec;
 using ZYC.CoreToolkit.Dotnet;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Modules.ApiReference.Abstractions;
 
 namespace ZYC.Framework.Build.NuGet;
 
@@ -18,24 +19,65 @@ public class Program
         }
 #endif
 
+        var tempSlnFileName = "_temp.sln";
 
+        try
+        {
+            await BuildSolutionAync(tempSlnFileName);
+
+            await GenerateDocAsync();
+
+            //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
+
+#if PUBLISH_NUGET_ORG
+        await DotnetNuGetTools.PushNuGetAsync(
+            BuildEnvironment.SrcFolder,
+            BuildEnvironment.NuGetPushSource,
+            apiKey);
+#endif
+        }
+        finally
+        {
+            IOTools.DeleteFileIfExists(tempSlnFileName);
+        }
+    }
+
+    private static async Task GenerateDocAsync()
+    {
         IOTools.SetCurrentDirectory(BuildEnvironment.RootFolder);
+
+        await DotnetToolTools.InstallGlobalAsync("docfx");
+
+        var docGenerateResult = await CommandTools.ExecuteCommandAsync("docfx docfx.json");
+        if (docGenerateResult != 0)
+        {
+            throw new InvalidOperationException("Doc generate failed !!");
+        }
+
+        IOTools.CopyDirectory(
+            Path.Combine(BuildEnvironment.RootFolder,"_site"),
+            Path.Combine(BuildEnvironment.OutputPath, ApiReferenceModuleConstants.DocFolder));
+
+        await PackProductAsync();
+    }
+
+    private static async Task BuildSolutionAync(string tempSlnFileName)
+    {
+        IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
 
         BuildEnvironment.UpdateVersionProps();
 
-        var csprojFiles = GetCsprojFilePaths(BuildEnvironment.RootFolder);
+        var csprojFiles = GetCsprojFilePaths(BuildEnvironment.SrcFolder);
 
 
         await IOTools.ClearPathAsync(BuildEnvironment.SettingsDirectoryPath);
 
 
-        var tempSlnFile = "_temp.sln";
-
-        IOTools.DeleteFileIfExists(tempSlnFile);
-        ProjectTools.GenerateSln(csprojFiles, tempSlnFile);
+        IOTools.DeleteFileIfExists(tempSlnFileName);
+        ProjectTools.GenerateSln(csprojFiles, tempSlnFileName);
 
 
-        var buildResult = await CommandTools.ExecuteCommandAsync($"dotnet build {tempSlnFile} -c release");
+        var buildResult = await CommandTools.ExecuteCommandAsync($"dotnet build {tempSlnFileName} -c release");
         if (buildResult != 0)
         {
             throw new InvalidOperationException("Build failed !!");
@@ -55,21 +97,8 @@ public class Program
         {
             File.Delete(file);
         }
-
-        await PackProductAsync();
-
-        await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.GetProjectRootFolderPath());
-
-
-#if PUBLISH_NUGET_ORG
-        await DotnetNuGetTools.PushNuGetAsync(
-            BuildEnvironment.GetProjectRootFolderPath(),
-            BuildEnvironment.NuGetPushSource,
-            apiKey);
-#endif
-
-        IOTools.DeleteFileIfExists(tempSlnFile);
     }
+
 
     private static string[] GetCsprojFilePaths(string projectRootFolder)
     {
@@ -94,7 +123,7 @@ public class Program
 
     private static async Task PackProductAsync()
     {
-        IOTools.SetCurrentDirectory(BuildEnvironment.RootFolder);
+        IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
 
         var package = GetProductPackage();
 

@@ -7,12 +7,11 @@ namespace ZYC.Framework.Build.NuGet;
 
 public static class BuildEnvironment
 {
-    /// <summary>
-    ///     src
-    /// </summary>
     public static string RootFolder => GetProjectRootFolderPath();
 
-    public static string SettingsDirectoryPath => Path.Combine(RootFolder, "_bin\\");
+    public static string SrcFolder => GetProjectSrcFolderPath();
+
+    public static string SettingsDirectoryPath => Path.Combine(SrcFolder, "_bin\\");
 
     public static string OutputPath => Path.Combine(SettingsDirectoryPath, $"{ProductInfo.Version}\\");
 
@@ -24,27 +23,27 @@ public static class BuildEnvironment
 
     public static string ProductPackageId => ProductInfo.PackageId;
 
-    public static string ProductPackagePath => Path.Combine(RootFolder, ProductPackageId);
+    public static string ProductPackagePath => Path.Combine(SrcFolder, ProductPackageId);
 
     public static string ProductPackageNuspecPath => $"{ProductPackagePath}\\{ProductPackageId}.nuspec";
 
     public static string NuGetCachePath => Path.Combine(OutputPath, ".cache");
 
-    public static string BuildProjectPath => Path.Combine(RootFolder, "ZYC.Framework.Build.NuGet");
+    public static string BuildProjectPath => Path.Combine(SrcFolder, "ZYC.Framework.Build.NuGet");
 
     public static string PatchNotePath => $"{BuildProjectPath}\\PatchNote.md";
 
     public static string AppPngPath => $"{BuildProjectPath}\\app.png";
 
-    public static string NuGetTargetsPath => Path.Combine(RootFolder, "nuget.targets");
+    public static string NuGetTargetsPath => Path.Combine(SrcFolder, "nuget.targets");
 
-    public static string NuGetPropsPath => Path.Combine(RootFolder, "nuget.props");
+    public static string NuGetPropsPath => Path.Combine(SrcFolder, "nuget.props");
 
     public static string NuGetREADMEPath => Path.Combine(BuildProjectPath, "README.md");
 
     public static string BuildVersion => ProductInfo.Version;
 
-    public static string VersionPropsPath => $"{RootFolder}\\version.props";
+    public static string VersionPropsPath => $"{SrcFolder}\\version.props";
 
     public static string NuGetPushSource => "https://api.nuget.org/v3/index.json";
 
@@ -60,11 +59,18 @@ public static class BuildEnvironment
         }
     }
 
-    public static string GetProjectRootFolderPath()
+    private static string GetProjectSrcFolderPath()
     {
         var directoryPath = IOTools.GetCallerDirectoryPath();
         var directoryInfo = new DirectoryInfo(directoryPath);
         var path = directoryInfo.Parent!.FullName;
+        return path;
+    }
+
+
+    private static string GetProjectRootFolderPath()
+    {
+        var path = new DirectoryInfo(GetProjectSrcFolderPath()).Parent!.FullName;
         return path;
     }
 

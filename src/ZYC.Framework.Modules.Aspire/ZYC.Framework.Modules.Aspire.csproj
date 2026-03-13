@@ -1,9 +1,14 @@
-﻿<Project >
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Sdk Name="Aspire.AppHost.Sdk" Version="13.1.1" />
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />
 
   <PropertyGroup>
-    <GenerateTemporaryTargetAssemblyDebuggingInformation>true</GenerateTemporaryTargetAssemblyDebuggingInformation>
+    <NoWarn>$(NoWarn);MSB4011</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--<GenerateTemporaryTargetAssemblyDebuggingInformation>true</GenerateTemporaryTargetAssemblyDebuggingInformation>-->
   </PropertyGroup>
 
 

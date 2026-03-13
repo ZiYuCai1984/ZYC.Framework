@@ -38,19 +38,13 @@ internal sealed class TabInsertAdorner : Adorner
         var fill = brush.Clone();
         fill.Opacity = 0.10;
 
-        var pen = new Pen(brush, 2)
+        const double penThickness = 2.0;
+        var pen = new Pen(brush, penThickness)
         {
             StartLineCap = PenLineCap.Round,
             EndLineCap = PenLineCap.Round,
             LineJoin = PenLineJoin.Round
         };
-
-        var x = _insertPosition == TabInsertPosition.Before
-            ? 2.0
-            : size.Width - 2.0;
-
-        var top = 4.0;
-        var bottom = Math.Max(top + 4, size.Height - 4.0);
 
         var rect = _insertPosition == TabInsertPosition.Before
             ? new Rect(0, 0, size.Width / 2.0, size.Height)
@@ -58,51 +52,38 @@ internal sealed class TabInsertAdorner : Adorner
 
         drawingContext.DrawRoundedRectangle(fill, null, rect, 4, 4);
 
-        var waveGeometry = CreateVerticalRandomCurveGeometry(
-            x,
-            top,
-            bottom,
-            3.0,
-            10.0, Random.Shared);
-
-        drawingContext.DrawGeometry(null, pen, waveGeometry);
+        DrawInsertionIBeam(drawingContext, size, pen);
     }
 
-    private static Geometry CreateVerticalRandomCurveGeometry(
-        double x,
-        double top,
-        double bottom,
-        double amplitude,
-        double segmentHeight,
-        Random random)
+    private void DrawInsertionIBeam(
+        DrawingContext drawingContext,
+        Size size,
+        Pen pen)
     {
-        var geometry = new StreamGeometry();
+        //!WARNING If here use 0 and Width, it will result in incomplete display at the boundaries.
+        var x = _insertPosition == TabInsertPosition.Before
+            ? 1.5
+            : size.Width - 1.5;
 
-        using var ctx = geometry.Open();
+        const double topMargin = 0.0;
+        const double bottomMargin = 0.0;
 
-        var y = top;
-        ctx.BeginFigure(new Point(x, y), false, false);
+        var top = topMargin;
+        var bottom = Math.Max(top + 8.0, size.Height - bottomMargin);
 
-        while (y < bottom)
-        {
-            var h = segmentHeight * (0.8 + random.NextDouble() * 0.4);
-            var nextY = Math.Min(y + h, bottom);
+        var armLength = Math.Min(10.0, Math.Max(6.0, size.Width * 0.18));
+        var halfArmLength = armLength / 2.0;
 
-            var dx1 = (random.NextDouble() * 2.0 - 1.0) * amplitude;
-            var dx2 = (random.NextDouble() * 2.0 - 1.0) * amplitude;
-            var dx3 = (random.NextDouble() * 2.0 - 1.0) * amplitude;
+        drawingContext.DrawLine(pen, new Point(x, top), new Point(x, bottom));
 
-            var c1 = new Point(x + dx1, y + (nextY - y) * 0.30);
-            var c2 = new Point(x + dx2, y + (nextY - y) * 0.70);
-            var end = new Point(x + dx3 * 0.2, nextY);
+        drawingContext.DrawLine(
+            pen,
+            new Point(x - halfArmLength, top),
+            new Point(x + halfArmLength, top));
 
-            ctx.BezierTo(c1, c2, end, true, false);
-
-            y = nextY;
-            x = end.X;
-        }
-
-        geometry.Freeze();
-        return geometry;
+        drawingContext.DrawLine(
+            pen,
+            new Point(x - halfArmLength, bottom),
+            new Point(x + halfArmLength, bottom));
     }
 }

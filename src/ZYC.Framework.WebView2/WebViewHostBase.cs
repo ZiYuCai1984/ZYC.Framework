@@ -74,13 +74,6 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
     ];
 
 
-    /// <summary>
-    ///     --ignore-certificate-errors
-    ///     --proxy-server=http://localhost:10808
-    /// </summary>
-    protected List<string> CustomBrowserArguments { get; } = new();
-
-
     protected string AdditionalBrowserArguments =>
         string.Join(" ",
             BuiltInBrowserArguments
@@ -95,6 +88,35 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
     private TaskCompletionSource? NavigateTaskCompletionSource { get; set; }
 
     private bool FirstRending { get; set; } = true;
+
+
+    /// <summary>
+    ///     Gets the list of custom browser command-line arguments.
+    ///     <para>
+    ///         Examples:
+    ///         --ignore-certificate-errors,
+    ///         --proxy-server=http://localhost:10808,
+    ///         --disable-web-security
+    ///     </para>
+    /// </summary>
+    /// <remarks>
+    ///     !WARNING If any arguments are added to this list, you MUST override <see cref="WebView2UserDataFolder" /> to
+    ///     provide a unique folder path.
+    ///     WebView2 does not support sharing the same User Data Folder (UDF) between instances
+    ///     that use different command-line arguments, which will trigger a COMException (0x8007139F).
+    /// </remarks>
+    protected List<string> CustomBrowserArguments { get; } = new();
+
+    /// <summary>
+    ///     Gets the path for the WebView2 User Data Folder (UDF).
+    /// </summary>
+    /// <remarks>
+    ///     This property must be overridden to return a unique path if <see cref="CustomBrowserArguments" />
+    ///     are customized. This ensures that this instance maintains its own browser process environment
+    ///     and avoids state conflicts with other WebView2 instances.
+    /// </remarks>
+    protected virtual string WebView2UserDataFolder => AppContext.GetDefaultWebView2UserDataFolder();
+
 
     protected virtual bool IsApplyFaviconChanged { get; set; }
 
@@ -118,7 +140,7 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
         };
         return CoreWebView2Environment.CreateAsync(
             null,
-            AppContext.GetDefaultWebView2UserDataFolder(),
+            WebView2UserDataFolder,
             options);
     }
 

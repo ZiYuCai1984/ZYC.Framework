@@ -11,7 +11,7 @@ internal partial class OverlayWindow
         InitializeComponent();
     }
 
-    public bool BlocksInput { get; set; } = false;
+    public bool BlocksInput { get; set; }
 
     public void SetTarget(UIElement target)
     {
@@ -28,6 +28,7 @@ internal partial class OverlayWindow
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
+        // ReSharper disable InconsistentNaming
         const int WM_NCHITTEST = 0x0084;
         const int HTCLIENT = 1;
         const int HTTRANSPARENT = -1;
