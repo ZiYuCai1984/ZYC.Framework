@@ -107,8 +107,7 @@ internal partial class TabManager : ITabManager
 
         if (!WorkspaceTabItemInstanceListDictionary.ContainsKey(fromWorkspace))
         {
-            //ignore(why ??)
-            //Debugger.Break();
+            //ignore
         }
         else
         {

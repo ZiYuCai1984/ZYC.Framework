@@ -43,13 +43,10 @@ internal class Program
 
         IOTools.CopyFile(
             "./Output/ZYC.Framework.Setup.exe",
-            $"{GetProjectRootFolderPath()}/ZYC.Framework.Setup.{ProductInfo.Version}.exe");
+            $"{GetProjectSrcFolderPath()}/ZYC.Framework.Setup.{ProductInfo.Version}.exe");
     }
 
-    /// <summary>
-    ///     src
-    /// </summary>
-    public static string GetProjectRootFolderPath()
+    public static string GetProjectSrcFolderPath()
     {
         var directoryPath = IOTools.GetCallerDirectoryPath();
         var directoryInfo = new DirectoryInfo(directoryPath);

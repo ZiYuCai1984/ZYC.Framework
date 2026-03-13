@@ -1,15 +1,17 @@
-﻿using System.ComponentModel;
+﻿using Autofac;
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Core;
 using ZYC.Framework.Core.Commands;
+using ZYC.Framework.Core.Localizations;
 using ZYC.Framework.Core.Menu;
 using ZYC.Framework.Modules.Aspire.Abstractions;
+
 
 namespace ZYC.Framework.Modules.Aspire;
 
@@ -39,6 +41,7 @@ internal class SetAspireBinarySourceMainMenuItem : MainMenuItemsProvider
 internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPropertyChanged, IDisposable
 {
     public SetAspireBinarySourceOptionMainMenuItem(
+        ILocalizationer localizationer,
         IAspireServiceManager aspireServiceManager,
         AspireBinarySource aspireBinarySource,
         AspireConfig aspireConfig)
@@ -46,9 +49,11 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
         Info = new MenuItemInfo
         {
             Title = aspireBinarySource.ToString(),
-            Icon = "SourceCommit"
+            Localization = false,
+            Icon = null
         };
 
+        Localizationer = localizationer;
         AspireServiceManager = aspireServiceManager;
         TargetAspireBinarySource = aspireBinarySource;
         AspireConfig = aspireConfig;
@@ -71,6 +76,8 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
 
     private CompositeDisposable CompositeDisposable { get; } = new();
 
+    private ILocalizationer Localizationer { get; }
+
     private IAspireServiceManager AspireServiceManager { get; }
 
     private AspireBinarySource TargetAspireBinarySource { get; }
@@ -81,12 +88,14 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
     {
         get
         {
+            var title = Localizationer.Localization(Info.Title);
+
             if (AspireConfig.AspireBinarySource != TargetAspireBinarySource)
             {
-                return Info.Title;
+                return title;
             }
 
-            return $"{Info.Title} ✔️";
+            return $"{title} ✔️";
         }
     }
 

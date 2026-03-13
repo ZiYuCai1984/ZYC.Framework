@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Tab;
@@ -21,6 +22,9 @@ internal class OpenLogFolderCommand : CommandBase
     protected override void InternalExecute(object? parameter)
     {
         var dir = Path.Combine(AppContext.GetSettingsDirectory(), "logs");
-        TabManager.NavigateAsync(dir);
+
+        //TODO-zyc Before fixing the theme display issue of FileExplorer in Windows 11, temporarily disable opening it within the program.
+        //TabManager.NavigateAsync(dir);
+        Process.Start("explorer.exe", dir);
     }
 }

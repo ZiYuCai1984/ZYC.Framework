@@ -13,6 +13,7 @@
              xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              xmlns:tab="clr-namespace:ZYC.Framework.Tab"
+             xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Root"
@@ -31,12 +32,16 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid>
+                <Grid.Resources>
+                    <shaders:GrayScaleEffect x:Key="GrayScaleEffect"/>
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <ContentControl x:Name="WorkspaceMenuViewHost"
-                                Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=1.0,FalseValue=0.5}}" />
+                <ContentControl x:Name="WorkspaceMenuViewHost" 
+                                Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=1.0,FalseValue=0.5}}"
+                                Effect="{Binding IsFocusedWorkspace,Converter={converters:BoolToObjectConverter TrueValue={x:Null},FalseValue={StaticResource GrayScaleEffect}}}" />
                 <ComboBox x:Name="UriComboBox"
                           Grid.Column="1"
                           mah:TextBoxHelper.ClearTextButton="False"

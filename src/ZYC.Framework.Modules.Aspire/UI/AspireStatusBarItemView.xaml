@@ -46,7 +46,7 @@
                    TargetType="{x:Type MenuItem}">
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
                 <Setter Property="Icon"
-                        Value="{Binding Icon,Converter={converters:HybridIconConverter}}" />
+                        Value="{Binding Icon}" />
                 <Setter Property="Command" Value="{Binding  Command}" />
                 <Setter Property="Header">
                     <Setter.Value>

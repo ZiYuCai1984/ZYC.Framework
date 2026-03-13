@@ -1,4 +1,4 @@
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Solution>
   <Folder Name="/Archived/" />
   <Folder Name="/Build/">
@@ -44,6 +44,8 @@
     <Project Path="ZYC.Framework.Modules.Update/ZYC.Framework.Modules.Update.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser.Abstractions/ZYC.Framework.Modules.WebBrowser.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser/ZYC.Framework.Modules.WebBrowser.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../README.md" />

@@ -26,6 +26,4 @@ internal class OpenAppFolderInExplorerTitleItem : IWindowTitleItem
     public ICommand Command => OpenAppFolderInExplorerCommand;
 
     public bool IsVisible => true;
-
-    //public bool IsVisible => AppConfig.GetIsDebugItemVisible();
 }
