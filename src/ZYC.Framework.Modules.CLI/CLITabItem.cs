@@ -2,6 +2,7 @@
 using ZYC.CoreToolkit.Common;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Tab;
+using ZYC.Framework.Core;
 using ZYC.Framework.Core.Tab;
 using ZYC.Framework.Modules.CLI.Abstractions;
 using ZYC.Framework.Modules.CLI.UI;
@@ -22,7 +23,7 @@ internal class CLITabItem : TabItemInstanceBase
     }
 
     public override object View => _view ??= LifetimeScope.Resolve<CLIView>(
-        new TypedParameter(typeof(CLIUriOptions), CLIUriOptions.Parse(TabReference.Uri)));
+        new TypedParameter(typeof(CLIUriOptions), UriBinder.Bind<CLIUriOptions>(TabReference.Uri)));
 
     private CLITabItemIndexPool IndexPool { get; }
 

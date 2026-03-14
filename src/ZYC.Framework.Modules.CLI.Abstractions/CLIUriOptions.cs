@@ -1,8 +1,8 @@
 ﻿using ZYC.Framework.Abstractions;
 
-namespace ZYC.Framework.Modules.CLI;
+namespace ZYC.Framework.Modules.CLI.Abstractions;
 
-internal sealed record CLIUriOptions(
+public sealed record CLIUriOptions(
     [UriQueryName("startup")] string? StartupCommandLineOverride,
     [UriQueryName("exec")] IReadOnlyList<string> ExecCommands,
     [UriQueryName("type")] bool TypeOnly = false,

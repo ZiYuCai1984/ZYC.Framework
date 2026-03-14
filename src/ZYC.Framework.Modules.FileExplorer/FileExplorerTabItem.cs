@@ -63,7 +63,7 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
 
         OnPropertyChanged(nameof(Title));
         RecentPathMainMenuItemsProvider?.AddRecentPath(newUri.LocalPath);
-        await TabManager.TabInternalNavigatingAsync(oldUri, newUri);
+        await TabManager.TabInternalNavigatingAsync(this, oldUri, newUri);
     }
 
     public void UpdateIcon(string base64Icon)
