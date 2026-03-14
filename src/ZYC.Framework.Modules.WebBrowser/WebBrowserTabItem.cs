@@ -66,7 +66,7 @@ internal class WebBrowserTabItem : TabItemInstanceBase, IWebTabItemInstance, INo
             return;
         }
 
-        await TabManager.TabInternalNavigatingAsync(oldUri, newUri);
+        await TabManager.TabInternalNavigatingAsync(this, oldUri, newUri);
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -73,13 +73,6 @@ public partial interface ITabManager
     void MoveAllTabItemInstances(Guid from, Guid to);
 
     /// <summary>
-    ///     Handles internal navigation within a tab, transitioning from an old URI to a new one.
-    /// </summary>
-    /// <param name="oriUri">The original URI.</param>
-    /// <param name="newUri">The new target URI.</param>
-    Task TabInternalNavigatingAsync(Uri oriUri, Uri newUri);
-
-    /// <summary>
     ///     Searches for an existing tab with the specified URI and brings it into focus.
     /// </summary>
     /// <param name="uri">The URI of the tab to focus.</param>
@@ -89,6 +82,7 @@ public partial interface ITabManager
     ///     Reloads the content of the tab corresponding to the specified URI.
     /// </summary>
     /// <param name="uri">The URI of the tab to reload.</param>
+    [Obsolete]
     Task ReloadAsync(Uri uri);
 
     /// <summary>
@@ -99,6 +93,15 @@ public partial interface ITabManager
 
 public partial interface ITabManager
 {
+    /// <summary>
+    ///     Handles internal navigation within a tab, transitioning from an old URI to a new one.
+    /// </summary>
+    /// <param name="instance">The tab item instance to move.</param>
+    /// <param name="oriUri">The original URI.</param>
+    /// <param name="newUri">The new target URI.</param>
+    [MCPIgnore]
+    Task TabInternalNavigatingAsync(ITabItemInstance instance, Uri oriUri, Uri newUri);
+
     /// <summary>
     ///     Moves a tab item instance from one workspace to another.
     /// </summary>

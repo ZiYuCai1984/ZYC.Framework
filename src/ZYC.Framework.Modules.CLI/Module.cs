@@ -22,7 +22,6 @@ internal class Module : ModuleBase
 
         NativeDllLoaderTools.LoadFrom(
             Path.Combine(
-                //!WARNING Using appContext.GetMainAppDirectory() here will cause the application to fail during the update apply !!
                 appContext.GetCurrentDirectory(),
                 "runtimes",
                 "win10-x64",
