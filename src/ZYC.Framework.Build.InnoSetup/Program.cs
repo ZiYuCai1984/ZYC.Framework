@@ -10,10 +10,6 @@ internal class Program
 {
     private static async Task Main()
     {
-#if DEBUG
-        DebuggerTools.Break();
-#endif
-
         IOTools.SetCurrentDirectoryToEntryScriptFileDirectory();
 
         IOTools.DeleteDirectoryIfExists("packages");

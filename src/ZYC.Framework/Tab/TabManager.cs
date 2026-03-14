@@ -231,11 +231,11 @@ internal partial class TabManager : ITabManager
     }
 
 
-    public async Task TabInternalNavigatingAsync(Uri oriUri, Uri newUri)
+    public async Task TabInternalNavigatingAsync(ITabItemInstance instance,Uri oriUri, Uri newUri)
     {
-        var instance = TabItemInstances.FirstOrDefault(t => t.Uri.Equals(newUri));
-        if (instance == null)
+        if (!TabItemInstances.Contains(instance))
         {
+            Debugger.Break();
             return;
         }
 

@@ -105,4 +105,9 @@
   </Target>
 
 
+  <ItemGroup>
+    <None Remove="**\*.ps" />
+    <Resource Include="**\*.ps" />
+  </ItemGroup>
+
 </Project>
