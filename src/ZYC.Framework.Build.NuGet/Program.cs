@@ -25,8 +25,9 @@ public class Program
         {
             await BuildSolutionAync(tempSlnFileName);
 
+#if PUBLISH_NUGET_ORG
             await GenerateDocAsync();
-
+#endif
             //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 
 #if PUBLISH_NUGET_ORG
