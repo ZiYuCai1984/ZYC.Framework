@@ -20,5 +20,9 @@
   </ItemGroup>
   <Target BeforeTargets="PrepareForBuild" Name="BuildShader" Condition="!Exists('./Shaders/Crt.ps')">
     <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/Crt.ps Shaders/Crt.fx" />
+    <ItemGroup>
+      <None Remove="**\*.ps" />
+      <Resource Include="**\*.ps" />
+    </ItemGroup>
   </Target>
 </Project>
