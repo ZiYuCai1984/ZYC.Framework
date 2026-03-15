@@ -77,53 +77,6 @@
 
 
 
-## 📸  界面预览
-
-<table align="center">
-  <tr>
-    <td>
-      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center">工作区展示</p>
-    </td>
-    <td>
-      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center">多 Tab 展示</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
-      <p align="center">多工作区展示</p>
-    </td>
-    <td>
-      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
-      <p align="center">多工作区 Tab 展示</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
-      <p align="center">Aspire 仪表板</p>
-    </td>
-    <td>
-      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
-      <p align="center">Blazor with Auth</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/exception.png" alt="exception" width="400" />
-      <p align="center">异常处理</p>
-    </td>
-    <td>
-      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
-      <p align="center">任务管理</p>
-    </td>
-  </tr>
-</table>
-
----
-
 
 
 ## 🛠️  技术栈
@@ -197,6 +150,55 @@ ZYC.Framework
 │       ├── ZYC.MdXaml                        # Markdown renderer + extensions
 │       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
 ```
+
+---
+
+
+
+## 📸  界面预览
+
+<table align="center">
+  <tr>
+    <td>
+      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
+      <p align="center">工作区展示</p>
+    </td>
+    <td>
+      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
+      <p align="center">多 Tab 展示</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
+      <p align="center">多工作区展示</p>
+    </td>
+    <td>
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
+      <p align="center">多工作区 Tab 展示</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
+      <p align="center">Aspire 仪表板</p>
+    </td>
+    <td>
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
+      <p align="center">Blazor with Auth</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/exception.png" alt="exception" width="400" />
+      <p align="center">异常处理</p>
+    </td>
+    <td>
+      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
+      <p align="center">任务管理</p>
+    </td>
+  </tr>
+</table>
 
 ---
 

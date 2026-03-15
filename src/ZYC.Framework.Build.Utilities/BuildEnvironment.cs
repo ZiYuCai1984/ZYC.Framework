@@ -45,6 +45,8 @@ public static class BuildEnvironment
 
     public static string NuGetREADMEPath => Path.Combine(BuildProjectPath, "README.md");
 
+    public static string GlobalJsonPath => Path.Combine(SrcFolder, "global.json");
+
     public static string BuildVersion => ProductInfo.Version;
 
     public static string VersionPropsPath => $"{SrcFolder}\\version.props";
@@ -52,16 +54,9 @@ public static class BuildEnvironment
     public static string NuGetPushSource => "https://api.nuget.org/v3/index.json";
 
 
-    public static string CoreToolkitVersion
-    {
-        get
-        {
-            var content = File.ReadAllText(NuGetPropsPath);
-            var regex = new Regex("(?s)<V_ZYC_CoreToolkit>\\s*([^<]+?)\\s*</V_ZYC_CoreToolkit>");
-            var result = regex.Match(content).Groups[1].Value;
-            return result;
-        }
-    }
+    public static string CoreToolkitVersion => ReadVersionFromNuGetProps("V_ZYC_CoreToolkit");
+
+    public static string AspireVersion => ReadVersionFromNuGetProps("V_Aspire");
 
     private static string GetProjectSrcFolderPath()
     {
@@ -88,5 +83,20 @@ public static class BuildEnvironment
             "</Project>";
 
         File.WriteAllText(VersionPropsPath, props);
+    }
+
+    private static string ReadVersionFromNuGetProps(string propertyName)
+    {
+        var content = File.ReadAllText(NuGetPropsPath);
+        var regex = new Regex(
+            $"(?s)<{Regex.Escape(propertyName)}>\\s*([^<]+?)\\s*</{Regex.Escape(propertyName)}>");
+        var result = regex.Match(content).Groups[1].Value.Trim();
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            throw new InvalidOperationException(
+                $"Cannot find '{propertyName}' in '{NuGetPropsPath}'.");
+        }
+
+        return result;
     }
 }

@@ -9,6 +9,7 @@
 *_wpftmp.csproj
 
 _temp.sln
+global.json
 
 _bin/
 _bin_*/
