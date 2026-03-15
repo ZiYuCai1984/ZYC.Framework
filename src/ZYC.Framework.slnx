@@ -12,6 +12,8 @@
   <Folder Name="/Modules/">
     <Project Path="ZYC.Framework.Modules.About.Abstractions/ZYC.Framework.Modules.About.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.About/ZYC.Framework.Modules.About.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
     <Project Path="ZYC.Framework.Modules.Aspire.Abstractions/ZYC.Framework.Modules.Aspire.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.Aspire/ZYC.Framework.Modules.Aspire.csproj" />
     <Project Path="ZYC.Framework.Modules.BlazorDemo.Abstractions/ZYC.Framework.Modules.BlazorDemo.Abstractions.csproj" />
@@ -46,14 +48,13 @@
     <Project Path="ZYC.Framework.Modules.Update/ZYC.Framework.Modules.Update.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser.Abstractions/ZYC.Framework.Modules.WebBrowser.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser/ZYC.Framework.Modules.WebBrowser.csproj" />
-    <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
-    <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../AGENTS.md" />
     <File Path="../README.md" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="DefineConstants.props" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
     <File Path="FodyWeavers.xml" />
