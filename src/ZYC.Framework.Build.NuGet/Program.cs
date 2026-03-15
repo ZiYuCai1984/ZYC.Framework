@@ -9,7 +9,7 @@ namespace ZYC.Framework.Build.NuGet;
 
 public class Program
 {
-    private static async Task Main()
+    public static async Task Main()
     {
 #if PUBLISH_NUGET_ORG
         var apiKey = Environment.GetEnvironmentVariable("NUGET_APIKEY");
@@ -25,7 +25,7 @@ public class Program
         {
             await BuildSolutionAync(tempSlnFileName);
 
-#if PUBLISH_NUGET_ORG
+#if GENERATE_DOC
             await GenerateDocAsync();
 #endif
             //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);

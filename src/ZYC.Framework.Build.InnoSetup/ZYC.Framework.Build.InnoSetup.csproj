@@ -19,6 +19,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Build.NuGet\ZYC.Framework.Build.NuGet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
