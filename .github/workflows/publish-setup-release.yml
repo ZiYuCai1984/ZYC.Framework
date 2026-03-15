@@ -1,0 +1,26 @@
+name: Publish Setup Release
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Optional release tag. If omitted, the builder tries the version tag and the v-prefixed version tag.
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Push Setup to Release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release --property:DefineConstants="PUBLISH_GITHUB_RELEASE"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
