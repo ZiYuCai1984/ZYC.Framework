@@ -1,4 +1,4 @@
-# Agent Guide for ZYC.Framework
+﻿# Agent Guide for ZYC.Framework
 
 This file defines house rules for any AI/code assistant working in this repository.
 It applies to the entire repository unless the user explicitly overrides it.
@@ -29,6 +29,7 @@ It applies to the entire repository unless the user explicitly overrides it.
 - Events and DTOs: PascalCase; avoid typos. For TaskManager events, use the pattern `ManagedTask*Event` (e.g., `ManagedTaskCompletedEvent`, `ManagedTaskFaultedEvent`, `ManagedTaskCreationFaultedEvent`).
 - Namespaces: file-scoped; match folder structure where practical.
 - XML docs: required for public APIs in `*.Abstractions` projects; optional elsewhere.
+- New files must use `CRLF` line endings and `UTF-8 with BOM` encoding.
 
 ## Safety & Change Policy
 - When renaming types, update file names and all references across the solution.

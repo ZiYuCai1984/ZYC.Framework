@@ -22,6 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Build.Utilities\ZYC.Framework.Build.Utilities.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
   </ItemGroup>
 

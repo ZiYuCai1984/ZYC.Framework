@@ -2,7 +2,7 @@
   <a href="./README.md">English</a> |
   <a href="./README.ja.md">日本語</a> |
   <a href="./README.zh-CN.md">简体中文</a> |
-  <a href="./README.zh-TW.md">简體中文</a> |
+  <a href="./README.zh-TW.md">繁體中文</a> |
   <a href="./README.ko.md">한국어</a> |
 </p>
 
@@ -13,7 +13,10 @@
 <h1 align="center">ZYC.Framework</h1>
 
 <p align="center">
-  A high-performance, modular, and extensible desktop automation framework built with <b>.NET 10</b> and <b>WPF</b>.
+
+
+A high-performance, modular, and extensible desktop automation framework built with <b>.NET 10</b> and <b>WPF</b>.
+
 </p>
 
 <p align="center">
@@ -36,21 +39,31 @@
     <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-manual.yml?branch=main&label=build&logo=github" alt="NuGet manual workflow" />
   </a>
   <a href="https://github.com/ZiYuCai1984/ZYC.Framework/actions/workflows/publish-nuget-nightly.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="NuGet nightly workflow" />
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/build-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="Build nightly workflow" />
   </a>
 </p>
 
 ---
 
-## 📖 Overview
+
+
+## 📖  Overview
+
+
 
 **ZYC.Framework** is a modern desktop automation solution that combines the expressive UI capabilities of **WPF** with the latest features of **.NET 10**. It is designed to simplify the development of complex automation systems through a modular architecture.
 
+
+
+
 The project deeply integrates **.NET Aspire** for distributed application orchestration, and supports a hybrid approach with **Blazor** and **WebView2**, so you can choose between a Web-based UI and a native desktop experience as needed.
+
 
 ---
 
-## ✨ Key Features
+
+
+## ✨  Key Features
 
 - **Modular Architecture**: Decoupled business logic with dynamic loading and independent development.
 - **Modern UI Experience**: Built on WPF with support for **multi-workspace** and **multi-tab** interactions.
@@ -65,7 +78,9 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 
 ---
 
-## 📸 UI Preview
+
+
+## 📸  UI Preview
 
 <table align="center">
   <tr>
@@ -78,7 +93,6 @@ The project deeply integrates **.NET Aspire** for distributed application orches
       <p align="center">Multiple Tabs</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
@@ -89,7 +103,6 @@ The project deeply integrates **.NET Aspire** for distributed application orches
       <p align="center">Workspaces + Tabs</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/aspire-dashboard.png" alt="aspire-dashboard" width="400" />
@@ -100,7 +113,6 @@ The project deeply integrates **.NET Aspire** for distributed application orches
       <p align="center">Blazor (with Auth)</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/exception.png" alt="exception" width="400" />
@@ -115,17 +127,22 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 
 ---
 
-## 🛠️ Tech Stack
+
+
+## 🛠️  Tech Stack
 
 - **Runtime**: .NET 10 SDK
 - **UI Framework**: WPF (Windows Presentation Foundation)
-- **Hybrid UI**: WebView2 + Blazor (Web UI)
+- **Hybrid UI**: WebView2 + Blazor
 - **Orchestration**: .NET Aspire
 - **Architecture**: Modular Monolith / Plugin-based
 
 ---
 
-## 🚀 Quick Start
+
+
+## 🚀  Quick Start
+
 
 Please refer to the detailed guide:
 
@@ -133,15 +150,18 @@ Please refer to the detailed guide:
 
 ### Installation
 
+
 Install the core package via NuGet:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version [version]
-````
+dotnet add package ZYC.Framework.Alpha --version 1.1.8
+```
 
 ---
 
-## 🏗️ Project Structure
+
+
+## 🏗️  Project Structure
 
 ```text
 ZYC.Framework
@@ -181,13 +201,19 @@ ZYC.Framework
 
 ---
 
-## 📄 License
+
+
+## 📄  License
+
 
 This project is open-sourced under the [MIT License](LICENSE).
 
 ---
 
-## 💖 Acknowledgements
+
+
+## 💖  Acknowledgements
+
 
 This project uses (and/or references parts of implementations from) the following open-source projects:
 
@@ -201,6 +227,9 @@ This project uses (and/or references parts of implementations from) the followin
 
 ---
 
-## 🤝 Contributing
+
+
+## 🤝  Contributing
+
 
 Issues and pull requests are welcome. If you have suggestions or found a bug, please open an issue or submit a PR.

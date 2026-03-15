@@ -3,6 +3,7 @@ using System.Text.Json;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions;
 using ZYC.CoreToolkit.Dotnet;
+using ZYC.Framework.Build.Utilities;
 using ProductInfo = ZYC.Framework.Abstractions.ProductInfo;
 using ProductInfoExtended = ZYC.Framework.Abstractions.ProductInfoExtended;
 
@@ -53,7 +54,7 @@ internal class Program
             throw new InvalidOperationException("Setup build failed.");
         }
 
-        var setupFilePath = Path.Combine(GetProjectSrcFolderPath(), $"ZYC.Framework.Setup.{ProductInfo.Version}.exe");
+        var setupFilePath = BuildEnvironment.SetupFilePath;
         File.Copy("./Output/ZYC.Framework.Setup.exe", setupFilePath, true);
         return setupFilePath;
     }
@@ -63,47 +64,62 @@ internal class Program
     {
         EnsureGitHubToken();
 
+        var releaseTag = GetRequiredReleaseTag();
+        ValidateReleaseTag(releaseTag);
+
         var repository = GetGitHubRepository();
-        var releaseTags = GetReleaseTagsToTry().Distinct(StringComparer.Ordinal).ToArray();
-        if (releaseTags.Length == 0)
+        IOTools.SetCurrentDirectory(BuildEnvironment.RootFolder);
+
+        await EnsureGitHubReleaseExistsAsync(repository, releaseTag);
+
+        var uploadCommand =
+            $"gh release upload \"{releaseTag}\" \"{setupFilePath}\" --repo \"{repository}\" --clobber";
+
+        var uploadResult = await CommandTools.ExecuteCommandAsync(uploadCommand);
+        if (uploadResult != 0)
         {
-            throw new InvalidOperationException("Could not resolve a GitHub release tag.");
+            throw new InvalidOperationException(
+                $"Setup upload failed for repository '{repository}' and release '{releaseTag}'.");
         }
 
-        IOTools.SetCurrentDirectory(GetProjectRootFolderPath());
+        Console.WriteLine($"Uploaded setup to release '{releaseTag}'.");
+    }
 
-        var failures = new List<string>();
-        foreach (var releaseTag in releaseTags)
+    private static string GetRequiredReleaseTag()
+    {
+        var releaseTag = TryGetExplicitReleaseTag();
+        if (!string.IsNullOrWhiteSpace(releaseTag))
         {
-            var uploadCommand =
-                $"gh release upload \"{releaseTag}\" \"{setupFilePath}\" --repo \"{repository}\" --clobber";
-
-            var uploadResult = await CommandTools.ExecuteCommandAsync(uploadCommand);
-            if (uploadResult == 0)
-            {
-                Console.WriteLine($"Uploaded setup to release '{releaseTag}'.");
-                return;
-            }
-
-            failures.Add($"'{releaseTag}' exited with code {uploadResult}");
+            return releaseTag;
         }
 
         throw new InvalidOperationException(
-            $"Setup upload failed for repository '{repository}'. Attempts: {string.Join(", ", failures)}.");
+            "Release tag is required. Provide the workflow_dispatch tag input or run from a release/tag context.");
     }
 
-    private static IEnumerable<string> GetReleaseTagsToTry()
+    private static async Task EnsureGitHubReleaseExistsAsync(string repository, string releaseTag)
     {
-        var explicitReleaseTag = TryGetExplicitReleaseTag();
-        if (!string.IsNullOrWhiteSpace(explicitReleaseTag))
+        var viewCommand = $"gh release view \"{releaseTag}\" --repo \"{repository}\"";
+        var viewResult = await CommandTools.ExecuteCommandAsync(viewCommand);
+        if (viewResult == 0)
         {
-            ValidateReleaseTag(explicitReleaseTag);
-            yield return explicitReleaseTag;
-            yield break;
+            return;
         }
 
-        yield return ProductInfo.Version;
-        yield return $"v{ProductInfo.Version}";
+        var target = Environment.GetEnvironmentVariable("GITHUB_SHA");
+        var targetArgument = string.IsNullOrWhiteSpace(target)
+            ? string.Empty
+            : $" --target \"{target}\"";
+
+        var createCommand =
+            $"gh release create \"{releaseTag}\" --repo \"{repository}\" --title \"{releaseTag}\" --notes \"Automated setup release for {ProductInfo.Version}.\"{targetArgument}";
+
+        var createResult = await CommandTools.ExecuteCommandAsync(createCommand);
+        if (createResult != 0)
+        {
+            throw new InvalidOperationException(
+                $"GitHub release '{releaseTag}' was not found and automatic creation failed.");
+        }
     }
 
     private static string? TryGetExplicitReleaseTag()
@@ -204,17 +220,4 @@ internal class Program
         return $"{segments[0]}/{segments[1]}";
     }
 #endif
-
-    public static string GetProjectSrcFolderPath()
-    {
-        var directoryPath = IOTools.GetCallerDirectoryPath();
-        var directoryInfo = new DirectoryInfo(directoryPath);
-        var path = directoryInfo.Parent!.FullName;
-        return path;
-    }
-
-    public static string GetProjectRootFolderPath()
-    {
-        return new DirectoryInfo(GetProjectSrcFolderPath()).Parent!.FullName;
-    }
 }

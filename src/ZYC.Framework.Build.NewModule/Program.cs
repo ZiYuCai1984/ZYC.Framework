@@ -1,6 +1,7 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using ZYC.CoreToolkit;
+using ZYC.Framework.Build.Utilities;
 
 namespace ZYC.Framework.Build.NewModule;
 
@@ -23,8 +24,7 @@ internal class Program
             return;
         }
 
-        var current = IOTools.GetCallerDirectoryPath();
-        IOTools.SetCurrentDirectory(new DirectoryInfo(current).Parent!.FullName);
+        IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
 
         var rootFolder = "ZYC.Framework.Build.NewModule\\Template\\";
 

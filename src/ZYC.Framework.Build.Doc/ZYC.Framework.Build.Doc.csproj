@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>
@@ -13,19 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tools.InnoSetup" />
-    <PackageReference Include="ZYC.CoreToolkit" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
-    <ProjectReference Include="..\ZYC.Framework.Build.NuGet\ZYC.Framework.Build.NuGet.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Build.Utilities\ZYC.Framework.Build.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="packages\**\*.*" />
-    <None Include="packages\**\*.*" />
   </ItemGroup>
 
 </Project>

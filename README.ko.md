@@ -1,8 +1,8 @@
-<p align="center">
+﻿<p align="center">
   <a href="./README.md">English</a> |
   <a href="./README.ja.md">日本語</a> |
   <a href="./README.zh-CN.md">简体中文</a> |
-  <a href="./README.zh-TW.md">简體中文</a> |
+  <a href="./README.zh-TW.md">繁體中文</a> |
   <a href="./README.ko.md">한국어</a> |
 </p>
 
@@ -13,7 +13,10 @@
 <h1 align="center">ZYC.Framework</h1>
 
 <p align="center">
-  <b>.NET 10</b>과 <b>WPF</b>를 기반으로 구축된 고성능, 모듈화, 확장 가능한 데스크톱 자동화 프레임워크입니다.
+
+
+<b>.NET 10</b>과 <b>WPF</b>를 기반으로 구축된 고성능, 모듈화, 확장 가능한 데스크톱 자동화 프레임워크입니다.
+
 </p>
 
 <p align="center">
@@ -36,51 +39,60 @@
     <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-manual.yml?branch=main&label=build&logo=github" alt="NuGet manual workflow" />
   </a>
   <a href="https://github.com/ZiYuCai1984/ZYC.Framework/actions/workflows/publish-nuget-nightly.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="NuGet nightly workflow" />
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/build-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="Build nightly workflow" />
   </a>
 </p>
 
 ---
 
-## 📖 개요
 
-**ZYC.Framework**은 **WPF**의 표현력 있는 UI 기능과 **.NET 10**의 최신 기능을 결합한 현대적인 데스크톱 자동화 솔루션입니다.  
-모듈화된 아키텍처를 통해 복잡한 자동화 시스템의 개발과 유지보수를 단순화하는 것을 목표로 합니다.
 
-본 프로젝트는 분산 애플리케이션 오케스트레이션을 위해 **.NET Aspire**를 깊이 통합하고 있으며,  
-**Blazor** 및 **WebView2** 기반의 하이브리드 접근 방식을 지원하여 Web UI와 네이티브 데스크톱 경험 중 필요에 따라 선택할 수 있습니다.
+## 📖  개요
+
+
+
+**ZYC.Framework**은 **WPF**의 표현력 있는 UI 기능과 **.NET 10**의 최신 기능을 결합한 현대적인 데스크톱 자동화 솔루션입니다. 모듈화된 아키텍처를 통해 복잡한 자동화 시스템의 개발과 유지보수를 단순화하는 것을 목표로 합니다.
+
+
+
+
+본 프로젝트는 분산 애플리케이션 오케스트레이션을 위해 **.NET Aspire**를 깊이 통합하고 있으며, **Blazor** 및 **WebView2** 기반의 하이브리드 접근 방식을 지원하여 Web UI와 네이티브 데스크톱 경험 중 필요에 따라 선택할 수 있습니다.
+
 
 ---
 
-## ✨ 주요 기능
+
+
+## ✨  주요 기능
 
 - **모듈화 아키텍처**: 비즈니스 로직을 분리하여 동적 로딩과 독립적인 개발을 지원합니다.
 - **현대적인 UI 경험**: WPF 기반으로 **다중 워크스페이스** 및 **다중 탭** 인터랙션을 지원합니다.
 - **하이브리드 개발**:
-  - **WebView2**를 통한 최신 Web 애플리케이션 임베딩
-  - **Blazor**를 활용한 데스크톱 환경에서의 Web 컴포넌트 재사용
-- **클라우드 네이티브 대응**: **.NET Aspire** 내장 지원으로 서비스 탐색, 거버넌스 및 배포를 단순화
+  - **WebView2**를 통한 최신 Web 애플리케이션 임베딩.
+  - **Blazor**를 활용한 데스크톱 환경에서의 Web 컴포넌트 재사용.
+- **클라우드 네이티브 대응**: **.NET Aspire** 내장 지원으로 서비스 탐색, 거버넌스 및 배포를 단순화합니다.
 - **엔터프라이즈 지향 기능 내장 (Batteries Included)**:
-  - **작업 관리**: 작업 스케줄링 및 전체 라이프사이클 관리
-  - **예외 처리**: 강력한 전역 오류 수집 및 진단 메커니즘
-  - **다국어 지원**: 글로벌 애플리케이션을 위한 내장 로컬라이제이션 기능
+  - **작업 관리**: 작업 스케줄링 및 전체 라이프사이클 관리.
+  - **예외 처리**: 강력한 전역 오류 수집 및 진단 메커니즘.
+  - **다국어 지원**: 글로벌 애플리케이션을 위한 내장 로컬라이제이션 기능.
 
 ---
 
-## 📸 UI 미리보기
+
+
+## 📸  UI 미리보기
 
 <table align="center">
   <tr>
     <td>
       <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center">워크스페이스 뷰</p>
+      <p align="center">워크스페이스 보기</p>
     </td>
     <td>
       <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center">다중 탭</p>
+      <p align="center">다중 탭 표시</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
@@ -91,7 +103,6 @@
       <p align="center">워크스페이스 + 탭</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/aspire-dashboard.png" alt="aspire-dashboard" width="400" />
@@ -102,7 +113,6 @@
       <p align="center">Blazor (인증 포함)</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/exception.png" alt="exception" width="400" />
@@ -117,33 +127,41 @@
 
 ---
 
-## 🛠️ 기술 스택
 
-- **런타임**: .NET 10 SDK
-- **UI 프레임워크**: WPF (Windows Presentation Foundation)
-- **하이브리드 UI**: WebView2 + Blazor (Web UI)
-- **오케스트레이션**: .NET Aspire
-- **아키텍처**: 모듈형 모놀리식 / 플러그인 기반
+
+## 🛠️  기술 스택
+
+- **Runtime**: .NET 10 SDK
+- **UI Framework**: WPF (Windows Presentation Foundation)
+- **Hybrid UI**: WebView2 + Blazor
+- **Orchestration**: .NET Aspire
+- **Architecture**: Modular Monolith / Plugin-based
 
 ---
 
-## 🚀 빠른 시작
 
-자세한 가이드는 아래 문서를 참고하세요:
 
-👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
+## 🚀  빠른 시작
+
+
+자세한 내용은 다음 가이드를 참고하세요:
+
+👉 **[빠른 시작 가이드 (quick-start.md)](docs/quick-start.md)**
 
 ### 설치
 
-NuGet을 통해 핵심 패키지를 설치합니다:
+
+NuGet을 통해 코어 패키지를 설치할 수 있습니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version [version]
-````
+dotnet add package ZYC.Framework.Alpha --version 1.1.8
+```
 
 ---
 
-## 🏗️ 프로젝트 구조
+
+
+## 🏗️  프로젝트 구조
 
 ```text
 ZYC.Framework
@@ -183,30 +201,35 @@ ZYC.Framework
 
 ---
 
-## 📄 라이선스
+
+
+## 📄  라이선스
+
 
 본 프로젝트는 [MIT License](LICENSE) 하에 오픈소스로 제공됩니다.
 
 ---
 
-## 💖 감사의 말
+
+
+## 💖  감사의 말
+
 
 본 프로젝트는 다음 오픈소스 프로젝트를 사용하거나(또는 일부 구현을 참고하였습니다):
 
-* [MahApps.Metro](https://github.com/MahApps/MahApps.Metro): UI 프레임워크
-* [MdXaml](https://github.com/whistyun/MdXaml): Markdown 렌더링
-* [titanium-web-proxy](https://github.com/justcoding121/titanium-web-proxy): 프록시 코어
-* [EasyWindowsTerminalControl](https://github.com/mitchcapper/EasyWindowsTerminalControl): 터미널 통합
+* [MahApps.Metro](https://github.com/MahApps/MahApps.Metro): UI 프레임워크.
+* [MdXaml](https://github.com/whistyun/MdXaml): Markdown 렌더링.
+* [titanium-web-proxy](https://github.com/justcoding121/titanium-web-proxy): 프록시 코어.
+* [EasyWindowsTerminalControl](https://github.com/mitchcapper/EasyWindowsTerminalControl): 터미널 통합.
 
 > 라이선스 및 저작권은 각 프로젝트의 원저작자에게 귀속됩니다.
 > 본 저장소는 각 프로젝트의 라이선스 조건을 준수하여 사용 및 참조합니다.
 
 ---
 
-## 🤝 기여하기
 
-Issue 및 Pull Request를 환영합니다.
-제안 사항이나 버그를 발견하셨다면 언제든지 Issue를 열거나 PR을 제출해 주세요.
 
-```
+## 🤝  기여하기
 
+
+Issue 및 Pull Request를 환영합니다. 제안 사항이나 버그를 발견하셨다면 언제든지 Issue를 열거나 PR을 제출해 주세요.
