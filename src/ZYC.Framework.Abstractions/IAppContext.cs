@@ -15,6 +15,12 @@ public partial interface IAppContext
     string GetSettingsDirectory();
 
     /// <summary>
+    ///     Gets the app root directory.
+    /// </summary>
+    /// <returns>The settings directory path.</returns>
+    string GetAppRootDirectory();
+
+    /// <summary>
     ///     Gets the current working directory.
     /// </summary>
     /// <returns>The current directory path.</returns>

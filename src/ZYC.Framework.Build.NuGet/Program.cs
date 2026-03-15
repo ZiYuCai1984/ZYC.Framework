@@ -71,7 +71,7 @@ public class Program
         var csprojFiles = GetCsprojFilePaths(BuildEnvironment.SrcFolder);
 
 
-        await IOTools.ClearPathAsync(BuildEnvironment.SettingsDirectoryPath);
+        await IOTools.ClearPathAsync(BuildEnvironment.AppRootDirectoryPath);
 
 
         IOTools.DeleteFileIfExists(tempSlnFileName);
