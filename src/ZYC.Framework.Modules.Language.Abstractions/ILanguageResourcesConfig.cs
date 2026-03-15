@@ -8,6 +8,7 @@ namespace ZYC.Framework.Modules.Language.Abstractions;
 ///     Defines configuration for language resources.
 /// </summary>
 [Hidden]
+[SkipReset]
 public interface ILanguageResourcesConfig : IConfig
 {
     /// <summary>

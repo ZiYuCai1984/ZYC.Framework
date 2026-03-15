@@ -32,7 +32,8 @@ internal partial class ApiReferenceView
     public override string HomePageUri => _homePageUri ??= Path.Combine(
         AppContext.GetCurrentDirectory(),
         ApiReferenceModuleConstants.DocFolder,
-        "index.html");
+        "_api",
+        "ZYC.Framework.Abstractions.html");
 
     protected override async Task InternalWebViewHostLoadedAsync()
     {

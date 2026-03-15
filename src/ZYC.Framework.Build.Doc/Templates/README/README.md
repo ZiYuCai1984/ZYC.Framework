@@ -34,9 +34,6 @@ A high-performance, modular, and extensible desktop automation framework built w
   <a href="https://www.nuget.org/packages/$(PackageId)">
     <img src="https://img.shields.io/nuget/dt/$(PackageId)?logo=nuget&label=Downloads" alt="NuGet Downloads" />
   </a>
-  <a href="https://raw.githubusercontent.com/ZiYuCai1984/Temp/refs/heads/main/ZYC.Framework.Setup.exe">
-    <img src="https://img.shields.io/badge/Download-Setup-blue?logo=windows&logoColor=white&label=Download%20Demo%20Installer" alt="Download Demo Installer" />
-  </a>
   <img src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white" alt=".NET 10" />
   <img src="https://img.shields.io/badge/Platform-WPF-orange" alt="Platform" />
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
@@ -123,17 +120,17 @@ The project deeply integrates **.NET Aspire** for distributed application orches
       <p align="center"><!--doc-l10n:begin preview-workspaces-->Multiple Workspaces<!--doc-l10n:locale ja-->複数ワークスペース<!--doc-l10n:locale zh-CN-->多工作区展示<!--doc-l10n:locale zh-TW-->多工作區展示<!--doc-l10n:locale ko-->다중 워크스페이스<!--doc-l10n:end--></p>
     </td>
     <td>
-      <img src="./docs/images/workspace-4-tabs.png" alt="workspace-4-tabs" width="400" />
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
       <p align="center"><!--doc-l10n:begin preview-workspaces-tabs-->Workspaces + Tabs<!--doc-l10n:locale ja-->複数ワークスペース + タブ<!--doc-l10n:locale zh-CN-->多工作区 Tab 展示<!--doc-l10n:locale zh-TW-->工作區 + 分頁<!--doc-l10n:locale ko-->워크스페이스 + 탭<!--doc-l10n:end--></p>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="./docs/images/aspire-dashboard.png" alt="aspire-dashboard" width="400" />
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
       <p align="center"><!--doc-l10n:begin preview-aspire-->Aspire Dashboard<!--doc-l10n:locale ja-->Aspire ダッシュボード<!--doc-l10n:locale zh-CN-->Aspire 仪表板<!--doc-l10n:locale zh-TW-->Aspire 儀表板<!--doc-l10n:locale ko-->Aspire 대시보드<!--doc-l10n:end--></p>
     </td>
     <td>
-      <img src="./docs/images/blazor-auth.png" alt="blazor-auth" width="400" />
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
       <p align="center"><!--doc-l10n:begin preview-blazor-->Blazor (with Auth)<!--doc-l10n:locale ja-->Blazor（認証付き）<!--doc-l10n:locale zh-CN-->Blazor with Auth<!--doc-l10n:locale zh-TW-->Blazor（含驗證）<!--doc-l10n:locale ko-->Blazor (인증 포함)<!--doc-l10n:end--></p>
     </td>
   </tr>
@@ -171,6 +168,8 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 <!--doc-l10n:begin quickstart-lead-->Please refer to the detailed guide:<!--doc-l10n:locale ja-->詳細な手順はこちら：<!--doc-l10n:locale zh-CN-->请参阅我们准备好的详细指南：<!--doc-l10n:locale zh-TW-->請參閱完整指南：<!--doc-l10n:locale ko-->자세한 내용은 다음 가이드를 참고하세요:<!--doc-l10n:end-->
 
 👉 **[<!--doc-l10n:begin quickstart-link-->Quick Start<!--doc-l10n:locale ja-->クイックスタート<!--doc-l10n:locale zh-CN-->快速开始指南<!--doc-l10n:locale zh-TW-->快速開始指南<!--doc-l10n:locale ko-->빠른 시작 가이드<!--doc-l10n:end--> (quick-start.md)](docs/quick-start.md)**
+
+👉 **[<!--doc-l10n:begin quickstart-demo-installer-link-->Download Demo Installer<!--doc-l10n:locale ja-->デモ インストーラーをダウンロード<!--doc-l10n:locale zh-CN-->下载 Demo 安装包<!--doc-l10n:locale zh-TW-->下載 Demo 安裝程式<!--doc-l10n:locale ko-->데모 설치 프로그램 다운로드<!--doc-l10n:end-->](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v$(Version)/ZYC.Framework.Setup.$(Version).exe)**
 
 ### <!--doc-l10n:begin install-title-->Installation<!--doc-l10n:locale ja-->インストール<!--doc-l10n:locale zh-CN-->安装<!--doc-l10n:locale zh-TW-->安裝<!--doc-l10n:locale ko-->설치<!--doc-l10n:end-->
 
