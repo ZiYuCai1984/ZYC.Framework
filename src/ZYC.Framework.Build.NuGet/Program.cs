@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Nuspec;
 using ZYC.CoreToolkit.Dotnet;
@@ -69,35 +71,49 @@ public class Program
 
         BuildEnvironment.UpdateVersionProps();
 
-        var csprojFiles = GetCsprojFilePaths(BuildEnvironment.SrcFolder);
+        var globalJsonExists = File.Exists(BuildEnvironment.GlobalJsonPath);
+        var originalGlobalJsonBytes = globalJsonExists
+            ? await File.ReadAllBytesAsync(BuildEnvironment.GlobalJsonPath)
+            : null;
 
-
-        await IOTools.ClearPathAsync(BuildEnvironment.AppRootDirectoryPath);
-
-
-        IOTools.DeleteFileIfExists(tempSlnFileName);
-        ProjectTools.GenerateSln(csprojFiles, tempSlnFileName);
-
-
-        var buildResult = await CommandTools.ExecuteCommandAsync($"dotnet build {tempSlnFileName} -c release");
-        if (buildResult != 0)
+        try
         {
-            throw new InvalidOperationException("Build failed !!");
+            WriteAspireSdkGlobalJson();
+
+            var csprojFiles = GetCsprojFilePaths(BuildEnvironment.SrcFolder);
+
+
+            await IOTools.ClearPathAsync(BuildEnvironment.AppRootDirectoryPath);
+
+
+            IOTools.DeleteFileIfExists(tempSlnFileName);
+            ProjectTools.GenerateSln(csprojFiles, tempSlnFileName);
+
+
+            var buildResult = await CommandTools.ExecuteCommandAsync($"dotnet build {tempSlnFileName} -c release");
+            if (buildResult != 0)
+            {
+                throw new InvalidOperationException("Build failed !!");
+            }
+
+
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.LogPath);
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.ProductPackagePath);
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.NuGetCachePath);
+
+            var pendingRemoveFiles = Directory.GetFiles(
+                BuildEnvironment.OutputPath, "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith(".pdb") ||
+                f.EndsWith(".xml") || f.EndsWith(".txt") || f.EndsWith(".endpoints.json")
+                || f.EndsWith(".runtime.json")).ToArray();
+
+            foreach (var file in pendingRemoveFiles)
+            {
+                File.Delete(file);
+            }
         }
-
-
-        IOTools.DeleteDirectoryIfExists(BuildEnvironment.LogPath);
-        IOTools.DeleteDirectoryIfExists(BuildEnvironment.ProductPackagePath);
-        IOTools.DeleteDirectoryIfExists(BuildEnvironment.NuGetCachePath);
-
-        var pendingRemoveFiles = Directory.GetFiles(
-            BuildEnvironment.OutputPath, "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith(".pdb") ||
-            f.EndsWith(".xml") || f.EndsWith(".txt") || f.EndsWith(".endpoints.json")
-            || f.EndsWith(".runtime.json")).ToArray();
-
-        foreach (var file in pendingRemoveFiles)
+        finally
         {
-            File.Delete(file);
+            RestoreGlobalJson(originalGlobalJsonBytes, globalJsonExists);
         }
     }
 
@@ -120,6 +136,45 @@ public class Program
         }
 
         return result.ToArray();
+    }
+
+    private static void WriteAspireSdkGlobalJson()
+    {
+        JsonObject rootObject;
+        if (File.Exists(BuildEnvironment.GlobalJsonPath))
+        {
+            var existingContent = File.ReadAllText(BuildEnvironment.GlobalJsonPath);
+            rootObject = string.IsNullOrWhiteSpace(existingContent)
+                ? new JsonObject()
+                : JsonNode.Parse(existingContent) as JsonObject ?? new JsonObject();
+        }
+        else
+        {
+            rootObject = new JsonObject();
+        }
+
+        var msbuildSdks = rootObject["msbuild-sdks"] as JsonObject ?? new JsonObject();
+        msbuildSdks["Aspire.AppHost.Sdk"] = BuildEnvironment.AspireVersion;
+        rootObject["msbuild-sdks"] = msbuildSdks;
+
+        // Force NuGetSdkResolver to resolve Aspire.AppHost.Sdk for CI-only temporary WPF projects.
+        var globalJsonContent = rootObject.ToJsonString(new JsonSerializerOptions
+        {
+            WriteIndented = true
+        }) + Environment.NewLine;
+
+        File.WriteAllText(BuildEnvironment.GlobalJsonPath, globalJsonContent);
+    }
+
+    private static void RestoreGlobalJson(byte[]? originalGlobalJsonBytes, bool globalJsonExists)
+    {
+        if (globalJsonExists)
+        {
+            File.WriteAllBytes(BuildEnvironment.GlobalJsonPath, originalGlobalJsonBytes ?? Array.Empty<byte>());
+            return;
+        }
+
+        IOTools.DeleteFileIfExists(BuildEnvironment.GlobalJsonPath);
     }
 
 

@@ -178,6 +178,12 @@ internal class Program
 
     private static void ValidateReleaseTag(string releaseTag)
     {
+        if (!releaseTag.StartsWith('v'))
+        {
+            throw new InvalidOperationException(
+                $"Release tag '{releaseTag}' must start with 'v' (for example: 'v{ProductInfo.Version}').");
+        }
+
         var normalizedTag = releaseTag.TrimStart('v');
         if (!string.Equals(normalizedTag, ProductInfo.Version, StringComparison.Ordinal))
         {

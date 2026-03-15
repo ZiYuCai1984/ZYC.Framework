@@ -77,53 +77,6 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 
 
 
-## 📸  UI Preview
-
-<table align="center">
-  <tr>
-    <td>
-      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center">Workspace View</p>
-    </td>
-    <td>
-      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center">Multiple Tabs</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
-      <p align="center">Multiple Workspaces</p>
-    </td>
-    <td>
-      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
-      <p align="center">Workspaces + Tabs</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
-      <p align="center">Aspire Dashboard</p>
-    </td>
-    <td>
-      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
-      <p align="center">Blazor (with Auth)</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/exception.png" alt="exception" width="400" />
-      <p align="center">Exception Handling</p>
-    </td>
-    <td>
-      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
-      <p align="center">Task Manager</p>
-    </td>
-  </tr>
-</table>
-
----
-
 
 
 ## 🛠️  Tech Stack
@@ -197,6 +150,55 @@ ZYC.Framework
 │       ├── ZYC.MdXaml                        # Markdown renderer + extensions
 │       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
 ```
+
+---
+
+
+
+## 📸  UI Preview
+
+<table align="center">
+  <tr>
+    <td>
+      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
+      <p align="center">Workspace View</p>
+    </td>
+    <td>
+      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
+      <p align="center">Multiple Tabs</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
+      <p align="center">Multiple Workspaces</p>
+    </td>
+    <td>
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
+      <p align="center">Workspaces + Tabs</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
+      <p align="center">Aspire Dashboard</p>
+    </td>
+    <td>
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
+      <p align="center">Blazor (with Auth)</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/exception.png" alt="exception" width="400" />
+      <p align="center">Exception Handling</p>
+    </td>
+    <td>
+      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
+      <p align="center">Task Manager</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
