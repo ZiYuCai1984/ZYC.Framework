@@ -21,6 +21,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - run: |
-          dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release --property:DefineConstants="PUBLISH_GITHUB_RELEASE;GENERATE_DOC"
+          dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release --property:DefineConstants="PUBLISH_GITHUB_RELEASE"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

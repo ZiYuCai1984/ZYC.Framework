@@ -1,4 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Condition="'$(EnableGenerateDoc)' == 'true'">
+    <DefineConstants>$(DefineConstants);GENERATE_DOC</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(EnablePublishNuGetOrg)' == 'true'">
+    <DefineConstants>$(DefineConstants);PUBLISH_NUGET_ORG</DefineConstants>
+  </PropertyGroup>
+
+
   <PropertyGroup>
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>
