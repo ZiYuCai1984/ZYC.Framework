@@ -89,8 +89,6 @@ internal partial class AppContext : IAppContext
             });
     }
 
-    private static string AlternateFolderName => "Alternate";
-
     private AppState AppState { get; }
 
     private ILifetimeScope LifetimeScope { get; }
@@ -102,22 +100,6 @@ internal partial class AppContext : IAppContext
     private AppConfig AppConfig { get; }
 
     private static SynchronizationContext? UISynchronizationContext { get; set; }
-
-    string IAppContext.GetCurrentDirectory()
-    {
-        return GetCurrentDirectory();
-    }
-
-    public string GetTempPath()
-    {
-        return Path.GetTempPath();
-    }
-
-    string IAppContext.GetProcessFileName()
-    {
-        return GetProcessFileName();
-    }
-
 
     public void SaveAllConfig()
     {
@@ -141,10 +123,7 @@ internal partial class AppContext : IAppContext
         }
     }
 
-    string IAppContext.GetArgumentString()
-    {
-        return GetArgumentString();
-    }
+
 
     public void UpdateStartupVersion(string version)
     {
@@ -215,41 +194,6 @@ internal partial class AppContext : IAppContext
         return Path.Combine(GetSettingsDirectory(), $"{GetProcessFileName()}.WebView2");
     }
 
-    public static string GetArgumentString()
-    {
-        var arguments = Environment.GetCommandLineArgs();
-        var argumentString = string.Join(" ", arguments.Skip(1));
-        return argumentString;
-    }
-
-    public static string GetCurrentDirectory()
-    {
-        return IOTools.GetExecutingFolder();
-    }
-
-
-    public static string GetSettingsDirectory()
-    {
-        var current = GetCurrentDirectory();
-
-        var directory = new DirectoryInfo(current);
-        return directory.Parent!.FullName;
-    }
-
-    public static string GetProcessFileName()
-    {
-        var fullFileName = Process.GetCurrentProcess().MainModule!.FileName;
-        return Path.GetFileName(fullFileName);
-    }
-
-    public static bool IsSelfAlternate()
-    {
-        var dir = Path.GetFileName(GetCurrentDirectory());
-        var result = dir == AlternateFolderName;
-
-        return result;
-    }
-
     protected override void OnStartup(StartupEventArgs e)
     {
         AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
@@ -269,10 +213,5 @@ internal partial class AppContext : IAppContext
 
 
         return null;
-    }
-
-    public static string GetMainAppDirectory()
-    {
-        throw new NotImplementedException();
     }
 }

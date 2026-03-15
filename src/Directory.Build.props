@@ -74,13 +74,12 @@
   </ItemGroup>
 
 
-
-
   <PropertyGroup>
     <Enable_Target_CopyJsonToSettingsOutput>false</Enable_Target_CopyJsonToSettingsOutput>
     <Enable_Target_CopyDebugJsonToSettingsOutput>false</Enable_Target_CopyDebugJsonToSettingsOutput>
-    <SettingsJsonOutputDir>$([System.IO.Path]::GetFullPath('$(OutputPath)..\'))</SettingsJsonOutputDir>
+    <SettingsOutputDir>$([System.IO.Path]::GetFullPath('$(OutputPath)..\settings\'))</SettingsOutputDir>
   </PropertyGroup>
+
 
   <ItemGroup>
     <JsonFiles Include="*.json" />
@@ -92,7 +91,7 @@
           AfterTargets="Build"
           Condition="'$(Enable_Target_CopyJsonToSettingsOutput)' == 'true'">
     <Copy SourceFiles="@(JsonFiles)"
-          DestinationFiles="@(JsonFiles->'$(SettingsJsonOutputDir)\%(Filename)%(Extension)')"
+          DestinationFiles="@(JsonFiles->'$(SettingsOutputDir)\%(Filename)%(Extension)')"
           SkipUnchangedFiles="true" />
   </Target>
 
@@ -100,10 +99,8 @@
           AfterTargets="Build"
           Condition="'$(Configuration)' == 'Debug' and '$(Enable_Target_CopyDebugJsonToSettingsOutput)' == 'true'">
     <Copy SourceFiles="@(JsonFiles)"
-          DestinationFiles="@(JsonFiles->'$(SettingsJsonOutputDir)\%(Filename)%(Extension)')"
+          DestinationFiles="@(JsonFiles->'$(SettingsOutputDir)\%(Filename)%(Extension)')"
           SkipUnchangedFiles="true" />
   </Target>
-
-
 
 </Project>
