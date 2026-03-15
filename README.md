@@ -26,9 +26,6 @@ A high-performance, modular, and extensible desktop automation framework built w
   <a href="https://www.nuget.org/packages/ZYC.Framework.Alpha">
     <img src="https://img.shields.io/nuget/dt/ZYC.Framework.Alpha?logo=nuget&label=Downloads" alt="NuGet Downloads" />
   </a>
-  <a href="https://raw.githubusercontent.com/ZiYuCai1984/Temp/refs/heads/main/ZYC.Framework.Setup.exe">
-    <img src="https://img.shields.io/badge/Download-Setup-blue?logo=windows&logoColor=white&label=Download%20Demo%20Installer" alt="Download Demo Installer" />
-  </a>
   <img src="https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white" alt=".NET 10" />
   <img src="https://img.shields.io/badge/Platform-WPF-orange" alt="Platform" />
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
@@ -99,17 +96,17 @@ The project deeply integrates **.NET Aspire** for distributed application orches
       <p align="center">Multiple Workspaces</p>
     </td>
     <td>
-      <img src="./docs/images/workspace-4-tabs.png" alt="workspace-4-tabs" width="400" />
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
       <p align="center">Workspaces + Tabs</p>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="./docs/images/aspire-dashboard.png" alt="aspire-dashboard" width="400" />
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
       <p align="center">Aspire Dashboard</p>
     </td>
     <td>
-      <img src="./docs/images/blazor-auth.png" alt="blazor-auth" width="400" />
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
       <p align="center">Blazor (with Auth)</p>
     </td>
   </tr>
@@ -148,13 +145,15 @@ Please refer to the detailed guide:
 
 👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
 
+👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+
 ### Installation
 
 
 Install the core package via NuGet:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.8
+dotnet add package ZYC.Framework.Alpha --version 1.1.9
 ```
 
 ---
