@@ -1,8 +1,8 @@
-<p align="center">
+﻿<p align="center">
   <a href="./README.md">English</a> |
   <a href="./README.ja.md">日本語</a> |
   <a href="./README.zh-CN.md">简体中文</a> |
-  <a href="./README.zh-TW.md">简體中文</a> |
+  <a href="./README.zh-TW.md">繁體中文</a> |
   <a href="./README.ko.md">한국어</a> |
 </p>
 
@@ -13,7 +13,10 @@
 <h1 align="center">ZYC.Framework</h1>
 
 <p align="center">
-  一個基於 <b>.NET 10</b> 與 <b>WPF</b> 構建的高效能、模組化、可擴充的桌面自動化框架。
+
+
+一個基於 <b>.NET 10</b> 與 <b>WPF</b> 構建的高效能、模組化、可擴充的桌面自動化框架。
+
 </p>
 
 <p align="center">
@@ -36,22 +39,31 @@
     <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-manual.yml?branch=main&label=build&logo=github" alt="NuGet manual workflow" />
   </a>
   <a href="https://github.com/ZiYuCai1984/ZYC.Framework/actions/workflows/publish-nuget-nightly.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/publish-nuget-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="NuGet nightly workflow" />
+    <img src="https://img.shields.io/github/actions/workflow/status/ZiYuCai1984/ZYC.Framework/build-nightly.yml?branch=main&label=nightly%20build&logo=github" alt="Build nightly workflow" />
   </a>
 </p>
 
 ---
 
-## 📖 專案概覽
 
-**ZYC.Framework** 是一個現代化的桌面自動化解決方案，結合了 **WPF** 的高表現力 UI 能力與 **.NET 10** 的最新技術特性。  
-其核心目標是透過模組化架構，降低複雜自動化系統的開發與維護成本。
+
+## 📖  專案概覽
+
+
+
+**ZYC.Framework** 是一個現代化的桌面自動化解決方案，結合了 **WPF** 的高表現力 UI 能力與 **.NET 10** 的最新技術特性。其核心目標是透過模組化架構，降低複雜自動化系統的開發與維護成本。
+
+
+
 
 本專案深度整合 **.NET Aspire** 以實現分散式應用程式的協調與管理，同時支援 **Blazor** 與 **WebView2** 的混合架構，讓你可以依需求在 Web UI 與原生桌面體驗之間自由取捨。
 
+
 ---
 
-## ✨ 主要特性
+
+
+## ✨  主要特性
 
 - **模組化架構**：業務邏輯高度解耦，支援動態載入與獨立開發。
 - **現代化 UI 體驗**：基於 WPF，支援 **多工作區** 與 **多分頁** 操作模式。
@@ -66,31 +78,31 @@
 
 ---
 
-## 📸 UI 預覽
+
+
+## 📸  UI 預覽
 
 <table align="center">
   <tr>
     <td>
       <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center">工作區檢視</p>
+      <p align="center">工作區展示</p>
     </td>
     <td>
       <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center">多分頁</p>
+      <p align="center">多分頁展示</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
-      <p align="center">多工作區</p>
+      <p align="center">多工作區展示</p>
     </td>
     <td>
       <img src="./docs/images/workspace-4-tabs.png" alt="workspace-4-tabs" width="400" />
       <p align="center">工作區 + 分頁</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/aspire-dashboard.png" alt="aspire-dashboard" width="400" />
@@ -98,10 +110,9 @@
     </td>
     <td>
       <img src="./docs/images/blazor-auth.png" alt="blazor-auth" width="400" />
-      <p align="center">Blazor（含身分驗證）</p>
+      <p align="center">Blazor（含驗證）</p>
     </td>
   </tr>
-
   <tr>
     <td>
       <img src="./docs/images/exception.png" alt="exception" width="400" />
@@ -109,40 +120,48 @@
     </td>
     <td>
       <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
-      <p align="center">任務管理器</p>
+      <p align="center">任務管理</p>
     </td>
   </tr>
 </table>
 
 ---
 
-## 🛠️ 技術棧
 
-- **執行環境**：.NET 10 SDK
-- **UI 框架**：WPF（Windows Presentation Foundation）
-- **混合 UI**：WebView2 + Blazor（Web UI）
-- **應用協調**：.NET Aspire
-- **架構風格**：模組化單體（Modular Monolith）／插件式架構
+
+## 🛠️  技術棧
+
+- **Runtime**: .NET 10 SDK
+- **UI Framework**: WPF (Windows Presentation Foundation)
+- **Hybrid UI**: WebView2 + Blazor
+- **Orchestration**: .NET Aspire
+- **Architecture**: Modular Monolith / Plugin-based
 
 ---
 
-## 🚀 快速開始
 
-請參考完整說明文件：
 
-👉 **[Quick Start（quick-start.md）](docs/quick-start.md)**
+## 🚀  快速開始
 
-### 安裝方式
 
-透過 NuGet 安裝核心套件：
+請參閱完整指南：
+
+👉 **[快速開始指南 (quick-start.md)](docs/quick-start.md)**
+
+### 安裝
+
+
+你可以透過 NuGet 將核心套件加入專案：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version [version]
-````
+dotnet add package ZYC.Framework.Alpha --version 1.1.8
+```
 
 ---
 
-## 🏗️ 專案結構
+
+
+## 🏗️  專案結構
 
 ```text
 ZYC.Framework
@@ -182,28 +201,35 @@ ZYC.Framework
 
 ---
 
-## 📄 授權條款
+
+
+## 📄  授權條款
+
 
 本專案以 [MIT License](LICENSE) 授權並開源。
 
 ---
 
-## 💖 致謝
+
+
+## 💖  致謝
+
 
 本專案使用（或參考了部分實作）以下開源專案：
 
-* [MahApps.Metro](https://github.com/MahApps/MahApps.Metro)：UI 框架
-* [MdXaml](https://github.com/whistyun/MdXaml)：Markdown 呈現
-* [titanium-web-proxy](https://github.com/justcoding121/titanium-web-proxy)：代理核心
-* [EasyWindowsTerminalControl](https://github.com/mitchcapper/EasyWindowsTerminalControl)：終端機整合
+* [MahApps.Metro](https://github.com/MahApps/MahApps.Metro): UI 框架。
+* [MdXaml](https://github.com/whistyun/MdXaml): Markdown 呈現。
+* [titanium-web-proxy](https://github.com/justcoding121/titanium-web-proxy): 代理核心。
+* [EasyWindowsTerminalControl](https://github.com/mitchcapper/EasyWindowsTerminalControl): 終端機整合。
 
 > 授權與著作權歸各專案原作者所有。
 > 本倉庫對其使用與引用皆遵循各自的授權條款。
 
 ---
 
-## 🤝 參與貢獻
 
-歡迎提交 Issue 與 Pull Request。
-如果你有任何建議或發現問題，請隨時提出。
 
+## 🤝  參與貢獻
+
+
+歡迎提交 Issue 與 Pull Request。如果你有任何建議或發現問題，請隨時提出。

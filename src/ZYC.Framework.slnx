@@ -1,10 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Solution>
   <Folder Name="/Archived/" />
   <Folder Name="/Build/">
+    <Project Path="ZYC.Framework.Build.Doc/ZYC.Framework.Build.Doc.csproj" Id="b40209a7-662c-4948-aa2a-5cab99f627ad" />
     <Project Path="ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj" />
     <Project Path="ZYC.Framework.Build.NewModule/ZYC.Framework.Build.NewModule.csproj" />
     <Project Path="ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj" />
+    <Project Path="ZYC.Framework.Build.Utilities/ZYC.Framework.Build.Utilities.csproj" Id="d64c08fc-a661-45a8-be99-ba9ac94f3463" />
   </Folder>
   <Folder Name="/Deprecated/" />
   <Folder Name="/Modules/">
@@ -48,6 +50,7 @@
     <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path="../AGENTS.md" />
     <File Path="../README.md" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
