@@ -108,7 +108,8 @@
       "Go to update page": "アップデートページへ移動",
       "Already the latest version.": "すでに最新バージョンです。",
       "Copied to clipboard.": "クリップボードにコピーしました。",
-      "Clear nuget http cache": "NuGet HTTP キャッシュをクリア"
+      "Clear nuget http cache": "NuGet HTTP キャッシュをクリア",
+      "Aspire is ready": "Aspire の準備が完了しました"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -218,7 +219,8 @@
       "Go to update page": "前往更新页面",
       "Already the latest version.": "已经是最新版本。",
       "Copied to clipboard.": "已复制到剪贴板。",
-      "Clear nuget http cache": "清除 NuGet HTTP 缓存"
+      "Clear nuget http cache": "清除 NuGet HTTP 缓存",
+      "Aspire is ready": "Aspire 已就绪"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -328,7 +330,8 @@
       "Go to update page": "前往更新頁面",
       "Already the latest version.": "已經是最新版本。",
       "Copied to clipboard.": "已複製到剪貼簿。",
-      "Clear nuget http cache": "清除 NuGet HTTP 快取"
+      "Clear nuget http cache": "清除 NuGet HTTP 快取",
+      "Aspire is ready": "Aspire 已就緒"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -438,7 +441,8 @@
       "Go to update page": "업데이트 페이지로 이동",
       "Already the latest version.": "이미 최신 버전입니다.",
       "Copied to clipboard.": "클립보드에 복사되었습니다.",
-      "Clear nuget http cache": "NuGet HTTP 캐시 지우기"
+      "Clear nuget http cache": "NuGet HTTP 캐시 지우기",
+      "Aspire is ready": "Aspire 준비 완료"
     }
   }
 }
