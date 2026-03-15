@@ -1,0 +1,19 @@
+﻿<Project>
+
+  <PropertyGroup Condition="'$(Enable_GENERATE_DOC)' == 'true'">
+    <DefineConstants>$(DefineConstants);GENERATE_DOC</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Enable_PUBLISH_NUGET_ORG)' == 'true'">
+    <DefineConstants>$(DefineConstants);PUBLISH_NUGET_ORG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Enable_PUBLISH_GITHUB_RELEASE)' == 'true'">
+    <DefineConstants>$(DefineConstants);PUBLISH_GITHUB_RELEASE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Enable_BUILD_NIGHTLY)' == 'true'">
+    <DefineConstants>$(DefineConstants);BUILD_NIGHTLY</DefineConstants>
+  </PropertyGroup>
+
+</Project>
