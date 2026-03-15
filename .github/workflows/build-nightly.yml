@@ -1,0 +1,15 @@
+name: Build Nightly
+on:
+  schedule:
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Build Nightly
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          dotnet run --project src/ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj -c Release --property:DefineConstants="Build_NIGHTLY"

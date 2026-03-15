@@ -1,4 +1,4 @@
-﻿# Agent Guide for ZYC.Framework
+# Agent Guide for ZYC.Framework
 
 This file defines house rules for any AI/code assistant working in this repository.
 It applies to the entire repository unless the user explicitly overrides it.
@@ -34,6 +34,7 @@ It applies to the entire repository unless the user explicitly overrides it.
 - When renaming types, update file names and all references across the solution.
 - Preserve existing target frameworks, output paths, and packaging structure.
 - Prefer additive and backward-compatible changes unless the user approves breaking changes.
+- Avoid running tests or local builds unless the user explicitly asks for them.
 
 ## Response Style for Assistants
 - Be concise and specific; avoid filler.
