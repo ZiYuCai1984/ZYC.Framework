@@ -42,7 +42,6 @@ internal partial class AppContext
         Environment.Exit(0);
     }
 
-
     private void OnAppDomainExceptionUnhandled(object sender, UnhandledExceptionEventArgs e)
     {
         if (e.ExceptionObject is Exception ex)

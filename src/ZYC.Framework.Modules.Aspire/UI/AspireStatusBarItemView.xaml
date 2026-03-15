@@ -10,6 +10,7 @@
              xmlns:bindings="clr-namespace:ZYC.Framework.Core.Bindings;assembly=ZYC.Framework.Core"
              xmlns:ui="clr-namespace:ZYC.Framework.Modules.Aspire.UI"
              xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
+             xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -18,7 +19,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/BottomRightDropDownButton.xaml" />
                 <ResourceDictionary>
-                    <shaders:GrayScaleEffect x:Key="GrayScaleEffect"/>
+                    <markupEx:LifetimeScopeResolve Type="{x:Type shaders:GrayScaleEffect}" 
+                                                   x:Key="GrayScaleEffect"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

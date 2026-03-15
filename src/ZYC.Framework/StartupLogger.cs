@@ -18,7 +18,7 @@ internal class StartupLogger : IAppLogger
     }
 
     private static string LogDirectory { get; } = Path.Combine(
-        AppContext.GetSettingsDirectory(),
+        AppContext.GetAppRootDirectory(),
         "logs");
 
 
