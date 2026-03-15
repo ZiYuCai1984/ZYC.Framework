@@ -7,11 +7,11 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 ## 1. 🧱 Project Setup & Prerequisites
 
 1. **Create Project**: Create a new **WPF Application** targeting **.NET 10** (e.g., name it `WpfApp1`). ✨
-2. **Add NuGet Package**: Install the core framework package `ZYC.Framework.Alpha` via NuGet Package Manager. 📦
+2. **Add NuGet Package**: Install the core framework package `$(PackageId)` via NuGet Package Manager. 📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.1.8" />
+  <PackageReference Include="$(PackageId)" Version="$(Version)" />
 </ItemGroup>
 ```
 

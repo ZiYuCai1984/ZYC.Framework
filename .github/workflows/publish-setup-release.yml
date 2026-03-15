@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Optional release tag. If omitted, the builder tries the version tag and the v-prefixed version tag.
-        required: false
+        description: Release tag to publish the setup asset to
+        required: true
         type: string
 
 permissions:
@@ -21,6 +21,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - run: |
-          dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release --property:DefineConstants="PUBLISH_GITHUB_RELEASE"
+          dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release --property:DefineConstants="PUBLISH_GITHUB_RELEASE;GENERATE_DOC"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

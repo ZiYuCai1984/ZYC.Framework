@@ -3,11 +3,15 @@ using System.Text.RegularExpressions;
 using ZYC.CoreToolkit;
 using ZYC.Framework.Abstractions;
 
-namespace ZYC.Framework.Build.NuGet;
+namespace ZYC.Framework.Build.Utilities;
 
 public static class BuildEnvironment
 {
+    public static string SetupFilePath = Path.Combine(SrcFolder, $"ZYC.Framework.Setup.{ProductInfo.Version}.exe");
+    
     public static string RootFolder => GetProjectRootFolderPath();
+
+    public static string DocFolder => Path.Combine(RootFolder, "docs\\");
 
     public static string SrcFolder => GetProjectSrcFolderPath();
 
