@@ -77,53 +77,6 @@
 
 
 
-## 📸  UI プレビュー
-
-<table align="center">
-  <tr>
-    <td>
-      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center">ワークスペース表示</p>
-    </td>
-    <td>
-      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center">マルチタブ表示</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
-      <p align="center">複数ワークスペース</p>
-    </td>
-    <td>
-      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
-      <p align="center">複数ワークスペース + タブ</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
-      <p align="center">Aspire ダッシュボード</p>
-    </td>
-    <td>
-      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
-      <p align="center">Blazor（認証付き）</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/exception.png" alt="exception" width="400" />
-      <p align="center">例外処理</p>
-    </td>
-    <td>
-      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
-      <p align="center">タスク管理</p>
-    </td>
-  </tr>
-</table>
-
----
-
 
 
 ## 🛠️  技術スタック
@@ -197,6 +150,55 @@ ZYC.Framework
 │       ├── ZYC.MdXaml                        # Markdown renderer + extensions
 │       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
 ```
+
+---
+
+
+
+## 📸  UI プレビュー
+
+<table align="center">
+  <tr>
+    <td>
+      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
+      <p align="center">ワークスペース表示</p>
+    </td>
+    <td>
+      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
+      <p align="center">マルチタブ表示</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
+      <p align="center">複数ワークスペース</p>
+    </td>
+    <td>
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
+      <p align="center">複数ワークスペース + タブ</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
+      <p align="center">Aspire ダッシュボード</p>
+    </td>
+    <td>
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
+      <p align="center">Blazor（認証付き）</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/exception.png" alt="exception" width="400" />
+      <p align="center">例外処理</p>
+    </td>
+    <td>
+      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
+      <p align="center">タスク管理</p>
+    </td>
+  </tr>
+</table>
 
 ---
 

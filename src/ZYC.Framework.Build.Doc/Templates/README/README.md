@@ -100,53 +100,6 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 ---
 
 
-<!--doc-meta: section preview -->
-## 📸 <!--doc-meta: l10n preview-title --> <!--doc-l10n:begin preview-title-->UI Preview<!--doc-l10n:locale ja-->UI プレビュー<!--doc-l10n:locale zh-CN-->界面预览<!--doc-l10n:locale zh-TW-->UI 預覽<!--doc-l10n:locale ko-->UI 미리보기<!--doc-l10n:end-->
-
-<table align="center">
-  <tr>
-    <td>
-      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-workspace-->Workspace View<!--doc-l10n:locale ja-->ワークスペース表示<!--doc-l10n:locale zh-CN-->工作区展示<!--doc-l10n:locale zh-TW-->工作區展示<!--doc-l10n:locale ko-->워크스페이스 보기<!--doc-l10n:end--></p>
-    </td>
-    <td>
-      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-tabs-->Multiple Tabs<!--doc-l10n:locale ja-->マルチタブ表示<!--doc-l10n:locale zh-CN-->多 Tab 展示<!--doc-l10n:locale zh-TW-->多分頁展示<!--doc-l10n:locale ko-->다중 탭 표시<!--doc-l10n:end--></p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-workspaces-->Multiple Workspaces<!--doc-l10n:locale ja-->複数ワークスペース<!--doc-l10n:locale zh-CN-->多工作区展示<!--doc-l10n:locale zh-TW-->多工作區展示<!--doc-l10n:locale ko-->다중 워크스페이스<!--doc-l10n:end--></p>
-    </td>
-    <td>
-      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-workspaces-tabs-->Workspaces + Tabs<!--doc-l10n:locale ja-->複数ワークスペース + タブ<!--doc-l10n:locale zh-CN-->多工作区 Tab 展示<!--doc-l10n:locale zh-TW-->工作區 + 分頁<!--doc-l10n:locale ko-->워크스페이스 + 탭<!--doc-l10n:end--></p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-aspire-->Aspire Dashboard<!--doc-l10n:locale ja-->Aspire ダッシュボード<!--doc-l10n:locale zh-CN-->Aspire 仪表板<!--doc-l10n:locale zh-TW-->Aspire 儀表板<!--doc-l10n:locale ko-->Aspire 대시보드<!--doc-l10n:end--></p>
-    </td>
-    <td>
-      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-blazor-->Blazor (with Auth)<!--doc-l10n:locale ja-->Blazor（認証付き）<!--doc-l10n:locale zh-CN-->Blazor with Auth<!--doc-l10n:locale zh-TW-->Blazor（含驗證）<!--doc-l10n:locale ko-->Blazor (인증 포함)<!--doc-l10n:end--></p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./docs/images/exception.png" alt="exception" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-exception-->Exception Handling<!--doc-l10n:locale ja-->例外処理<!--doc-l10n:locale zh-CN-->异常处理<!--doc-l10n:locale zh-TW-->例外處理<!--doc-l10n:locale ko-->예외 처리<!--doc-l10n:end--></p>
-    </td>
-    <td>
-      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
-      <p align="center"><!--doc-l10n:begin preview-taskmanager-->Task Manager<!--doc-l10n:locale ja-->タスク管理<!--doc-l10n:locale zh-CN-->任务管理<!--doc-l10n:locale zh-TW-->任務管理<!--doc-l10n:locale ko-->작업 관리자<!--doc-l10n:end--></p>
-    </td>
-  </tr>
-</table>
-
----
 
 
 <!--doc-meta: section tech-stack -->
@@ -221,6 +174,55 @@ ZYC.Framework
 │       ├── ZYC.MdXaml                        # Markdown renderer + extensions
 │       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
 ```
+
+---
+
+
+<!--doc-meta: section preview -->
+## 📸 <!--doc-meta: l10n preview-title --> <!--doc-l10n:begin preview-title-->UI Preview<!--doc-l10n:locale ja-->UI プレビュー<!--doc-l10n:locale zh-CN-->界面预览<!--doc-l10n:locale zh-TW-->UI 預覽<!--doc-l10n:locale ko-->UI 미리보기<!--doc-l10n:end-->
+
+<table align="center">
+  <tr>
+    <td>
+      <img src="./docs/images/workspace.png" alt="workspace" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-workspace-->Workspace View<!--doc-l10n:locale ja-->ワークスペース表示<!--doc-l10n:locale zh-CN-->工作区展示<!--doc-l10n:locale zh-TW-->工作區展示<!--doc-l10n:locale ko-->워크스페이스 보기<!--doc-l10n:end--></p>
+    </td>
+    <td>
+      <img src="./docs/images/multiple-tabs.png" alt="multiple-tabs" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-tabs-->Multiple Tabs<!--doc-l10n:locale ja-->マルチタブ表示<!--doc-l10n:locale zh-CN-->多 Tab 展示<!--doc-l10n:locale zh-TW-->多分頁展示<!--doc-l10n:locale ko-->다중 탭 표시<!--doc-l10n:end--></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/workspace-4.png" alt="workspace-4" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-workspaces-->Multiple Workspaces<!--doc-l10n:locale ja-->複数ワークスペース<!--doc-l10n:locale zh-CN-->多工作区展示<!--doc-l10n:locale zh-TW-->多工作區展示<!--doc-l10n:locale ko-->다중 워크스페이스<!--doc-l10n:end--></p>
+    </td>
+    <td>
+      <img src="./docs/images/workspace-4-tabs.gif" alt="workspace-4-tabs" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-workspaces-tabs-->Workspaces + Tabs<!--doc-l10n:locale ja-->複数ワークスペース + タブ<!--doc-l10n:locale zh-CN-->多工作区 Tab 展示<!--doc-l10n:locale zh-TW-->工作區 + 分頁<!--doc-l10n:locale ko-->워크스페이스 + 탭<!--doc-l10n:end--></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/aspire-dashboard.gif" alt="aspire-dashboard" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-aspire-->Aspire Dashboard<!--doc-l10n:locale ja-->Aspire ダッシュボード<!--doc-l10n:locale zh-CN-->Aspire 仪表板<!--doc-l10n:locale zh-TW-->Aspire 儀表板<!--doc-l10n:locale ko-->Aspire 대시보드<!--doc-l10n:end--></p>
+    </td>
+    <td>
+      <img src="./docs/images/blazor-auth.gif" alt="blazor-auth" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-blazor-->Blazor (with Auth)<!--doc-l10n:locale ja-->Blazor（認証付き）<!--doc-l10n:locale zh-CN-->Blazor with Auth<!--doc-l10n:locale zh-TW-->Blazor（含驗證）<!--doc-l10n:locale ko-->Blazor (인증 포함)<!--doc-l10n:end--></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./docs/images/exception.png" alt="exception" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-exception-->Exception Handling<!--doc-l10n:locale ja-->例外処理<!--doc-l10n:locale zh-CN-->异常处理<!--doc-l10n:locale zh-TW-->例外處理<!--doc-l10n:locale ko-->예외 처리<!--doc-l10n:end--></p>
+    </td>
+    <td>
+      <img src="./docs/images/taskmanager.png" alt="taskmanager" width="400" />
+      <p align="center"><!--doc-l10n:begin preview-taskmanager-->Task Manager<!--doc-l10n:locale ja-->タスク管理<!--doc-l10n:locale zh-CN-->任务管理<!--doc-l10n:locale zh-TW-->任務管理<!--doc-l10n:locale ko-->작업 관리자<!--doc-l10n:end--></p>
+    </td>
+  </tr>
+</table>
 
 ---
 
