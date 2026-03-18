@@ -22,6 +22,7 @@ internal partial class WindowTitleView : IDisposable
         WindowTitleConfig windowTitleConfig,
         IEventAggregator eventAggregator,
         IQuickBarManager quickBarManager,
+        IWindowTitleExtendManager windowTitleExtendManager,
         IWindowTitleManager windowTitleManager,
         IMainWindow mainWindow,
         FullScreenCommand fullScreenCommand)
@@ -29,6 +30,7 @@ internal partial class WindowTitleView : IDisposable
         WindowTitleConfig = windowTitleConfig;
         EventAggregator = eventAggregator;
         QuickBarManager = quickBarManager;
+        WindowTitleExtendManager = windowTitleExtendManager;
         WindowTitleManager = windowTitleManager;
         MainWindow = mainWindow;
         FullScreenCommand = fullScreenCommand;
@@ -39,7 +41,6 @@ internal partial class WindowTitleView : IDisposable
         EventAggregator.Subscribe<QuickMenuItemsChangedEvent>(OnQuickMenuItemsChanged)
             .DisposeWith(CompositeDisposable);
 
- 
 
         OnQuickMenuItemsChanged(null!);
 
@@ -53,6 +54,7 @@ internal partial class WindowTitleView : IDisposable
     private IEventAggregator EventAggregator { get; }
 
     private IQuickBarManager QuickBarManager { get; }
+    private IWindowTitleExtendManager WindowTitleExtendManager { get; }
 
     private IWindowTitleManager WindowTitleManager { get; }
 
@@ -60,7 +62,11 @@ internal partial class WindowTitleView : IDisposable
 
     private FullScreenCommand FullScreenCommand { get; }
 
-    public ObservableCollection<IQuickBarItem?> QuickMenuTitleItems { get; set; } = [];
+    public ObservableCollection<IQuickBarItem?> QuickMenuTitleItems { get; } = [];
+
+    public ObservableCollection<IWindowTitleItem> WindowTitleItems { get; } = [];
+
+    public ObservableCollection<IWindowTitleExtendItem> WindowTitleExtendItems { get; } = [];
 
     public void Dispose()
     {
@@ -79,11 +85,24 @@ internal partial class WindowTitleView : IDisposable
 
     private void OnWindowTitleViewLoaded(object sender, RoutedEventArgs e)
     {
-        var items = WindowTitleManager.GetItems();
-
-        foreach (var item in items)
         {
-            ItemsControl.Items.Add(item);
+            WindowTitleItems.Clear();
+            var items = WindowTitleManager.GetItems();
+
+            foreach (var item in items)
+            {
+                WindowTitleItems.Add(item);
+            }
+        }
+
+        {
+            WindowTitleExtendItems.Clear();
+            var items = WindowTitleExtendManager.GetItems();
+
+            foreach (var item in items)
+            {
+                WindowTitleExtendItems.Add(item);
+            }
         }
     }
 

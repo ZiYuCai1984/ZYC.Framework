@@ -28,6 +28,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ItemsControl HorizontalAlignment="Left"
                           ItemsSource="{Binding QuickMenuTitleItems, RelativeSource={RelativeSource AncestorType=windowTitle:WindowTitleView}}">
@@ -68,8 +69,24 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
+
             <ItemsControl Grid.Column="2"
-                          x:Name="ItemsControl">
+                          ItemsSource="{Binding WindowTitleExtendItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Child="{Binding View}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl Grid.Column="3"
+                          ItemsSource="{Binding WindowTitleItems}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
