@@ -4,8 +4,6 @@ using System.Globalization;
 using System.IO;
 using Autofac;
 using ZYC.CoreToolkit;
-using ZYC.CoreToolkit.Abstractions;
-using ZYC.CoreToolkit.Dotnet;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.State;
@@ -18,17 +16,33 @@ internal class Program
     public static async Task<int> Main(string[] args)
     {
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-        //TODO-zyc Pending refactor(CLI)
+
         var rootCommand = new RootCommand($"Command line tool for {ProductInfo.ProductName}");
         var optionRegister = new CommandLineOptionRegister(rootCommand);
 
         var builder = new ContainerBuilder();
 
         var appContextDirectory = IOTools.GetExecutingFolder();
-        var modules = ModuleTools.RegisterModules(
-            appContextDirectory,
+        var settingsDirectory = Path.Combine(
+            new DirectoryInfo(appContextDirectory).Parent!.FullName, "settings");
+
+
+        var moduleConfig = new ModuleConfig();
+
+        ModuleTools.RegisterAllFromAssembly(settingsDirectory,
             builder,
-            new ModuleConfig(),
+            typeof(ProductInfo).Assembly, obj =>
+            {
+                if (obj is ModuleConfig initModuleConfig)
+                {
+                    moduleConfig = initModuleConfig;
+                }
+            });
+
+        var modules = ModuleTools.RegisterModules(
+            settingsDirectory,
+            builder,
+            moduleConfig,
             new PendingFileOperationsState());
 
         var container = builder.Build();
@@ -38,40 +52,40 @@ internal class Program
             module.RegisterCommandLineOption(container, optionRegister);
         }
 
-        optionRegister.AddOption<bool>(_ =>
-            {
-                Task.Run(async () =>
-                {
-                    var currentFolder = IOTools.GetExecutingFolder();
-                    IOTools.SetCurrentDirectory(currentFolder);
+        //optionRegister.AddOption<bool>(_ =>
+        //    {
+        //        Task.Run(async () =>
+        //        {
+        //            var currentFolder = IOTools.GetExecutingFolder();
+        //            IOTools.SetCurrentDirectory(currentFolder);
 
-                    var packageId = ProductInfo.PackageId;
+        //            var packageId = ProductInfo.PackageId;
 
-                    var version = (await NuGetTools.GetNuGetVersionV3Async(packageId))!.ToString();
-                    var package = new NuGetPackage
-                    {
-                        Name = packageId,
-                        Version = version
-                    };
+        //            var version = (await NuGetTools.GetNuGetVersionV3Async(packageId))!.ToString();
+        //            var package = new NuGetPackage
+        //            {
+        //                Name = packageId,
+        //                Version = version
+        //            };
 
-                    var cachePath = "./packages";
-                    await DotnetNuGetTools.DownloadNuGetPackagesAsync(package, cachePath);
+        //            var cachePath = "./packages";
+        //            await DotnetNuGetTools.DownloadNuGetPackagesAsync(package, cachePath);
 
-                    Console.WriteLine("---------------------");
+        //            Console.WriteLine("---------------------");
 
-                    var sourceDir = Path.Combine(cachePath, packageId, version);
-                    var currentDir = IOTools.GetExecutingFolder();
+        //            var sourceDir = Path.Combine(cachePath, packageId, version);
+        //            var currentDir = IOTools.GetExecutingFolder();
 
-                    FileReplaceTools.SafeCopyWithDelayedReplace(sourceDir, currentDir);
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "apply_update.bat",
-                        UseShellExecute = true
-                    });
+        //            FileReplaceTools.SafeCopyWithDelayedReplace(sourceDir, currentDir);
+        //            Process.Start(new ProcessStartInfo
+        //            {
+        //                FileName = "apply_update.bat",
+        //                UseShellExecute = true
+        //            });
 
-                    Environment.Exit(0);
-                }).Wait();
-            }, "--init", $"Download the latest full of {ProductInfo.ProductName}");
+        //            Environment.Exit(0);
+        //        }).Wait();
+        //    }, "--init", $"Download the latest full of {ProductInfo.ProductName}");
 
 
         optionRegister.AddOption<bool>(_ =>

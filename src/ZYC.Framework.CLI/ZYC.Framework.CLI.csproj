@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!--<OutputType>Exe</OutputType>-->
+    <OutputType>Exe</OutputType>
     <!--!WARNING For debug-->
     <!--<OutputPath>../_bin_dotnettool</OutputPath>-->
   </PropertyGroup>
