@@ -20,7 +20,7 @@
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.1" />
 </ItemGroup>
 ```
 
@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 添加模块配置文件
 
-在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。⚙️
+在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。同时需要将它配置为相对于主程序生成到 `../settings/ModuleConfig.json`。⚙️
 
 1. **文件内容**：
 ```json
@@ -113,8 +113,17 @@ public partial class UserControl1
 }
 ```
 
-2. **属性设置**：📌
-在解决方案资源管理器中选中该文件，并在属性面板中将 **Copy to Output Directory** 设置为 **Copy always**。
+2. **项目项设置**：📌
+在 `.csproj` 文件中加入以下配置，让 `ModuleConfig.json` 在构建时生成到 `../settings/ModuleConfig.json`：
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **提示**：`AdditionalAssemblyNames` 必须包含 `Module.cs` 所在程序集的名称。
 

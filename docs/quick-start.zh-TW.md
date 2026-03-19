@@ -20,7 +20,7 @@
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.1" />
 </ItemGroup>
 ```
 
@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 新增模組設定檔
 
-在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。⚙️
+在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。同時需要將它設定為相對於主程式輸出到 `../settings/ModuleConfig.json`。⚙️
 
 1. **檔案內容**：
 ```json
@@ -113,8 +113,17 @@ public partial class UserControl1
 }
 ```
 
-2. **屬性設定**：📌
-在方案總管中選取這個檔案，並在屬性面板中將 **Copy to Output Directory** 設定為 **Copy always**。
+2. **專案項目設定**：📌
+在 `.csproj` 檔案中加入以下設定，讓 `ModuleConfig.json` 在建置時輸出到 `../settings/ModuleConfig.json`：
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **提示**：`AdditionalAssemblyNames` 必須包含 `Module.cs` 所在組件的名稱。
 

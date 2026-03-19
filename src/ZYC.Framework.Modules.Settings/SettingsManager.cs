@@ -8,6 +8,8 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.CoreToolkit.Extensions.Settings;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config.Attributes;
+using ZYC.Framework.Abstractions.Notification.Toast;
+using ZYC.Framework.Core.Localizations;
 using ZYC.Framework.Modules.Settings.Abstractions;
 using ZYC.Framework.Modules.Settings.Abstractions.Event;
 
@@ -17,12 +19,14 @@ namespace ZYC.Framework.Modules.Settings;
 public partial class SettingsManager : ISettingsManager
 {
     public SettingsManager(
+        IToastManager toastManager,
         IEventAggregator eventAggregator,
         IConfig[] configs,
         IAppContext appContext,
         ILifetimeScope lifetimeScope,
         IAppLogger<SettingsManager> logger)
     {
+        ToastManager = toastManager;
         EventAggregator = eventAggregator;
         Configs = configs;
         AppContext = appContext;
@@ -30,6 +34,7 @@ public partial class SettingsManager : ISettingsManager
         Logger = logger;
     }
 
+    private IToastManager ToastManager { get; }
     private IEventAggregator EventAggregator { get; }
 
     private IConfig[] Configs { get; }
@@ -191,9 +196,13 @@ public partial class SettingsManager : ISettingsManager
                 config.GetType(), oriConfig, config);
 
             SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
+
+            ToastManager.PromptMessage(
+                ToastMessage.Info($"{config}\r\n[ {oldValue} ] -> [ {newValue} ]", false));
         }
         catch (Exception e)
         {
+            ToastManager.PromptException(e);
             logger.Error(e);
         }
     }
@@ -212,6 +221,8 @@ public partial class SettingsManager : ISettingsManager
             var valueType = property.PropertyType;
             if (!TryParseValueFromString(valueType, newValue, out var parsedNewValue))
             {
+                ToastManager.PromptMessage(
+                    ToastMessage.Warn($"{config}\r\n{L.Translate("Invalid setting value")} <{property.Name}>. {L.Translate("Expected type")}: <{valueType.Name}>.", false));
                 return;
             }
 
@@ -230,9 +241,13 @@ public partial class SettingsManager : ISettingsManager
                 config.GetType(), oriConfig, config);
 
             SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
+
+            ToastManager.PromptMessage(
+                ToastMessage.Info($"{config}\r\n[ {oldValue} ] -> [ {newValue} ]", false));
         }
         catch (Exception e)
         {
+            ToastManager.PromptException(e);
             logger.Error(e);
         }
     }

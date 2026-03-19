@@ -20,7 +20,7 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.1" />
 </ItemGroup>
 ```
 
@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 Add Module Configuration
 
-Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. ⚙️
+Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. Configure your project to copy it to `../settings/ModuleConfig.json` relative to the main executable. ⚙️
 
 1. **File Content**:
 ```json
@@ -113,8 +113,17 @@ Create a `ModuleConfig.json` file in the project root. This file serves as a "ma
 }
 ```
 
-2. **Property Settings**: 📌
-Select the file in the Solution Explorer and set **Copy to Output Directory** to **Copy always** in the Properties panel.
+2. **Project Item Settings**: 📌
+Add the following configuration to your `.csproj` file so `ModuleConfig.json` is generated into `../settings/ModuleConfig.json` during build:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **Tip**: `AdditionalAssemblyNames` must include the name of the assembly that contains your `Module.cs`.
 
