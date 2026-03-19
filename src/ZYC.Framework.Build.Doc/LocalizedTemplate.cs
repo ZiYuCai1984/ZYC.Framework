@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ZYC.Framework.Build.Doc;
 
-internal sealed class LocalizedReadmeTemplate
+internal sealed class LocalizedTemplate
 {
     private static readonly Regex BlockRegex = new(
         @"<!--doc-l10n:begin\s+(?<name>[^>]+?)-->(?<body>.*?)<!--doc-l10n:end-->",
@@ -13,14 +13,14 @@ internal sealed class LocalizedReadmeTemplate
         @"<!--doc-l10n:locale\s+(?<locale>[^>]+?)-->",
         RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-    private readonly IReadOnlyList<ReadmeFragment> _fragments;
+    private readonly IReadOnlyList<TemplateFragment> fragments;
 
-    private LocalizedReadmeTemplate(IReadOnlyList<ReadmeFragment> fragments)
+    private LocalizedTemplate(IReadOnlyList<TemplateFragment> fragments)
     {
-        _fragments = fragments;
+        this.fragments = fragments;
     }
 
-    public IReadOnlyCollection<string> Locales => _fragments
+    public IReadOnlyCollection<string> Locales => fragments
         .OfType<LocalizedBlockFragment>()
         .SelectMany(fragment => fragment.LocalizedContents.Keys)
         .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -32,9 +32,9 @@ internal sealed class LocalizedReadmeTemplate
         return content.Contains("<!--doc-l10n:begin ", StringComparison.Ordinal);
     }
 
-    public static LocalizedReadmeTemplate Parse(string content)
+    public static LocalizedTemplate Parse(string content)
     {
-        var fragments = new List<ReadmeFragment>();
+        var fragments = new List<TemplateFragment>();
         var currentIndex = 0;
 
         foreach (Match match in BlockRegex.Matches(content))
@@ -53,14 +53,14 @@ internal sealed class LocalizedReadmeTemplate
             fragments.Add(new PlainTextFragment(content[currentIndex..]));
         }
 
-        return new LocalizedReadmeTemplate(fragments);
+        return new LocalizedTemplate(fragments);
     }
 
     public string Render(string? locale)
     {
         var builder = new StringBuilder();
 
-        foreach (var fragment in _fragments)
+        foreach (var fragment in fragments)
         {
             switch (fragment)
             {
@@ -107,14 +107,14 @@ internal sealed class LocalizedReadmeTemplate
         return new LocalizedBlockFragment(name, defaultContent, localizedContents);
     }
 
-    private abstract record ReadmeFragment;
+    private abstract record TemplateFragment;
 
-    private sealed record PlainTextFragment(string Content) : ReadmeFragment;
+    private sealed record PlainTextFragment(string Content) : TemplateFragment;
 
     private sealed record LocalizedBlockFragment(
         string Name,
         string DefaultContent,
-        IReadOnlyDictionary<string, string> LocalizedContents) : ReadmeFragment
+        IReadOnlyDictionary<string, string> LocalizedContents) : TemplateFragment
     {
         public string GetContent(string? locale)
         {

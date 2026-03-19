@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -10,7 +10,7 @@ internal sealed class DocumentationBuilder
 
     private static readonly UTF8Encoding Utf8BomEncoding = new(true);
 
-    private static readonly string[] PreferredReadmeLocales = ["ja", "zh-CN", "zh-TW", "ko"];
+    private static readonly string[] PreferredLocales = ["ja", "zh-CN", "zh-TW", "ko"];
 
     private static readonly HashSet<string> TextExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -76,7 +76,7 @@ internal sealed class DocumentationBuilder
         ISet<string> missingPlaceholders)
     {
         var templateContent = File.ReadAllText(workspace.PrimaryReadmeTemplatePath);
-        if (LocalizedReadmeTemplate.ContainsBlocks(templateContent))
+        if (LocalizedTemplate.ContainsBlocks(templateContent))
         {
             return RenderLocalizedReadmeTemplate(templateContent, renderer, missingPlaceholders);
         }
@@ -94,8 +94,8 @@ internal sealed class DocumentationBuilder
         TemplateRenderer renderer,
         ISet<string> missingPlaceholders)
     {
-        var template = LocalizedReadmeTemplate.Parse(templateContent);
-        var locales = OrderReadmeLocales(template.Locales).ToArray();
+        var template = LocalizedTemplate.Parse(templateContent);
+        var locales = OrderLocales(template.Locales).ToArray();
 
         var renderedPrimaryContent = renderer.Render(template.Render(null), missingPlaceholders);
         WriteRenderedTextFile(
@@ -113,16 +113,16 @@ internal sealed class DocumentationBuilder
         return locales.Length + 1;
     }
 
-    private static IEnumerable<string> OrderReadmeLocales(IEnumerable<string> locales)
+    private static IEnumerable<string> OrderLocales(IEnumerable<string> locales)
     {
-        return locales.OrderBy(GetReadmeLocaleSortKey, StringComparer.OrdinalIgnoreCase)
+        return locales.OrderBy(GetLocaleSortKey, StringComparer.OrdinalIgnoreCase)
             .ThenBy(locale => locale, StringComparer.OrdinalIgnoreCase);
     }
 
-    private static string GetReadmeLocaleSortKey(string locale)
+    private static string GetLocaleSortKey(string locale)
     {
         var index = Array.FindIndex(
-            PreferredReadmeLocales,
+            PreferredLocales,
             value => value.Equals(locale, StringComparison.OrdinalIgnoreCase));
 
         return index >= 0 ? $"{index:D2}-{locale}" : $"99-{locale}";
@@ -150,31 +150,108 @@ internal sealed class DocumentationBuilder
             .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
             .ToArray();
 
+        var renderedFileCount = 0;
+
         foreach (var templateFile in templateFiles)
         {
             var relativePath = Path.GetRelativePath(templateRoot, templateFile);
             var renderedRelativePath = renderer.Render(relativePath, missingPlaceholders);
-            var outputPath = Path.Combine(outputRoot, renderedRelativePath);
-            var outputDirectory = Path.GetDirectoryName(outputPath);
-
-            if (!string.IsNullOrWhiteSpace(outputDirectory))
-            {
-                Directory.CreateDirectory(outputDirectory);
-            }
 
             if (IsTextTemplateFile(templateFile))
             {
                 var content = File.ReadAllText(templateFile);
+                if (LocalizedTemplate.ContainsBlocks(content))
+                {
+                    renderedFileCount += RenderLocalizedTemplateFile(
+                        content,
+                        renderedRelativePath,
+                        outputRoot,
+                        renderer,
+                        missingPlaceholders);
+                    continue;
+                }
+
+                var outputPath = Path.Combine(outputRoot, renderedRelativePath);
+                EnsureOutputDirectoryExists(outputPath);
+
                 var renderedContent = renderer.Render(content, missingPlaceholders);
                 WriteRenderedTextFile(outputPath, renderedContent);
+                renderedFileCount++;
             }
             else
             {
+                var outputPath = Path.Combine(outputRoot, renderedRelativePath);
+                EnsureOutputDirectoryExists(outputPath);
                 File.Copy(templateFile, outputPath, true);
+                renderedFileCount++;
             }
         }
 
-        return templateFiles.Length;
+        return renderedFileCount;
+    }
+
+    private static int RenderLocalizedTemplateFile(
+        string templateContent,
+        string renderedRelativePath,
+        string outputRoot,
+        TemplateRenderer renderer,
+        ISet<string> missingPlaceholders)
+    {
+        var template = LocalizedTemplate.Parse(templateContent);
+        var locales = OrderLocales(template.Locales).ToArray();
+
+        WriteRenderedLocalizedTextFile(
+            Path.Combine(outputRoot, renderedRelativePath),
+            template.Render(null),
+            renderer,
+            missingPlaceholders);
+
+        foreach (var locale in locales)
+        {
+            var localizedRelativePath = GetLocalizedTemplateOutputFileName(renderedRelativePath, locale);
+            WriteRenderedLocalizedTextFile(
+                Path.Combine(outputRoot, localizedRelativePath),
+                template.Render(locale),
+                renderer,
+                missingPlaceholders);
+        }
+
+        return locales.Length + 1;
+    }
+
+    private static void WriteRenderedLocalizedTextFile(
+        string outputPath,
+        string templateContent,
+        TemplateRenderer renderer,
+        ISet<string> missingPlaceholders)
+    {
+        EnsureOutputDirectoryExists(outputPath);
+
+        var renderedContent = renderer.Render(templateContent, missingPlaceholders);
+        WriteRenderedTextFile(outputPath, renderedContent);
+    }
+
+    private static string GetLocalizedTemplateOutputFileName(string relativePath, string locale)
+    {
+        var directory = Path.GetDirectoryName(relativePath);
+        var extension = Path.GetExtension(relativePath);
+        var fileName = Path.GetFileNameWithoutExtension(relativePath);
+        var localizedFileName = string.IsNullOrEmpty(extension)
+            ? $"{Path.GetFileName(relativePath)}.{locale}"
+            : $"{fileName}.{locale}{extension}";
+
+        return string.IsNullOrEmpty(directory)
+            ? localizedFileName
+            : Path.Combine(directory, localizedFileName);
+    }
+
+    private static void EnsureOutputDirectoryExists(string outputPath)
+    {
+        var outputDirectory = Path.GetDirectoryName(outputPath);
+        if (!string.IsNullOrWhiteSpace(outputDirectory))
+        {
+            Directory.CreateDirectory(outputDirectory);
+        }
     }
 
     private static void WriteRenderedTextFile(string path, string content)

@@ -96,7 +96,9 @@
 
 詳細な手順はこちら：
 
-👉 **[クイックスタート (quick-start.md)](docs/quick-start.md)**
+
+👉 **[クイックスタート (quick-start.ja.md)](docs/quick-start.ja.md)**
+
 
 👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 

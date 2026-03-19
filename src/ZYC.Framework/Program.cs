@@ -69,7 +69,7 @@ internal partial class Program
         {
             MessageBoxTools.Warning(
                 $"Cannot start version '{version}'.\n\n" +
-                $"Executable not found:\n{targetAppFile}");
+                $"Executable not found:\n{targetAppFile}", "Warning", false);
         }
     }
 

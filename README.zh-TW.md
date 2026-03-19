@@ -96,7 +96,9 @@
 
 請參閱完整指南：
 
-👉 **[快速開始指南 (quick-start.md)](docs/quick-start.md)**
+
+👉 **[快速開始指南 (quick-start.zh-TW.md)](docs/quick-start.zh-TW.md)**
+
 
 👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
