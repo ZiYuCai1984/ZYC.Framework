@@ -98,7 +98,7 @@
 
 👉 **[快速开始指南 (quick-start.md)](docs/quick-start.md)**
 
-👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
 ### 安装
 
@@ -106,50 +106,69 @@
 你可以通过 NuGet 直接将核心包引入你的项目：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.9
+dotnet add package ZYC.Framework.Alpha --version 1.2.0
 ```
 
 ---
 
 
 
-## 🏗️  项目结构
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+
+
+## 功能
+
+### 核心框架
+
+| 功能       | 说明                                              |
+| -------- | ----------------------------------------------- |
+| 模块化架构    | 支持按模块组织功能，并支持动态加载与扩展。                           |
+| 多工作区布局   | 支持工作区分割、合并、方向切换和位置交换。                           |
+| 多标签页导航   | 支持基于 URI 的标签页导航、恢复和跨工作区移动。                      |
+| 可扩展菜单系统  | 提供主菜单、Hamburger 菜单、窗口标题栏、状态栏等扩展点。               |
+| 通知系统     | 内置 Toast、Banner 等通知能力，用于状态和错误提示。                |
+| 交互辅助能力   | 提供 BusyWindow、Overlay、拖放处理等桌面交互基础设施。            |
+| 混合界面支持   | 支持通过 `WebView2` 嵌入 Web 内容，并可结合 `Blazor` 构建混合应用。 |
+| 配置与状态持久化 | 支持配置、应用状态和任务记录的本地持久化。                           |
+| 单实例运行    | 支持应用单实例启动控制。                                    |
+| MCP 暴露机制 | 可将框架和模块中的公开能力自动暴露为 MCP 工具。                      |
+
+### 内置模块
+
+| 模块            | 说明                                   |
+| ------------- | ------------------------------------ |
+| About         | 显示应用基本信息，如版本、作者和描述。                  |
+| ApiReference  | 内置 API 文档查看页，可在应用内浏览生成的文档。           |
+| CLI           | 内嵌终端页面，支持命令执行和参数控制。                  |
+| FileExplorer  | 内置文件资源管理器视图，支持目录浏览。                  |
+| WebBrowser    | 内置浏览器模块，支持访问网页和本地内容。                 |
+| Language      | 提供多语言切换和本地化资源管理。                     |
+| Translator    | 提供翻译服务接入能力。                          |
+| Settings      | 统一的设置管理界面，支持查看、编辑和重置配置。              |
+| Secrets       | 提供敏感配置的安全查看与编辑。                      |
+| TaskManager   | 支持任务入队、执行、暂停、恢复、取消和状态追踪。             |
+| Update        | 基于 NuGet 的版本检查、下载和更新流程。              |
+| NuGet         | 提供 NuGet 包查询、下载、依赖处理和缓存管理。           |
+| ModuleManager | 管理本地模块和 NuGet 模块的安装、卸载、启用和禁用。        |
+| MCP.Server    | 提供本地 MCP Server，可将应用功能对外暴露为工具服务。     |
+| Aspire        | 提供 `Aspire` 工具下载、服务控制和 Dashboard 集成。 |
+| Log           | 提供日志功能和日志目录访问入口。                     |
+| BlazorDemo    | `Blazor Server` 集成示例模块。              |
+| Mock          | 用于测试和演示框架能力的模块。                      |
+
+### 开发与交付
+
+| 功能       | 说明                   |
+| -------- | -------------------- |
+| CLI 工具   | 提供命令行入口，支持模块级命令扩展。   |
+| 模块脚手架    | 支持通过模板快速生成新模块及其抽象项目。 |
+| 文档生成     | 支持生成 README 和文档模板内容。 |
+| NuGet 打包 | 支持框架和模块的 NuGet 打包流程。 |
+| 安装包构建    | 支持生成桌面安装包，方便分发与部署。   |
+
+
+
+
 
 ---
 

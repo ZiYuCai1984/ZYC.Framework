@@ -98,7 +98,7 @@ Please refer to the detailed guide:
 
 👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
 
-👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
 ### Installation
 
@@ -106,50 +106,67 @@ Please refer to the detailed guide:
 Install the core package via NuGet:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.9
+dotnet add package ZYC.Framework.Alpha --version 1.2.0
 ```
 
 ---
 
 
 
-## 🏗️  Project Structure
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+
+## Features
+
+### Core Framework
+
+| Feature                | Description                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| Modular Architecture   | Organize features as modules with support for dynamic loading and extension.              |
+| Multi-Workspace Layout | Split, merge, reorder, and change workspace layout directions.                            |
+| Multi-Tab Navigation   | URI-based tab navigation with switching, restoration, and cross-workspace movement.       |
+| Extensible Menu System | Extension points for main menu, hamburger menu, title bar, status bar, and taskbar menus. |
+| Notification System    | Built-in Toast and Banner notifications for status and error feedback.                    |
+| Interaction Utilities  | Desktop interaction helpers such as BusyWindow, overlays, and drag-and-drop.              |
+| Hybrid UI Support      | Embed web content using `WebView2` and build hybrid UI with `Blazor`.                     |
+| Configuration & State  | Local persistence for configuration, application state, and task history.                 |
+| Single Instance        | Supports single-instance application startup control.                                     |
+| MCP Exposure           | Automatically expose public framework and module capabilities as MCP tools.               |
+
+### Built-in Modules
+
+| Module        | Description                                                           |
+| ------------- | --------------------------------------------------------------------- |
+| About         | Application metadata (version, author, description, copyright).       |
+| ApiReference  | Built-in API documentation viewer.                                    |
+| CLI           | Embedded terminal with command execution and parameter support.       |
+| FileExplorer  | Embedded file explorer for directory browsing.                        |
+| WebBrowser    | Embedded browser for web and local content.                           |
+| Language      | Language switching and localization resource management.              |
+| Translator    | Translation service integration.                                      |
+| Settings      | Unified configuration management UI.                                  |
+| Secrets       | Secure configuration editing and display.                             |
+| TaskManager   | Task queue, execution, pause/resume, cancel, and status tracking.     |
+| Update        | NuGet-based version checking and update workflow.                     |
+| NuGet         | Package search, download, dependency handling, and caching.           |
+| ModuleManager | Install, enable, disable, and manage local or NuGet modules.          |
+| MCP.Server    | Local MCP server exposing application capabilities.                   |
+| Aspire        | `Aspire` tool integration with service control and dashboard support. |
+| Log           | Logging infrastructure and log directory access.                      |
+| BlazorDemo    | Demonstrates `Blazor Server` integration.                             |
+| Mock          | Test module for validating framework capabilities.                    |
+
+### Development & Delivery
+
+| Feature                  | Description                                                   |
+| ------------------------ | ------------------------------------------------------------- |
+| CLI Tools                | Standalone CLI entry with module command extension support.   |
+| Module Scaffolding       | Generate new modules and abstraction projects from templates. |
+| Documentation Generation | Generate README and documentation templates.                  |
+| NuGet Packaging          | Build NuGet packages for framework and modules.               |
+| Installer Build          | Build desktop installers for distribution.                    |
+
+
+
 
 ---
 

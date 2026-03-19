@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableWpf>false</EnableWpf>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <OutputPath>../_bin_build</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Build.Utilities\ZYC.Framework.Build.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

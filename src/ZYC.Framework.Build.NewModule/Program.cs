@@ -1,128 +1,272 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.IO;
+using System.Text;
 using System.Xml.Linq;
-using ZYC.CoreToolkit;
-using ZYC.Framework.Build.Utilities;
 
 namespace ZYC.Framework.Build.NewModule;
 
-internal class Program
+public sealed class NewModuleGenerationOptions
 {
-    private static string Flag => "Chronosynchronicity";
+    public string Target { get; init; } = string.Empty;
 
-    private static string Target => "AAA";
+    public string? SourceRoot { get; init; }
 
-    private static string DefaultTarget => "AAA";
+    public bool Overwrite { get; init; }
+}
 
-    private static string ShortName
-        => Target.Split('.', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .LastOrDefault() ?? Target;
+public sealed class NewModuleGenerationResult
+{
+    public required string Target { get; init; }
 
-    private static void Main()
+    public required string SourceRoot { get; init; }
+
+    public required IReadOnlyList<string> GeneratedFiles { get; init; }
+}
+
+public static class NewModuleGenerator
+{
+    private static readonly UTF8Encoding Utf8BomEncoding = new(true);
+
+    public const string TemplateName = "Chronosynchronicity";
+
+    public static NewModuleGenerationResult Generate(NewModuleGenerationOptions options)
     {
-        if (DefaultTarget == Target)
+        ArgumentNullException.ThrowIfNull(options);
+
+        var target = NormalizeTarget(options.Target);
+        var sourceRoot = ResolveSourceRoot(options.SourceRoot);
+        var templateRoot = ResolveTemplateRoot(sourceRoot);
+        var shortName = GetShortName(target);
+
+        EnsureTargetDoesNotExist(sourceRoot, target, options.Overwrite);
+
+        var generatedFiles = Directory.GetFiles(templateRoot, "*.*", SearchOption.AllDirectories)
+            .OrderBy(static path => path, StringComparer.OrdinalIgnoreCase)
+            .Select(file => GenerateFile(templateRoot, sourceRoot, file, target, shortName, options.Overwrite))
+            .ToList();
+
+        UpdateSlnx(sourceRoot, target);
+
+        return new NewModuleGenerationResult
+        {
+            Target = target,
+            SourceRoot = sourceRoot,
+            GeneratedFiles = generatedFiles
+        };
+    }
+
+    private static string NormalizeTarget(string target)
+    {
+        if (string.IsNullOrWhiteSpace(target))
+        {
+            throw new ArgumentException("Target is required.", nameof(target));
+        }
+
+        target = target.Trim();
+
+        const string modulePrefix = "ZYC.Framework.Modules.";
+        if (target.StartsWith(modulePrefix, StringComparison.Ordinal))
+        {
+            target = target[modulePrefix.Length..];
+        }
+
+        const string abstractionsSuffix = ".Abstractions";
+        if (target.EndsWith(abstractionsSuffix, StringComparison.Ordinal))
+        {
+            target = target[..^abstractionsSuffix.Length];
+        }
+
+        if (string.IsNullOrWhiteSpace(target))
+        {
+            throw new ArgumentException("Target is required.", nameof(target));
+        }
+
+        return target;
+    }
+
+    private static string ResolveSourceRoot(string? sourceRoot)
+    {
+        if (!string.IsNullOrWhiteSpace(sourceRoot))
+        {
+            return NormalizeSourceRoot(sourceRoot);
+        }
+
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        for (var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+             directory != null;
+             directory = directory.Parent)
+        {
+            foreach (var candidate in EnumerateSourceRootCandidates(directory.FullName))
+            {
+                if (seen.Add(candidate) && IsSourceRoot(candidate))
+                {
+                    return candidate;
+                }
+            }
+        }
+
+        throw new InvalidOperationException(
+            "Cannot resolve the source root automatically. Pass --src-root with the repository root or src folder.");
+    }
+
+    private static string NormalizeSourceRoot(string sourceRoot)
+    {
+        foreach (var candidate in EnumerateSourceRootCandidates(Path.GetFullPath(sourceRoot)))
+        {
+            if (IsSourceRoot(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        throw new DirectoryNotFoundException(
+            $"Cannot find 'ZYC.Framework.Build.NewModule\\Template' under '{sourceRoot}'. Pass the repository root or src folder.");
+    }
+
+    private static IEnumerable<string> EnumerateSourceRootCandidates(string path)
+    {
+        yield return path;
+        yield return Path.Combine(path, "src");
+    }
+
+    private static bool IsSourceRoot(string path)
+    {
+        return Directory.Exists(Path.Combine(path, "ZYC.Framework.Build.NewModule", "Template"));
+    }
+
+    private static string ResolveTemplateRoot(string sourceRoot)
+    {
+        var templateRoot = Path.Combine(sourceRoot, "ZYC.Framework.Build.NewModule", "Template");
+        if (!Directory.Exists(templateRoot))
+        {
+            throw new DirectoryNotFoundException($"Template root not found: '{templateRoot}'.");
+        }
+
+        return templateRoot;
+    }
+
+    private static string GetShortName(string target)
+    {
+        return target.Split('.', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                   .LastOrDefault()
+               ?? target;
+    }
+
+    private static void EnsureTargetDoesNotExist(string sourceRoot, string target, bool overwrite)
+    {
+        if (overwrite)
         {
             return;
         }
 
-        IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
-
-        var rootFolder = "ZYC.Framework.Build.NewModule\\Template\\";
-
-        var files = Directory.GetFiles(rootFolder, "*.*", SearchOption.AllDirectories);
-
-        foreach (var file in files)
+        foreach (var targetDirectory in GetTargetDirectories(sourceRoot, target))
         {
-            var filePath = StringTools.ReplaceOnce(file, rootFolder, "");
-            var targetFileContent = ReplaceFileContent(file);
-            var targetFilePath = ReplacePathFlags(filePath);
+            if (Directory.Exists(targetDirectory))
+            {
+                throw new IOException(
+                    $"Target directory already exists: '{targetDirectory}'. Pass --overwrite to replace existing files.");
+            }
+        }
+    }
 
-            var targetFolder = new FileInfo(targetFilePath).Directory!.FullName;
-            IOTools.EnsureDirectoryExists(targetFolder);
+    private static IEnumerable<string> GetTargetDirectories(string sourceRoot, string target)
+    {
+        yield return Path.Combine(sourceRoot, $"ZYC.Framework.Modules.{target}");
+        yield return Path.Combine(sourceRoot, $"ZYC.Framework.Modules.{target}.Abstractions");
+    }
 
-            File.WriteAllText(targetFilePath, targetFileContent);
+    private static string GenerateFile(
+        string templateRoot,
+        string sourceRoot,
+        string templateFilePath,
+        string target,
+        string shortName,
+        bool overwrite)
+    {
+        var templateRelativePath = Path.GetRelativePath(templateRoot, templateFilePath);
+        var targetRelativePath = ReplacePathFlags(templateRelativePath, target, shortName);
+        var targetFilePath = Path.Combine(sourceRoot, targetRelativePath);
+        var targetFolder = Path.GetDirectoryName(targetFilePath)
+                           ?? throw new InvalidOperationException($"Cannot resolve target folder: '{targetFilePath}'.");
+
+        Directory.CreateDirectory(targetFolder);
+
+        if (!overwrite && File.Exists(targetFilePath))
+        {
+            throw new IOException(
+                $"Target file already exists: '{targetFilePath}'. Pass --overwrite to replace existing files.");
         }
 
-        UpdateSlnx();
-
-        RestoreTarget();
+        var targetFileContent = ReplaceFileContent(templateFilePath, target, shortName);
+        File.WriteAllText(targetFilePath, targetFileContent, Utf8BomEncoding);
+        return targetFilePath;
     }
 
-    private static void RestoreTarget(
-        [CallerFilePath] string callerFilePath = "")
+    private static string ReplacePathFlags(string path, string target, string shortName)
     {
-        var current = IOTools.GetCallerDirectoryPath();
-        IOTools.SetCurrentDirectory(current);
+        var result = path.Replace(
+            $"ZYC.Framework.Modules.{TemplateName}.Abstractions",
+            $"ZYC.Framework.Modules.{target}.Abstractions",
+            StringComparison.Ordinal);
+        result = result.Replace(
+            $"ZYC.Framework.Modules.{TemplateName}",
+            $"ZYC.Framework.Modules.{target}",
+            StringComparison.Ordinal);
 
-        var content = File.ReadAllText(callerFilePath);
-        content = content.Replace(
-            $"private static string Target => \"{Target}\"",
-            $"private static string Target => \"{DefaultTarget}\"");
-        File.WriteAllText(callerFilePath, content);
-    }
-
-    private static string ReplacePathFlags(string path)
-    {
-        var result = path.Replace($"ZYC.Framework.Modules.{Flag}.Abstractions",
-            $"ZYC.Framework.Modules.{Target}.Abstractions");
-        result = result.Replace($"ZYC.Framework.Modules.{Flag}", $"ZYC.Framework.Modules.{Target}");
-
-        result = result.Replace(Flag, ShortName, StringComparison.InvariantCulture);
-        result = result.Replace(Flag.ToLowerInvariant(), ShortName.ToLowerInvariant(),
-            StringComparison.InvariantCulture);
+        result = result.Replace(TemplateName, shortName, StringComparison.Ordinal);
+        result = result.Replace(TemplateName.ToLowerInvariant(), shortName.ToLowerInvariant(), StringComparison.Ordinal);
         return result;
     }
 
-    private static string ReplaceFileContent(string file)
+    private static string ReplaceFileContent(string file, string target, string shortName)
     {
         var content = File.ReadAllText(file);
 
-        content = content.Replace($"ZYC.Framework.Modules.{Flag}.Abstractions",
-            $"ZYC.Framework.Modules.{Target}.Abstractions", StringComparison.InvariantCulture);
-        content = content.Replace($"ZYC.Framework.Modules.{Flag}", $"ZYC.Framework.Modules.{Target}",
-            StringComparison.InvariantCulture);
+        content = content.Replace(
+            $"ZYC.Framework.Modules.{TemplateName}.Abstractions",
+            $"ZYC.Framework.Modules.{target}.Abstractions",
+            StringComparison.Ordinal);
+        content = content.Replace(
+            $"ZYC.Framework.Modules.{TemplateName}",
+            $"ZYC.Framework.Modules.{target}",
+            StringComparison.Ordinal);
 
-        content = content.Replace(Flag, ShortName, StringComparison.InvariantCulture);
-
-        content = content.Replace(Flag.ToLowerInvariant(), ShortName.ToLowerInvariant(),
-            StringComparison.InvariantCulture);
-
-        content = content.Replace("// ReSharper disable once CheckNamespace", "");
+        content = content.Replace(TemplateName, shortName, StringComparison.Ordinal);
+        content = content.Replace(
+            TemplateName.ToLowerInvariant(),
+            shortName.ToLowerInvariant(),
+            StringComparison.Ordinal);
+        content = content.Replace("// ReSharper disable once CheckNamespace", "", StringComparison.Ordinal);
 
         return content;
     }
 
-    private static void UpdateSlnx()
+    private static void UpdateSlnx(string sourceRoot, string target)
     {
-        var srcRoot = Directory.GetCurrentDirectory();
-        var slnxPath = Directory.GetFiles(srcRoot, "*.slnx", SearchOption.TopDirectoryOnly).FirstOrDefault()
-                       ?? Path.Combine(srcRoot, "ZYC.Framework.slnx");
+        var slnxPath = Directory.GetFiles(sourceRoot, "*.slnx", SearchOption.TopDirectoryOnly).FirstOrDefault()
+                       ?? Path.Combine(sourceRoot, "ZYC.Framework.slnx");
 
         var projects = new[]
         {
-            Path.Combine($"ZYC.Framework.Modules.{Target}", $"ZYC.Framework.Modules.{Target}.csproj"),
-            Path.Combine($"ZYC.Framework.Modules.{Target}.Abstractions",
-                $"ZYC.Framework.Modules.{Target}.Abstractions.csproj")
+            Path.Combine($"ZYC.Framework.Modules.{target}", $"ZYC.Framework.Modules.{target}.csproj"),
+            Path.Combine($"ZYC.Framework.Modules.{target}.Abstractions",
+                $"ZYC.Framework.Modules.{target}.Abstractions.csproj")
         };
 
-        EnsureSlnxExists(slnxPath, srcRoot);
-        AddProjectsToSlnx(slnxPath, srcRoot, projects);
+        EnsureSlnxExists(slnxPath, sourceRoot);
+        AddProjectsToSlnx(slnxPath, sourceRoot, projects);
     }
 
-    private static void EnsureSlnxExists(string slnxPath, string srcRoot)
+    private static void EnsureSlnxExists(string slnxPath, string sourceRoot)
     {
         if (File.Exists(slnxPath))
         {
             return;
         }
 
-        var csprojs = Directory.GetFiles(srcRoot, "*.csproj", SearchOption.AllDirectories)
-            .Where(p => !p.Contains("ZYC.Framework.Build.NewModule\\Template", StringComparison.OrdinalIgnoreCase))
-            .Select(p =>
-            {
-                var rootUri = new Uri(srcRoot.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
-                var fileUri = new Uri(p);
-                return rootUri.MakeRelativeUri(fileUri).ToString();
-            })
+        var templateRoot = Path.Combine("ZYC.Framework.Build.NewModule", "Template");
+        var csprojs = Directory.GetFiles(sourceRoot, "*.csproj", SearchOption.AllDirectories)
+            .Where(p => !p.Contains(templateRoot, StringComparison.OrdinalIgnoreCase))
+            .Select(p => ToSolutionRelativePath(sourceRoot, p))
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
@@ -140,7 +284,7 @@ internal class Program
         doc.Save(slnxPath);
     }
 
-        private static void AddProjectsToSlnx(string slnxPath, string srcRoot, IEnumerable<string> newProjects)
+    private static void AddProjectsToSlnx(string slnxPath, string sourceRoot, IEnumerable<string> newProjects)
     {
         XDocument doc;
         try
@@ -149,7 +293,7 @@ internal class Program
         }
         catch
         {
-            EnsureSlnxExists(slnxPath, srcRoot);
+            EnsureSlnxExists(slnxPath, sourceRoot);
             doc = XDocument.Load(slnxPath);
         }
 
@@ -169,21 +313,23 @@ internal class Program
             .FirstOrDefault(e => string.Equals((string?)e.Attribute("Name"), "/Modules/", StringComparison.Ordinal))
             ?? CreateFolder(root, "/Modules/");
 
-        var rootUri = new Uri(srcRoot.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
-
-        foreach (var p in newProjects)
+        foreach (var project in newProjects)
         {
-            var full = Path.Combine(srcRoot, p);
-            var rel = rootUri.MakeRelativeUri(new Uri(full)).ToString();
-            rel = rel.Replace('\\','/');
-            if (!existing.Contains(rel))
+            var fullPath = Path.Combine(sourceRoot, project);
+            var relativePath = ToSolutionRelativePath(sourceRoot, fullPath);
+            if (!existing.Contains(relativePath))
             {
-                modulesFolder.Add(new XElement("Project", new XAttribute("Path", rel)));
-                existing.Add(rel);
+                modulesFolder.Add(new XElement("Project", new XAttribute("Path", relativePath)));
+                existing.Add(relativePath);
             }
         }
 
         doc.Save(slnxPath);
+    }
+
+    private static string ToSolutionRelativePath(string sourceRoot, string filePath)
+    {
+        return Path.GetRelativePath(sourceRoot, filePath).Replace('\\', '/');
     }
 
     private static XElement CreateFolder(XElement root, string name)
@@ -194,3 +340,116 @@ internal class Program
     }
 }
 
+internal static class Program
+{
+    private static int Main(string[] args)
+    {
+        try
+        {
+            if (ShouldShowHelp(args))
+            {
+                WriteHelp();
+                return 0;
+            }
+
+            var options = ParseArguments(args);
+            var result = NewModuleGenerator.Generate(options);
+
+            Console.WriteLine($"Created module '{result.Target}'.");
+            Console.WriteLine($"Source root: {result.SourceRoot}");
+
+            foreach (var file in result.GeneratedFiles)
+            {
+                Console.WriteLine(file);
+            }
+
+            return 0;
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine(exception.Message);
+            Console.Error.WriteLine("Use --help to view command usage.");
+            return 1;
+        }
+    }
+
+    private static bool ShouldShowHelp(IEnumerable<string> args)
+    {
+        return args.Any(arg => string.Equals(arg, "--help", StringComparison.OrdinalIgnoreCase)
+                               || string.Equals(arg, "-h", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static NewModuleGenerationOptions ParseArguments(IReadOnlyList<string> args)
+    {
+        string? target = null;
+        string? sourceRoot = null;
+        var overwrite = false;
+
+        for (var index = 0; index < args.Count; index++)
+        {
+            var argument = args[index];
+            switch (argument)
+            {
+                case "--target":
+                case "-t":
+                    target = ReadArgumentValue(args, ref index, argument);
+                    break;
+                case "--src-root":
+                case "-s":
+                    sourceRoot = ReadArgumentValue(args, ref index, argument);
+                    break;
+                case "--overwrite":
+                case "-f":
+                    overwrite = true;
+                    break;
+                default:
+                    if (argument.StartsWith("-", StringComparison.Ordinal))
+                    {
+                        throw new ArgumentException($"Unknown argument '{argument}'.");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(target))
+                    {
+                        throw new ArgumentException("Target was provided multiple times.");
+                    }
+
+                    target = argument;
+                    break;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(target))
+        {
+            throw new ArgumentException("Target is required. Pass --target <ModuleName>.");
+        }
+
+        return new NewModuleGenerationOptions
+        {
+            Target = target,
+            SourceRoot = sourceRoot,
+            Overwrite = overwrite
+        };
+    }
+
+    private static string ReadArgumentValue(IReadOnlyList<string> args, ref int index, string argumentName)
+    {
+        var valueIndex = index + 1;
+        if (valueIndex >= args.Count)
+        {
+            throw new ArgumentException($"Missing value for '{argumentName}'.");
+        }
+
+        index = valueIndex;
+        return args[valueIndex];
+    }
+
+    private static void WriteHelp()
+    {
+        Console.WriteLine("Usage:");
+        Console.WriteLine("  dotnet run --project .\\src\\ZYC.Framework.Build.NewModule -- --target <ModuleName> [--src-root <RepoRootOrSrc>] [--overwrite]");
+        Console.WriteLine();
+        Console.WriteLine("Examples:");
+        Console.WriteLine("  dotnet run --project .\\src\\ZYC.Framework.Build.NewModule -- --target Blog --src-root .\\src");
+        Console.WriteLine("  dotnet run --project .\\src\\ZYC.Framework.Build.NewModule -- Translator --src-root .");
+    }
+}

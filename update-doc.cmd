@@ -1,0 +1,1 @@
+dotnet run --project src/ZYC.Framework.Build.Doc/ZYC.Framework.Build.Doc.csproj
