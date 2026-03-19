@@ -109,7 +109,9 @@
       "Already the latest version.": "すでに最新バージョンです。",
       "Copied to clipboard.": "クリップボードにコピーしました。",
       "Clear nuget http cache": "NuGet HTTP キャッシュをクリア",
-      "Aspire is ready": "Aspire の準備が完了しました"
+      "Aspire is ready": "Aspire の準備が完了しました",
+      "Invalid setting value": "設定値が無効です",
+      "Expected type": "期待される型"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -220,7 +222,9 @@
       "Already the latest version.": "已经是最新版本。",
       "Copied to clipboard.": "已复制到剪贴板。",
       "Clear nuget http cache": "清除 NuGet HTTP 缓存",
-      "Aspire is ready": "Aspire 已就绪"
+      "Aspire is ready": "Aspire 已就绪",
+      "Invalid setting value": "设置值无效",
+      "Expected type": "期望类型"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -331,7 +335,9 @@
       "Already the latest version.": "已經是最新版本。",
       "Copied to clipboard.": "已複製到剪貼簿。",
       "Clear nuget http cache": "清除 NuGet HTTP 快取",
-      "Aspire is ready": "Aspire 已就緒"
+      "Aspire is ready": "Aspire 已就緒",
+      "Invalid setting value": "設定值無效",
+      "Expected type": "預期類型"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -442,7 +448,9 @@
       "Already the latest version.": "이미 최신 버전입니다.",
       "Copied to clipboard.": "클립보드에 복사되었습니다.",
       "Clear nuget http cache": "NuGet HTTP 캐시 지우기",
-      "Aspire is ready": "Aspire 준비 완료"
+      "Aspire is ready": "Aspire 준비 완료",
+      "Invalid setting value": "설정 값이 올바르지 않습니다",
+      "Expected type": "예상 타입"
     }
   }
 }

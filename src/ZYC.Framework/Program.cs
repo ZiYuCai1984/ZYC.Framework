@@ -29,7 +29,7 @@ namespace ZYC.Framework;
 
 internal partial class Program
 {
-    private static void StartApp()
+    private static void RedirectToStartupVersion()
     {
         var settingsDirectory = AppContext.GetSettingsDirectory();
 
@@ -87,8 +87,11 @@ internal partial class Program
 
         InitJsonToolsSettings();
 
+#if DEBUG
 
-        StartApp();
+#else
+        RedirectToStartupVersion();
+#endif
 
         var builder = new ContainerBuilder();
 

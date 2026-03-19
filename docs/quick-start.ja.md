@@ -20,7 +20,7 @@
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.1" />
 </ItemGroup>
 ```
 
@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 モジュール構成ファイルを追加する
 
-プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。⚙️
+プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。さらに、メイン実行ファイルを基準に `../settings/ModuleConfig.json` へコピーされるようにプロジェクトを設定します。⚙️
 
 1. **ファイル内容**:
 ```json
@@ -113,8 +113,17 @@ public partial class UserControl1
 }
 ```
 
-2. **プロパティ設定**: 📌
-ソリューション エクスプローラーでこのファイルを選択し、プロパティ パネルの **Copy to Output Directory** を **Copy always** に設定します。
+2. **プロジェクト項目の設定**: 📌
+ビルド時に `ModuleConfig.json` を `../settings/ModuleConfig.json` として生成するため、`.csproj` ファイルに次の設定を追加します:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **ヒント**: `AdditionalAssemblyNames` には `Module.cs` を含むアセンブリ名を必ず含めてください。
 

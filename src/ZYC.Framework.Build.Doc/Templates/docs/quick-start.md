@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 Add Module Configuration
 
-Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. ⚙️
+Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. Configure your project to copy it to `../settings/ModuleConfig.json` relative to the main executable. ⚙️
 
 1. **File Content**:
 ```json
@@ -113,8 +113,17 @@ Create a `ModuleConfig.json` file in the project root. This file serves as a "ma
 }
 ```
 
-2. **Property Settings**: 📌
-Select the file in the Solution Explorer and set **Copy to Output Directory** to **Copy always** in the Properties panel.
+2. **Project Item Settings**: 📌
+Add the following configuration to your `.csproj` file so `ModuleConfig.json` is generated into `../settings/ModuleConfig.json` during build:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **Tip**: `AdditionalAssemblyNames` must include the name of the assembly that contains your `Module.cs`.
 
@@ -226,7 +235,7 @@ public partial class UserControl1
 
 ## 5. 📄 モジュール構成ファイルを追加する
 
-プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。⚙️
+プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。さらに、メイン実行ファイルを基準に `../settings/ModuleConfig.json` へコピーされるようにプロジェクトを設定します。⚙️
 
 1. **ファイル内容**:
 ```json
@@ -238,8 +247,17 @@ public partial class UserControl1
 }
 ```
 
-2. **プロパティ設定**: 📌
-ソリューション エクスプローラーでこのファイルを選択し、プロパティ パネルの **Copy to Output Directory** を **Copy always** に設定します。
+2. **プロジェクト項目の設定**: 📌
+ビルド時に `ModuleConfig.json` を `../settings/ModuleConfig.json` として生成するため、`.csproj` ファイルに次の設定を追加します:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **ヒント**: `AdditionalAssemblyNames` には `Module.cs` を含むアセンブリ名を必ず含めてください。
 
@@ -351,7 +369,7 @@ public partial class UserControl1
 
 ## 5. 📄 添加模块配置文件
 
-在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。⚙️
+在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。同时需要将它配置为相对于主程序生成到 `../settings/ModuleConfig.json`。⚙️
 
 1. **文件内容**：
 ```json
@@ -363,8 +381,17 @@ public partial class UserControl1
 }
 ```
 
-2. **属性设置**：📌
-在解决方案资源管理器中选中该文件，并在属性面板中将 **Copy to Output Directory** 设置为 **Copy always**。
+2. **项目项设置**：📌
+在 `.csproj` 文件中加入以下配置，让 `ModuleConfig.json` 在构建时生成到 `../settings/ModuleConfig.json`：
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **提示**：`AdditionalAssemblyNames` 必须包含 `Module.cs` 所在程序集的名称。
 
@@ -476,7 +503,7 @@ public partial class UserControl1
 
 ## 5. 📄 新增模組設定檔
 
-在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。⚙️
+在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。同時需要將它設定為相對於主程式輸出到 `../settings/ModuleConfig.json`。⚙️
 
 1. **檔案內容**：
 ```json
@@ -488,8 +515,17 @@ public partial class UserControl1
 }
 ```
 
-2. **屬性設定**：📌
-在方案總管中選取這個檔案，並在屬性面板中將 **Copy to Output Directory** 設定為 **Copy always**。
+2. **專案項目設定**：📌
+在 `.csproj` 檔案中加入以下設定，讓 `ModuleConfig.json` 在建置時輸出到 `../settings/ModuleConfig.json`：
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **提示**：`AdditionalAssemblyNames` 必須包含 `Module.cs` 所在組件的名稱。
 
@@ -601,7 +637,7 @@ public partial class UserControl1
 
 ## 5. 📄 모듈 구성 파일 추가
 
-프로젝트 루트에 `ModuleConfig.json` 파일을 만듭니다. 이 파일은 호스트에게 어떤 어셈블리를 동적으로 로드해야 하는지 알려 주는 "지도" 역할을 합니다. ⚙️
+프로젝트 루트에 `ModuleConfig.json` 파일을 만듭니다. 이 파일은 호스트에게 어떤 어셈블리를 동적으로 로드해야 하는지 알려 주는 "지도" 역할을 합니다. 또한 주 실행 파일 기준으로 `../settings/ModuleConfig.json`에 복사되도록 프로젝트를 설정해야 합니다. ⚙️
 
 1. **파일 내용**:
 ```json
@@ -613,8 +649,17 @@ public partial class UserControl1
 }
 ```
 
-2. **속성 설정**: 📌
-솔루션 탐색기에서 이 파일을 선택하고 속성 창에서 **Copy to Output Directory**를 **Copy always**로 설정합니다.
+2. **프로젝트 항목 설정**: 📌
+빌드 시 `ModuleConfig.json`이 `../settings/ModuleConfig.json`으로 생성되도록 `.csproj` 파일에 다음 설정을 추가합니다:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **팁**: `AdditionalAssemblyNames`에는 `Module.cs`를 포함하는 어셈블리 이름이 반드시 들어가야 합니다.
 

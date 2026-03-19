@@ -20,7 +20,7 @@
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.1" />
 </ItemGroup>
 ```
 
@@ -101,7 +101,7 @@ public partial class UserControl1
 
 ## 5. 📄 모듈 구성 파일 추가
 
-프로젝트 루트에 `ModuleConfig.json` 파일을 만듭니다. 이 파일은 호스트에게 어떤 어셈블리를 동적으로 로드해야 하는지 알려 주는 "지도" 역할을 합니다. ⚙️
+프로젝트 루트에 `ModuleConfig.json` 파일을 만듭니다. 이 파일은 호스트에게 어떤 어셈블리를 동적으로 로드해야 하는지 알려 주는 "지도" 역할을 합니다. 또한 주 실행 파일 기준으로 `../settings/ModuleConfig.json`에 복사되도록 프로젝트를 설정해야 합니다. ⚙️
 
 1. **파일 내용**:
 ```json
@@ -113,8 +113,17 @@ public partial class UserControl1
 }
 ```
 
-2. **속성 설정**: 📌
-솔루션 탐색기에서 이 파일을 선택하고 속성 창에서 **Copy to Output Directory**를 **Copy always**로 설정합니다.
+2. **프로젝트 항목 설정**: 📌
+빌드 시 `ModuleConfig.json`이 `../settings/ModuleConfig.json`으로 생성되도록 `.csproj` 파일에 다음 설정을 추가합니다:
+
+```xml
+<ItemGroup>
+  <None Update="ModuleConfig.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Link>../settings/ModuleConfig.json</Link>
+  </None>
+</ItemGroup>
+```
 
 > 💡 **팁**: `AdditionalAssemblyNames`에는 `Module.cs`를 포함하는 어셈블리 이름이 반드시 들어가야 합니다.
 
