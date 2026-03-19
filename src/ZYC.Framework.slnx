@@ -6,6 +6,7 @@
     <Project Path="ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj" />
     <Project Path="ZYC.Framework.Build.NewModule/ZYC.Framework.Build.NewModule.csproj" />
     <Project Path="ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj" />
+    <Project Path="ZYC.Framework.Build.ProductVersion/ZYC.Framework.Build.ProductVersion.csproj" Id="310c5d4a-74ed-4304-b85d-c0e4e45e6c61" />
     <Project Path="ZYC.Framework.Build.Utilities/ZYC.Framework.Build.Utilities.csproj" Id="d64c08fc-a661-45a8-be99-ba9ac94f3463" />
   </Folder>
   <Folder Name="/Deprecated/" />

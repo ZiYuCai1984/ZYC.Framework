@@ -2,7 +2,7 @@
 
   <Import Project="$(MSBuildThisFileDirectory)nuget.props" />
 
-  <Import Project="$(MSBuildThisFileDirectory)version.props" Condition="Exists('$(MSBuildThisFileDirectory)version.props')" />
+  <Import Project="$(MSBuildThisFileDirectory)version.props" />
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU5104</NoWarn>

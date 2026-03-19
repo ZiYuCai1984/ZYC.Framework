@@ -98,7 +98,7 @@
 
 👉 **[快速開始指南 (quick-start.md)](docs/quick-start.md)**
 
-👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
 ### 安裝
 
@@ -106,50 +106,70 @@
 你可以透過 NuGet 將核心套件加入專案：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.9
+dotnet add package ZYC.Framework.Alpha --version 1.2.0
 ```
 
 ---
 
 
 
-## 🏗️  專案結構
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+
+
+
+## 功能
+
+### 核心框架
+
+| 功能     | 說明                            |
+| ------ | ----------------------------- |
+| 模組化架構  | 支援模組化功能組織與動態載入。               |
+| 多工作區佈局 | 支援工作區分割、合併與重新排列。              |
+| 多分頁導航  | 基於 URI 的分頁導航與恢復。              |
+| 可擴展選單  | 主選單、Hamburger 選單等擴展點。         |
+| 通知系統   | 內建 Toast 與 Banner 通知。         |
+| 互動輔助   | BusyWindow、Overlay、拖放處理。      |
+| 混合 UI  | `WebView2` + `Blazor` 混合桌面應用。 |
+| 設定與狀態  | 本地持久化設定與應用狀態。                 |
+| 單例執行   | 支援單實例應用啟動。                    |
+| MCP 暴露 | 可將功能暴露為 MCP 工具。               |
+
+### 內建模組
+
+| 模組            | 說明           |
+| ------------- | ------------ |
+| About         | 應用基本資訊。      |
+| ApiReference  | 內建 API 文件瀏覽。 |
+| CLI           | 內建終端。        |
+| FileExplorer  | 檔案瀏覽器。       |
+| WebBrowser    | 內建瀏覽器。       |
+| Language      | 多語言管理。       |
+| Translator    | 翻譯服務整合。      |
+| Settings      | 設定管理。        |
+| Secrets       | 敏感設定管理。      |
+| TaskManager   | 任務管理與追蹤。     |
+| Update        | NuGet 更新。    |
+| NuGet         | 套件管理。        |
+| ModuleManager | 模組管理。        |
+| MCP.Server    | MCP 服務。      |
+| Aspire        | Aspire 工具整合。 |
+| Log           | 日誌功能。        |
+| BlazorDemo    | Blazor 整合示例。 |
+| Mock          | 測試模組。        |
+
+### 開發與交付
+
+| 功能       | 說明                |
+| -------- | ----------------- |
+| CLI 工具   | 命令列入口。            |
+| 模組模板     | 快速建立新模組。          |
+| 文件生成     | README / Docs 生成。 |
+| NuGet 打包 | NuGet 套件生成。       |
+| 安裝包      | 桌面安裝程式建構。         |
+
+
+
+
 
 ---
 

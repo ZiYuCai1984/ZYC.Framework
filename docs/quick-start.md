@@ -11,7 +11,7 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.1.9" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.0" />
 </ItemGroup>
 ```
 

@@ -32,4 +32,5 @@ db/
 
 zyc.txt
 
-version.props
+
+.dotnet/

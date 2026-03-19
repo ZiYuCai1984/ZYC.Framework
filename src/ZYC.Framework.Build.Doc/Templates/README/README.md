@@ -135,45 +135,278 @@ dotnet add package $(PackageId) --version $(Version)
 
 ---
 
+<!--doc-meta: section features -->
 
-<!--doc-meta: section project-structure -->
-## 🏗️ <!--doc-meta: l10n structure-title --> <!--doc-l10n:begin structure-title-->Project Structure<!--doc-l10n:locale ja-->プロジェクト構成<!--doc-l10n:locale zh-CN-->项目结构<!--doc-l10n:locale zh-TW-->專案結構<!--doc-l10n:locale ko-->프로젝트 구조<!--doc-l10n:end-->
+<!--doc-l10n:begin features-->
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+## Features
+
+### Core Framework
+
+| Feature                | Description                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| Modular Architecture   | Organize features as modules with support for dynamic loading and extension.              |
+| Multi-Workspace Layout | Split, merge, reorder, and change workspace layout directions.                            |
+| Multi-Tab Navigation   | URI-based tab navigation with switching, restoration, and cross-workspace movement.       |
+| Extensible Menu System | Extension points for main menu, hamburger menu, title bar, status bar, and taskbar menus. |
+| Notification System    | Built-in Toast and Banner notifications for status and error feedback.                    |
+| Interaction Utilities  | Desktop interaction helpers such as BusyWindow, overlays, and drag-and-drop.              |
+| Hybrid UI Support      | Embed web content using `WebView2` and build hybrid UI with `Blazor`.                     |
+| Configuration & State  | Local persistence for configuration, application state, and task history.                 |
+| Single Instance        | Supports single-instance application startup control.                                     |
+| MCP Exposure           | Automatically expose public framework and module capabilities as MCP tools.               |
+
+### Built-in Modules
+
+| Module        | Description                                                           |
+| ------------- | --------------------------------------------------------------------- |
+| About         | Application metadata (version, author, description, copyright).       |
+| ApiReference  | Built-in API documentation viewer.                                    |
+| CLI           | Embedded terminal with command execution and parameter support.       |
+| FileExplorer  | Embedded file explorer for directory browsing.                        |
+| WebBrowser    | Embedded browser for web and local content.                           |
+| Language      | Language switching and localization resource management.              |
+| Translator    | Translation service integration.                                      |
+| Settings      | Unified configuration management UI.                                  |
+| Secrets       | Secure configuration editing and display.                             |
+| TaskManager   | Task queue, execution, pause/resume, cancel, and status tracking.     |
+| Update        | NuGet-based version checking and update workflow.                     |
+| NuGet         | Package search, download, dependency handling, and caching.           |
+| ModuleManager | Install, enable, disable, and manage local or NuGet modules.          |
+| MCP.Server    | Local MCP server exposing application capabilities.                   |
+| Aspire        | `Aspire` tool integration with service control and dashboard support. |
+| Log           | Logging infrastructure and log directory access.                      |
+| BlazorDemo    | Demonstrates `Blazor Server` integration.                             |
+| Mock          | Test module for validating framework capabilities.                    |
+
+### Development & Delivery
+
+| Feature                  | Description                                                   |
+| ------------------------ | ------------------------------------------------------------- |
+| CLI Tools                | Standalone CLI entry with module command extension support.   |
+| Module Scaffolding       | Generate new modules and abstraction projects from templates. |
+| Documentation Generation | Generate README and documentation templates.                  |
+| NuGet Packaging          | Build NuGet packages for framework and modules.               |
+| Installer Build          | Build desktop installers for distribution.                    |
+
+<!--doc-l10n:locale ja-->
+
+## 主な機能
+
+### コアフレームワーク
+
+| 機能           | 説明                                     |
+| ------------ | -------------------------------------- |
+| モジュールアーキテクチャ | 機能をモジュール単位で構成し、動的ロードと拡張をサポート。          |
+| マルチワークスペース   | ワークスペースの分割・結合・並び替え・方向変更に対応。            |
+| マルチタブナビゲーション | URI ベースのタブナビゲーション、復元、ワークスペース間移動。       |
+| 拡張可能メニュー     | メインメニュー、ハンバーガーメニュー、タイトルバーなどの拡張ポイント。    |
+| 通知システム       | Toast / Banner による通知表示。                |
+| UI インタラクション  | BusyWindow、Overlay、ドラッグ＆ドロップ処理などを提供。   |
+| ハイブリッド UI    | `WebView2` と `Blazor` によるハイブリッド UI 構築。 |
+| 設定・状態管理      | 設定や状態、タスク履歴のローカル保存。                    |
+| シングルインスタンス   | アプリケーションの単一インスタンス起動制御。                 |
+| MCP 公開       | フレームワーク機能を MCP ツールとして公開可能。             |
+
+### 組み込みモジュール
+
+| モジュール         | 説明                    |
+| ------------- | --------------------- |
+| About         | バージョンや作者などの基本情報表示。    |
+| ApiReference  | アプリ内で API ドキュメントを閲覧。  |
+| CLI           | コマンド実行可能な内蔵ターミナル。     |
+| FileExplorer  | ディレクトリ閲覧用ファイルエクスプローラ。 |
+| WebBrowser    | Web / ローカルページ閲覧用ブラウザ。 |
+| Language      | 多言語切替とローカライズ管理。       |
+| Translator    | 翻訳サービス統合。             |
+| Settings      | 統合設定管理画面。             |
+| Secrets       | 機密設定の安全な管理。           |
+| TaskManager   | タスク管理と状態追跡。           |
+| Update        | NuGet ベースの更新機能。       |
+| NuGet         | NuGet パッケージ検索と管理。     |
+| ModuleManager | モジュールのインストール・有効化・管理。  |
+| MCP.Server    | ローカル MCP Server。      |
+| Aspire        | `Aspire` ツール統合。       |
+| Log           | ログ機能とログディレクトリ。        |
+| BlazorDemo    | Blazor Server 統合デモ。   |
+| Mock          | テスト用モジュール。            |
+
+### 開発・配布
+
+| 機能          | 説明                 |
+| ----------- | ------------------ |
+| CLI ツール     | コマンドラインインターフェース。   |
+| モジュールテンプレート | 新規モジュール生成テンプレート。   |
+| ドキュメント生成    | README / ドキュメント生成。 |
+| NuGet パッケージ | NuGet パッケージ作成。     |
+| インストーラ      | デスクトップインストーラ生成。    |
+
+
+<!--doc-l10n:locale zh-CN-->
+
+
+## 功能
+
+### 核心框架
+
+| 功能       | 说明                                              |
+| -------- | ----------------------------------------------- |
+| 模块化架构    | 支持按模块组织功能，并支持动态加载与扩展。                           |
+| 多工作区布局   | 支持工作区分割、合并、方向切换和位置交换。                           |
+| 多标签页导航   | 支持基于 URI 的标签页导航、恢复和跨工作区移动。                      |
+| 可扩展菜单系统  | 提供主菜单、Hamburger 菜单、窗口标题栏、状态栏等扩展点。               |
+| 通知系统     | 内置 Toast、Banner 等通知能力，用于状态和错误提示。                |
+| 交互辅助能力   | 提供 BusyWindow、Overlay、拖放处理等桌面交互基础设施。            |
+| 混合界面支持   | 支持通过 `WebView2` 嵌入 Web 内容，并可结合 `Blazor` 构建混合应用。 |
+| 配置与状态持久化 | 支持配置、应用状态和任务记录的本地持久化。                           |
+| 单实例运行    | 支持应用单实例启动控制。                                    |
+| MCP 暴露机制 | 可将框架和模块中的公开能力自动暴露为 MCP 工具。                      |
+
+### 内置模块
+
+| 模块            | 说明                                   |
+| ------------- | ------------------------------------ |
+| About         | 显示应用基本信息，如版本、作者和描述。                  |
+| ApiReference  | 内置 API 文档查看页，可在应用内浏览生成的文档。           |
+| CLI           | 内嵌终端页面，支持命令执行和参数控制。                  |
+| FileExplorer  | 内置文件资源管理器视图，支持目录浏览。                  |
+| WebBrowser    | 内置浏览器模块，支持访问网页和本地内容。                 |
+| Language      | 提供多语言切换和本地化资源管理。                     |
+| Translator    | 提供翻译服务接入能力。                          |
+| Settings      | 统一的设置管理界面，支持查看、编辑和重置配置。              |
+| Secrets       | 提供敏感配置的安全查看与编辑。                      |
+| TaskManager   | 支持任务入队、执行、暂停、恢复、取消和状态追踪。             |
+| Update        | 基于 NuGet 的版本检查、下载和更新流程。              |
+| NuGet         | 提供 NuGet 包查询、下载、依赖处理和缓存管理。           |
+| ModuleManager | 管理本地模块和 NuGet 模块的安装、卸载、启用和禁用。        |
+| MCP.Server    | 提供本地 MCP Server，可将应用功能对外暴露为工具服务。     |
+| Aspire        | 提供 `Aspire` 工具下载、服务控制和 Dashboard 集成。 |
+| Log           | 提供日志功能和日志目录访问入口。                     |
+| BlazorDemo    | `Blazor Server` 集成示例模块。              |
+| Mock          | 用于测试和演示框架能力的模块。                      |
+
+### 开发与交付
+
+| 功能       | 说明                   |
+| -------- | -------------------- |
+| CLI 工具   | 提供命令行入口，支持模块级命令扩展。   |
+| 模块脚手架    | 支持通过模板快速生成新模块及其抽象项目。 |
+| 文档生成     | 支持生成 README 和文档模板内容。 |
+| NuGet 打包 | 支持框架和模块的 NuGet 打包流程。 |
+| 安装包构建    | 支持生成桌面安装包，方便分发与部署。   |
+
+
+<!--doc-l10n:locale zh-TW-->
+
+
+
+## 功能
+
+### 核心框架
+
+| 功能     | 說明                            |
+| ------ | ----------------------------- |
+| 模組化架構  | 支援模組化功能組織與動態載入。               |
+| 多工作區佈局 | 支援工作區分割、合併與重新排列。              |
+| 多分頁導航  | 基於 URI 的分頁導航與恢復。              |
+| 可擴展選單  | 主選單、Hamburger 選單等擴展點。         |
+| 通知系統   | 內建 Toast 與 Banner 通知。         |
+| 互動輔助   | BusyWindow、Overlay、拖放處理。      |
+| 混合 UI  | `WebView2` + `Blazor` 混合桌面應用。 |
+| 設定與狀態  | 本地持久化設定與應用狀態。                 |
+| 單例執行   | 支援單實例應用啟動。                    |
+| MCP 暴露 | 可將功能暴露為 MCP 工具。               |
+
+### 內建模組
+
+| 模組            | 說明           |
+| ------------- | ------------ |
+| About         | 應用基本資訊。      |
+| ApiReference  | 內建 API 文件瀏覽。 |
+| CLI           | 內建終端。        |
+| FileExplorer  | 檔案瀏覽器。       |
+| WebBrowser    | 內建瀏覽器。       |
+| Language      | 多語言管理。       |
+| Translator    | 翻譯服務整合。      |
+| Settings      | 設定管理。        |
+| Secrets       | 敏感設定管理。      |
+| TaskManager   | 任務管理與追蹤。     |
+| Update        | NuGet 更新。    |
+| NuGet         | 套件管理。        |
+| ModuleManager | 模組管理。        |
+| MCP.Server    | MCP 服務。      |
+| Aspire        | Aspire 工具整合。 |
+| Log           | 日誌功能。        |
+| BlazorDemo    | Blazor 整合示例。 |
+| Mock          | 測試模組。        |
+
+### 開發與交付
+
+| 功能       | 說明                |
+| -------- | ----------------- |
+| CLI 工具   | 命令列入口。            |
+| 模組模板     | 快速建立新模組。          |
+| 文件生成     | README / Docs 生成。 |
+| NuGet 打包 | NuGet 套件生成。       |
+| 安裝包      | 桌面安裝程式建構。         |
+
+
+<!--doc-l10n:locale ko-->
+
+
+## 기능
+
+### 핵심 프레임워크
+
+| 기능        | 설명                                   |
+| --------- | ------------------------------------ |
+| 모듈 아키텍처   | 기능을 모듈 단위로 구성하고 동적 확장을 지원합니다.        |
+| 멀티 워크스페이스 | 워크스페이스 분할, 병합, 재배치 지원.               |
+| 멀티 탭 탐색   | URI 기반 탭 탐색 및 복원.                    |
+| 확장 가능한 메뉴 | 메인 메뉴 및 다양한 UI 확장 지점 제공.             |
+| 알림 시스템    | Toast 및 Banner 알림 제공.                |
+| UI 인터랙션   | BusyWindow, Overlay, Drag & Drop 지원. |
+| 하이브리드 UI  | `WebView2` + `Blazor` 기반 UI.         |
+| 설정 및 상태   | 설정과 상태 로컬 저장.                        |
+| 단일 인스턴스   | 단일 인스턴스 실행 지원.                       |
+| MCP 노출    | MCP 도구로 기능 노출 가능.                    |
+
+### 내장 모듈
+
+| 모듈            | 설명             |
+| ------------- | -------------- |
+| About         | 애플리케이션 정보 표시.  |
+| ApiReference  | API 문서 뷰어.     |
+| CLI           | 내장 터미널.        |
+| FileExplorer  | 파일 탐색기.        |
+| WebBrowser    | 내장 브라우저.       |
+| Language      | 다국어 관리.        |
+| Translator    | 번역 서비스 통합.     |
+| Settings      | 설정 관리 UI.      |
+| Secrets       | 민감 설정 관리.      |
+| TaskManager   | 작업 관리 및 추적.    |
+| Update        | NuGet 기반 업데이트. |
+| NuGet         | 패키지 관리.        |
+| ModuleManager | 모듈 관리.         |
+| MCP.Server    | MCP 서버.        |
+| Aspire        | Aspire 도구 통합.  |
+| Log           | 로그 기능.         |
+| BlazorDemo    | Blazor 통합 데모.  |
+| Mock          | 테스트 모듈.        |
+
+### 개발 및 배포
+
+| 기능        | 설명               |
+| --------- | ---------------- |
+| CLI 도구    | 명령줄 인터페이스.       |
+| 모듈 템플릿    | 새 모듈 생성 템플릿.     |
+| 문서 생성     | README / 문서 생성.  |
+| NuGet 패키징 | NuGet 패키지 빌드.    |
+| 설치 프로그램   | 데스크톱 설치 프로그램 빌드. |
+
+
+<!--doc-l10n:end-->
+
 
 ---
 

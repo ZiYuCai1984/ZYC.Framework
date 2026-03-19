@@ -98,7 +98,7 @@
 
 👉 **[빠른 시작 가이드 (quick-start.md)](docs/quick-start.md)**
 
-👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
 ### 설치
 
@@ -106,50 +106,69 @@
 NuGet을 통해 코어 패키지를 설치할 수 있습니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.9
+dotnet add package ZYC.Framework.Alpha --version 1.2.0
 ```
 
 ---
 
 
 
-## 🏗️  프로젝트 구조
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+
+
+## 기능
+
+### 핵심 프레임워크
+
+| 기능        | 설명                                   |
+| --------- | ------------------------------------ |
+| 모듈 아키텍처   | 기능을 모듈 단위로 구성하고 동적 확장을 지원합니다.        |
+| 멀티 워크스페이스 | 워크스페이스 분할, 병합, 재배치 지원.               |
+| 멀티 탭 탐색   | URI 기반 탭 탐색 및 복원.                    |
+| 확장 가능한 메뉴 | 메인 메뉴 및 다양한 UI 확장 지점 제공.             |
+| 알림 시스템    | Toast 및 Banner 알림 제공.                |
+| UI 인터랙션   | BusyWindow, Overlay, Drag & Drop 지원. |
+| 하이브리드 UI  | `WebView2` + `Blazor` 기반 UI.         |
+| 설정 및 상태   | 설정과 상태 로컬 저장.                        |
+| 단일 인스턴스   | 단일 인스턴스 실행 지원.                       |
+| MCP 노출    | MCP 도구로 기능 노출 가능.                    |
+
+### 내장 모듈
+
+| 모듈            | 설명             |
+| ------------- | -------------- |
+| About         | 애플리케이션 정보 표시.  |
+| ApiReference  | API 문서 뷰어.     |
+| CLI           | 내장 터미널.        |
+| FileExplorer  | 파일 탐색기.        |
+| WebBrowser    | 내장 브라우저.       |
+| Language      | 다국어 관리.        |
+| Translator    | 번역 서비스 통합.     |
+| Settings      | 설정 관리 UI.      |
+| Secrets       | 민감 설정 관리.      |
+| TaskManager   | 작업 관리 및 추적.    |
+| Update        | NuGet 기반 업데이트. |
+| NuGet         | 패키지 관리.        |
+| ModuleManager | 모듈 관리.         |
+| MCP.Server    | MCP 서버.        |
+| Aspire        | Aspire 도구 통합.  |
+| Log           | 로그 기능.         |
+| BlazorDemo    | Blazor 통합 데모.  |
+| Mock          | 테스트 모듈.        |
+
+### 개발 및 배포
+
+| 기능        | 설명               |
+| --------- | ---------------- |
+| CLI 도구    | 명령줄 인터페이스.       |
+| 모듈 템플릿    | 새 모듈 생성 템플릿.     |
+| 문서 생성     | README / 문서 생성.  |
+| NuGet 패키징 | NuGet 패키지 빌드.    |
+| 설치 프로그램   | 데스크톱 설치 프로그램 빌드. |
+
+
+
+
 
 ---
 

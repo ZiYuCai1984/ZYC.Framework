@@ -98,7 +98,7 @@
 
 👉 **[クイックスタート (quick-start.md)](docs/quick-start.md)**
 
-👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.1.9/ZYC.Framework.Setup.1.1.9.exe)**
+👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
 ### インストール
 
@@ -106,50 +106,68 @@
 NuGet でコアパッケージを追加できます：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.1.9
+dotnet add package ZYC.Framework.Alpha --version 1.2.0
 ```
 
 ---
 
 
 
-## 🏗️  プロジェクト構成
 
-```text
-ZYC.Framework
-├── src
-│   ├── ZYC.Framework                         # WPF desktop host/entry: main window, workspaces, menus, UI lifecycle
-│   ├── ZYC.Framework.Abstractions            # Shared contracts: interfaces, states, configs used across host/modules
-│   ├── ZYC.Framework.Core                    # Core infrastructure: commands, bindings, converters, base UI components, i18n
-│   ├── ZYC.Framework.MetroWindow             # Metro-style window shell (alternative window implementation)
-│   ├── ZYC.Framework.WebView2                # WebView2 hosting layer: navigation, menu bar, interop, page hosting
-│   ├── ZYC.Framework.CLI                     # CLI tool: developer utilities, module/file helpers, automation entrypoints
-│   ├── ZYC.Framework.Build.*                 # Build & packaging toolchain
-│   │   ├── ZYC.Framework.Build.NuGet         # NuGet packaging tool: build/.props/.targets, README, PatchNote, outputs
-│   │   ├── ZYC.Framework.Build.InnoSetup     # Inno Setup builder: produces the Windows installer (setup)
-│   │   └── ZYC.Framework.Build.NewModule     # Module scaffolder: templates for Module + Abstractions projects
-│   ├── ZYC.Framework.Modules.*               # Feature modules
-│   │   ├── ZYC.Framework.Modules.About                  # About / version info page (UI + tab)
-│   │   ├── ZYC.Framework.Modules.Aspire                 # .NET Aspire AppHost/orchestration integration + dashboard
-│   │   ├── ZYC.Framework.Modules.BlazorDemo             # Blazor Server demo: web UI + auth/integration showcase
-│   │   ├── ZYC.Framework.Modules.CLI                    # In-app CLI module (terminal-like tools page)
-│   │   ├── ZYC.Framework.Modules.FileExplorer           # File Explorer module (Explorer-like browsing in tabs)
-│   │   ├── ZYC.Framework.Modules.Language               # Language/i18n module: language switching + resources config
-│   │   ├── ZYC.Framework.Modules.Log                    # Logging module: view logs, open log folder, log plumbing
-│   │   ├── ZYC.Framework.Modules.Mock                   # Test/demo module for validating UI/notifications/tasks/workspaces
-│   │   ├── ZYC.Framework.Modules.ModuleManager          # Module manager: enable/disable/install/uninstall (local + NuGet)
-│   │   ├── ZYC.Framework.Modules.NuGet                  # NuGet access layer: sources, metadata, version utilities
-│   │   ├── ZYC.Framework.Modules.Secrets                # Secrets utilities: password generator, Wi-Fi password, secrets UI
-│   │   ├── ZYC.Framework.Modules.Settings               # Settings module: settings UI, grouping, reset actions
-│   │   ├── ZYC.Framework.Modules.TaskManager            # Task manager: queue/progress/pause/cancel/cleanup framework
-│   │   ├── ZYC.Framework.Modules.Translator             # Translator module: integrates translation services/local runner
-│   │   ├── ZYC.Framework.Modules.Update                 # Update module: check/download/apply+restart, fault handling UI
-│   │   └── ZYC.Framework.Modules.WebBrowser             # Built-in web browser module (tab-hosted browsing)
-│   └── Thirdparty                            # Integrated third-party components (vendored/forked)
-│       ├── ZYC.Terminal                      # Terminal/ConPTY integration: pseudo console, PTY, process + pipes
-│       ├── ZYC.MdXaml                        # Markdown renderer + extensions
-│       └── ZYC.Titanium.Web.Proxy            # HTTP(S) proxy core (integrated Titanium Web Proxy fork)
-```
+
+## 主な機能
+
+### コアフレームワーク
+
+| 機能           | 説明                                     |
+| ------------ | -------------------------------------- |
+| モジュールアーキテクチャ | 機能をモジュール単位で構成し、動的ロードと拡張をサポート。          |
+| マルチワークスペース   | ワークスペースの分割・結合・並び替え・方向変更に対応。            |
+| マルチタブナビゲーション | URI ベースのタブナビゲーション、復元、ワークスペース間移動。       |
+| 拡張可能メニュー     | メインメニュー、ハンバーガーメニュー、タイトルバーなどの拡張ポイント。    |
+| 通知システム       | Toast / Banner による通知表示。                |
+| UI インタラクション  | BusyWindow、Overlay、ドラッグ＆ドロップ処理などを提供。   |
+| ハイブリッド UI    | `WebView2` と `Blazor` によるハイブリッド UI 構築。 |
+| 設定・状態管理      | 設定や状態、タスク履歴のローカル保存。                    |
+| シングルインスタンス   | アプリケーションの単一インスタンス起動制御。                 |
+| MCP 公開       | フレームワーク機能を MCP ツールとして公開可能。             |
+
+### 組み込みモジュール
+
+| モジュール         | 説明                    |
+| ------------- | --------------------- |
+| About         | バージョンや作者などの基本情報表示。    |
+| ApiReference  | アプリ内で API ドキュメントを閲覧。  |
+| CLI           | コマンド実行可能な内蔵ターミナル。     |
+| FileExplorer  | ディレクトリ閲覧用ファイルエクスプローラ。 |
+| WebBrowser    | Web / ローカルページ閲覧用ブラウザ。 |
+| Language      | 多言語切替とローカライズ管理。       |
+| Translator    | 翻訳サービス統合。             |
+| Settings      | 統合設定管理画面。             |
+| Secrets       | 機密設定の安全な管理。           |
+| TaskManager   | タスク管理と状態追跡。           |
+| Update        | NuGet ベースの更新機能。       |
+| NuGet         | NuGet パッケージ検索と管理。     |
+| ModuleManager | モジュールのインストール・有効化・管理。  |
+| MCP.Server    | ローカル MCP Server。      |
+| Aspire        | `Aspire` ツール統合。       |
+| Log           | ログ機能とログディレクトリ。        |
+| BlazorDemo    | Blazor Server 統合デモ。   |
+| Mock          | テスト用モジュール。            |
+
+### 開発・配布
+
+| 機能          | 説明                 |
+| ----------- | ------------------ |
+| CLI ツール     | コマンドラインインターフェース。   |
+| モジュールテンプレート | 新規モジュール生成テンプレート。   |
+| ドキュメント生成    | README / ドキュメント生成。 |
+| NuGet パッケージ | NuGet パッケージ作成。     |
+| インストーラ      | デスクトップインストーラ生成。    |
+
+
+
+
 
 ---
 
