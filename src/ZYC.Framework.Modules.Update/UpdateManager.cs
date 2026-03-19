@@ -104,7 +104,7 @@ internal class UpdateManager : IUpdateManager
                 product.PackageId,
                 product.Version);
 
-            var extractFolder = Path.Combine(AppContext.GetSettingsDirectory(), product.Version);
+            var extractFolder = Path.Combine(AppContext.GetAppRootDirectory(), product.Version);
 
             await ZipTools.UnpackZipAsync(productZip, extractFolder);
             AppContext.UpdateStartupVersion(product.Version);

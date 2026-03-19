@@ -120,7 +120,17 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 <!--doc-meta: l10n quickstart-lead -->
 <!--doc-l10n:begin quickstart-lead-->Please refer to the detailed guide:<!--doc-l10n:locale ja-->詳細な手順はこちら：<!--doc-l10n:locale zh-CN-->请参阅我们准备好的详细指南：<!--doc-l10n:locale zh-TW-->請參閱完整指南：<!--doc-l10n:locale ko-->자세한 내용은 다음 가이드를 참고하세요:<!--doc-l10n:end-->
 
-👉 **[<!--doc-l10n:begin quickstart-link-->Quick Start<!--doc-l10n:locale ja-->クイックスタート<!--doc-l10n:locale zh-CN-->快速开始指南<!--doc-l10n:locale zh-TW-->快速開始指南<!--doc-l10n:locale ko-->빠른 시작 가이드<!--doc-l10n:end--> (quick-start.md)](docs/quick-start.md)**
+<!--doc-l10n:begin quickstart-link-line-->
+👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
+<!--doc-l10n:locale ja-->
+👉 **[クイックスタート (quick-start.ja.md)](docs/quick-start.ja.md)**
+<!--doc-l10n:locale zh-CN-->
+👉 **[快速开始指南 (quick-start.zh-CN.md)](docs/quick-start.zh-CN.md)**
+<!--doc-l10n:locale zh-TW-->
+👉 **[快速開始指南 (quick-start.zh-TW.md)](docs/quick-start.zh-TW.md)**
+<!--doc-l10n:locale ko-->
+👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
+<!--doc-l10n:end-->
 
 👉 **[<!--doc-l10n:begin quickstart-demo-installer-link-->Download Demo Installer<!--doc-l10n:locale ja-->デモ インストーラーをダウンロード<!--doc-l10n:locale zh-CN-->下载 Demo 安装包<!--doc-l10n:locale zh-TW-->下載 Demo 安裝程式<!--doc-l10n:locale ko-->데모 설치 프로그램 다운로드<!--doc-l10n:end-->](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v$(Version)/ZYC.Framework.Setup.$(Version).exe)**
 

@@ -96,7 +96,9 @@
 
 자세한 내용은 다음 가이드를 참고하세요:
 
-👉 **[빠른 시작 가이드 (quick-start.md)](docs/quick-start.md)**
+
+👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
+
 
 👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.0/ZYC.Framework.Setup.1.2.0.exe)**
 
