@@ -5,10 +5,11 @@ using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.Build.Utilities;
 
+// ReSharper disable InconsistentNaming
 public static class BuildEnvironment
 {
     public static string SetupFilePath = Path.Combine(SrcFolder, $"ZYC.Framework.Setup.{ProductInfo.Version}.exe");
-    
+
     public static string RootFolder => GetProjectRootFolderPath();
 
     public static string DocFolder => Path.Combine(RootFolder, "docs\\");
@@ -32,6 +33,16 @@ public static class BuildEnvironment
     public static string ProductPackageNuspecPath => $"{ProductPackagePath}\\{ProductPackageId}.nuspec";
 
     public static string NuGetCachePath => Path.Combine(OutputPath, ".cache");
+
+    public static string RuntimesPath => Path.Combine(OutputPath, "runtimes");
+
+    public static string RuntimesPath_win_arm64 => Path.Combine(RuntimesPath, "win-arm64");
+
+    public static string RuntimesPath_win10_arm64 => Path.Combine(RuntimesPath, "win10-arm64");
+    
+    public static string RuntimesPath_win10_x86 => Path.Combine(RuntimesPath, "win10-x86");
+    
+    public static string RuntimesPath_win_x86 => Path.Combine(RuntimesPath, "win-x86");
 
     public static string BuildProjectPath => Path.Combine(SrcFolder, "ZYC.Framework.Build.NuGet");
 

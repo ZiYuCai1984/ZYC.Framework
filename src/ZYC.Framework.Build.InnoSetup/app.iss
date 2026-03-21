@@ -35,3 +35,6 @@ Source: "_bin\*"; DestDir: "{app}\"; Flags: ignoreversion recursesubdirs
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#Version}\{#AppName}.exe"
 Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#Version}\{#AppName}.exe"
+
+[Run]
+Filename: "{app}\{#Version}\{#AppName}.exe"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

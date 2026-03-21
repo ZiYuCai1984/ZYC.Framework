@@ -16,6 +16,8 @@ internal class AboutMainMenuItemsProvider : MainMenuItemsProvider, IAboutMainMen
             Icon = null,
             Priority = MainMenuPriority.About
         };
+
+        RegisterSubItem(lifetimeScope.Resolve<SwitchVersionMainMenuItem>());
     }
 
     public override MenuItemInfo Info { get; }

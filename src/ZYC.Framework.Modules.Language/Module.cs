@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
 using ZYC.CoreToolkit.Extensions.Autofac;
+using ZYC.CoreToolkit.Extensions.Settings;
 using ZYC.Framework.Core;
 using ZYC.Framework.Modules.Language.Abstractions;
 using ZYC.Framework.Modules.Settings.Abstractions;
@@ -17,6 +19,18 @@ internal class Module : ModuleBase
 
         builder.RegisterAdapter<IConfig[], ILanguageResourcesConfig[]>(configs =>
             configs.OfType<ILanguageResourcesConfig>().ToArray());
+
+        try
+        {
+            var currentFolder = IOTools.GetExecutingFolder();
+            var result = SettingsTools.GetFromFolderGeneric(
+                currentFolder, typeof(DefaultLanguageResourcesConfig));
+            builder.RegisterConfigR(result);
+        }
+        catch
+        {
+            //ignore
+        }
     }
 
     public override Task LoadAsync(ILifetimeScope lifetimeScope)

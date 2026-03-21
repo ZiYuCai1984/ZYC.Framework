@@ -100,7 +100,7 @@
 👉 **[クイックスタート (quick-start.ja.md)](docs/quick-start.ja.md)**
 
 
-👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.2/ZYC.Framework.Setup.1.2.2.exe)**
+👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.3/ZYC.Framework.Setup.1.2.3.exe)**
 
 ### インストール
 
@@ -108,7 +108,7 @@
 NuGet でコアパッケージを追加できます：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.2.2
+dotnet add package ZYC.Framework.Alpha --version 1.2.3
 ```
 
 ---

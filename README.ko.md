@@ -100,7 +100,7 @@
 👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
 
 
-👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.2/ZYC.Framework.Setup.1.2.2.exe)**
+👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.3/ZYC.Framework.Setup.1.2.3.exe)**
 
 ### 설치
 
@@ -108,7 +108,7 @@
 NuGet을 통해 코어 패키지를 설치할 수 있습니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.2.2
+dotnet add package ZYC.Framework.Alpha --version 1.2.3
 ```
 
 ---
