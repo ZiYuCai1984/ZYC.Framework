@@ -131,7 +131,7 @@
                         TabStripPlacement="Top"
                         SelectionChanged="OnTabControlSelectionChanged"
                         Padding="0">
-                <TabControl.Resources>
+                <TabControl.ItemContainerStyle>
                     <Style TargetType="TabItem">
                         <Setter Property="Padding" Value="0" />
                         <Setter Property="Content" Value="{Binding View}" />
@@ -210,8 +210,6 @@
                                                             Width="8"
                                                             Height="8" />
                                                 </Button>
-
-
                                             </Grid>
                                             <Border />
                                         </DockPanel>
@@ -221,7 +219,7 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </TabControl.Resources>
+                </TabControl.ItemContainerStyle>
             </TabControl>
 
             <Border Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}">
