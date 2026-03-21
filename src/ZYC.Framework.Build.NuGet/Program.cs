@@ -31,8 +31,10 @@ public class Program
 #if GENERATE_DOC
             await GenerateDocAsync();
 #endif
-            //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 
+            await PackProductAsync();
+
+            //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 #if PUBLISH_NUGET_ORG
         await DotnetNuGetTools.PushNuGetAsync(
             BuildEnvironment.SrcFolder,
@@ -61,8 +63,6 @@ public class Program
         IOTools.CopyDirectory(
             Path.Combine(BuildEnvironment.RootFolder,"_site"),
             Path.Combine(BuildEnvironment.OutputPath, ApiReferenceModuleConstants.DocFolder));
-
-        await PackProductAsync();
     }
 
     private static async Task BuildSolutionAync(string tempSlnFileName)
@@ -101,6 +101,11 @@ public class Program
             IOTools.DeleteDirectoryIfExists(BuildEnvironment.ProductPackagePath);
             IOTools.DeleteDirectoryIfExists(BuildEnvironment.NuGetCachePath);
 
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.RuntimesPath_win_arm64);
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.RuntimesPath_win10_arm64);
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.RuntimesPath_win_x86);
+            IOTools.DeleteDirectoryIfExists(BuildEnvironment.RuntimesPath_win10_x86);
+
             var pendingRemoveFiles = Directory.GetFiles(
                 BuildEnvironment.OutputPath, "*.*", SearchOption.AllDirectories).Where(f => f.EndsWith(".pdb") ||
                 f.EndsWith(".xml") || f.EndsWith(".txt") || f.EndsWith(".endpoints.json")
@@ -113,7 +118,7 @@ public class Program
         }
         finally
         {
-            RestoreGlobalJson(originalGlobalJsonBytes, globalJsonExists);
+            DeleteGlobalJson(originalGlobalJsonBytes, globalJsonExists);
         }
     }
 
@@ -166,7 +171,7 @@ public class Program
         File.WriteAllText(BuildEnvironment.GlobalJsonPath, globalJsonContent);
     }
 
-    private static void RestoreGlobalJson(byte[]? originalGlobalJsonBytes, bool globalJsonExists)
+    private static void DeleteGlobalJson(byte[]? originalGlobalJsonBytes, bool globalJsonExists)
     {
         if (globalJsonExists)
         {

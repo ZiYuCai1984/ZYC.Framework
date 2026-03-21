@@ -103,7 +103,7 @@
     <V_Newtonsoft_Json>13.0.3</V_Newtonsoft_Json>
   </PropertyGroup>
 
-  <!--!WARNING In order to be compatible with Newtonsoft.Json version in NuGet.Protocol and TickerQ-->
+  <!--!WARNING In order to be compatible with Newtonsoft.Json version in NuGet.Protocol-->
   <ItemGroup>
     <PackageReference Update="Newtonsoft.Json" Version="$(V_Newtonsoft_Json)" />
   </ItemGroup>
@@ -136,10 +136,6 @@
     <PackageReference Update="log4net" Version="3.2.0" />
     <PackageReference Update="LibreTranslate.Net" Version="1.0.1" />
     <PackageReference Update="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Update="SSH.NET" Version="2025.0.0" />
-    <PackageReference Update="PDFsharp" Version="6.2.1" />
-    <PackageReference Update="Google.Apis.Drive.v3" Version="1.70.0.3893" />
-    <PackageReference Update="Aspose.Words" Version="20.11.0" />
     <PackageReference Update="Tools.InnoSetup" Version="6.7.0" />
     <PackageReference Update="BrotliSharpLib" Version="0.3.3" />
     <PackageReference Update="BouncyCastle.Cryptography" Version="2.7.0-beta.98" />

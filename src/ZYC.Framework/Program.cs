@@ -50,9 +50,9 @@ internal partial class Program
     {
         var fileName = AppContext.GetProcessFileName();
 
-        var settingsDirectory = AppContext.GetSettingsDirectory();
-        var targetAppFolder = Path.Combine(settingsDirectory, version);
-        var targetAppFile = Path.Combine(settingsDirectory, version, fileName);
+        var appRootDirectory = AppContext.GetAppRootDirectory();
+        var targetAppFolder = Path.Combine(appRootDirectory, version);
+        var targetAppFile = Path.Combine(appRootDirectory, version, fileName);
 
         if (IOTools.FileExists(targetAppFile))
         {

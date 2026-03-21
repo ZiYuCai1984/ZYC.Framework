@@ -13,16 +13,9 @@
     <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.ModuleManager.Abstractions\ZYC.Framework.Modules.ModuleManager.Abstractions.csproj" />
   </ItemGroup>
-
-
   <ItemGroup>
-    <LogConfigFiles Include="log4net.config" />
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-
-  <Target Name="CopyLogConfigToSettingsOutput"
-          AfterTargets="Build">
-    <Copy SourceFiles="@(LogConfigFiles)"
-          DestinationFiles="@(LogConfigFiles->'$(SettingsOutputDir)\%(Filename)%(Extension)')"
-          SkipUnchangedFiles="true" />
-  </Target>
 </Project>
