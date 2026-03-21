@@ -1,13 +1,25 @@
 ﻿<Project>
 
-  <Target Name="Copy_Files_ZYC_Automation_Alpha" BeforeTargets="PrepareForBuild">
+  <Target Name="Copy_ZYC_Framework_Alpha_Files" BeforeTargets="PrepareForBuild">
     <ItemGroup>
-      <Files_ZYC_Automation_Alpha Include="$(MSBuildThisFileDirectory)..\**\*" />
+      <ZYC_Framework_Alpha_Files Include="$(MSBuildThisFileDirectory)..\**\*" />
     </ItemGroup>
 
-    <Copy SourceFiles="@(Files_ZYC_Automation_Alpha)" DestinationFolder="$(OutputPath)\%(RecursiveDir)"
+    <Copy SourceFiles="@(ZYC_Framework_Alpha_Files)" DestinationFolder="$(OutputPath)\%(RecursiveDir)"
           SkipUnchangedFiles="true" />
   </Target>
+
+  <Target Name="Copy_ZYC_Framework_Alpha_Settings_Files" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <ZYC_Framework_Alpha_Settings_Files Include="$(MSBuildThisFileDirectory)..\log4net.config" />
+      <ZYC_Framework_Alpha_Settings_Files Include="$(MSBuildThisFileDirectory)..\Language.DefaultLanguageResourcesConfig.json" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(Copy_ZYC_Framework_Alpha_Settings_Files)" DestinationFolder="$(OutputPath)..\settings\%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+
 
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\SharedSources\**\*.cs"

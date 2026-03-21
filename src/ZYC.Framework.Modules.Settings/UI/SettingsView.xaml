@@ -5,15 +5,14 @@
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
-               xmlns:system="clr-namespace:System;assembly=System.Runtime"
                xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
                xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
                xmlns:bindings="clr-namespace:ZYC.Framework.Core.Bindings;assembly=ZYC.Framework.Core"
-               xmlns:abstractions="clr-namespace:ZYC.Framework.Modules.Settings.Abstractions;assembly=ZYC.Framework.Modules.Settings.Abstractions"
                xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
                xmlns:ui="clr-namespace:ZYC.Framework.Modules.Settings.UI"
+               xmlns:settings="clr-namespace:ZYC.Framework.Modules.Settings"
                mc:Ignorable="d"
                d:DesignHeight="450"
                d:DesignWidth="800"
@@ -28,6 +27,122 @@
                  Style="{DynamicResource MahApps.Styles.TextBox.Search}" />
     </page:PageBase.HeaderAdditionContent>
     <Grid>
+        <Grid.Resources>
+            <settings:SettingValueTemplateSelector x:Key="SettingValueTemplateSelector">
+                <settings:SettingValueTemplateSelector.DoubleTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding .}"
+                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                 LostFocus="OnTextBoxLostFocus"
+                                 KeyDown="OnTextBoxKeyDown" />
+                    </DataTemplate>
+                </settings:SettingValueTemplateSelector.DoubleTemplate>
+                <settings:SettingValueTemplateSelector.EnumTemplate>
+                    <DataTemplate>
+                        <ComboBox
+                            ItemsSource="{Binding .,Converter={converters:EnumToItemSourceConverter}}"
+                            Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                            SelectedItem="{Binding .}"
+                            SelectionChanged="OnSelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <wpf:TextBlock Text="{Binding .}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </DataTemplate>
+                </settings:SettingValueTemplateSelector.EnumTemplate>
+                <settings:SettingValueTemplateSelector.MultilineTextTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding Text,Mode=OneWay}"
+                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                 LostFocus="OnTextBoxLostFocus"
+                                 KeyDown="OnTextBoxKeyDown"
+                                 Height="128"
+                                 MinHeight="128"
+                                 VerticalScrollBarVisibility="Visible"
+                                 HorizontalScrollBarVisibility="Disabled"
+                                 TextWrapping="Wrap"
+                                 AutoWordSelection="True" />
+                    </DataTemplate>
+
+                </settings:SettingValueTemplateSelector.MultilineTextTemplate>
+                <settings:SettingValueTemplateSelector.Int32Template>
+                    <DataTemplate>
+                        <TextBox Text="{Binding .}"
+                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                 LostFocus="OnTextBoxLostFocus"
+                                 KeyDown="OnTextBoxKeyDown" />
+                    </DataTemplate>
+
+                </settings:SettingValueTemplateSelector.Int32Template>
+
+                <settings:SettingValueTemplateSelector.StringTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding .}"
+                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                 LostFocus="OnTextBoxLostFocus"
+                                 KeyDown="OnTextBoxKeyDown" />
+                    </DataTemplate>
+                </settings:SettingValueTemplateSelector.StringTemplate>
+                <settings:SettingValueTemplateSelector.BooleanTemplate>
+                    <DataTemplate>
+                        <mah:ToggleSwitch IsOn="{Binding .}"
+                                          OnContent="{x:Null}"
+                                          OffContent="{x:Null}"
+                                          Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                                          Toggled="OnSwitchToggled" />
+                    </DataTemplate>
+                </settings:SettingValueTemplateSelector.BooleanTemplate>
+                <settings:SettingValueTemplateSelector.ArrayTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <DockPanel Margin="0 0 0 4">
+                                <Button DockPanel.Dock="Right"
+                                        Margin="8 0 0 0"
+                                        Width="32">
+                                    <iconPacks:PackIconMaterial Kind="Plus"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Width="8"
+                                                                Height="8" />
+                                </Button>
+                                <TextBox
+                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=2}}"
+                                    LostFocus="OnNewArrayItemTextBoxLostFocus"
+                                    KeyDown="OnNewArrayItemTextBoxKeyDown" />
+                            </DockPanel>
+                            <ItemsControl ItemsSource="{Binding .}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="0 0 0 4">
+                                            <Button DockPanel.Dock="Right"
+                                                    Padding="0"
+                                                    Margin="8 0 0 0"
+                                                    Width="32"
+                                                    ui:SettingsView.ArrayDeleteTarget="{Binding .}"
+                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
+                                                    Click="OnDeleteArrayItemButtonClick">
+                                                <iconPacks:PackIconMaterial
+                                                    Kind="TrashCanOutline"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Width="16"
+                                                    Height="16" />
+                                            </Button>
+                                            <TextBox Text="{Binding .}"
+                                                     Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
+                                                     IsReadOnly="True"
+                                                     IsEnabled="False" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </settings:SettingValueTemplateSelector.ArrayTemplate>
+            </settings:SettingValueTemplateSelector>
+        </Grid.Resources>
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Margin="0 8 0 0">
@@ -36,7 +151,6 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                             <wpf:TextBlock VerticalAlignment="Center"
                                            FontWeight="SemiBold">
                                 <Run Text="{Binding Name,Mode=OneWay}" />
@@ -56,105 +170,8 @@
                                                                VerticalAlignment="Center" />
                                             </StackPanel>
                                             <ContentPresenter Content="{Binding Value}"
-                                                              Margin="8">
-                                                <ContentPresenter.Resources>
-                                                    <DataTemplate DataType="{x:Type system:Boolean}">
-                                                        <mah:ToggleSwitch IsOn="{Binding .}"
-                                                                          Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                                          Toggled="OnSwitchToggled" />
-                                                    </DataTemplate>
-
-                                                    <DataTemplate DataType="{x:Type abstractions:MultilineText}">
-                                                        <TextBox Text="{Binding Text,Mode=OneWay}"
-                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                                 LostFocus="OnTextBoxLostFocus"
-                                                                 KeyDown="OnTextBoxKeyDown"
-                                                                 Height="128"
-                                                                 MinHeight="128"
-                                                                 VerticalScrollBarVisibility="Visible"
-                                                                 HorizontalScrollBarVisibility="Disabled"
-                                                                 TextWrapping="Wrap"
-                                                                 AutoWordSelection="True" />
-                                                    </DataTemplate>
-
-                                                    <DataTemplate DataType="{x:Type system:String}">
-                                                        <TextBox Text="{Binding .}"
-                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                                 LostFocus="OnTextBoxLostFocus"
-                                                                 KeyDown="OnTextBoxKeyDown" />
-                                                    </DataTemplate>
-                                                    <DataTemplate DataType="{x:Type system:Int32}">
-                                                        <TextBox Text="{Binding .}"
-                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                                 LostFocus="OnTextBoxLostFocus"
-                                                                 KeyDown="OnTextBoxKeyDown" />
-                                                    </DataTemplate>
-                                                    <DataTemplate DataType="{x:Type system:Double}">
-                                                        <TextBox Text="{Binding .}"
-                                                                 Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                                 LostFocus="OnTextBoxLostFocus"
-                                                                 KeyDown="OnTextBoxKeyDown" />
-                                                    </DataTemplate>
-                                                    <DataTemplate DataType="{x:Type system:Array}">
-                                                        <StackPanel>
-                                                            <DockPanel Margin="0 0 0 4">
-                                                                <Button DockPanel.Dock="Right"
-                                                                        Margin="8 0 0 0"
-                                                                        Width="32">
-                                                                    <iconPacks:PackIconMaterial Kind="Plus"
-                                                                            HorizontalAlignment="Center"
-                                                                            VerticalAlignment="Center"
-                                                                            Width="8"
-                                                                            Height="8" />
-                                                                </Button>
-                                                                <TextBox
-                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=2}}"
-                                                                    LostFocus="OnNewArrayItemTextBoxLostFocus"
-                                                                    KeyDown="OnNewArrayItemTextBoxKeyDown" />
-                                                            </DockPanel>
-                                                            <ItemsControl ItemsSource="{Binding .}">
-                                                                <ItemsControl.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <DockPanel Margin="0 0 0 4">
-                                                                            <Button DockPanel.Dock="Right"
-                                                                                    Padding="0"
-                                                                                    Margin="8 0 0 0"
-                                                                                    Width="32"
-                                                                                    ui:SettingsView.ArrayDeleteTarget="{Binding .}"
-                                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
-                                                                                    Click="OnDeleteArrayItemButtonClick">
-                                                                                <iconPacks:PackIconMaterial
-                                                                                    Kind="TrashCanOutline"
-                                                                                    HorizontalAlignment="Center"
-                                                                                    VerticalAlignment="Center"
-                                                                                    Width="16"
-                                                                                    Height="16" />
-                                                                            </Button>
-                                                                            <wpf:TextBox Text="{Binding .}"
-                                                                                    Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel,AncestorLevel=3}}"
-                                                                                    IsReadOnly="True"
-                                                                                    IsEnabled="False" />
-                                                                        </DockPanel>
-                                                                    </DataTemplate>
-                                                                </ItemsControl.ItemTemplate>
-                                                            </ItemsControl>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                    <DataTemplate DataType="{x:Type system:Enum}">
-                                                        <ComboBox
-                                                            ItemsSource="{Binding .,Converter={converters:EnumToItemSourceConverter}}"
-                                                            Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                                                            SelectedItem="{Binding .}"
-                                                            SelectionChanged="OnSelectionChanged">
-                                                            <ComboBox.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <wpf:TextBlock Text="{Binding .}" />
-                                                                </DataTemplate>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
-                                                    </DataTemplate>
-                                                </ContentPresenter.Resources>
-                                            </ContentPresenter>
+                                                              Margin="8"
+                                                              ContentTemplateSelector="{StaticResource SettingValueTemplateSelector}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
