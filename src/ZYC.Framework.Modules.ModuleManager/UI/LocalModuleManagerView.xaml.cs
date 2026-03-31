@@ -30,13 +30,11 @@ public partial class LocalModuleManagerView
         {
             OnPropertyChanged(nameof(ModuleDisabledAssemblyNames));
         }).DisposeWith(CompositeDisposable);
-        ;
 
         EventAggregator.Subscribe<EnableModuleEvent>(_ =>
         {
             OnPropertyChanged(nameof(ModuleDisabledAssemblyNames));
         }).DisposeWith(CompositeDisposable);
-        ;
 
         InitializeComponent();
     }
