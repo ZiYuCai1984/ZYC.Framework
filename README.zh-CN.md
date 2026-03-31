@@ -100,7 +100,7 @@
 👉 **[快速开始指南 (quick-start.zh-CN.md)](docs/quick-start.zh-CN.md)**
 
 
-👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.3/ZYC.Framework.Setup.1.2.3.exe)**
+👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.4/ZYC.Framework.Setup.1.2.4.exe)**
 
 ### 安装
 
@@ -108,7 +108,7 @@
 你可以通过 NuGet 直接将核心包引入你的项目：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.2.3
+dotnet add package ZYC.Framework.Alpha --version 1.2.4
 ```
 
 ---
