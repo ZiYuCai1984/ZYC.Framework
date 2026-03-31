@@ -29,6 +29,14 @@ namespace ZYC.Framework;
 
 internal partial class Program
 {
+    static Program()
+    {
+        System.AppContext.SetSwitch(
+            "Switch.System.Windows.Appearance.DisableFluentThemeWindowBackdrop",
+            true);
+    }
+
+
     private static void RedirectToStartupVersion()
     {
         var settingsDirectory = AppContext.GetSettingsDirectory();
