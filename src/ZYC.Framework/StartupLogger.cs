@@ -17,10 +17,7 @@ internal class StartupLogger : IAppLogger
         _logFilePath = GetOrCreateLogFile();
     }
 
-    private static string LogDirectory { get; } = Path.Combine(
-        AppContext.GetAppRootDirectory(),
-        "logs");
-
+    private static string LogDirectory { get; } = AppContext.GetLogsDirectory();
 
     public void Debug(string message)
     {

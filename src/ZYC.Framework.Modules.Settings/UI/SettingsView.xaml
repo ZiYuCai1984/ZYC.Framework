@@ -57,12 +57,13 @@
                         <TextBox Text="{Binding Text,Mode=OneWay}"
                                  Tag="{Binding DataContext,RelativeSource={RelativeSource AncestorType=StackPanel}}"
                                  LostFocus="OnTextBoxLostFocus"
-                                 KeyDown="OnTextBoxKeyDown"
+                                 KeyDown="OnMultilineTextBoxKeyDown"
                                  Height="128"
                                  MinHeight="128"
                                  VerticalScrollBarVisibility="Visible"
                                  HorizontalScrollBarVisibility="Disabled"
                                  TextWrapping="Wrap"
+                                 AcceptsReturn="True"
                                  AutoWordSelection="True" />
                     </DataTemplate>
 

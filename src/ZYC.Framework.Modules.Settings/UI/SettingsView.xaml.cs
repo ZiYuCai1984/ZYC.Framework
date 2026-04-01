@@ -176,7 +176,6 @@ internal partial class SettingsView : ISettingsView
     {
         var comboBox = (ComboBox)sender;
         var item = (SettingItem)comboBox.Tag;
-        //TODO-zyc Needs to be refactored!!
         if (comboBox.SelectedItem == null || item == null)
         {
             return;
@@ -198,6 +197,21 @@ internal partial class SettingsView : ISettingsView
     private void OnTextBoxKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
+        {
+            return;
+        }
+
+        var textBox = (TextBox)sender;
+        var item = (SettingItem)textBox.Tag;
+
+        item.ValueChangedCallbackAction.Invoke(item, textBox.Text);
+        e.Handled = true;
+    }
+
+    private void OnMultilineTextBoxKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter
+            || (Keyboard.Modifiers & ModifierKeys.Control) == 0)
         {
             return;
         }

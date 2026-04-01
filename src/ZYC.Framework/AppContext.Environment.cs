@@ -7,6 +7,11 @@ namespace ZYC.Framework;
 
 internal partial class AppContext
 {
+    string IAppContext.GetLogsDirectory()
+    {
+        return GetLogsDirectory();
+    }
+
     string IAppContext.GetAppRootDirectory()
     {
         return GetAppRootDirectory();
@@ -30,6 +35,11 @@ internal partial class AppContext
     string IAppContext.GetArgumentString()
     {
         return GetArgumentString();
+    }
+
+    public static string GetLogsDirectory()
+    {
+        return Path.Combine(GetAppRootDirectory(), "logs");
     }
 
     public static string GetAppRootDirectory()

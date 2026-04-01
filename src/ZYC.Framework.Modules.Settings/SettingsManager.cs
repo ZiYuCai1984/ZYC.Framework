@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Autofac;
 using Namotion.Reflection;
 using ZYC.CoreToolkit;
@@ -18,6 +20,12 @@ namespace ZYC.Framework.Modules.Settings;
 [RegisterSingleInstanceAs(typeof(ISettingsManager))]
 public partial class SettingsManager : ISettingsManager
 {
+    private static readonly JsonSerializerOptions JsonEditorSerializerOptions = new()
+    {
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
+
     public SettingsManager(
         IToastManager toastManager,
         IEventAggregator eventAggregator,
@@ -118,9 +126,19 @@ public partial class SettingsManager : ISettingsManager
 
 
                 var isMultiline = property.ExistAttribute<MultilineTextAttribute>();
+                var isJsonObject = property.ExistAttribute<JsonObjectAttribute>();
 
                 var initValue = property.GetValue(config);
-                if (isMultiline)
+                if (isJsonObject)
+                {
+                    if (!TrySerializeValueToJson(property.PropertyType, initValue, out var initJson))
+                    {
+                        initJson = initValue?.ToString() ?? string.Empty;
+                    }
+
+                    initValue = new MultilineText(initJson);
+                }
+                else if (isMultiline)
                 {
                     initValue = new MultilineText(initValue);
                 }
@@ -130,7 +148,11 @@ public partial class SettingsManager : ISettingsManager
                     initValue,
                     (self, newValue) =>
                     {
-                        if (isMultiline)
+                        if (isJsonObject)
+                        {
+                            UpdateJsonConfig(config, property, self, newValue, Logger);
+                        }
+                        else if (isMultiline)
                         {
                             newValue = new MultilineText(newValue);
                             //!WARNING Design defeat
@@ -166,6 +188,54 @@ public partial class SettingsManager : ISettingsManager
         {
             Logger.Error(e);
             return "";
+        }
+    }
+
+
+    private void UpdateJsonConfig(
+        IConfig config,
+        PropertyInfo property,
+        SettingItem item,
+        object? newValue,
+        IAppLogger<SettingsManager> logger)
+    {
+        try
+        {
+            var oriConfig = JsonTools.DeepCopyGeneric(config);
+            var text = newValue?.ToString() ?? string.Empty;
+            var valueType = property.PropertyType;
+
+            if (!TryParseValueFromJson(valueType, text, out var parsedValue, out var normalizedJson))
+            {
+                ToastManager.PromptMessage(
+                    ToastMessage.Warn(
+                        $"{config}\r\n{L.Translate("Invalid setting value")} <{property.Name}>. {L.Translate("Expected type")}: <{valueType.Name}> JSON.",
+                        false));
+                return;
+            }
+
+            var oldValue = property.GetValue(config);
+            if (TrySerializeValueToJson(valueType, oldValue, out var oldJson)
+                && oldJson == normalizedJson)
+            {
+                return;
+            }
+
+            property.SetValue(config, parsedValue);
+            item.Value = new MultilineText(normalizedJson);
+
+            PublishSettingChangedEvent(
+                config.GetType(), oriConfig, config);
+
+            SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
+
+            ToastManager.PromptMessage(
+                ToastMessage.Info($"{config}\r\n{property.Name} JSON updated.", false));
+        }
+        catch (Exception e)
+        {
+            ToastManager.PromptException(e);
+            logger.Error(e);
         }
     }
 
@@ -222,7 +292,9 @@ public partial class SettingsManager : ISettingsManager
             if (!TryParseValueFromString(valueType, newValue, out var parsedNewValue))
             {
                 ToastManager.PromptMessage(
-                    ToastMessage.Warn($"{config}\r\n{L.Translate("Invalid setting value")} <{property.Name}>. {L.Translate("Expected type")}: <{valueType.Name}>.", false));
+                    ToastMessage.Warn(
+                        $"{config}\r\n{L.Translate("Invalid setting value")} <{property.Name}>. {L.Translate("Expected type")}: <{valueType.Name}>.",
+                        false));
                 return;
             }
 
@@ -258,6 +330,46 @@ public partial class SettingsManager : ISettingsManager
             type,
             oldValue,
             newValue));
+    }
+
+    private static bool TrySerializeValueToJson(Type valueType, object? value, out string jsonText)
+    {
+        try
+        {
+            jsonText = JsonSerializer.Serialize(value, valueType, JsonEditorSerializerOptions);
+            return true;
+        }
+        catch
+        {
+            jsonText = string.Empty;
+            return false;
+        }
+    }
+
+    private static bool TryParseValueFromJson(
+        Type valueType,
+        string jsonText,
+        out object? parsedValue,
+        out string normalizedJson)
+    {
+        parsedValue = null;
+        normalizedJson = string.Empty;
+
+        try
+        {
+            parsedValue = JsonSerializer.Deserialize(jsonText, valueType, JsonEditorSerializerOptions);
+            if (parsedValue == null)
+            {
+                return false;
+            }
+
+            normalizedJson = JsonSerializer.Serialize(parsedValue, valueType, JsonEditorSerializerOptions);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static bool TryParseValueFromString(
