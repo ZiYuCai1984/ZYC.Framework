@@ -25,6 +25,7 @@
                  TitleBarHeight="0"
                  BorderThickness="1"
                  SnapsToDevicePixels="True"
+                 FontSize="12"
                  Icon="{x:Static core:IconTools.IconImageSource}"
                  BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
                  x:Name="Root"

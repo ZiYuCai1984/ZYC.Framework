@@ -6,28 +6,25 @@
 
 ## 🆕 New Features
 
-* Added **tab drag & drop** support for improved workspace interaction
-* Added **tab item drag sort** support to make tab reordering more intuitive
-* Added a new **Recent Path** feature for quicker navigation to previously used locations
-* Introduced a **hamburger menu** entry point to improve main window navigation
-* Added a **test shader / mock shader** setup for shader-related development and experiments
+* Added **Fluent theme** support for a more modern desktop appearance
+* Added support for **switching versions**
+* Added support for **window title item extension**
 
 ---
 
 ## 🛠 Improvements
 
-* Improved overall **tab management and interaction flow**
-* Migrated and reorganized **external modules** for a cleaner module structure
-* Continued refinement of desktop UI interaction patterns and menu organization
-* General internal cleanup and feature integration work across the framework
-
+* Refactored **HybridIcon** into partial classes for better maintainability
+* Refactored **NuGetManager** into partial classes for cleaner structure
+* Updated the **README** and **Quick Start** documentation
+* Added a **Features** section to the README for clearer project introduction
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed an issue where the application **could not be closed from the taskbar**
-* Fixed an **address string crash** issue
+* Fixed an issue with an **incorrect product decompression path during update**
+* Included various **minor fixes and stability improvements**
 
 ---
 

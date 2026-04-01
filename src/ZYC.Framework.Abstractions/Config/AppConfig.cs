@@ -32,7 +32,7 @@ public class AppConfig : IConfig
     /// <summary>
     ///     Gets or sets a value indicating whether the application runs in debug mode.
     /// </summary>
-    public bool DebugMode { get; set; }
+    public bool DebugMode { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets a value indicating whether a desktop shortcut should be created.
