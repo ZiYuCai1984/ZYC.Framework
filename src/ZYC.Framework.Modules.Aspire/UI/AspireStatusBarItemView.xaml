@@ -39,6 +39,7 @@
                                  Effect="{Binding IsIconGray,Converter={converters:BoolToObjectConverter TrueValue={StaticResource GrayScaleEffect},FalseValue={x:Null}}}">
                 </core:HybridIcon>
                 <TextBlock Text="{bindings:LBinding AspireServiceStatus.Status}"
+                           FontSize="12"
                            Margin="8 0 4 0"
                            FontWeight="SemiBold" />
             </StackPanel>
