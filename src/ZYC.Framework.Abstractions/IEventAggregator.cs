@@ -1,10 +1,21 @@
 ﻿namespace ZYC.Framework.Abstractions;
 
 /// <summary>
-///     Provides a lightweight event aggregation mechanism.
+///     Provides event publishing and subscription capabilities.
 /// </summary>
 public interface IEventAggregator
 {
+    /// <summary>
+    ///     Observes all published events.
+    /// </summary>
+    IObservable<object> ObserveAll();
+
+    /// <summary>
+    ///     Observes events of the specified type.
+    /// </summary>
+    /// <typeparam name="TEvent">The event type.</typeparam>
+    IObservable<TEvent> Observe<TEvent>() where TEvent : notnull;
+
     /// <summary>
     ///     Subscribes to an event type.
     /// </summary>
@@ -18,12 +29,12 @@ public interface IEventAggregator
     ///     Publishes an event.
     /// </summary>
     /// <typeparam name="TEvent">The event type.</typeparam>
-    /// <param name="event">The event instance.</param>
-    void Publish<TEvent>(TEvent @event) where TEvent : notnull;
+    /// <param name="eventData">The event instance.</param>
+    void Publish<TEvent>(TEvent eventData) where TEvent : notnull;
 
     /// <summary>
     ///     Publishes an event as an object.
     /// </summary>
-    /// <param name="obj">The event instance.</param>
-    void Publish(object obj);
+    /// <param name="eventData">The event instance.</param>
+    void Publish(object eventData);
 }

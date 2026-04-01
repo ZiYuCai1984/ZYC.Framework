@@ -1,130 +1,108 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.Infrastructure;
 
 [RegisterSingleInstanceAs(typeof(IEventAggregator))]
-public sealed class EventAggregator : IEventAggregator
+public sealed class EventAggregator : IEventAggregator, IDisposable
 {
-    private readonly ConcurrentDictionary<Type, List<WeakReference>> _map = new();
+    private readonly ISubject<object> _subject;
     private readonly SynchronizationContext? _uiCtx;
+    private bool _disposed;
 
     public EventAggregator(IAppContext appContext)
     {
         _uiCtx = appContext.GetUISynchronizationContext();
+        _subject = Subject.Synchronize(new Subject<object>());
+    }
+
+    public IObservable<object> ObserveAll()
+    {
+        ThrowIfDisposed();
+        return _subject.AsObservable();
+    }
+
+    public IObservable<TEvent> Observe<TEvent>() where TEvent : notnull
+    {
+        ThrowIfDisposed();
+        return _subject.OfType<TEvent>();
     }
 
     public IDisposable Subscribe<TEvent>(Action<TEvent> handler, bool onUiThread = false) where TEvent : notnull
     {
-        var list = _map.GetOrAdd(typeof(TEvent), _ => []);
-        var entry = new Subscription<TEvent>(handler, onUiThread, _uiCtx);
-        lock (list)
-        {
-            list.Add(new WeakReference(entry));
-        }
+        ThrowIfDisposed();
+        ArgumentNullException.ThrowIfNull(handler);
 
-        return new Unsubscriber(() =>
+        return Observe<TEvent>().Subscribe(e =>
         {
-            lock (list)
+            if (onUiThread && _uiCtx is not null)
             {
-                list.RemoveAll(w => !w.IsAlive || ReferenceEquals(w.Target, entry));
+                _uiCtx.Post(static state =>
+                {
+                    var s = (DispatchState<TEvent>)state!;
+                    s.Handler(s.EventData);
+                }, new DispatchState<TEvent>(handler, e));
+            }
+            else
+            {
+                handler(e);
             }
         });
     }
 
-    public void Publish<TEvent>(TEvent @event) where TEvent : notnull
+    public void Publish<TEvent>(TEvent eventData) where TEvent : notnull
     {
-        var eventType = @event.GetType();
+        ThrowIfDisposed();
+        ArgumentNullException.ThrowIfNull(eventData);
 
-        if (!_map.TryGetValue(eventType, out var list))
+        _subject.OnNext(eventData);
+    }
+
+    public void Publish(object eventData)
+    {
+        ThrowIfDisposed();
+
+        if (eventData is null)
         {
             return;
         }
 
-        List<Subscription<TEvent>> targets;
-        lock (list)
-        {
-            targets = list.Select(w => w.Target as Subscription<TEvent>)
-                .Where(x => x is not null)
-                .Cast<Subscription<TEvent>>()
-                .ToList();
-            list.RemoveAll(w => !w.IsAlive);
-        }
-
-        foreach (var s in targets)
-        {
-            s.Invoke(@event);
-        }
+        _subject.OnNext(eventData);
     }
 
-    public void Publish(object @event)
+    public void Dispose()
     {
-        if (@event is null)
+        if (_disposed)
         {
             return;
         }
 
-        var eventType = @event.GetType();
-        if (!_map.TryGetValue(eventType, out var list))
-        {
-            return;
-        }
+        _disposed = true;
+        _subject.OnCompleted();
 
-        List<object> targets;
-        lock (list)
+        if (_subject is IDisposable disposable)
         {
-            targets = list
-                .Select(w => w.Target)
-                .Where(t => t is not null)
-                .ToList()!;
-            list.RemoveAll(w => !w.IsAlive);
-        }
-
-        foreach (var target in targets)
-        {
-            ((dynamic)target).Invoke((dynamic)@event);
+            disposable.Dispose();
         }
     }
 
-    private sealed class Subscription<TEvent>
+    private void ThrowIfDisposed()
     {
-        private readonly SynchronizationContext? _ctx;
-        private readonly Action<TEvent> _handler;
-        private readonly bool _onUiThread;
-
-        public Subscription(Action<TEvent> handler, bool onUiThread, SynchronizationContext? ctx)
-        {
-            _handler = handler;
-            _onUiThread = onUiThread;
-            _ctx = ctx;
-        }
-
-        public void Invoke(TEvent e)
-        {
-            if (_onUiThread && _ctx is not null)
-            {
-                _ctx.Post(_ => _handler(e), null);
-            }
-            else
-            {
-                _handler(e);
-            }
-        }
+        ObjectDisposedException.ThrowIf(_disposed, this);
     }
 
-    private sealed class Unsubscriber : IDisposable
+    private sealed class DispatchState<TEvent>
     {
-        private readonly Action _dispose;
-
-        public Unsubscriber(Action dispose)
+        public DispatchState(Action<TEvent> handler, TEvent eventData)
         {
-            _dispose = dispose;
+            Handler = handler;
+            EventData = eventData;
         }
 
-        public void Dispose()
-        {
-            _dispose();
-        }
+        public Action<TEvent> Handler { get; }
+
+        public TEvent EventData { get; }
     }
 }

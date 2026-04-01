@@ -33,14 +33,14 @@
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.Resources>
-                    <markupEx:LifetimeScopeResolve Type="{x:Type shaders:GrayScaleEffect}" 
-                                                   x:Key="GrayScaleEffect"/>
+                    <markupEx:LifetimeScopeResolve Type="{x:Type shaders:GrayScaleEffect}"
+                                                   x:Key="GrayScaleEffect" />
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <ContentControl x:Name="WorkspaceMenuViewHost" 
+                <ContentControl x:Name="WorkspaceMenuViewHost"
                                 Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=1.0,FalseValue=0.5}}"
                                 Effect="{Binding IsFocusedWorkspace,Converter={converters:BoolToObjectConverter TrueValue={x:Null},FalseValue={StaticResource GrayScaleEffect}}}" />
                 <ComboBox x:Name="UriComboBox"
@@ -223,6 +223,12 @@
             </TabControl>
 
             <Border Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}">
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{Binding WorkspaceNode.Index}" />
+                        <MenuItem Header="Hello" />
+                    </ContextMenu>
+                </Border.ContextMenu>
                 <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
                 <Border
                     Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
@@ -236,6 +242,20 @@
                                Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}" />
                 </Border>
             </Border>
+
+            <!--0-->
+            <Border Background="Transparent"
+                    Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter Reverse=True}}">
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{Binding WorkspaceNode.Index}" />
+                        <MenuItem Header="Hello" />
+                    </ContextMenu>
+                </Border.ContextMenu>
+
+            </Border>
+
+
         </Grid>
     </Grid>
 </UserControl>
