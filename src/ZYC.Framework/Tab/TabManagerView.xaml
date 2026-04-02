@@ -225,7 +225,7 @@
             </TabControl>
             <!--//TODO-zyc Hide or Show Navigation Bar-->
             <Border >
-                <Border.ContextMenu>
+                <!--<Border.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="{Binding WorkspaceNode.Index}" IsEnabled="False" />
                         <MenuItem Header="Hide Navigation Bar"
@@ -235,13 +235,13 @@
                                   Command="{markupEx:LifetimeScopeResolve localCommands:ShowNavigationBarCommand}"
                                   CommandParameter="{Binding WorkspaceNode}" />
                     </ContextMenu>
-                </Border.ContextMenu>
+                </Border.ContextMenu>-->
                 <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
                 <Border
                     Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
                     Background="Transparent"
                     MouseDown="OnWorkspaceNodeIndexMouseDown">
-                    <!--Hides when index is 0-->
+                    <!--!WARNING Hides when index is 0-->
                     <TextBlock Text="{Binding WorkspaceNode.Index}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
