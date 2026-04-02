@@ -7,36 +7,38 @@ using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Core.Commands;
 using ZYC.Framework.Modules.FileExplorer.Abstractions;
 
-namespace ZYC.Framework.Modules.Log.Commands;
+namespace ZYC.Framework.Modules.NuGet.Commands;
 
 [RegisterSingleInstance]
-internal class OpenLogFolderCommand : CommandBase
+internal class OpenNuGetCacheFolderCommand : CommandBase
 {
-    public OpenLogFolderCommand(
+    public OpenNuGetCacheFolderCommand(
+        FileExplorerConfig fileExplorerConfig,
         IToastManager toastManager,
         IAppContext appContext,
         ITabManager tabManager,
-        FileExplorerConfig fileExplorerConfig,
-        ILogger<OpenLogFolderCommand> logger)
+        ILogger<OpenNuGetCacheFolderCommand> logger)
     {
+        FileExplorerConfig = fileExplorerConfig;
         ToastManager = toastManager;
         AppContext = appContext;
         TabManager = tabManager;
-        FileExplorerConfig = fileExplorerConfig;
         Logger = logger;
     }
 
+    private FileExplorerConfig FileExplorerConfig { get; }
+
     private IToastManager ToastManager { get; }
+
     private IAppContext AppContext { get; }
 
     private ITabManager TabManager { get; }
 
-    private FileExplorerConfig FileExplorerConfig { get; }
-    private ILogger<OpenLogFolderCommand> Logger { get; }
+    private ILogger<OpenNuGetCacheFolderCommand> Logger { get; }
 
     protected override void InternalExecute(object? parameter)
     {
-        var path = AppContext.GetLogsDirectory();
+        var path = $"C:/Users/{Environment.UserName}/.nuget/packages";
 
         try
         {

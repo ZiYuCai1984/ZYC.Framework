@@ -15,6 +15,7 @@ internal class WindowTitleManager : IWindowTitleManager
         RegisterItem<RestartTitleItem>();
         RegisterItem<OpenAppFolderInExplorerTitleItem>();
         RegisterItem<AttachDebuggerTitleItem>();
+        RegisterItem<GitHubTitleItem>();
         RegisterItem<SetTopmostTitleItem>();
         RegisterItem<MinimizeTitleItem>();
         RegisterItem<FullScreenTitleItem>();

@@ -14,6 +14,7 @@
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              xmlns:tab="clr-namespace:ZYC.Framework.Tab"
              xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
+             xmlns:localCommands="clr-namespace:ZYC.Framework.Commands"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Root"
@@ -24,7 +25,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid
+            Visibility="{Binding WorkspaceNode.IsNavigationBarVisible,Converter={converters:BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
@@ -221,12 +223,17 @@
                     </Style>
                 </TabControl.ItemContainerStyle>
             </TabControl>
-
-            <Border Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}">
+            <!--//TODO-zyc Hide or Show Navigation Bar-->
+            <Border >
                 <Border.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{Binding WorkspaceNode.Index}" />
-                        <MenuItem Header="Hello" />
+                        <MenuItem Header="{Binding WorkspaceNode.Index}" IsEnabled="False" />
+                        <MenuItem Header="Hide Navigation Bar"
+                                  Command="{markupEx:LifetimeScopeResolve localCommands:HideNavigationBarCommand}"
+                                  CommandParameter="{Binding WorkspaceNode}" />
+                        <MenuItem Header="Show Navigation Bar"
+                                  Command="{markupEx:LifetimeScopeResolve localCommands:ShowNavigationBarCommand}"
+                                  CommandParameter="{Binding WorkspaceNode}" />
                     </ContextMenu>
                 </Border.ContextMenu>
                 <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
@@ -234,27 +241,15 @@
                     Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
                     Background="Transparent"
                     MouseDown="OnWorkspaceNodeIndexMouseDown">
+                    <!--Hides when index is 0-->
                     <TextBlock Text="{Binding WorkspaceNode.Index}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="108"
                                Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=0.5,FalseValue=0.2}}"
-                               Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}" />
+                               Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}" />
                 </Border>
             </Border>
-
-            <!--0-->
-            <Border Background="Transparent"
-                    Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter Reverse=True}}">
-                <Border.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="{Binding WorkspaceNode.Index}" />
-                        <MenuItem Header="Hello" />
-                    </ContextMenu>
-                </Border.ContextMenu>
-
-            </Border>
-
 
         </Grid>
     </Grid>

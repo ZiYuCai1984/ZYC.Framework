@@ -1,4 +1,5 @@
-﻿using ZYC.Framework.Abstractions.State;
+﻿using PropertyChanged;
+using ZYC.Framework.Abstractions.State;
 
 namespace ZYC.Framework.Abstractions.Workspace;
 
@@ -6,6 +7,7 @@ namespace ZYC.Framework.Abstractions.Workspace;
 ///     Represents a node within a hierarchical workspace layout tree.
 ///     Can be either a parent node (defining a split) or a leaf node (containing navigation state).
 /// </summary>
+[AddINotifyPropertyChangedInterface]
 public class WorkspaceNode
 {
     /// <summary>
@@ -47,6 +49,8 @@ public class WorkspaceNode
     ///     The display or logical order index of the node within its parent context.
     /// </summary>
     public int Index { get; set; }
+
+    public bool IsNavigationBarVisible { get; set; } = true;
 }
 
 /// <summary>
