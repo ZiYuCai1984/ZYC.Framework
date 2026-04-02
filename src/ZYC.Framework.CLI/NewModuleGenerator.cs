@@ -10,6 +10,8 @@ public sealed class NewModuleGenerationOptions
 
     public string? SourceRoot { get; init; }
 
+    public string? SlnxPath { get; init; }
+
     public bool Overwrite { get; init; }
 }
 
@@ -19,14 +21,15 @@ public sealed class NewModuleGenerationResult
 
     public required string SourceRoot { get; init; }
 
+    public string? SlnxPath { get; init; }
+
     public required IReadOnlyList<string> GeneratedFiles { get; init; }
 }
 
 public static class NewModuleGenerator
 {
-    private static readonly UTF8Encoding Utf8BomEncoding = new(true);
-
     public const string TemplateName = "Chronosynchronicity";
+    private static readonly UTF8Encoding Utf8BomEncoding = new(true);
 
     public static NewModuleGenerationResult Generate(NewModuleGenerationOptions options)
     {
@@ -34,8 +37,9 @@ public static class NewModuleGenerator
 
         var target = NormalizeTarget(options.Target);
         var sourceRoot = ResolveSourceRoot(options.SourceRoot);
-        var templateRoot = ResolveTemplateRoot(sourceRoot);
+        var templateRoot = ResolveTemplateRoot();
         var shortName = GetShortName(target);
+        var slnxPath = ResolveSlnxPath(sourceRoot, options.SlnxPath);
 
         EnsureTargetDoesNotExist(sourceRoot, target, options.Overwrite);
 
@@ -44,12 +48,16 @@ public static class NewModuleGenerator
             .Select(file => GenerateFile(templateRoot, sourceRoot, file, target, shortName, options.Overwrite))
             .ToList();
 
-        UpdateSlnx(sourceRoot, target);
+        if (!string.IsNullOrWhiteSpace(slnxPath))
+        {
+            UpdateSlnx(sourceRoot, target, slnxPath);
+        }
 
         return new NewModuleGenerationResult
         {
             Target = target,
             SourceRoot = sourceRoot,
+            SlnxPath = slnxPath,
             GeneratedFiles = generatedFiles
         };
     }
@@ -85,63 +93,39 @@ public static class NewModuleGenerator
 
     private static string ResolveSourceRoot(string? sourceRoot)
     {
-        if (!string.IsNullOrWhiteSpace(sourceRoot))
+        if (string.IsNullOrWhiteSpace(sourceRoot))
         {
-            return NormalizeSourceRoot(sourceRoot);
+            throw new ArgumentException("Source root is required. Pass --src-root <SourceRoot>.",
+                nameof(sourceRoot));
         }
 
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        for (var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-             directory != null;
-             directory = directory.Parent)
-        {
-            foreach (var candidate in EnumerateSourceRootCandidates(directory.FullName))
-            {
-                if (seen.Add(candidate) && IsSourceRoot(candidate))
-                {
-                    return candidate;
-                }
-            }
-        }
-
-        throw new InvalidOperationException(
-            "Cannot resolve the source root automatically. Pass --src-root with the repository root or src folder.");
+        return Path.GetFullPath(sourceRoot);
     }
 
-    private static string NormalizeSourceRoot(string sourceRoot)
+    private static string ResolveTemplateRoot()
     {
-        foreach (var candidate in EnumerateSourceRootCandidates(Path.GetFullPath(sourceRoot)))
-        {
-            if (IsSourceRoot(candidate))
-            {
-                return candidate;
-            }
-        }
-
-        throw new DirectoryNotFoundException(
-            $"Cannot find 'ZYC.Framework.CLI\\Template' under '{sourceRoot}'. Pass the repository root or src folder.");
-    }
-
-    private static IEnumerable<string> EnumerateSourceRootCandidates(string path)
-    {
-        yield return path;
-        yield return Path.Combine(path, "src");
-    }
-
-    private static bool IsSourceRoot(string path)
-    {
-        return Directory.Exists(Path.Combine(path, "ZYC.Framework.CLI", "Template"));
-    }
-
-    private static string ResolveTemplateRoot(string sourceRoot)
-    {
-        var templateRoot = Path.Combine(sourceRoot, "ZYC.Framework.CLI", "Template");
+        var templateRoot = Path.Combine(AppContext.BaseDirectory, "Template");
         if (!Directory.Exists(templateRoot))
         {
             throw new DirectoryNotFoundException($"Template root not found: '{templateRoot}'.");
         }
 
         return templateRoot;
+    }
+
+    private static string? ResolveSlnxPath(string sourceRoot, string? slnxPath)
+    {
+        if (string.IsNullOrWhiteSpace(slnxPath))
+        {
+            return null;
+        }
+
+        if (Path.IsPathRooted(slnxPath))
+        {
+            return Path.GetFullPath(slnxPath);
+        }
+
+        return Path.GetFullPath(Path.Combine(sourceRoot, slnxPath));
     }
 
     private static string GetShortName(string target)
@@ -213,7 +197,8 @@ public static class NewModuleGenerator
             StringComparison.Ordinal);
 
         result = result.Replace(TemplateName, shortName, StringComparison.Ordinal);
-        result = result.Replace(TemplateName.ToLowerInvariant(), shortName.ToLowerInvariant(), StringComparison.Ordinal);
+        result = result.Replace(TemplateName.ToLowerInvariant(), shortName.ToLowerInvariant(),
+            StringComparison.Ordinal);
         return result;
     }
 
@@ -240,11 +225,8 @@ public static class NewModuleGenerator
         return content;
     }
 
-    private static void UpdateSlnx(string sourceRoot, string target)
+    private static void UpdateSlnx(string sourceRoot, string target, string slnxPath)
     {
-        var slnxPath = Directory.GetFiles(sourceRoot, "*.slnx", SearchOption.TopDirectoryOnly).FirstOrDefault()
-                       ?? Path.Combine(sourceRoot, "ZYC.Framework.slnx");
-
         var projects = new[]
         {
             Path.Combine($"ZYC.Framework.Modules.{target}", $"ZYC.Framework.Modules.{target}.csproj"),
@@ -263,10 +245,15 @@ public static class NewModuleGenerator
             return;
         }
 
-        var templateRoot = Path.Combine("ZYC.Framework.CLI", "Template");
+        var solutionDirectory = Path.GetDirectoryName(slnxPath)
+                                ?? throw new InvalidOperationException(
+                                    $"Cannot resolve solution directory: '{slnxPath}'.");
+        Directory.CreateDirectory(solutionDirectory);
+
+        var templateRoot = Path.Combine(sourceRoot, "ZYC.Framework.CLI", "Template");
         var csprojs = Directory.GetFiles(sourceRoot, "*.csproj", SearchOption.AllDirectories)
             .Where(p => !p.Contains(templateRoot, StringComparison.OrdinalIgnoreCase))
-            .Select(p => ToSolutionRelativePath(sourceRoot, p))
+            .Select(p => ToSolutionRelativePath(slnxPath, p))
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
@@ -310,13 +297,14 @@ public static class NewModuleGenerator
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var modulesFolder = root.Elements("Folder")
-            .FirstOrDefault(e => string.Equals((string?)e.Attribute("Name"), "/Modules/", StringComparison.Ordinal))
-            ?? CreateFolder(root, "/Modules/");
+                                .FirstOrDefault(e => string.Equals((string?)e.Attribute("Name"), "/Modules/",
+                                    StringComparison.Ordinal))
+                            ?? CreateFolder(root, "/Modules/");
 
         foreach (var project in newProjects)
         {
             var fullPath = Path.Combine(sourceRoot, project);
-            var relativePath = ToSolutionRelativePath(sourceRoot, fullPath);
+            var relativePath = ToSolutionRelativePath(slnxPath, fullPath);
             if (!existing.Contains(relativePath))
             {
                 modulesFolder.Add(new XElement("Project", new XAttribute("Path", relativePath)));
@@ -327,9 +315,12 @@ public static class NewModuleGenerator
         doc.Save(slnxPath);
     }
 
-    private static string ToSolutionRelativePath(string sourceRoot, string filePath)
+    private static string ToSolutionRelativePath(string slnxPath, string filePath)
     {
-        return Path.GetRelativePath(sourceRoot, filePath).Replace('\\', '/');
+        var solutionDirectory = Path.GetDirectoryName(slnxPath)
+                                ?? throw new InvalidOperationException(
+                                    $"Cannot resolve solution directory: '{slnxPath}'.");
+        return Path.GetRelativePath(solutionDirectory, filePath).Replace('\\', '/');
     }
 
     private static XElement CreateFolder(XElement root, string name)
@@ -339,4 +330,3 @@ public static class NewModuleGenerator
         return folder;
     }
 }
-

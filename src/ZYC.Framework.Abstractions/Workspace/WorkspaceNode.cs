@@ -50,6 +50,9 @@ public class WorkspaceNode
     /// </summary>
     public int Index { get; set; }
 
+    /// <summary>
+    ///     Indicates whether the navigation bar for this workspace node should be displayed.
+    /// </summary>
     public bool IsNavigationBarVisible { get; set; } = true;
 }
 

@@ -18,6 +18,10 @@ public static class NewModuleCommandRunner
 
             writeLine($"Created module '{result.Target}'.");
             writeLine($"Source root: {result.SourceRoot}");
+            if (!string.IsNullOrWhiteSpace(result.SlnxPath))
+            {
+                writeLine($"Updated slnx: {result.SlnxPath}");
+            }
 
             foreach (var file in result.GeneratedFiles)
             {

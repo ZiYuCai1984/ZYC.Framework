@@ -53,40 +53,6 @@ internal class Program
             module.RegisterCommandLineOption(container, optionRegister);
         }
 
-        //optionRegister.AddOption<bool>(_ =>
-        //    {
-        //        Task.Run(async () =>
-        //        {
-        //            var currentFolder = IOTools.GetExecutingFolder();
-        //            IOTools.SetCurrentDirectory(currentFolder);
-
-        //            var packageId = ProductInfo.PackageId;
-
-        //            var version = (await NuGetTools.GetNuGetVersionV3Async(packageId))!.ToString();
-        //            var package = new NuGetPackage
-        //            {
-        //                Name = packageId,
-        //                Version = version
-        //            };
-
-        //            var cachePath = "./packages";
-        //            await DotnetNuGetTools.DownloadNuGetPackagesAsync(package, cachePath);
-
-        //            Console.WriteLine("---------------------");
-
-        //            var sourceDir = Path.Combine(cachePath, packageId, version);
-        //            var currentDir = IOTools.GetExecutingFolder();
-
-        //            FileReplaceTools.SafeCopyWithDelayedReplace(sourceDir, currentDir);
-        //            Process.Start(new ProcessStartInfo
-        //            {
-        //                FileName = "apply_update.bat",
-        //                UseShellExecute = true
-        //            });
-
-        //            Environment.Exit(0);
-        //        }).Wait();
-        //    }, "--init", $"Download the latest full of {ProductInfo.ProductName}");
 
 
         optionRegister.AddOption<bool>(_ =>
@@ -125,8 +91,10 @@ internal class Program
 
         var targetArgument = new Argument<string?>("target", () => null, "Target module name.");
 
-        var sourceRootOption = new Option<string?>("--src-root", "Repository root or src directory.");
+        var sourceRootOption = new Option<string?>("--src-root", "Source root directory.");
         sourceRootOption.AddAlias("-s");
+
+        var slnxOption = new Option<string?>("--slnx", "Optional slnx path. Omit to skip updating any slnx.");
 
         var overwriteOption = new Option<bool>("--overwrite", "Overwrite existing files.");
         overwriteOption.AddAlias("-f");
@@ -134,6 +102,7 @@ internal class Program
         newModuleCommand.AddOption(targetOption);
         newModuleCommand.AddArgument(targetArgument);
         newModuleCommand.AddOption(sourceRootOption);
+        newModuleCommand.AddOption(slnxOption);
         newModuleCommand.AddOption(overwriteOption);
 
         newModuleCommand.SetHandler((InvocationContext context) =>
@@ -153,6 +122,7 @@ internal class Program
             var target = !string.IsNullOrWhiteSpace(targetFromOption)
                 ? targetFromOption
                 : targetFromArgument;
+            var sourceRoot = context.ParseResult.GetValueForOption(sourceRootOption);
 
             if (string.IsNullOrWhiteSpace(target))
             {
@@ -161,10 +131,18 @@ internal class Program
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(sourceRoot))
+            {
+                context.Console.Error.Write($"Source root is required. Pass --src-root <SourceRoot>.{Environment.NewLine}");
+                context.ExitCode = 1;
+                return;
+            }
+
             var options = new NewModuleGenerationOptions
             {
                 Target = target,
-                SourceRoot = context.ParseResult.GetValueForOption(sourceRootOption),
+                SourceRoot = sourceRoot,
+                SlnxPath = context.ParseResult.GetValueForOption(slnxOption),
                 Overwrite = context.ParseResult.GetValueForOption(overwriteOption)
             };
 

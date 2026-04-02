@@ -10,6 +10,8 @@ internal static class Program
         try
         {
             var cliProjectPath = ResolveCliProjectPath();
+            var sourceRoot = ResolveSourceRoot(cliProjectPath, args);
+            var slnxPath = ResolveDefaultSlnxPath(sourceRoot);
 
             var startInfo = new ProcessStartInfo("dotnet")
             {
@@ -21,6 +23,18 @@ internal static class Program
             startInfo.ArgumentList.Add(cliProjectPath);
             startInfo.ArgumentList.Add("--");
             startInfo.ArgumentList.Add("new-module");
+
+            if (!HasSourceRootArgument(args))
+            {
+                startInfo.ArgumentList.Add("--src-root");
+                startInfo.ArgumentList.Add(sourceRoot);
+            }
+
+            if (!HasSlnxArgument(args))
+            {
+                startInfo.ArgumentList.Add("--slnx");
+                startInfo.ArgumentList.Add(slnxPath);
+            }
 
             foreach (var argument in args)
             {
@@ -69,5 +83,79 @@ internal static class Program
     {
         yield return Path.Combine(path, "src", "ZYC.Framework.CLI", "ZYC.Framework.CLI.csproj");
         yield return Path.Combine(path, "ZYC.Framework.CLI", "ZYC.Framework.CLI.csproj");
+    }
+
+    private static string ResolveSourceRoot(string cliProjectPath, IReadOnlyList<string> args)
+    {
+        var sourceRootFromArguments = TryGetSourceRootArgument(args);
+        if (!string.IsNullOrWhiteSpace(sourceRootFromArguments))
+        {
+            return Path.GetFullPath(sourceRootFromArguments);
+        }
+
+        var projectDirectory = Path.GetDirectoryName(cliProjectPath)
+                               ?? throw new InvalidOperationException($"Cannot resolve CLI project directory: '{cliProjectPath}'.");
+        var sourceRoot = Directory.GetParent(projectDirectory)?.FullName;
+        if (string.IsNullOrWhiteSpace(sourceRoot))
+        {
+            throw new InvalidOperationException($"Cannot resolve source root from '{cliProjectPath}'.");
+        }
+
+        return sourceRoot;
+    }
+
+    private static bool HasSourceRootArgument(IEnumerable<string> args)
+    {
+        return args.Any(arg =>
+            string.Equals(arg, "--src-root", StringComparison.Ordinal)
+            || string.Equals(arg, "-s", StringComparison.Ordinal)
+            || arg.StartsWith("--src-root=", StringComparison.Ordinal)
+            || arg.StartsWith("-s=", StringComparison.Ordinal));
+    }
+
+    private static string? TryGetSourceRootArgument(IReadOnlyList<string> args)
+    {
+        for (var index = 0; index < args.Count; index++)
+        {
+            var argument = args[index];
+            if (string.Equals(argument, "--src-root", StringComparison.Ordinal)
+                || string.Equals(argument, "-s", StringComparison.Ordinal))
+            {
+                var valueIndex = index + 1;
+                if (valueIndex < args.Count)
+                {
+                    return args[valueIndex];
+                }
+
+                return null;
+            }
+
+            const string longPrefix = "--src-root=";
+            if (argument.StartsWith(longPrefix, StringComparison.Ordinal))
+            {
+                return argument[longPrefix.Length..];
+            }
+
+            const string shortPrefix = "-s=";
+            if (argument.StartsWith(shortPrefix, StringComparison.Ordinal))
+            {
+                return argument[shortPrefix.Length..];
+            }
+        }
+
+        return null;
+    }
+
+    private static string ResolveDefaultSlnxPath(string sourceRoot)
+    {
+        return Directory.GetFiles(sourceRoot, "*.slnx", SearchOption.TopDirectoryOnly).FirstOrDefault()
+               ?? Path.Combine(sourceRoot, "ZYC.Framework.slnx");
+    }
+
+    private static bool HasSlnxArgument(IEnumerable<string> args)
+    {
+        return args.Any(arg =>
+            string.Equals(arg, "--slnx", StringComparison.Ordinal)
+            || arg.StartsWith("--slnx=", StringComparison.Ordinal));
     }
 }
