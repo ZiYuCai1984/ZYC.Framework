@@ -5,13 +5,58 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="SplitterVisualStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Control.Border}" />
+            <Setter Property="Opacity" Value="0.35" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, ElementName=Splitter}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Validation4}" />
+                    <Setter Property="Opacity" Value="0.85" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsDragging, ElementName=Splitter}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Validation4}" />
+                    <Setter Property="Opacity" Value="1" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=IsSplitterLocked}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Validation3}" />
+                    <Setter Property="Opacity" Value="0.8" />
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=IsSplitterLocked}" Value="True" />
+                        <Condition Binding="{Binding IsMouseOver, ElementName=Splitter}" Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Validation2}" />
+                    <Setter Property="Opacity" Value="1" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid x:Name="Root">
         <ContentPresenter x:Name="LeftPresenter"
                           Content="{Binding LeftContent, RelativeSource={RelativeSource AncestorType=UserControl}}"
                           SnapsToDevicePixels="True" />
 
         <GridSplitter x:Name="Splitter"
-                      ShowsPreview="False" />
+                      Background="Transparent"
+                      ContextMenuService.IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=IsSplitterLockContextMenuEnabled}"
+                      Tag="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      ShowsPreview="False">
+            <GridSplitter.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Lock Splitter Drag"
+                              IsCheckable="True"
+                              IsChecked="{Binding PlacementTarget.Tag.IsSplitterLocked, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </ContextMenu>
+            </GridSplitter.ContextMenu>
+        </GridSplitter>
+
+        <Border x:Name="SplitterVisual"
+                IsHitTestVisible="False"
+                CornerRadius="1"
+                Style="{StaticResource SplitterVisualStyle}"
+                SnapsToDevicePixels="True" />
 
         <ContentPresenter x:Name="RightPresenter"
                           Content="{Binding RightContent, RelativeSource={RelativeSource AncestorType=UserControl}}"

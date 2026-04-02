@@ -149,6 +149,7 @@ internal sealed partial class WorkspaceView : INotifyPropertyChanged
         };
 
         split.SetBinding(SplitView.RatioProperty, nameof(WorkspaceNode.Ratio));
+        split.SetBinding(SplitView.IsSplitterLockedProperty, nameof(WorkspaceNode.IsSplitterLocked));
 
 
         split.RightContent = ResolveChildNode(Node.Right!);
@@ -171,6 +172,7 @@ internal sealed partial class WorkspaceView : INotifyPropertyChanged
         if (Node.Left == null)
         {
             Node.IsHorizontal = isHorizontal;
+            Node.IsSplitterLocked = false;
 
             Node.Left = CreateWorkspace();
             Node.Right = CreateWorkspace();
@@ -202,6 +204,7 @@ internal sealed partial class WorkspaceView : INotifyPropertyChanged
 
         ParentWorkspaceView.Node.Left = null;
         ParentWorkspaceView.Node.Right = null;
+        ParentWorkspaceView.Node.IsSplitterLocked = false;
 
         await ParentWorkspaceView.RenderNodeAsync();
     }
@@ -283,6 +286,7 @@ internal sealed partial class WorkspaceView : INotifyPropertyChanged
         workspaceNode.Right = null;
         workspaceNode.Ratio = 0.5;
         workspaceNode.IsHorizontal = true;
+        workspaceNode.IsSplitterLocked = false;
         workspaceNode.NavigationState = new NavigationState();
         workspaceNode.Id = Guid.NewGuid();
     }

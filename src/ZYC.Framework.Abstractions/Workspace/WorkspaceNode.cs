@@ -40,6 +40,12 @@ public class WorkspaceNode
     public bool IsHorizontal { get; set; } = true;
 
     /// <summary>
+    ///     Indicates whether drag-resizing is disabled for this split node.
+    ///     When true, the splitter remains visible but cannot be dragged.
+    /// </summary>
+    public bool IsSplitterLocked { get; set; }
+
+    /// <summary>
     ///     Holds the UI or navigation data associated with this node.
     ///     Usually relevant when the node is a leaf (no children).
     /// </summary>
