@@ -10,11 +10,13 @@
                     ],
                     "exclude": [
                         "**/bin/**",
+                        "**/obj/**",
                         "**/_bin/**",
                         "**/_bin_build/**",
-                        "**/obj/**",
+                        "**/_bin_dotnettool/**",
                         "**/_obj/**",
-                        "**/ZYC.Framework.Build.*/**"
+                        "**/ZYC.Framework.Build.*/**",
+                        "**/ZYC.Framework.CLI/Template/**"
                     ]
                 }
             ],
