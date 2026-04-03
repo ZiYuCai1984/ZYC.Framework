@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Text.Json;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions;
@@ -70,7 +71,16 @@ internal class Program
         var repository = GetGitHubRepository();
         IOTools.SetCurrentDirectory(BuildEnvironment.RootFolder);
 
-        await EnsureGitHubReleaseExistsAsync(repository, releaseTag);
+        var releaseNotesFilePath = WriteReleaseNotesFile();
+
+        try
+        {
+            await EnsureGitHubReleaseExistsAsync(repository, releaseTag, releaseNotesFilePath);
+        }
+        finally
+        {
+            IOTools.DeleteFileIfExists(releaseNotesFilePath);
+        }
 
         var uploadCommand =
             $"gh release upload \"{releaseTag}\" \"{setupFilePath}\" --repo \"{repository}\" --clobber";
@@ -97,12 +107,25 @@ internal class Program
             "Release tag is required. Provide the workflow_dispatch tag input or run from a release/tag context.");
     }
 
-    private static async Task EnsureGitHubReleaseExistsAsync(string repository, string releaseTag)
+    private static async Task EnsureGitHubReleaseExistsAsync(
+        string repository,
+        string releaseTag,
+        string releaseNotesFilePath)
     {
         var viewCommand = $"gh release view \"{releaseTag}\" --repo \"{repository}\"";
         var viewResult = await CommandTools.ExecuteCommandAsync(viewCommand);
         if (viewResult == 0)
         {
+            var editCommand =
+                $"gh release edit \"{releaseTag}\" --repo \"{repository}\" --title \"{releaseTag}\" --notes-file \"{releaseNotesFilePath}\"";
+
+            var editResult = await CommandTools.ExecuteCommandAsync(editCommand);
+            if (editResult != 0)
+            {
+                throw new InvalidOperationException(
+                    $"GitHub release '{releaseTag}' exists, but updating release notes failed.");
+            }
+
             return;
         }
 
@@ -112,7 +135,7 @@ internal class Program
             : $" --target \"{target}\"";
 
         var createCommand =
-            $"gh release create \"{releaseTag}\" --repo \"{repository}\" --title \"{releaseTag}\" --notes \"Automated setup release for {ProductInfo.Version}.\"{targetArgument}";
+            $"gh release create \"{releaseTag}\" --repo \"{repository}\" --title \"{releaseTag}\" --notes-file \"{releaseNotesFilePath}\"{targetArgument}";
 
         var createResult = await CommandTools.ExecuteCommandAsync(createCommand);
         if (createResult != 0)
@@ -224,6 +247,16 @@ internal class Program
         }
 
         return $"{segments[0]}/{segments[1]}";
+    }
+
+    private static string WriteReleaseNotesFile()
+    {
+        var releaseNotesFilePath = Path.Combine(
+            Path.GetTempPath(),
+            $"ZYC.Framework.ReleaseNotes.{Guid.NewGuid():N}.md");
+
+        File.WriteAllText(releaseNotesFilePath, PatchNoteTools.GetPatchNote(), new UTF8Encoding(false));
+        return releaseNotesFilePath;
     }
 #endif
 }

@@ -15,6 +15,7 @@
              xmlns:tab="clr-namespace:ZYC.Framework.Tab"
              xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
              xmlns:localCommands="clr-namespace:ZYC.Framework.Commands"
+             xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Root"
@@ -223,19 +224,27 @@
                     </Style>
                 </TabControl.ItemContainerStyle>
             </TabControl>
-            <!--//TODO-zyc Hide or Show Navigation Bar-->
-            <Border >
-                <!--<Border.ContextMenu>
+
+            <Border>
+                <Border.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="{Binding WorkspaceNode.Index}" IsEnabled="False" />
-                        <MenuItem Header="Hide Navigation Bar"
+                        <MenuItem Command="{markupEx:LifetimeScopeResolve commands:NeverExecutableCommand}">
+                            <MenuItem.Header>
+                                <TextBlock>
+                                    <Run Text="{localizations:L Current Workspace}" />
+                                    <Run Text=" " />
+                                    <Run Text="{Binding WorkspaceNode.Index,Mode=OneWay}" />
+                                </TextBlock>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Header="{localizations:L Hide Navigation Bar}"
                                   Command="{markupEx:LifetimeScopeResolve localCommands:HideNavigationBarCommand}"
                                   CommandParameter="{Binding WorkspaceNode}" />
-                        <MenuItem Header="Show Navigation Bar"
+                        <MenuItem Header="{localizations:L Show Navigation Bar}"
                                   Command="{markupEx:LifetimeScopeResolve localCommands:ShowNavigationBarCommand}"
                                   CommandParameter="{Binding WorkspaceNode}" />
                     </ContextMenu>
-                </Border.ContextMenu>-->
+                </Border.ContextMenu>
                 <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
                 <Border
                     Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
