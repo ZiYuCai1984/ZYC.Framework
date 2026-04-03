@@ -1,0 +1,64 @@
+﻿using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
+using System.Runtime.CompilerServices;
+using Autofac;
+using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions.Config;
+using ZYC.Framework.Abstractions.MainMenu;
+using ZYC.Framework.Core;
+using ZYC.Framework.Core.Menu;
+
+namespace ZYC.Framework.MainMenu.BuildIn;
+
+[RegisterSingleInstance]
+internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, INotifyPropertyChanged
+{
+    private ApplyCustomLayoutMainMenuItem[] _subItems = [];
+
+    public ApplyCustomLayoutMainMenuItemsProvider(
+        ILifetimeScope lifetimeScope,
+        CustomWorkspaceLayoutConfig customWorkspaceLayoutConfig) : base(lifetimeScope)
+    {
+        CustomWorkspaceLayoutConfig = customWorkspaceLayoutConfig;
+
+        Info = new MenuItemInfo
+        {
+            Title = "Apply Layout"
+        };
+
+        customWorkspaceLayoutConfig.ObserveProperty(nameof(CustomWorkspaceLayoutConfig.Layout))
+            .Subscribe(_ => RefreshSubItems())
+            .DisposeWith(CompositeDisposable);
+    }
+
+    public override ApplyCustomLayoutMainMenuItem[] SubItems => _subItems;
+
+    private CustomWorkspaceLayoutConfig CustomWorkspaceLayoutConfig { get; }
+
+    private CompositeDisposable CompositeDisposable { get; } = new();
+
+    public override MenuItemInfo Info { get; }
+
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void RefreshSubItems()
+    {
+        var layouts = CustomWorkspaceLayoutConfig.Layout.ToArray();
+
+        _subItems = layouts
+            .Select(layout =>
+                LifetimeScope.Resolve<ApplyCustomLayoutMainMenuItem>(
+                    new TypedParameter(typeof(CustomWorkspaceLayout),
+                        layout)))
+            .ToArray();
+
+        OnPropertyChanged(nameof(SubItems));
+    }
+}
