@@ -94,4 +94,10 @@ public interface IParallelWorkspaceManager
     ///     Asynchronously merges all existing workspace nodes into a single primary workspace.
     /// </summary>
     Task MergeAllAsync();
+
+    /// <summary>
+    ///     Asynchronously applies the specified workspace layout tree to the current workspace surface.
+    /// </summary>
+    /// <param name="workspaceLayout">The workspace layout tree to apply.</param>
+    Task ApplyLayoutAsync(WorkspaceNode workspaceLayout);
 }

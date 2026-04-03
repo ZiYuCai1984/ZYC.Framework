@@ -13,11 +13,11 @@ using ZYC.Framework.Core.Menu;
 namespace ZYC.Framework.MainMenu.BuildIn;
 
 [RegisterSingleInstance]
-internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, INotifyPropertyChanged
+internal class RemoveCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, INotifyPropertyChanged
 {
-    private ApplyCustomLayoutMainMenuItem[] _subItems = [];
+    private RemoveCustomLayoutMainMenuItem[] _subItems = [];
 
-    public ApplyCustomLayoutMainMenuItemsProvider(
+    public RemoveCustomLayoutMainMenuItemsProvider(
         ILifetimeScope lifetimeScope,
         CustomWorkspaceLayoutConfig customWorkspaceLayoutConfig) : base(lifetimeScope)
     {
@@ -25,7 +25,7 @@ internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, I
 
         Info = new MenuItemInfo
         {
-            Title = "Apply Layout"
+            Title = "Remove Layout"
         };
 
         RefreshSubItems();
@@ -35,14 +35,13 @@ internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, I
             .DisposeWith(CompositeDisposable);
     }
 
-    public override ApplyCustomLayoutMainMenuItem[] SubItems => _subItems;
+    public override RemoveCustomLayoutMainMenuItem[] SubItems => _subItems;
 
     private CustomWorkspaceLayoutConfig CustomWorkspaceLayoutConfig { get; }
 
     private CompositeDisposable CompositeDisposable { get; } = new();
 
     public override MenuItemInfo Info { get; }
-
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -57,9 +56,8 @@ internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, I
 
         _subItems = layouts
             .Select(layout =>
-                LifetimeScope.Resolve<ApplyCustomLayoutMainMenuItem>(
-                    new TypedParameter(typeof(CustomWorkspaceLayout),
-                        layout)))
+                LifetimeScope.Resolve<RemoveCustomLayoutMainMenuItem>(
+                    new TypedParameter(typeof(CustomWorkspaceLayout), layout)))
             .ToArray();
 
         OnPropertyChanged(nameof(SubItems));

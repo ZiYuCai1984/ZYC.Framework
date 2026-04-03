@@ -186,6 +186,13 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
         }
     }
 
+    public async Task ApplyLayoutAsync(WorkspaceNode workspaceLayout)
+    {
+        await MergeAllAsync();
+        await BuildLayoutAsync(RootWorkspaceNodeState, workspaceLayout);
+        ApplyNodeSettings(RootWorkspaceNodeState, workspaceLayout);
+    }
+
     private async Task<object> CreateTabManagerViewAsync(WorkspaceView workspaceView)
     {
         await Task.CompletedTask;
@@ -317,6 +324,43 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
     public async Task MergeAsync(WorkspaceNode workspaceNode)
     {
         await WorkspaceViewDictionary[workspaceNode.Id].MergeAsync();
+    }
+
+    private async Task BuildLayoutAsync(WorkspaceNode target, WorkspaceNode source)
+    {
+        if (source.Left == null || source.Right == null)
+        {
+            return;
+        }
+
+        if (source.IsHorizontal)
+        {
+            await SplitHorizontalAsync(target);
+        }
+        else
+        {
+            await SplitVerticalAsync(target);
+        }
+
+        await BuildLayoutAsync(target.Left!, source.Left);
+        await BuildLayoutAsync(target.Right!, source.Right);
+    }
+
+    private static void ApplyNodeSettings(WorkspaceNode target, WorkspaceNode source)
+    {
+        target.Ratio = source.Ratio;
+        target.IsHorizontal = source.IsHorizontal;
+        target.IsSplitterLocked = source.IsSplitterLocked;
+        target.Index = source.Index;
+        target.IsNavigationBarVisible = source.IsNavigationBarVisible;
+
+        if (source.Left == null || source.Right == null)
+        {
+            return;
+        }
+
+        ApplyNodeSettings(target.Left!, source.Left);
+        ApplyNodeSettings(target.Right!, source.Right);
     }
 
     private void PublishWorkspaceFocusChangedEvent(Guid? id = null)

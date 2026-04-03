@@ -30,8 +30,8 @@ internal class Module : ModuleBase
             new MockTabItemInfo(typeof(TestTaskManagerView)));
         mockTabItemFactory.RegisterMockTabItem(
             new MockTabItemInfo(typeof(TestCLIView)));
-        mockTabItemFactory.RegisterMockTabItem(
-            new MockTabItemInfo(typeof(TestShaderView)));
+        //mockTabItemFactory.RegisterMockTabItem(
+        //    new MockTabItemInfo(typeof(TestShaderView)));
 
         if (lifetimeScope.TryResolve<ICommandlineResourcesProvider>(
                 out var commandlineResourcesProvider))

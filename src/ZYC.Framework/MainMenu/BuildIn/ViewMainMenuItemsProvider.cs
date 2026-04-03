@@ -13,6 +13,7 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
         ILifetimeScope lifetimeScope,
         ApplyCustomLayoutMainMenuItemsProvider applyCustomLayoutMainMenuItemsProvider,
         MatrixLayoutCommand matrixLayoutCommand,
+        RemoveCustomLayoutMainMenuItemsProvider removeCustomLayoutMainMenuItemsProvider,
         ResetLayoutCommand resetLayoutCommand,
         SaveCustomLayoutCommand saveCustomLayoutCommand,
         TopBottomLayoutCommand topBottomLayoutCommand,
@@ -37,10 +38,11 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
             "BorderInside", matrixLayoutCommand));
 
         RegisterSubItem(new MainMenuItem(
-            "Save Layout",
+            "Save To Custom Layout",
             null, saveCustomLayoutCommand));
 
         RegisterSubItem(applyCustomLayoutMainMenuItemsProvider);
+        RegisterSubItem(removeCustomLayoutMainMenuItemsProvider);
 
         RegisterSubItem(new MainMenuItem(
             "Reset Layout",
