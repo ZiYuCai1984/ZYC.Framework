@@ -15,6 +15,12 @@ public partial interface IAppContext
     string GetSettingsDirectory();
 
     /// <summary>
+    ///     Gets the logs directory.
+    /// </summary>
+    /// <returns></returns>
+    string GetLogsDirectory();
+
+    /// <summary>
     ///     Gets the app root directory.
     /// </summary>
     /// <returns>The settings directory path.</returns>

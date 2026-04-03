@@ -6,15 +6,15 @@ namespace ZYC.Framework.Abstractions.Workspace;
 ///     Represents a specific sub-item in the context menu used for moving workspace tabs.
 ///     It links a target <see cref="WorkspaceNode" /> with the command required to perform the move.
 /// </summary>
-public class MoveWorkSpaceTabItemHeaderContextMenuSubItem
+public class MoveWorkspaceTabItemHeaderContextMenuSubItem
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="MoveWorkSpaceTabItemHeaderContextMenuSubItem" /> class.
+    ///     Initializes a new instance of the <see cref="MoveWorkspaceTabItemHeaderContextMenuSubItem" /> class.
     /// </summary>
     /// <param name="workspace">The target workspace node associated with this menu item.</param>
     /// <param name="title">The display text for the menu item.</param>
     /// <param name="command">The execution logic for moving the tab to the specified workspace.</param>
-    public MoveWorkSpaceTabItemHeaderContextMenuSubItem(WorkspaceNode workspace, string title, ICommand command)
+    public MoveWorkspaceTabItemHeaderContextMenuSubItem(WorkspaceNode workspace, string title, ICommand command)
     {
         Workspace = workspace;
         Title = title;
@@ -46,7 +46,7 @@ public class MoveWorkSpaceTabItemHeaderContextMenuSubItem
     ///     Gets a collection of nested sub-items if this menu item acts as a category.
     ///     Defaults to an empty array.
     /// </summary>
-    public MoveWorkSpaceTabItemHeaderContextMenuSubItem[] SubItems => [];
+    public MoveWorkspaceTabItemHeaderContextMenuSubItem[] SubItems => [];
 
     /// <summary>
     ///     Gets the visual icon for the menu item. Can be overridden in derived classes.

@@ -16,14 +16,4 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
   
-  <ItemGroup>
-    <None Include="Template\ZYC.Framework.Modules.Chronosynchronicity.Abstractions\ZYC.Framework.Modules.Chronosynchronicity.Abstractions.csproj" />
-    <None Include="Template\ZYC.Framework.Modules.Chronosynchronicity\ZYC.Framework.Modules.Chronosynchronicity.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\ZYC.Framework.Build.Utilities\ZYC.Framework.Build.Utilities.csproj" />
-    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
-  </ItemGroup>
-
 </Project>

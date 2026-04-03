@@ -284,12 +284,6 @@ public class Program
 
     private static string GetPatchNote()
     {
-        var patchNote = File.ReadAllText(
-            BuildEnvironment.PatchNotePath);
-
-        patchNote = patchNote.Replace("$(Version)", ProductInfo.Version);
-        patchNote = patchNote.Replace("$(ReleaseDate)", DateTime.Now.ToString("yyyy-MM-dd"));
-
-        return patchNote;
+        return PatchNoteTools.GetPatchNote();
     }
 }

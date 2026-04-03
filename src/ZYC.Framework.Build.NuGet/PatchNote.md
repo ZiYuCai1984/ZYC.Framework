@@ -6,25 +6,27 @@
 
 ## 🆕 New Features
 
-* Added **Fluent theme** support for a more modern desktop appearance
-* Added support for **switching versions**
-* Added support for **window title item extension**
+* Added **custom workspace layout management** with save, apply, and remove actions
+* Added support for **locking split view** to keep workspace panes fixed during use
+* Added **WorkspaceContextMenuManager** to make workspace context menus easier to extend
+* Added **JSON editing** support for config properties in the Settings UI
+* Moved **new module generation** into the CLI for a more direct scaffolding workflow
 
 ---
 
 ## 🛠 Improvements
 
-* Refactored **HybridIcon** into partial classes for better maintainability
-* Refactored **NuGetManager** into partial classes for cleaner structure
-* Updated the **README** and **Quick Start** documentation
-* Added a **Features** section to the README for clearer project introduction
+* Added quick actions to open the **current folder**, **log folder**, and **NuGet cache folder**
+* Added commands to **show or hide the navigation bar**
+* Refactored the **EventAggregator** to improve event delivery and UI updates
+* Improved the Settings UI with **multiline JSON editing**, validation, and clearer error handling
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed an issue with an **incorrect product decompression path during update**
-* Included various **minor fixes and stability improvements**
+* Improved stability for **settings serialization** and structured JSON input handling
+* Included additional **workspace and layout interaction** fixes
 
 ---
 

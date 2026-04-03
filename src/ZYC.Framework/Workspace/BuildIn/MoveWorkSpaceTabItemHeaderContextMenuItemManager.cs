@@ -7,10 +7,10 @@ using ZYC.Framework.Core.Localizations;
 
 namespace ZYC.Framework.Workspace.BuildIn;
 
-[RegisterSingleInstanceAs(typeof(IMoveWorkSpaceTabItemHeaderContextMenuItemManager))]
-internal class MoveWorkSpaceTabItemHeaderContextMenuItemManager : IMoveWorkSpaceTabItemHeaderContextMenuItemManager
+[RegisterSingleInstanceAs(typeof(IMoveWorkspaceTabItemHeaderContextMenuItemManager))]
+internal class MoveWorkspaceTabItemHeaderContextMenuItemManager : IMoveWorkspaceTabItemHeaderContextMenuItemManager
 {
-    public MoveWorkSpaceTabItemHeaderContextMenuItemManager(
+    public MoveWorkspaceTabItemHeaderContextMenuItemManager(
         ITabManager tabManager,
         IParallelWorkspaceManager parallelWorkspaceManager)
     {
@@ -23,19 +23,19 @@ internal class MoveWorkSpaceTabItemHeaderContextMenuItemManager : IMoveWorkSpace
     private IParallelWorkspaceManager ParallelWorkspaceManager { get; }
 
 
-    public MoveWorkSpaceTabItemHeaderContextMenuSubItem[] GetSubItems(ITabItemInstance instance)
+    public MoveWorkspaceTabItemHeaderContextMenuSubItem[] GetSubItems(ITabItemInstance instance)
     {
         var currentWorkspace = TabManager.GetTabItemInstanceWorkspace(instance);
 
         var moveAvailableWorkspaces =
             ParallelWorkspaceManager.GetWorkspaceDictionary().Values.Where(t => t != currentWorkspace).ToArray();
 
-        var moveWorkSpaceTabItemHeaderContextMenuSubItems = new List<MoveWorkSpaceTabItemHeaderContextMenuSubItem>();
+        var moveWorkspaceTabItemHeaderContextMenuSubItems = new List<MoveWorkspaceTabItemHeaderContextMenuSubItem>();
 
         foreach (var toWorkspace in moveAvailableWorkspaces)
         {
             var title = $"{L.Translate("Workspace")} {toWorkspace.Index.ToString()}";
-            var item = new MoveWorkSpaceTabItemHeaderContextMenuSubItem(
+            var item = new MoveWorkspaceTabItemHeaderContextMenuSubItem(
                 toWorkspace,
                 title,
                 new ActionCommand(() =>
@@ -46,11 +46,11 @@ internal class MoveWorkSpaceTabItemHeaderContextMenuItemManager : IMoveWorkSpace
                         toWorkspace.Id);
                 }));
 
-            moveWorkSpaceTabItemHeaderContextMenuSubItems.Add(item);
+            moveWorkspaceTabItemHeaderContextMenuSubItems.Add(item);
         }
 
 
-        moveWorkSpaceTabItemHeaderContextMenuSubItems.Add(new MoveToNewWorkSpaceTabItemHeaderContextMenuSubItem(
+        moveWorkspaceTabItemHeaderContextMenuSubItems.Add(new MoveToNewWorkspaceTabItemHeaderContextMenuSubItem(
             L.Translate("New Horizontal"), new ActionCommand(
                 // ReSharper disable AsyncVoidLambda
                 async () =>
@@ -71,7 +71,7 @@ internal class MoveWorkSpaceTabItemHeaderContextMenuItemManager : IMoveWorkSpace
                         toWorkspace.Id);
                 })));
 
-        moveWorkSpaceTabItemHeaderContextMenuSubItems.Add(new MoveToNewWorkSpaceTabItemHeaderContextMenuSubItem(
+        moveWorkspaceTabItemHeaderContextMenuSubItems.Add(new MoveToNewWorkspaceTabItemHeaderContextMenuSubItem(
             L.Translate("New Vertical"), new ActionCommand(
                 // ReSharper disable AsyncVoidLambda
                 async () =>
@@ -92,6 +92,6 @@ internal class MoveWorkSpaceTabItemHeaderContextMenuItemManager : IMoveWorkSpace
                         toWorkspace.Id);
                 })));
 
-        return moveWorkSpaceTabItemHeaderContextMenuSubItems.ToArray();
+        return moveWorkspaceTabItemHeaderContextMenuSubItems.ToArray();
     }
 }

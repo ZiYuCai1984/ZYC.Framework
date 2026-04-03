@@ -100,7 +100,7 @@ Please refer to the detailed guide:
 👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
 
 
-👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.5/ZYC.Framework.Setup.1.2.5.exe)**
+👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.2.6/ZYC.Framework.Setup.1.2.6.exe)**
 
 ### Installation
 
@@ -108,7 +108,7 @@ Please refer to the detailed guide:
 Install the core package via NuGet:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.2.5
+dotnet add package ZYC.Framework.Alpha --version 1.2.6
 ```
 
 ---

@@ -11,8 +11,11 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
 {
     public ViewMainMenuItemsProvider(
         ILifetimeScope lifetimeScope,
+        ApplyCustomLayoutMainMenuItemsProvider applyCustomLayoutMainMenuItemsProvider,
         MatrixLayoutCommand matrixLayoutCommand,
+        RemoveCustomLayoutMainMenuItemsProvider removeCustomLayoutMainMenuItemsProvider,
         ResetLayoutCommand resetLayoutCommand,
+        SaveCustomLayoutCommand saveCustomLayoutCommand,
         TopBottomLayoutCommand topBottomLayoutCommand,
         LeftRightLayoutCommand leftRightLayoutCommand) : base(lifetimeScope)
     {
@@ -33,6 +36,14 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
         RegisterSubItem(new MainMenuItem(
             "Matrix Layout",
             "BorderInside", matrixLayoutCommand));
+
+        RegisterSubItem(new MainMenuItem(
+            "Save To Custom Layout",
+            null, saveCustomLayoutCommand));
+
+        RegisterSubItem(applyCustomLayoutMainMenuItemsProvider);
+        RegisterSubItem(removeCustomLayoutMainMenuItemsProvider);
+
         RegisterSubItem(new MainMenuItem(
             "Reset Layout",
             "BorderNoneVariant", resetLayoutCommand));

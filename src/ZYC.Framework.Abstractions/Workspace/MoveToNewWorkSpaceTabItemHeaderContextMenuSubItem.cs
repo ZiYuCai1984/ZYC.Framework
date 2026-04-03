@@ -7,14 +7,14 @@ namespace ZYC.Framework.Abstractions.Workspace;
 ///     Unlike its base class, this item does not target an existing node but rather triggers
 ///     the creation of a new one.
 /// </summary>
-public class MoveToNewWorkSpaceTabItemHeaderContextMenuSubItem : MoveWorkSpaceTabItemHeaderContextMenuSubItem
+public class MoveToNewWorkspaceTabItemHeaderContextMenuSubItem : MoveWorkspaceTabItemHeaderContextMenuSubItem
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="MoveToNewWorkSpaceTabItemHeaderContextMenuSubItem" /> class.
+    ///     Initializes a new instance of the <see cref="MoveToNewWorkspaceTabItemHeaderContextMenuSubItem" /> class.
     /// </summary>
     /// <param name="title">The display text for the menu item (e.g., "Move to New Vertical Split").</param>
     /// <param name="command">The command that handles the logic of creating a new workspace and moving the tab.</param>
-    public MoveToNewWorkSpaceTabItemHeaderContextMenuSubItem(string title, ICommand command)
+    public MoveToNewWorkspaceTabItemHeaderContextMenuSubItem(string title, ICommand command)
         : base(null!, title, command)
     {
         // Note: null! is passed as the WorkspaceNode because the target node 

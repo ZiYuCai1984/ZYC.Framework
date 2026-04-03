@@ -11,14 +11,23 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--!WARNING For debug-->
-    <!--<OutputPath>../_bin_dotnettool</OutputPath>-->
+    <OutputPath>../_bin_dotnettool</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="DotnetToolSettings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Template\**\*.cs" />
+    <Page Remove="Template\**\*.xaml" />
+    <None Remove="Template\**\*" />
+    <Content Include="Template\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

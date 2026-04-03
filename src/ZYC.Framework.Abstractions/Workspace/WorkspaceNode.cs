@@ -1,4 +1,5 @@
-﻿using ZYC.Framework.Abstractions.State;
+﻿using PropertyChanged;
+using ZYC.Framework.Abstractions.State;
 
 namespace ZYC.Framework.Abstractions.Workspace;
 
@@ -6,6 +7,7 @@ namespace ZYC.Framework.Abstractions.Workspace;
 ///     Represents a node within a hierarchical workspace layout tree.
 ///     Can be either a parent node (defining a split) or a leaf node (containing navigation state).
 /// </summary>
+[AddINotifyPropertyChangedInterface]
 public class WorkspaceNode
 {
     /// <summary>
@@ -38,6 +40,12 @@ public class WorkspaceNode
     public bool IsHorizontal { get; set; } = true;
 
     /// <summary>
+    ///     Indicates whether drag-resizing is disabled for this split node.
+    ///     When true, the splitter remains visible but cannot be dragged.
+    /// </summary>
+    public bool IsSplitterLocked { get; set; }
+
+    /// <summary>
     ///     Holds the UI or navigation data associated with this node.
     ///     Usually relevant when the node is a leaf (no children).
     /// </summary>
@@ -47,6 +55,11 @@ public class WorkspaceNode
     ///     The display or logical order index of the node within its parent context.
     /// </summary>
     public int Index { get; set; }
+
+    /// <summary>
+    ///     Indicates whether the navigation bar for this workspace node should be displayed.
+    /// </summary>
+    public bool IsNavigationBarVisible { get; set; } = true;
 }
 
 /// <summary>

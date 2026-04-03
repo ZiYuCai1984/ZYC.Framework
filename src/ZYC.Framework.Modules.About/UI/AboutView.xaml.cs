@@ -18,4 +18,7 @@ internal partial class AboutView
     }
 
     public IProduct CurrentProduct { get; }
+
+    public global::System.Collections.Generic.IReadOnlyDictionary<string, string> ProductProperties =>
+        ProductInfo.Properties;
 }

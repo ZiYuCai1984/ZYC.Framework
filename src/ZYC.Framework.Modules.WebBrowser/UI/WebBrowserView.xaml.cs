@@ -89,7 +89,6 @@ internal partial class WebBrowserView
             e.Handled = true;
             if (!WebBrowserUriPolicy.IsAllowed(new Uri(e.Uri)))
             {
-                //TODO-zyc To respond to drag and drop, the event needs to be forwarded to an external location.
                 return;
             }
 

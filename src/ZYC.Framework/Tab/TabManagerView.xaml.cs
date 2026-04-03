@@ -80,9 +80,9 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
     private Func<WorkspaceNode, Task> DisposeTabManagerViewAsyncFunc { get; }
 
-    public ILifetimeScope LifetimeScope { get; }
+    private ILifetimeScope LifetimeScope { get; }
 
-    public TabItemLockState TabItemLockState { get; }
+    private TabItemLockState TabItemLockState { get; }
 
     private NavigationState NavigationState { get; }
 

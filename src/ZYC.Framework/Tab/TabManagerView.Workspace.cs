@@ -9,6 +9,8 @@ internal partial class TabManagerView
 {
     private IParallelWorkspaceManager? _parallelWorkspaceManager;
 
+    private IWorkspaceContextMenuManager? _workspaceContextMenuManager;
+
     public bool IsFocusedWorkspace
     {
         get
@@ -23,6 +25,9 @@ internal partial class TabManagerView
 
     private IParallelWorkspaceManager ParallelWorkspaceManager =>
         _parallelWorkspaceManager ??= LifetimeScope.Resolve<IParallelWorkspaceManager>();
+
+    private IWorkspaceContextMenuManager WorkspaceContextMenuManager =>
+        _workspaceContextMenuManager ??= LifetimeScope.Resolve<IWorkspaceContextMenuManager>();
 
     private void OnWorkspaceFocusChangedEvent(WorkspaceFocusChangedEvent e)
     {

@@ -11,19 +11,19 @@ using ZYC.Framework.Abstractions.Workspace;
 namespace ZYC.Framework.Workspace.BuildIn;
 
 [RegisterAs(typeof(ITabItemHeaderContextMenuItemView))]
-internal partial class MoveWorkSpaceTabItemHeaderContextMenuItem : ITabItemHeaderContextMenuItemView,
+internal partial class MoveWorkspaceTabItemHeaderContextMenuItem : ITabItemHeaderContextMenuItemView,
     INotifyPropertyChanged
 {
-    public MoveWorkSpaceTabItemHeaderContextMenuItem(
+    public MoveWorkspaceTabItemHeaderContextMenuItem(
         IAppContext appContext,
         IParallelWorkspaceManager parallelWorkspaceManager,
-        IMoveWorkSpaceTabItemHeaderContextMenuItemManager moveWorkSpaceTabItemHeaderContextMenuItemManager)
+        IMoveWorkspaceTabItemHeaderContextMenuItemManager moveWorkspaceTabItemHeaderContextMenuItemManager)
     {
         DataContext = this;
 
         AppContext = appContext;
         ParallelWorkspaceManager = parallelWorkspaceManager;
-        MoveWorkSpaceTabItemHeaderContextMenuItemManager = moveWorkSpaceTabItemHeaderContextMenuItemManager;
+        MoveWorkspaceTabItemHeaderContextMenuItemManager = moveWorkspaceTabItemHeaderContextMenuItemManager;
     }
 
     private IAppContext AppContext { get; }
@@ -31,11 +31,11 @@ internal partial class MoveWorkSpaceTabItemHeaderContextMenuItem : ITabItemHeade
     private IParallelWorkspaceManager ParallelWorkspaceManager { get; }
 
 
-    private IMoveWorkSpaceTabItemHeaderContextMenuItemManager MoveWorkSpaceTabItemHeaderContextMenuItemManager { get; }
+    private IMoveWorkspaceTabItemHeaderContextMenuItemManager MoveWorkspaceTabItemHeaderContextMenuItemManager { get; }
 
     private bool FirstRendering { get; set; } = true;
 
-    public MoveWorkSpaceTabItemHeaderContextMenuSubItem[] SubItems { get; private set; } = [];
+    public MoveWorkspaceTabItemHeaderContextMenuSubItem[] SubItems { get; private set; } = [];
 
     private ITabItemInstance? TabItemInstance
     {
@@ -76,7 +76,7 @@ internal partial class MoveWorkSpaceTabItemHeaderContextMenuItem : ITabItemHeade
                 await Task.Delay(100);
             }
 
-            SubItems = MoveWorkSpaceTabItemHeaderContextMenuItemManager.GetSubItems(TabItemInstance);
+            SubItems = MoveWorkspaceTabItemHeaderContextMenuItemManager.GetSubItems(TabItemInstance);
             OnPropertyChanged(nameof(SubItems));
         });
     }
@@ -90,7 +90,7 @@ internal partial class MoveWorkSpaceTabItemHeaderContextMenuItem : ITabItemHeade
     {
         var menuItem = (MenuItem)sender;
 
-        var node = (MoveWorkSpaceTabItemHeaderContextMenuSubItem)menuItem.DataContext;
+        var node = (MoveWorkspaceTabItemHeaderContextMenuSubItem)menuItem.DataContext;
         ParallelWorkspaceManager.SetHighlight(node.Workspace, true);
     }
 
@@ -98,7 +98,7 @@ internal partial class MoveWorkSpaceTabItemHeaderContextMenuItem : ITabItemHeade
     {
         var menuItem = (MenuItem)sender;
 
-        var node = (MoveWorkSpaceTabItemHeaderContextMenuSubItem)menuItem.DataContext;
+        var node = (MoveWorkspaceTabItemHeaderContextMenuSubItem)menuItem.DataContext;
         ParallelWorkspaceManager.SetHighlight(node.Workspace, false);
     }
 }

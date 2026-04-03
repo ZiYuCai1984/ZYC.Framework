@@ -35,11 +35,10 @@ public class AspireConfig : IConfig
     /// </summary>
     public bool AutoStart { get; set; }
 
-    //!WARNING Dictionary not support now in UI !!
     /// <summary>
     ///     Gets or sets environment variables used when starting Aspire services.
     /// </summary>
-    [Hidden]
+    [JsonObject]
     public Dictionary<string, string> Environment { get; set; } = new()
     {
         ["DOTNET_DASHBOARD_OTLP_ENDPOINT_URL"] = "http://localhost:18886",

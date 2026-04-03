@@ -64,6 +64,23 @@
                        HorizontalAlignment="Right"
                        TextWrapping="Wrap" />
         </DockPanel>
+        <ItemsControl ItemsSource="{Binding ProductProperties}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="0 0 0 8">
+                        <TextBlock DockPanel.Dock="Left">
+                            <TextBlock.Inlines>
+                                <Run Text="{Binding Key,Mode=OneWay}" />
+                                <Run Text=" :" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                        <TextBlock Text="{Binding Value}"
+                                   HorizontalAlignment="Right"
+                                   TextWrapping="Wrap" />
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 
 </page:PageBase>
