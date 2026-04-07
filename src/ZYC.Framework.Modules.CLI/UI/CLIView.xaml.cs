@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Windows;
+using System.Windows.Input;
 using EasyWindowsTerminalControl;
 using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
@@ -13,7 +15,7 @@ internal partial class CLIView : IDisposable
 {
     public CLIView(
         CLIConfig cliConfig,
-        CLIUriOptions cliUriOptions, 
+        CLIUriOptions cliUriOptions,
         ILogger<CLIView> logger)
     {
         CLIConfig = cliConfig;
@@ -54,6 +56,9 @@ internal partial class CLIView : IDisposable
 
         IsDisposed = true;
 
+        PreviewKeyDown -= OnCLIViewPreviewKeyDown;
+        Loaded -= OnCLIViewOnLoaded;
+
         var conPTYTerm = ConPTYTerm;
         if (conPTYTerm != null)
         {
@@ -79,6 +84,8 @@ internal partial class CLIView : IDisposable
                     {
                         return;
                     }
+
+                    Keyboard.Focus(EasyTerminalControl);
 
 
                     if (!string.IsNullOrWhiteSpace(CLIUriOptions.TypeText))
@@ -118,5 +125,32 @@ internal partial class CLIView : IDisposable
         {
             //ignore
         }
+    }
+
+    private void OnCLIViewPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        var conPTYTerm = ConPTYTerm;
+        if (conPTYTerm == null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (e.Key == Key.Tab)
+            {
+                e.Handled = true;
+                conPTYTerm.WriteToTerm("\t");
+            }
+        }
+        catch (Exception exception)
+        {
+            Logger.Error(exception);
+        }
+    }
+
+    private void OnCLIViewOnLoaded(object sender, RoutedEventArgs e)
+    {
+        Keyboard.Focus(EasyTerminalControl);
     }
 }
