@@ -10,6 +10,9 @@
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MahApps.Metro" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Language.DefaultLanguageResourcesConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Autofac;
-using ZYC.CoreToolkit;
+﻿using Autofac;
 using ZYC.CoreToolkit.Common;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.CoreToolkit.Extensions.Settings;
@@ -13,21 +11,24 @@ using ZYC.Framework.Modules.Translator.Abstractions;
 
 namespace ZYC.Framework.Modules.Language;
 
-[RegisterSingleInstanceAs(typeof(ILanguageManager), typeof(ILocalizationer))]
-internal class LanguageManager : ILanguageManager, ILocalizationer
+[RegisterSingleInstanceAs(typeof(ILanguageManager), typeof(ILocalizationer), typeof(ILanguageResourcesManager))]
+internal partial class LanguageManager : ILanguageManager, ILocalizationer, ILanguageResourcesManager
 {
     public LanguageManager(
         IEventAggregator eventAggregator,
         IBannerManager bannerManager,
-        DefaultLanguageResourcesConfig defaultLanguageResourcesConfig,
+        OverrideDefaultLanguageResourcesConfig overrideDefaultLanguageResourcesConfig,
         ILifetimeScope lifetimeScope,
+        IAppContext appContext,
         LanguageConfig config)
     {
         EventAggregator = eventAggregator;
         BannerManager = bannerManager;
-        DefaultLanguageResourcesConfig = defaultLanguageResourcesConfig;
+        OverrideDefaultLanguageResourcesConfig = overrideDefaultLanguageResourcesConfig;
         LifetimeScope = lifetimeScope;
+        AppContext = appContext;
         Config = config;
+        DefaultLanguageResourcesConfig = ResolveDefaultLanguageResourcesConfig();
 
         if (LifetimeScope.TryResolve<ITranslator>(out var translator))
         {
@@ -44,11 +45,15 @@ internal class LanguageManager : ILanguageManager, ILocalizationer
 
     private DefaultLanguageResourcesConfig DefaultLanguageResourcesConfig { get; }
 
+    private OverrideDefaultLanguageResourcesConfig OverrideDefaultLanguageResourcesConfig { get; }
+
     private ILifetimeScope LifetimeScope { get; }
 
     private Dictionary<LanguageType, SnapshotDictionary<string, string>> LanguageResources { get; }
 
     private ITranslator? Translator { get; }
+
+    private IAppContext AppContext { get; }
 
     private LanguageConfig Config { get; }
 
@@ -71,37 +76,14 @@ internal class LanguageManager : ILanguageManager, ILocalizationer
         BannerManager.PromptRestart();
     }
 
-    public string Localization(string text)
-    {
-        var languageType = CurrentLanguage;
-
-
-        if (TryGetValueFromCache(languageType, text, out var r))
-        {
-            return r;
-        }
-
-        if (Translator == null)
-        {
-            return text;
-        }
-
-
-        var translatedResult = Translator.TranslateFromEnglish(text, languageType);
-        if (!string.IsNullOrWhiteSpace(translatedResult)
-            && translatedResult != text)
-        {
-            SaveTranslatedResult(languageType, text, translatedResult);
-        }
-
-        return translatedResult;
-    }
 
     public ILanguageResourcesConfig[] GetAllLanguageResources()
     {
         var languages = LifetimeScope.Resolve<ILanguageResourcesConfig[]>().ToList();
 
-        languages.Remove(DefaultLanguageResourcesConfig);
+        languages.RemoveAll(config => config is DefaultLanguageResourcesConfig);
+        languages.RemoveAll(config => config is OverrideDefaultLanguageResourcesConfig);
+        languages.Insert(0, OverrideDefaultLanguageResourcesConfig);
         languages.Insert(0, DefaultLanguageResourcesConfig);
 
         return languages.ToArray();
@@ -129,6 +111,16 @@ internal class LanguageManager : ILanguageManager, ILocalizationer
         }
 
         return translatedResult;
+    }
+
+    private DefaultLanguageResourcesConfig ResolveDefaultLanguageResourcesConfig()
+    {
+        var configs = LifetimeScope.Resolve<ILanguageResourcesConfig[]>();
+
+        // The built-in default file and the settings-folder config share the same concrete type.
+        // Direct injection can therefore point at the empty settings instance; prefer the populated default file.
+        return configs.OfType<DefaultLanguageResourcesConfig>()
+            .LastOrDefault(config => config.Resources.Count > 0) ?? new DefaultLanguageResourcesConfig();
     }
 
     private static Dictionary<LanguageType, SnapshotDictionary<string, string>> MergeLanguages(
@@ -166,7 +158,7 @@ internal class LanguageManager : ILanguageManager, ILocalizationer
         var cache = GetCurrentLangDictionary(languageType);
         cache.Add(ori, translatedResult);
 
-        var resources = DefaultLanguageResourcesConfig.Resources;
+        var resources = OverrideDefaultLanguageResourcesConfig.Resources;
         if (!resources.ContainsKey(languageType))
         {
             resources.Add(languageType, new Dictionary<string, string>());
@@ -175,11 +167,20 @@ internal class LanguageManager : ILanguageManager, ILocalizationer
 
         if (resources[languageType].TryAdd(ori, translatedResult))
         {
-            var currentProjectFolder = IOTools.GetCallerDirectoryPath();
-            Debug.Assert(IOTools.DirectoryExists(currentProjectFolder));
-
-            SettingsTools.SetToFolder(currentProjectFolder, DefaultLanguageResourcesConfig);
+            SaveLanguageResourcesConfig(OverrideDefaultLanguageResourcesConfig);
         }
+    }
+
+
+    private void SaveLanguageResourcesConfig(ILanguageResourcesConfig config)
+    {
+        if (config is DefaultLanguageResourcesConfig)
+        {
+            throw new InvalidOperationException(
+                $"{nameof(DefaultLanguageResourcesConfig)} is read-only. Use {nameof(OverrideDefaultLanguageResourcesConfig)} for changes.");
+        }
+
+        SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
     }
 
     private bool TryGetValueFromCache(LanguageType languageType, string text, out string result)

@@ -12,5 +12,21 @@ public static class LanguageModuleConstants
 
     public const string Title = "Language";
 
+    public const string Anchor = "Language";
+
     public static Uri Uri => UriTools.CreateAppUri(Host);
+
+    public static class LocalizationResources
+    {
+        // ReSharper disable MemberHidesStaticFromOuterClass
+        public const string Host = LanguageModuleConstants.Host;
+
+        public const string Path = "/resources";
+
+        public const string Icon = "TableEdit";
+
+        public const string Title = "Localization Resources";
+
+        public static Uri Uri => UriTools.CreateAppUri(Host, Path);
+    }
 }

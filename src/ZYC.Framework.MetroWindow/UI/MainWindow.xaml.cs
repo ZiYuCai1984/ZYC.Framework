@@ -41,14 +41,6 @@ internal partial class MainWindow
         LifetimeScope = lifetimeScope;
 
         SetMenuDropAlignmentRight();
-
-        appConfig.ObserveProperty(nameof(AppConfig.ShowInTaskbar))
-            .Throttle(TimeSpan.FromMilliseconds(200))
-            .ObserveOnUI()
-            .Subscribe(_ =>
-            {
-                SetShowInTaskbar(appConfig.ShowInTaskbar);
-            }).DisposeWith(CompositeDisposable);
     }
 
     private CompositeDisposable CompositeDisposable { get; } = new();
@@ -147,6 +139,14 @@ internal partial class MainWindow
 
         var appContext = LifetimeScope.Resolve<IAppContext>();
         appContext.Exiting += OnAppContextExiting;
+
+        AppConfig.ObserveProperty(nameof(AppConfig.ShowInTaskbar))
+            .Throttle(TimeSpan.FromMilliseconds(200))
+            .ObserveOnUI()
+            .Subscribe(_ =>
+            {
+                SetShowInTaskbar(AppConfig.ShowInTaskbar);
+            }).DisposeWith(CompositeDisposable);
     }
 
     public void SetMenuDropAlignmentRight()

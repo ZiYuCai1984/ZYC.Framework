@@ -6,27 +6,30 @@
 
 ## 🆕 New Features
 
-* Added **custom workspace layout management** with save, apply, and remove actions
-* Added support for **locking split view** to keep workspace panes fixed during use
-* Added **WorkspaceContextMenuManager** to make workspace context menus easier to extend
-* Added **JSON editing** support for config properties in the Settings UI
-* Moved **new module generation** into the CLI for a more direct scaffolding workflow
+* Added a **Localization Resources** page for inspecting, filtering, and editing language resource values
+* Added **ILanguageResourcesManager** for retrieving and updating editable localization entries
+* Added **LanguageResourceEntry** and **OverrideDefaultLanguageResourcesConfig** to support persisted resource overrides
+* Added a Settings menu entry and tab route for **Localization Resources**
+* Added shared selection styling for **DataGrid** and **ComboBox** controls
 
 ---
 
 ## 🛠 Improvements
 
-* Added quick actions to open the **current folder**, **log folder**, and **NuGet cache folder**
-* Added commands to **show or hide the navigation bar**
-* Refactored the **EventAggregator** to improve event delivery and UI updates
-* Improved the Settings UI with **multiline JSON editing**, validation, and clearer error handling
+* Updated documentation, quick-start samples, installer links, and package references to **1.2.7**
+* Updated core dependency versions including **ZYC.CoreToolkit**, **Aspire**, **NuGet**, **WPFHexaEditor**, **log4net**, and **Namotion.Reflection**
+* Improved the Language module menu structure with a stable **Language** anchor and localized **Localization Resources** labels
+* Saved generated and manually edited language resources to the application settings directory
+* Let the CLI project use the standard output path by default
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Improved stability for **settings serialization** and structured JSON input handling
-* Included additional **workspace and layout interaction** fixes
+* Kept built-in default language resources read-only and redirected runtime changes to override resources
+* Treated English localization entries as source keys so they are visible but not editable
+* Delayed **ShowInTaskbar** change observation until the main window is loaded
+* Improved selected and hovered row readability for grid and combo box selection states
 
 ---
 

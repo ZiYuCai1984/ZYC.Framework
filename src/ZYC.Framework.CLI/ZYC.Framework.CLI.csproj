@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <OutputPath>../_bin_dotnettool</OutputPath>
+    <!--<OutputPath>../_bin_dotnettool</OutputPath>-->
   </PropertyGroup>
 
   <ItemGroup>
