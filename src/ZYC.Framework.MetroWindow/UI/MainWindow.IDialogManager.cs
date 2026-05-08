@@ -1,31 +1,33 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using System.Windows;
+using Autofac;
 using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.MetroWindow.UI;
 
 internal partial class MainWindow : IDialogManager
 {
-    public async Task<string> ShowInputDialogAsync(
-        string content,
-        string caption,
-        bool localization = true)
+    public void Show<T>() where T : IDialog
     {
-        var result = await this.ShowInputAsync(caption, content);
-        return result ?? "";
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.Invoke(() => ShowCore<T>());
+            return;
+        }
+
+        ShowCore<T>();
     }
 
-    public async Task ShowMessageDialogAsync(
-        string content,
-        string caption,
-        string buttonText,
-        bool localization = true)
+    private void ShowCore<T>() where T : IDialog
     {
-        await this.ShowMessageAsync(caption,
-            content,
-            MessageDialogStyle.Affirmative,
-            new MetroDialogSettings
-            {
-                AffirmativeButtonText = buttonText
-            });
+        var dialog = LifetimeScope.Resolve<T>();
+        if (dialog is not Window dialogWindow)
+        {
+            throw new InvalidOperationException(
+                $"Dialog type '{typeof(T).FullName}' must inherit from {typeof(Window).FullName}.");
+        }
+
+        dialogWindow.Owner = this;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        dialogWindow.Show();
     }
 }

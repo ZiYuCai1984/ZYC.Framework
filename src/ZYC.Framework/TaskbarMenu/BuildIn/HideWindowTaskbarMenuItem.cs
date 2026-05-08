@@ -4,7 +4,7 @@ using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Abstractions.TaskbarMenu;
 using ZYC.Framework.Core.Commands;
 
-namespace ZYC.Framework.Taskbar.BuildIn;
+namespace ZYC.Framework.TaskbarMenu.BuildIn;
 
 [RegisterSingleInstance]
 internal class HideWindowTaskbarMenuItem : ITaskbarMenuItem
@@ -14,7 +14,8 @@ internal class HideWindowTaskbarMenuItem : ITaskbarMenuItem
         HideWindowCommand = showWindowCommand;
         Info = new MenuItemInfo
         {
-            Title = "Hide Window"
+            Title = "Hide Window",
+            Priority = 40
         };
     }
 

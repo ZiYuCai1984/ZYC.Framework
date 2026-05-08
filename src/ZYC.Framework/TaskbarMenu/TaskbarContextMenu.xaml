@@ -1,4 +1,4 @@
-﻿<ContextMenu x:Class="ZYC.Framework.Taskbar.TaskbarContextMenu"
+﻿<ContextMenu x:Class="ZYC.Framework.TaskbarMenu.TaskbarContextMenu"
              x:ClassModifier="internal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
