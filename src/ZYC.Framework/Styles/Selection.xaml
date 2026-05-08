@@ -1,0 +1,117 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
+
+    <!-- ReSharper disable InconsistentNaming -->
+    <SolidColorBrush x:Key="ZYC.Brushes.Selection.Transparent" Color="Transparent" />
+    <SolidColorBrush x:Key="ZYC.Brushes.Selection.Hover" Color="#10000000" />
+    <SolidColorBrush x:Key="ZYC.Brushes.Selection.Selected" Color="#180078D4" />
+    <SolidColorBrush x:Key="ZYC.Brushes.Selection.SelectedInactive" Color="#120078D4" />
+    <SolidColorBrush x:Key="ZYC.Brushes.Selection.SelectedHover" Color="#220078D4" />
+
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Background"
+                     Color="#180078D4" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Background.Inactive"
+                     Color="#120078D4" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Background.MouseOver"
+                     Color="#10000000" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.BorderBrush"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.BorderBrush.Inactive"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.BorderBrush.MouseOver"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Text"
+                     Color="{StaticResource MahApps.Colors.ThemeForeground}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Text.Inactive"
+                     Color="{StaticResource MahApps.Colors.ThemeForeground}" />
+    <SolidColorBrush x:Key="MahApps.Brushes.DataGrid.Selection.Text.MouseOver"
+                     Color="{StaticResource MahApps.Colors.ThemeForeground}" />
+
+    <Style x:Key="ZYC.Styles.DataGridRow"
+           BasedOn="{StaticResource MahApps.Styles.DataGridRow}"
+           TargetType="{x:Type DataGridRow}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Hover}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Selected}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="Selector.IsSelectionActive" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.SelectedInactive}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.SelectedHover}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ZYC.Styles.DataGridCell"
+           BasedOn="{StaticResource MahApps.Styles.DataGridCell}"
+           TargetType="{x:Type DataGridCell}">
+        <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+                <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}"
+           TargetType="{x:Type DataGrid}">
+        <Setter Property="RowStyle" Value="{StaticResource ZYC.Styles.DataGridRow}" />
+        <Setter Property="CellStyle" Value="{StaticResource ZYC.Styles.DataGridCell}" />
+    </Style>
+
+    <Style BasedOn="{StaticResource MahApps.Styles.ComboBoxItem}"
+           TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="mah:ItemHelper.ActiveSelectionBackgroundBrush" Value="{StaticResource ZYC.Brushes.Selection.Selected}" />
+        <Setter Property="mah:ItemHelper.ActiveSelectionBorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="mah:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="mah:ItemHelper.HoverBackgroundBrush" Value="{StaticResource ZYC.Brushes.Selection.Hover}" />
+        <Setter Property="mah:ItemHelper.HoverBorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="mah:ItemHelper.HoverForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="mah:ItemHelper.HoverSelectedBackgroundBrush" Value="{StaticResource ZYC.Brushes.Selection.SelectedHover}" />
+        <Setter Property="mah:ItemHelper.HoverSelectedBorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="mah:ItemHelper.HoverSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="mah:ItemHelper.SelectedBackgroundBrush" Value="{StaticResource ZYC.Brushes.Selection.Selected}" />
+        <Setter Property="mah:ItemHelper.SelectedBorderBrush" Value="{StaticResource ZYC.Brushes.Selection.Transparent}" />
+        <Setter Property="mah:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+    </Style>
+</ResourceDictionary>

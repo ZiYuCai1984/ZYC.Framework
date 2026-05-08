@@ -36,9 +36,12 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<LanguageTabItemFactory>();
+        lifetimeScope.RegisterTabItemFactory<LocalizationResourcesTabItemFactory>();
 
         var settingsMainMenuItem = lifetimeScope.Resolve<ISettingsMainMenuItemsProvider>();
+
         settingsMainMenuItem.RegisterSubItem<LanguageMainMenuItem>();
+        settingsMainMenuItem.RegisterSubItem<LocalizationResourcesMainMenuItem>();
 
         return Task.CompletedTask;
     }

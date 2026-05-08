@@ -23,7 +23,8 @@ internal class LanguageMainMenuItem : MainMenuItemsProvider
         Info = new MenuItemInfo
         {
             Title = LanguageModuleConstants.Title,
-            Icon = LanguageModuleConstants.DefaultIcon
+            Icon = LanguageModuleConstants.DefaultIcon,
+            Anchor = LanguageModuleConstants.Anchor
         };
 
         var languages = Enum.GetValues<LanguageType>();
@@ -33,10 +34,6 @@ internal class LanguageMainMenuItem : MainMenuItemsProvider
                 LifetimeScope.Resolve<SetLanguageOptionMainMenuItem>(new TypedParameter(typeof(LanguageType),
                     language)));
         }
-
-        //RegisterSubItem(new MainMenuItem("Detail",
-        //    "ListBoxOutline",
-        //    lifetimeScope.CreateNavigateCommand(LanguageTabItem.Constants.Uri)));
     }
 
     public override MenuItemInfo Info { get; }

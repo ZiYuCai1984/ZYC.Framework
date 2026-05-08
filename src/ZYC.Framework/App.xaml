@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.indigo.xaml" />
+                <ResourceDictionary Source="Styles/Selection.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
