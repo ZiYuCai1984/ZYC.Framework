@@ -1,0 +1,42 @@
+﻿<core:DialogWindowBase x:Class="ZYC.Framework.Modules.Mock.UI.TestDialogWindow"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+                       mc:Ignorable="d"
+                       d:DesignHeight="240" d:DesignWidth="420"
+                       Title="Test Dialog Window"
+                       Width="420"
+                       Height="240"
+                       MinWidth="360"
+                       MinHeight="220"
+                       ShowInTaskbar="False">
+    <core:DialogWindowBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MockResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </core:DialogWindowBase.Resources>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Dialog Window" />
+            <TextBlock FontWeight="Normal"
+                       TextWrapping="Wrap"
+                       Text="This window is resolved through IDialogManager and shown as a real WPF Window." />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Click="OnCloseBtnClick"
+                    Content="Close" />
+        </StackPanel>
+    </Grid>
+</core:DialogWindowBase>

@@ -4,7 +4,7 @@ using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Abstractions.TaskbarMenu;
 using ZYC.Framework.Core.Commands;
 
-namespace ZYC.Framework.Taskbar.BuildIn;
+namespace ZYC.Framework.TaskbarMenu.BuildIn;
 
 [RegisterSingleInstance]
 internal class ExitProcessTaskbarItem : ITaskbarMenuItem
@@ -15,7 +15,8 @@ internal class ExitProcessTaskbarItem : ITaskbarMenuItem
 
         Info = new MenuItemInfo
         {
-            Title = "Exit"
+            Title = "Exit",
+            Priority = 90
         };
     }
 

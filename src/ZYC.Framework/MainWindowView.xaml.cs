@@ -6,7 +6,7 @@ using ZYC.Framework.Abstractions.Event;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Core;
 using ZYC.Framework.Modules.Settings.Abstractions;
-using ZYC.Framework.Taskbar;
+using ZYC.Framework.TaskbarMenu;
 
 namespace ZYC.Framework;
 

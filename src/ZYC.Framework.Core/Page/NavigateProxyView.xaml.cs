@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
-using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Tab;
 
 namespace ZYC.Framework.Core.Page;
@@ -11,12 +10,10 @@ public partial class NavigateProxyView : IDisposable
 {
     public NavigateProxyView(
         NavigateProxyParameter navigateProxyParameter,
-        ITabManager tabManager,
-        IDialogManager dialogManager)
+        ITabManager tabManager)
     {
         NavigateProxyParameter = navigateProxyParameter;
         TabManager = tabManager;
-        DialogManager = dialogManager;
 
         InitializeComponent();
     }
@@ -25,8 +22,6 @@ public partial class NavigateProxyView : IDisposable
     private NavigateProxyParameter NavigateProxyParameter { get; }
 
     private ITabManager TabManager { get; }
-
-    private IDialogManager DialogManager { get; }
 
     public void Dispose()
     {
@@ -42,12 +37,6 @@ public partial class NavigateProxyView : IDisposable
             await TabManager.ReloadAsync(NavigateProxyParameter.Source);
             return;
         }
-
-        await DialogManager.ShowMessageDialogAsync(
-            NavigateProxyParameter.Content,
-            NavigateProxyParameter.Caption,
-            NavigateProxyParameter.ButtonText,
-            NavigateProxyParameter.Localization);
 
         await TabManager.NavigateAsync(NavigateProxyParameter.Target);
 

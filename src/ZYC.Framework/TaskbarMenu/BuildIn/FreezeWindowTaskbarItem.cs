@@ -4,7 +4,7 @@ using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Abstractions.TaskbarMenu;
 using ZYC.Framework.Commands;
 
-namespace ZYC.Framework.Taskbar.BuildIn;
+namespace ZYC.Framework.TaskbarMenu.BuildIn;
 
 [RegisterSingleInstance]
 internal class FreezeWindowTaskbarItem : ITaskbarMenuItem
@@ -15,7 +15,8 @@ internal class FreezeWindowTaskbarItem : ITaskbarMenuItem
 
         Info = new MenuItemInfo
         {
-            Title = "Freeze"
+            Title = "Freeze",
+            Priority = 10
         };
     }
 
