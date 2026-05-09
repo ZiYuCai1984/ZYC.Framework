@@ -43,14 +43,14 @@
     <Project Path="ZYC.Framework.Modules.Settings/ZYC.Framework.Modules.Settings.csproj" />
     <Project Path="ZYC.Framework.Modules.TaskManager.Abstractions/ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.TaskManager/ZYC.Framework.Modules.TaskManager.csproj" />
+    <Project Path="ZYC.Framework.Modules.TextEditor.Abstractions/ZYC.Framework.Modules.TextEditor.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.TextEditor/ZYC.Framework.Modules.TextEditor.csproj" />
     <Project Path="ZYC.Framework.Modules.Translator.Abstractions/ZYC.Framework.Modules.Translator.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.Translator/ZYC.Framework.Modules.Translator.csproj" />
     <Project Path="ZYC.Framework.Modules.Update.Abstractions/ZYC.Framework.Modules.Update.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.Update/ZYC.Framework.Modules.Update.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser.Abstractions/ZYC.Framework.Modules.WebBrowser.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.WebBrowser/ZYC.Framework.Modules.WebBrowser.csproj" />
-    <Project Path="ZYC.Framework.Modules.TextEditor/ZYC.Framework.Modules.TextEditor.csproj" />
-    <Project Path="ZYC.Framework.Modules.TextEditor.Abstractions/ZYC.Framework.Modules.TextEditor.Abstractions.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../AGENTS.md" />

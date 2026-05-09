@@ -9,7 +9,7 @@ namespace ZYC.Framework.Modules.TextEditor;
 
 internal class Module : ModuleBase
 {
-    public override string Icon => TextEditorModuleConstants.Icon;
+    public override string Icon => TextEditorModuleConstants.PreviewIcon;
 
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {

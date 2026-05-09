@@ -1,7 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <IgnoreFromPublish>true</IgnoreFromPublish>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
   </ItemGroup>

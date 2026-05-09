@@ -22,7 +22,7 @@ internal class TextPreviewTabItem : TabItemInstanceBase
 
     public override string Title => TextDocumentTools.GetDisplayName(DocumentUri.LocalPath);
 
-    public override string Icon => TextEditorModuleConstants.Icon;
+    public override string Icon => TextEditorModuleConstants.PreviewIcon;
 
     public override bool Localization => false;
 

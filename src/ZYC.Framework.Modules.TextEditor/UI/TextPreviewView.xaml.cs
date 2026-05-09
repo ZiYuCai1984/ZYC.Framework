@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.TextEditor.Abstractions;
@@ -17,10 +19,12 @@ internal partial class TextPreviewView
     private readonly string _currentFilePath;
 
     public TextPreviewView(
+        ILogger<TextPreviewView> logger,
         Uri documentUri,
         ITabManager tabManager,
         IToastManager toastManager)
     {
+        Logger = logger;
         DocumentUri = documentUri;
         TabManager = tabManager;
         ToastManager = toastManager;
@@ -35,6 +39,8 @@ internal partial class TextPreviewView
         };
         _reloadTimer.Tick += OnReloadTimerTick;
     }
+
+    private ILogger<TextPreviewView> Logger { get; }
 
     private Uri DocumentUri { get; }
 
@@ -81,16 +87,16 @@ internal partial class TextPreviewView
                 return;
             }
 
-            var text = await TextDocumentTools.ReadAllTextAsync(_currentFilePath);
+            var document = await TextDocumentTools.ReadDocumentAsync(_currentFilePath);
 
-            _lastKnownWriteUtc = File.GetLastWriteTimeUtc(_currentFilePath);
+            _lastKnownWriteUtc = document.LastWriteUtc;
             IsFileAvailable = true;
 
             TextDocumentTools.ApplySyntaxHighlighting(Editor, _currentFilePath);
-            Editor.Text = text;
+            Editor.Text = document.Text;
 
             UpdatePageTitle();
-            SyncStatusText = $"Watching for changes. Last sync {DateTime.Now:HH:mm:ss}";
+            SyncStatusText = $"Watching for changes. Last sync {DateTime.Now:HH:mm:ss} ({document.EncodingName})";
 
             OnPropertyChanged(nameof(IsFileAvailable));
             OnPropertyChanged(nameof(SyncStatusText));
@@ -99,7 +105,8 @@ internal partial class TextPreviewView
         {
             SyncStatusText = "Failed to synchronize from disk.";
             OnPropertyChanged(nameof(SyncStatusText));
-            ToastManager.PromptMessage(ToastMessage.Exception(ex));
+            ToastManager.PromptException(ex);
+            Logger.Error(ex);
         }
     }
 
@@ -160,8 +167,7 @@ internal partial class TextPreviewView
 
     private void UpdatePageTitle()
     {
-        var displayName = TextDocumentTools.GetDisplayName(_currentFilePath);
-        PageTitle = $"{TextEditorModuleConstants.PreviewTitle}: {displayName}";
+        PageTitle = $"{TextEditorModuleConstants.PreviewTitle}";
         OnPropertyChanged(nameof(PageTitle));
     }
 
@@ -186,22 +192,46 @@ internal partial class TextPreviewView
 
     private async void OnReloadTimerTick(object? sender, EventArgs e)
     {
-        _reloadTimer.Stop();
-        await LoadDocumentAsync(force: false);
+        try
+        {
+            _reloadTimer.Stop();
+            await LoadDocumentAsync(force: false);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            ToastManager.PromptException(ex);
+        }
     }
 
     private async void OnReloadButtonClick(object sender, RoutedEventArgs e)
     {
-        await LoadDocumentAsync(force: true);
+        try
+        {
+            await LoadDocumentAsync(force: true);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            ToastManager.PromptException(ex);
+        }
     }
 
     private async void OnEditButtonClick(object sender, RoutedEventArgs e)
     {
-        if (!IsFileAvailable)
+        try
         {
-            return;
-        }
+            if (!IsFileAvailable)
+            {
+                return;
+            }
 
-        await TabManager.NavigateAsync(TextEditorModuleConstants.CreateEditorUri(DocumentUri));
+            await TabManager.NavigateAsync(TextEditorModuleConstants.CreateEditorUri(DocumentUri));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            ToastManager.PromptException(ex);
+        }
     }
 }

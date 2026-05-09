@@ -5,6 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              ThemeMode="Light">
@@ -17,6 +18,11 @@
                 <ResourceDictionary
                     Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.indigo.xaml" />
                 <ResourceDictionary Source="Styles/Selection.xaml" />
+
+                <ResourceDictionary>
+                    <Style TargetType="{x:Type buttons:IconButton}"
+                           BasedOn="{StaticResource {x:Type Button}}" />
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

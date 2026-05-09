@@ -6,30 +6,34 @@
 
 ## 🆕 New Features
 
-* Added a **Localization Resources** page for inspecting, filtering, and editing language resource values
-* Added **ILanguageResourcesManager** for retrieving and updating editable localization entries
-* Added **LanguageResourceEntry** and **OverrideDefaultLanguageResourcesConfig** to support persisted resource overrides
-* Added a Settings menu entry and tab route for **Localization Resources**
-* Added shared selection styling for **DataGrid** and **ComboBox** controls
+* Added the built-in **TextEditor** module to the release package
+* Added read-only text file preview with an **Edit** action for switching into editor mode
+* Added text editing support with reload, save, save-as, dirty-state tracking, and unsaved-change confirmation
+* Added syntax highlighting for common text, code, markup, project, script, and configuration files
+* Added encoding-aware text document snapshots for reliable text loading and saving
 
 ---
 
 ## 🛠 Improvements
 
-* Updated documentation, quick-start samples, installer links, and package references to **1.2.7**
-* Updated core dependency versions including **ZYC.CoreToolkit**, **Aspire**, **NuGet**, **WPFHexaEditor**, **log4net**, and **Namotion.Reflection**
-* Improved the Language module menu structure with a stable **Language** anchor and localized **Localization Resources** labels
-* Saved generated and manually edited language resources to the application settings directory
-* Let the CLI project use the standard output path by default
+* Updated product version, documentation, quick-start samples, installer links, and package references to **1.2.8**
+* Updated **Aspire** tooling dependency to **13.3.0**
+* Added **System.Text.Encoding.CodePages** for Windows legacy code page support in the TextEditor module
+* Preserved detected text encoding and BOM style when saving edited files
+* Displayed detected encoding in TextEditor preview and editor status text
+* Refined TextEditor labels and icons for separate **Preview** and **Editor** surfaces
+* Refactored TextEditor file selection into a reusable command with centralized exception notification and logging
+* Changed **IconButton** to derive from **Button**, preserving standard command, style, focus, and button behavior
+* Added application-level default styling for **IconButton**
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Kept built-in default language resources read-only and redirected runtime changes to override resources
-* Treated English localization entries as source keys so they are visible but not editable
-* Delayed **ShowInTaskbar** change observation until the main window is loaded
-* Improved selected and hovered row readability for grid and combo box selection states
+* Restored the **File > Open** submenu registration so file-open commands are visible from the File menu
+* Prevented unsupported characters from being silently replaced when saving with a non-Unicode text encoding
+* Improved TextEditor watcher, reload, edit, read, and save exception handling with logged errors and user-facing notifications
+* Replaced debugger breaks and raw exception toast calls with centralized **PromptException** handling in Aspire, Localization Resources, and workspace drag-drop flows
 
 ---
 

@@ -114,6 +114,7 @@
 
   <ItemGroup>
     <PackageReference Update="System.Reactive" Version="7.0.0-preview.1" />
+    <PackageReference Update="System.Text.Encoding.CodePages" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>
