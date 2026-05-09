@@ -6,7 +6,7 @@
 
   <!--!WARNING Referenced by <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />, so it cannot be placed in nuget.targets-->
   <PropertyGroup>
-    <V_Aspire>13.2.4</V_Aspire>
+    <V_Aspire>13.3.0</V_Aspire>
   </PropertyGroup>
 
 

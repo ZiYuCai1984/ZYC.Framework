@@ -60,7 +60,7 @@ internal partial class WorkspaceView
         }
         catch (Exception ex)
         {
-            ToastManager.PromptMessage(ToastMessage.Exception(ex));
+            ToastManager.PromptException(ex);
         }
     }
 

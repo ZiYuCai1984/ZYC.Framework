@@ -38,7 +38,7 @@ internal class TextEditorTabItem : TabItemInstanceBase, INotifyPropertyChanged
 
     public override string Title => BuildTitle();
 
-    public override string Icon => TextEditorModuleConstants.Icon;
+    public override string Icon => TextEditorModuleConstants.EditorIcon;
 
     public override bool Localization => false;
 

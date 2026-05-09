@@ -69,7 +69,7 @@ internal sealed partial class AspireServiceManager : IAspireServiceManager, IDis
         }
         catch (Exception e)
         {
-            DebuggerTools.Break();
+            ToastManager.PromptException(e);
             Logger.Error(e);
         }
         finally

@@ -1,13 +1,18 @@
 ﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Core;
 using ZYC.Framework.Modules.TextEditor.Abstractions;
 
 namespace ZYC.Framework.Modules.TextEditor.UI;
+
+// ReSharper disable AsyncVoidEventHandlerMethod
 
 [Register]
 internal partial class TextEditorView
@@ -18,12 +23,16 @@ internal partial class TextEditorView
     private bool _isLoading;
     private DateTime _lastKnownWriteUtc;
     private string _currentFilePath;
+    private Encoding _documentEncoding = TextDocumentTools.DefaultEncoding;
+    private string _documentEncodingName = TextDocumentTools.DefaultEncodingName;
     private string _savedText = string.Empty;
 
     public TextEditorView(
+        ILogger<TextEditorView> logger,
         TextEditorTabItem instance,
         IToastManager toastManager)
     {
+        Logger = logger;
         Instance = instance;
         ToastManager = toastManager;
 
@@ -38,6 +47,7 @@ internal partial class TextEditorView
         _reloadTimer.Tick += OnReloadTimerTick;
     }
 
+    private ILogger<TextEditorView> Logger { get; }
     private TextEditorTabItem Instance { get; }
 
     private IToastManager ToastManager { get; }
@@ -125,24 +135,26 @@ internal partial class TextEditorView
 
             _isLoading = true;
 
-            var text = await TextDocumentTools.ReadAllTextAsync(_currentFilePath);
+            var document = await TextDocumentTools.ReadDocumentAsync(_currentFilePath);
 
-            _savedText = text;
-            _lastKnownWriteUtc = File.GetLastWriteTimeUtc(_currentFilePath);
+            _savedText = document.Text;
+            _documentEncoding = document.Encoding;
+            _documentEncodingName = document.EncodingName;
+            _lastKnownWriteUtc = document.LastWriteUtc;
             _hasExternalChange = false;
 
             FilePathText = _currentFilePath;
             IsReadOnlyDocument = new FileInfo(_currentFilePath).IsReadOnly;
 
             TextDocumentTools.ApplySyntaxHighlighting(Editor, _currentFilePath);
-            Editor.Text = text;
+            Editor.Text = document.Text;
 
             Instance.SetDirty(false);
             UpdatePageTitle();
 
             StatusText = triggeredByExternalChange
-                ? $"Reloaded from disk at {DateTime.Now:HH:mm:ss}"
-                : $"Editing {TextDocumentTools.GetDisplayName(_currentFilePath)}";
+                ? $"Reloaded from disk at {DateTime.Now:HH:mm:ss} ({_documentEncodingName})"
+                : $"Editing {TextDocumentTools.GetDisplayName(_currentFilePath)} ({_documentEncodingName})";
 
             OnPropertyChanged(nameof(FilePathText));
             OnPropertyChanged(nameof(IsReadOnlyDocument));
@@ -152,7 +164,7 @@ internal partial class TextEditorView
         {
             StatusText = "Failed to read file.";
             OnPropertyChanged(nameof(StatusText));
-            ToastManager.PromptMessage(ToastMessage.Exception(ex));
+            ToastManager.PromptException(ex);
         }
         finally
         {
@@ -193,7 +205,7 @@ internal partial class TextEditorView
                 targetPath = selectedPath;
             }
 
-            await File.WriteAllTextAsync(targetPath, Editor.Text);
+            await TextDocumentTools.WriteDocumentAsync(targetPath, Editor.Text, _documentEncoding);
 
             var isPathChanged = !string.Equals(_currentFilePath, targetPath, StringComparison.OrdinalIgnoreCase);
 
@@ -209,7 +221,7 @@ internal partial class TextEditorView
             ConfigureWatcher(targetPath);
             UpdatePageTitle();
 
-            StatusText = $"Saved at {DateTime.Now:HH:mm:ss}";
+            StatusText = $"Saved at {DateTime.Now:HH:mm:ss} ({_documentEncodingName})";
 
             Instance.SetDirty(false);
 
@@ -222,11 +234,19 @@ internal partial class TextEditorView
                 await Instance.UpdateDocumentUriAsync(new Uri(targetPath));
             }
         }
+        catch (EncoderFallbackException)
+        {
+            StatusText =
+                $"Failed to save file. The document contains characters not supported by {_documentEncodingName}.";
+            OnPropertyChanged(nameof(StatusText));
+            ToastManager.PromptMessage(ToastMessage.Warn(StatusText, false));
+        }
         catch (Exception ex)
         {
             StatusText = "Failed to save file.";
             OnPropertyChanged(nameof(StatusText));
-            ToastManager.PromptMessage(ToastMessage.Exception(ex));
+            ToastManager.PromptException(ex);
+            Logger.Error(ex);
         }
     }
 
@@ -277,7 +297,7 @@ internal partial class TextEditorView
 
     private void UpdatePageTitle()
     {
-        PageTitle = $"{TextEditorModuleConstants.EditorTitle}: {TextDocumentTools.GetDisplayName(_currentFilePath)}";
+        PageTitle = $"{TextEditorModuleConstants.EditorTitle}";
         OnPropertyChanged(nameof(PageTitle));
     }
 
@@ -302,8 +322,16 @@ internal partial class TextEditorView
 
     private async void OnReloadTimerTick(object? sender, EventArgs e)
     {
-        _reloadTimer.Stop();
-        await HandleExternalFileChangeAsync();
+        try
+        {
+            _reloadTimer.Stop();
+            await HandleExternalFileChangeAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            ToastManager.PromptException(ex);
+        }
     }
 
     private void OnEditorTextChanged(object sender, EventArgs e)
@@ -330,12 +358,12 @@ internal partial class TextEditorView
     {
         await SaveDocumentAsync(false);
     }
-
+    
     private async void OnSaveAsButtonClick(object sender, RoutedEventArgs e)
     {
         await SaveDocumentAsync(true);
     }
-
+    
     private async void OnSaveMenuItemClick(object sender, RoutedEventArgs e)
     {
         await SaveDocumentAsync(false);

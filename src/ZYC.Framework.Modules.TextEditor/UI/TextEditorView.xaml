@@ -6,6 +6,7 @@
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
+               xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
                mc:Ignorable="d"
                d:DesignHeight="450"
                d:DesignWidth="800"
@@ -31,20 +32,21 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
-                <Button Margin="0 0 8 0"
-                        Padding="8 4"
-                        Click="OnReloadButtonClick">
-                    <TextBlock Text="Reload" />
-                </Button>
-                <Button Margin="0 0 8 0"
-                        Padding="8 4"
-                        Click="OnSaveButtonClick">
-                    <TextBlock Text="Save" />
-                </Button>
-                <Button Padding="8 4"
-                        Click="OnSaveAsButtonClick">
-                    <TextBlock Text="Save As" />
-                </Button>
+                <buttons:IconButton
+                    Kind="Reload"
+                    Text="Reload"
+                    Margin="0 0 16 0"
+                    Click="OnReloadButtonClick">
+                </buttons:IconButton>
+                <buttons:IconButton Text="Save"
+                    Kind="ContentSaveOutline"
+                    Margin="0 0 16 0"
+                    Click="OnSaveButtonClick">
+                </buttons:IconButton>
+                <buttons:IconButton Kind="ContentSaveMoveOutline"
+                                    Text="Save As"
+                                    Click="OnSaveAsButtonClick">
+                </buttons:IconButton>
             </StackPanel>
         </Grid>
     </page:PageBase.HeaderAdditionContent>

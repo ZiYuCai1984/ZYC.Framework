@@ -185,7 +185,7 @@ internal sealed partial class LocalizationResourcesView
         }
         catch (Exception ex)
         {
-            ToastManager.PromptMessage(ToastMessage.Exception(ex));
+            ToastManager.PromptException(ex);
         }
     }
 }
