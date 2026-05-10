@@ -1,5 +1,4 @@
-﻿using System.Windows.Threading;
-using Autofac;
+﻿using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,11 +39,17 @@ public sealed class MCPServer : IAsyncDisposable
         await DisposeAsync();
     }
 
-    public async Task StartAsync(Dispatcher dispatcher, int port)
+    public async Task StartAsync(int port)
     {
+        if (_app is not null)
+        {
+            return;
+        }
+
         var builder = WebApplication.CreateBuilder();
 
         builder.WebHost.UseUrls($"http://127.0.0.1:{port}");
+
         builder.Host.UseServiceProviderFactory(
             new AutofacChildScopeServiceProviderFactory(LifetimeScope));
 
@@ -69,11 +74,20 @@ public sealed class MCPServer : IAsyncDisposable
             .WithHttpTransport()
             .AddAutoDiscoveredTools(LifetimeScope);
 
-
         var app = builder.Build();
+
         app.MapMcp();
 
-        await app.StartAsync();
-        _app = app;
+        try
+        {
+            await app.StartAsync();
+
+            _app = app;
+        }
+        catch
+        {
+            await app.DisposeAsync();
+            throw;
+        }
     }
 }

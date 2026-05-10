@@ -69,17 +69,17 @@
                     <Separator />
                     <MenuItem Header="Cut"
                               Command="{x:Static ApplicationCommands.Cut}"
-                              CommandTarget="{Binding PlacementTarget,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                              CommandTarget="{Binding PlacementTarget.TextArea,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                     <MenuItem Header="Copy"
                               Command="{x:Static ApplicationCommands.Copy}"
-                              CommandTarget="{Binding PlacementTarget,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                              CommandTarget="{Binding PlacementTarget.TextArea,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                     <MenuItem Header="Paste"
                               Command="{x:Static ApplicationCommands.Paste}"
-                              CommandTarget="{Binding PlacementTarget,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                              CommandTarget="{Binding PlacementTarget.TextArea,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                     <Separator />
                     <MenuItem Header="Select All"
                               Command="{x:Static ApplicationCommands.SelectAll}"
-                              CommandTarget="{Binding PlacementTarget,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                              CommandTarget="{Binding PlacementTarget.TextArea,RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 </ContextMenu>
             </avalonEdit:TextEditor.ContextMenu>
         </avalonEdit:TextEditor>
