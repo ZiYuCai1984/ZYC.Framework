@@ -16,9 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary
-                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/light.indigo.xaml" />
-                <ResourceDictionary Source="Styles/Selection.xaml" />
-
+                    Source="Styles/ZYC.Indigo.Light.xaml" />
                 <ResourceDictionary>
                     <Style TargetType="{x:Type buttons:IconButton}"
                            BasedOn="{StaticResource {x:Type Button}}" />

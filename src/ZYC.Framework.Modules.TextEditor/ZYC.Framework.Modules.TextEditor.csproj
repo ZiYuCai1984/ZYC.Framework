@@ -8,7 +8,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AvalonEdit" />
-    <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
   </ItemGroup>
 </Project>

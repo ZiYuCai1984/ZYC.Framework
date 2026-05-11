@@ -25,7 +25,8 @@ internal class ApplyCustomLayoutMainMenuItemsProvider : MainMenuItemsProvider, I
 
         Info = new MenuItemInfo
         {
-            Title = "Apply Layout"
+            Title = "Apply Layout",
+            Priority = 60
         };
 
         RefreshSubItems();

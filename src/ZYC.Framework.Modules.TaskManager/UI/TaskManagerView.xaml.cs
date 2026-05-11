@@ -26,6 +26,8 @@ internal sealed partial class TaskManagerView
 
         ManagedTasksCollectionViewSource.Source = ManagedTasks;
         ManagedTasksCollectionViewSource.Filter += OnFilter;
+        ManagedTasksCollectionView.SortDescriptions.Add(
+            new SortDescription(nameof(ManagedTaskWrapper.CreatedAt), ListSortDirection.Descending));
 
         Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                 h => PropertyChanged += h,

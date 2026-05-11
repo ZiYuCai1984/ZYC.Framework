@@ -29,7 +29,10 @@ internal partial class CLIView : IDisposable
         {
             EasyTerminalControl.StartupCommandLine = CLIConfig.StartupCommandLine;
         }
-
+        else
+        {
+            EasyTerminalControl.StartupCommandLine = cliUriOptions.StartupCommandLineOverride;
+        }
 
         Debug.Assert(ConPTYTerm != null);
         ConPTYTerm.TermReady += OnConPTYTermTermReady;

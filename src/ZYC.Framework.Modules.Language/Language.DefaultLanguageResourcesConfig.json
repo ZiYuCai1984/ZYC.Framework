@@ -123,7 +123,8 @@
       "Custom layout removed.": "カスタムレイアウトを削除しました。",
       "No custom layout saved.": "保存されたカスタムレイアウトはありません。",
       "Custom layout applied.": "カスタムレイアウトを適用しました。",
-      "Localization Resources": "ローカライズリソース"
+      "Localization Resources": "ローカライズリソース",
+      "Search localization": "ローカライズを検索"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -248,7 +249,8 @@
       "Custom layout removed.": "已删除自定义布局。",
       "No custom layout saved.": "尚未保存自定义布局。",
       "Custom layout applied.": "已应用自定义布局。",
-      "Localization Resources": "本地化资源"
+      "Localization Resources": "本地化资源",
+      "Search localization": "搜索本地化项"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -373,7 +375,8 @@
       "Custom layout removed.": "已刪除自訂佈局。",
       "No custom layout saved.": "尚未儲存自訂佈局。",
       "Custom layout applied.": "已套用自訂佈局。",
-      "Localization Resources": "在地化資源"
+      "Localization Resources": "在地化資源",
+      "Search localization": "搜尋在地化項"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -498,7 +501,8 @@
       "Custom layout removed.": "사용자 지정 레이아웃을 삭제했습니다.",
       "No custom layout saved.": "저장된 사용자 지정 레이아웃이 없습니다.",
       "Custom layout applied.": "사용자 지정 레이아웃을 적용했습니다.",
-      "Localization Resources": "현지화 리소스"
+      "Localization Resources": "현지화 리소스",
+      "Search localization": "로컬라이제이션 검색"
     }
   }
 }

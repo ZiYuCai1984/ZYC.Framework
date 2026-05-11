@@ -96,7 +96,7 @@
             <!--Focus background-->
             <Border Grid.ColumnSpan="4"
                     Grid.Column="0"
-                    Background="{DynamicResource MahApps.Brushes.Accent}"
+                    Background="{DynamicResource MahApps.Brushes.Accent.Ori}"
                     IsHitTestVisible="False">
                 <Border.Style>
                     <Style TargetType="Border">

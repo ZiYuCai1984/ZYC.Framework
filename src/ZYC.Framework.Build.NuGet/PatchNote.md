@@ -6,34 +6,29 @@
 
 ## 🆕 New Features
 
-* Added the built-in **TextEditor** module to the release package
-* Added read-only text file preview with an **Edit** action for switching into editor mode
-* Added text editing support with reload, save, save-as, dirty-state tracking, and unsaved-change confirmation
-* Added syntax highlighting for common text, code, markup, project, script, and configuration files
-* Added encoding-aware text document snapshots for reliable text loading and saving
+* Added a **Save Custom Layout** dialog with editable layout names and generated workspace-layout thumbnails
+* Added a **Manage Custom Layouts** dialog for renaming, deleting, and reordering saved workspace layouts
+* Added the bundled **ZYC.Indigo.Light** application theme based on MahApps.Metro resources
+* Added a reusable static-resource markup extension for theme resource aliases
 
 ---
 
 ## 🛠 Improvements
 
-* Updated product version, documentation, quick-start samples, installer links, and package references to **1.2.8**
-* Updated **Aspire** tooling dependency to **13.3.0**
-* Added **System.Text.Encoding.CodePages** for Windows legacy code page support in the TextEditor module
-* Preserved detected text encoding and BOM style when saving edited files
-* Displayed detected encoding in TextEditor preview and editor status text
-* Refined TextEditor labels and icons for separate **Preview** and **Editor** surfaces
-* Refactored TextEditor file selection into a reusable command with centralized exception notification and logging
-* Changed **IconButton** to derive from **Button**, preserving standard command, style, focus, and button behavior
-* Added application-level default styling for **IconButton**
+* Reworked the **View** menu layout commands with explicit ordering and a dedicated custom-layout management entry
+* Moved custom-layout thumbnail generation into a shared builder used by the save and management flows
+* Updated custom-layout apply notifications to include the selected layout name
+* Sorted TaskManager entries by creation time with newest tasks first
+* Removed obsolete placeholder and duplicate custom-layout removal menu types
+* Removed the TextEditor module's direct **System.Text.Encoding.CodePages** package reference now that the package version is centrally managed
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Restored the **File > Open** submenu registration so file-open commands are visible from the File menu
-* Prevented unsupported characters from being silently replaced when saving with a non-Unicode text encoding
-* Improved TextEditor watcher, reload, edit, read, and save exception handling with logged errors and user-facing notifications
-* Replaced debugger breaks and raw exception toast calls with centralized **PromptException** handling in Aspire, Localization Resources, and workspace drag-drop flows
+* Fixed CLI startup URI overrides so non-empty startup command values are applied to the terminal control
+* Kept toast popups visible while owned dialog windows are active
+* Preserved the original accent brush for main-window borders and active tab indicators after switching to the custom theme
 
 ---
 
