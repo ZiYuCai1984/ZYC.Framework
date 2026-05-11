@@ -36,7 +36,8 @@ internal class ApplyCustomLayoutMainMenuItem : MainMenuItem
             {
                 await ParallelWorkspaceManager.ApplyLayoutAsync(CustomWorkspaceLayout.WorkspaceNode);
 
-                ToastManager.PromptMessage(ToastMessage.Info("Custom layout applied."));
+                ToastManager.PromptMessage(
+                    ToastMessage.Info($"{customWorkspaceLayout.Name} applied."));
             }
             catch (Exception e)
             {

@@ -8,10 +8,10 @@ using ZYC.Framework.Workspace.CustomLayouts;
 namespace ZYC.Framework.Commands;
 
 [RegisterSingleInstance]
-internal class SaveCustomLayoutCommand : AsyncCommandBase
+internal class ManageCustomLayoutsCommand : AsyncCommandBase
 {
-    public SaveCustomLayoutCommand(
-        ILogger<SaveCustomLayoutCommand> logger,
+    public ManageCustomLayoutsCommand(
+        ILogger<ManageCustomLayoutsCommand> logger,
         IDialogManager dialogManager,
         IToastManager toastManager)
     {
@@ -20,7 +20,7 @@ internal class SaveCustomLayoutCommand : AsyncCommandBase
         ToastManager = toastManager;
     }
 
-    private ILogger<SaveCustomLayoutCommand> Logger { get; }
+    private ILogger<ManageCustomLayoutsCommand> Logger { get; }
 
     private IDialogManager DialogManager { get; }
 
@@ -30,7 +30,7 @@ internal class SaveCustomLayoutCommand : AsyncCommandBase
     {
         try
         {
-            DialogManager.Show<SaveCustomLayoutDialog>();
+            DialogManager.Show<ManageCustomLayoutsDialog>();
         }
         catch (Exception ex)
         {

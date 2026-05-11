@@ -204,9 +204,37 @@ internal sealed class ToastStackPopupHost : IDisposable
 
     private bool ShouldBeVisible()
     {
+        return IsOwnerVisible()
+               && IsOwnerActivationScopeActive();
+    }
+
+    private bool IsOwnerVisible()
+    {
         return _owner.IsVisible
-               && _owner.WindowState != WindowState.Minimized
-               && _owner.IsActive;
+               && _owner.WindowState != WindowState.Minimized;
+    }
+
+    private bool IsOwnerActivationScopeActive()
+    {
+        return IsWindowOrOwnedWindowActive(_owner);
+    }
+
+    private static bool IsWindowOrOwnedWindowActive(Window window)
+    {
+        if (window.IsActive)
+        {
+            return true;
+        }
+
+        foreach (Window ownedWindow in window.OwnedWindows)
+        {
+            if (IsWindowOrOwnedWindowActive(ownedWindow))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private CustomPopupPlacement[] PlacePopupPlacement(Size popupSize, Size targetSize, Point offset)

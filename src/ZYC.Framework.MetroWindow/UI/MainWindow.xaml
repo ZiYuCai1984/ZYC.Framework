@@ -27,7 +27,7 @@
                  SnapsToDevicePixels="True"
                  FontSize="12"
                  Icon="{x:Static core:IconTools.IconImageSource}"
-                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 BorderBrush="{DynamicResource MahApps.Brushes.Accent.Ori}"
                  x:Name="Root"
                  DataContext="{Binding RelativeSource={RelativeSource Self},Path=LifetimeScope}"
                  Loaded="OnMainWindowLoaded">

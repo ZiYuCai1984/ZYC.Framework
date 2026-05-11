@@ -13,7 +13,7 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
         ILifetimeScope lifetimeScope,
         ApplyCustomLayoutMainMenuItemsProvider applyCustomLayoutMainMenuItemsProvider,
         MatrixLayoutCommand matrixLayoutCommand,
-        RemoveCustomLayoutMainMenuItemsProvider removeCustomLayoutMainMenuItemsProvider,
+        ManageCustomLayoutsCommand manageCustomLayoutsCommand,
         ResetLayoutCommand resetLayoutCommand,
         SaveCustomLayoutCommand saveCustomLayoutCommand,
         TopBottomLayoutCommand topBottomLayoutCommand,
@@ -29,24 +29,27 @@ internal class ViewMainMenuItemsProvider : MainMenuItemsProvider, IViewMainMenuI
         RegisterSubItem(
             new MainMenuItem(
                 "Left-Right Layout",
-                "BorderVertical", leftRightLayoutCommand));
+                "BorderVertical", leftRightLayoutCommand, priority: 10));
         RegisterSubItem(new MainMenuItem(
             "Top-Bottom Layout",
-            "BorderHorizontal", topBottomLayoutCommand));
+            "BorderHorizontal", topBottomLayoutCommand, priority: 20));
         RegisterSubItem(new MainMenuItem(
             "Matrix Layout",
-            "BorderInside", matrixLayoutCommand));
+            "BorderInside", matrixLayoutCommand, priority: 30));
 
         RegisterSubItem(new MainMenuItem(
             "Save To Custom Layout",
-            null, saveCustomLayoutCommand));
+            null, saveCustomLayoutCommand, priority: 40));
+
+        RegisterSubItem(new MainMenuItem(
+            "Manage Custom Layouts",
+            null, manageCustomLayoutsCommand, priority: 50));
 
         RegisterSubItem(applyCustomLayoutMainMenuItemsProvider);
-        RegisterSubItem(removeCustomLayoutMainMenuItemsProvider);
 
         RegisterSubItem(new MainMenuItem(
             "Reset Layout",
-            "BorderNoneVariant", resetLayoutCommand));
+            "BorderNoneVariant", resetLayoutCommand, priority: 70));
     }
 
     public override MenuItemInfo Info { get; }
