@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using System.Windows.Input;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Workspace;
 
@@ -7,7 +8,6 @@ namespace ZYC.Framework.Workspace;
 [RegisterSingleInstanceAs(typeof(IWorkspaceContextMenuManager))]
 internal class WorkspaceContextMenuManager : IWorkspaceContextMenuManager
 {
-    //TODO-zyc WorkspaceContextMenuManager
     public WorkspaceContextMenuManager(ILifetimeScope lifetimeScope)
     {
         LifetimeScope = lifetimeScope;
@@ -29,6 +29,55 @@ internal class WorkspaceContextMenuManager : IWorkspaceContextMenuManager
 
     public IWorkspaceMenuItem[] GetItems()
     {
-        return WorkspaceMenuItems.ToArray();
+        return WorkspaceMenuItems
+            .GroupBy(t => t.Anchor)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .SelectMany(g => g
+                .OrderBy(t => t.Priority)
+                .Select(SortSubItemsRecursively))
+            .ToArray();
+    }
+
+    private static IWorkspaceMenuItem SortSubItemsRecursively(IWorkspaceMenuItem item)
+    {
+        if (item.SubItems.Length == 0)
+        {
+            return item;
+        }
+
+        var subItems = item.SubItems
+            .GroupBy(t => t.Anchor)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .SelectMany(g => g
+                .OrderBy(t => t.Priority)
+                .Select(SortSubItemsRecursively))
+            .ToArray();
+
+        return new SortedWorkspaceMenuItem(item, subItems);
+    }
+
+    private sealed class SortedWorkspaceMenuItem : IWorkspaceMenuItem
+    {
+        private readonly IWorkspaceMenuItem _inner;
+
+        public SortedWorkspaceMenuItem(IWorkspaceMenuItem inner, IWorkspaceMenuItem[] subItems)
+        {
+            _inner = inner;
+            SubItems = subItems;
+        }
+
+        public string Title => _inner.Title;
+
+        public ICommand Command => _inner.Command;
+
+        public IWorkspaceMenuItem[] SubItems { get; }
+
+        public string Icon => _inner.Icon;
+
+        public string Anchor => _inner.Anchor;
+
+        public int Priority => _inner.Priority;
+
+        public bool Localization => _inner.Localization;
     }
 }
