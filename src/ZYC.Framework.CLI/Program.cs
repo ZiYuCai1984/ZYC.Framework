@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -73,6 +72,7 @@ internal class Program
             "Hello World (no argument required)");
 
 
+        RegisterNewProjectCommand(rootCommand);
         RegisterNewModuleCommand(rootCommand);
 
         optionRegister.FinalizeHandlers();
@@ -81,10 +81,65 @@ internal class Program
         return await rootCommand.InvokeAsync(finalArgs);
     }
 
+    private static void RegisterNewProjectCommand(RootCommand rootCommand)
+    {
+        var newProjectCommand = new Command("new", "Create a new project from template.");
+
+        var nameArgument = new Argument<string?>("name", () => null, "Project name.");
+
+        var templateOption = new Option<string>("--template", () => NewProjectGenerator.DefaultTemplateName,
+            $"Project template. Supported values: {string.Join(", ", NewProjectGenerator.TemplateNames)}.");
+        templateOption.AddAlias("-t");
+
+        var outputOption = new Option<string?>("--output", "Output directory. Defaults to ./<ProjectName>.");
+        outputOption.AddAlias("-o");
+
+        var packageVersionOption = new Option<string?>("--package-version",
+            "ZYC.Framework.Alpha package version. Defaults to the CLI product version.");
+
+        var overwriteOption = new Option<bool>("--overwrite", "Overwrite existing files.");
+        overwriteOption.AddAlias("-f");
+
+        newProjectCommand.AddArgument(nameArgument);
+        newProjectCommand.AddOption(templateOption);
+        newProjectCommand.AddOption(outputOption);
+        newProjectCommand.AddOption(packageVersionOption);
+        newProjectCommand.AddOption(overwriteOption);
+
+        newProjectCommand.SetHandler(context =>
+        {
+            var name = context.ParseResult.GetValueForArgument(nameArgument);
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                context.Console.Error.Write(
+                    $"Project name is required. Pass <ProjectName> as the positional argument.{Environment.NewLine}");
+                context.ExitCode = 1;
+                return;
+            }
+
+            var options = new NewProjectGenerationOptions
+            {
+                Name = name,
+                Template = context.ParseResult.GetValueForOption(templateOption)!,
+                OutputRoot = context.ParseResult.GetValueForOption(outputOption),
+                PackageVersion = context.ParseResult.GetValueForOption(packageVersionOption),
+                Overwrite = context.ParseResult.GetValueForOption(overwriteOption)
+            };
+
+            context.ExitCode = NewProjectCommandRunner.Run(
+                options,
+                line => context.Console.Out.Write($"{line}{Environment.NewLine}"),
+                line => context.Console.Error.Write($"{line}{Environment.NewLine}"),
+                "Use 'zyc new --help' to view command usage.");
+        });
+
+        rootCommand.AddCommand(newProjectCommand);
+    }
+
     private static void RegisterNewModuleCommand(RootCommand rootCommand)
     {
         var newModuleCommand = new Command("new-module", "Create a new module from template.");
-        newModuleCommand.AddAlias("new");
 
         var targetOption = new Option<string?>("--target", "Target module name.");
         targetOption.AddAlias("-t");
@@ -105,7 +160,7 @@ internal class Program
         newModuleCommand.AddOption(slnxOption);
         newModuleCommand.AddOption(overwriteOption);
 
-        newModuleCommand.SetHandler((InvocationContext context) =>
+        newModuleCommand.SetHandler(context =>
         {
             var targetFromOption = context.ParseResult.GetValueForOption(targetOption);
             var targetFromArgument = context.ParseResult.GetValueForArgument(targetArgument);

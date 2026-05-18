@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ZYC.Framework.Alpha" Version="__PACKAGE_VERSION__" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ZYC.Framework.Abstractions">
+      <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ModuleConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>../settings/ModuleConfig.json</Link>
+    </None>
+  </ItemGroup>
+</Project>

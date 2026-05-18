@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ZYC.Framework.Alpha" Version="__PACKAGE_VERSION__" />
+  </ItemGroup>
+</Project>

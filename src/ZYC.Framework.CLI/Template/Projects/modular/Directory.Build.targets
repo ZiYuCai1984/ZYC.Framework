@@ -1,0 +1,20 @@
+﻿<Project>
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>_</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <V_ZYC_Framework_Alpha>__PACKAGE_VERSION__</V_ZYC_Framework_Alpha>
+  </PropertyGroup>
+
+  <Import Project="$(USERPROFILE)\.nuget\packages\ZYC.Framework.Alpha\$(V_ZYC_Framework_Alpha)\build\nuget.props"
+          Condition="Exists('$(USERPROFILE)\.nuget\packages\ZYC.Framework.Alpha\$(V_ZYC_Framework_Alpha)\build\nuget.props')" />
+  <Import Project="$(USERPROFILE)\.nuget\packages\ZYC.Framework.Alpha\$(V_ZYC_Framework_Alpha)\build\nuget.targets"
+          Condition="Exists('$(USERPROFILE)\.nuget\packages\ZYC.Framework.Alpha\$(V_ZYC_Framework_Alpha)\build\nuget.targets')" />
+
+  <ItemGroup>
+    <PackageReference Update="ZYC.Framework.Alpha" Version="$(V_ZYC_Framework_Alpha)" />
+  </ItemGroup>
+</Project>
