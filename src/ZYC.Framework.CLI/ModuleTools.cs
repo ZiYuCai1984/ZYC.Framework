@@ -339,15 +339,4 @@ public static class ModuleTools
 
         return list.ToArray();
     }
-
-    /// <summary>
-    ///     !WARNING Based on the metadata, there may be a problem.
-    /// </summary>
-    /// <returns></returns>
-    private static bool IsAlreadyLoadedBySimpleName(string assemblyPath)
-    {
-        var simpleName = AssemblyName.GetAssemblyName(assemblyPath).Name;
-        return AppDomain.CurrentDomain.GetAssemblies()
-            .Any(a => string.Equals(a.GetName().Name, simpleName, StringComparison.OrdinalIgnoreCase));
-    }
 }

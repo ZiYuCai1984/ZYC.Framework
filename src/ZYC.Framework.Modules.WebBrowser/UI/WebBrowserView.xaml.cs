@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.WebBrowser.Abstractions;
 
@@ -12,6 +13,7 @@ namespace ZYC.Framework.Modules.WebBrowser.UI;
 internal partial class WebBrowserView
 {
     public WebBrowserView(
+        IToastManager toastManager,
         ILogger<WebBrowserView> logger,
         IWebBrowserUriPolicy webBrowserUriPolicy,
         ITabManager tabManager,
@@ -20,6 +22,7 @@ internal partial class WebBrowserView
         IWebTabItemInstance instance,
         WebBrowserConfig webBrowserConfig) : base(lifetimeScope)
     {
+        ToastManager = toastManager;
         Logger = logger;
         WebBrowserUriPolicy = webBrowserUriPolicy;
         TabManager = tabManager;
@@ -28,6 +31,7 @@ internal partial class WebBrowserView
         WebBrowserConfig = webBrowserConfig;
     }
 
+    private IToastManager ToastManager { get; }
     private ILogger<WebBrowserView> Logger { get; }
 
     private IWebBrowserUriPolicy WebBrowserUriPolicy { get; }
@@ -61,20 +65,38 @@ internal partial class WebBrowserView
         return Task.CompletedTask;
     }
 
-    protected override async void OnNavigationStarting(
-        object? sender,
-        CoreWebView2NavigationStartingEventArgs e)
+    //protected override async void OnNavigationStarting(
+    //    object? sender,
+    //    CoreWebView2NavigationStartingEventArgs e)
+    //{
+    //    try
+    //    {
+    //        base.OnNavigationStarting(sender, e);
+
+    //        var target = e.Uri;
+    //        await Instance.TabInternalNavigatingAsync(new Uri(target));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Logger.Error(ex);
+    //        ToastManager.PromptException(ex);
+    //    }
+    //}
+
+    protected override async void OnSourceChanged(object? sender, CoreWebView2SourceChangedEventArgs e)
     {
+        //!WARNING Pending test
         try
         {
-            base.OnNavigationStarting(sender, e);
+            base.OnSourceChanged(sender, e);
 
-            var target = e.Uri;
+            var target = CoreWebView2.Source;
             await Instance.TabInternalNavigatingAsync(new Uri(target));
         }
         catch (Exception ex)
         {
             Logger.Error(ex);
+            ToastManager.PromptException(ex);
         }
     }
 
@@ -97,6 +119,7 @@ internal partial class WebBrowserView
         catch (Exception ex)
         {
             Logger.Error(ex);
+            ToastManager.PromptException(ex);
         }
     }
 }
