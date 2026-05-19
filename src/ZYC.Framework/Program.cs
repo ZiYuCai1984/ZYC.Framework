@@ -1,7 +1,4 @@
-﻿using Autofac;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.Encodings.Web;
@@ -9,6 +6,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Windows;
+using Autofac;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac;
 using ZYC.CoreToolkit.Extensions.Settings;
@@ -86,11 +86,12 @@ internal partial class Program
     private static void Main()
     {
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+        var startupUri = StartupUriParser.GetStartupUriArgument();
 
 #if DEBUG
 
 #else
-        EnsureSingleInstance();
+        EnsureSingleInstance(startupUri);
 #endif
 
         InitJsonToolsSettings();
@@ -99,6 +100,13 @@ internal partial class Program
 
 #else
         RedirectToStartupVersion();
+#endif
+
+        var startupUriNavigationDispatcher = new StartupUriNavigationDispatcher();
+#if DEBUG
+        StartupUriPipeServer? startupUriPipeServer = null;
+#else
+        var startupUriPipeServer = StartStartupUriPipeServer(startupUriNavigationDispatcher);
 #endif
 
         var builder = new ContainerBuilder();
@@ -134,7 +142,6 @@ internal partial class Program
 
         ModuleConfig? moduleConfig = null;
         PendingFileOperationsState? pendingDeleteState = null;
-
 
 
         ModuleTools.RegisterAllFromAssembly(settingsDirectory,
@@ -212,18 +219,47 @@ internal partial class Program
         L.SetLifetimeScope(container);
 
         var app = container.Resolve<AppContext>();
+        app.Exit += (_, _) =>
+        {
+            startupUriPipeServer?.Dispose();
+            startupUriNavigationDispatcher.Dispose();
+        };
+
         ReactiveExtensions.SetSynchronizationContext(app.GetUISynchronizationContext());
 
         container.RegisterTabItemFactory<ModuleLoadTabItemFactory>();
-        container.Resolve<IModuleLoadInfoManager>().
-            SetLoadErrorInfos(moduleLoadErrorInfoList.ToArray());
+        container.Resolve<IModuleLoadInfoManager>().SetLoadErrorInfos(moduleLoadErrorInfoList.ToArray());
 
         var mainWindowView = container.Resolve<MainWindowView>();
         var mainWindow = container.Resolve<IMainWindow>();
         mainWindow.InitContent(mainWindowView);
 
+        RegisterStartupUriNavigation(container, startupUriNavigationDispatcher, startupUri);
+
         var window = (Window)mainWindow;
         app.Run(window);
+    }
+
+    private static StartupUriPipeServer? StartStartupUriPipeServer(
+        StartupUriNavigationDispatcher startupUriNavigationDispatcher)
+    {
+        var pipeName = GetStartupUriPipeName();
+        if (string.IsNullOrWhiteSpace(pipeName))
+        {
+            return null;
+        }
+
+        var server = new StartupUriPipeServer(pipeName, startupUriNavigationDispatcher.Enqueue);
+        server.Start();
+        return server;
+    }
+
+    private static void RegisterStartupUriNavigation(
+        ILifetimeScope container,
+        StartupUriNavigationDispatcher startupUriNavigationDispatcher,
+        Uri? startupUri)
+    {
+        startupUriNavigationDispatcher.Register(container, startupUri);
     }
 
     private static void InitJsonToolsSettings()

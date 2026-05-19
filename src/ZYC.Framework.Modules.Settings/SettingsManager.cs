@@ -315,7 +315,7 @@ public partial class SettingsManager : ISettingsManager
             SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
 
             ToastManager.PromptMessage(
-                ToastMessage.Info($"{config}\r\n[ {oldValue} ] -> [ {newValue} ]", false));
+                ToastMessage.Info($"{config}.{property.Name}\r\n[ {oldValue} ] -> [ {newValue} ]", false));
         }
         catch (Exception e)
         {

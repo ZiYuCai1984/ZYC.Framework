@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <EnableWpf>false</EnableWpf>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <OutputPath>../_bin_build</OutputPath>
   </PropertyGroup>
 

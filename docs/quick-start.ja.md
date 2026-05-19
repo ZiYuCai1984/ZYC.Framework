@@ -20,7 +20,7 @@
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.2.9" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.0" />
 </ItemGroup>
 ```
 

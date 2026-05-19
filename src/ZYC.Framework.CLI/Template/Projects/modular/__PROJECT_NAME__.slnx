@@ -1,0 +1,14 @@
+﻿<Solution>
+  <Folder Name="/Build/">
+    <Project Path="Entry/Entry.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="version.props" />
+  </Folder>
+  <Project Path="ZYC.Framework.Modules.__PROJECT_NAME__.Abstractions/ZYC.Framework.Modules.__PROJECT_NAME__.Abstractions.csproj" />
+  <Project Path="ZYC.Framework.Modules.__PROJECT_NAME__/ZYC.Framework.Modules.__PROJECT_NAME__.csproj" />
+</Solution>

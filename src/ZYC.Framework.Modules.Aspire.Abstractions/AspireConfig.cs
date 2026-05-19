@@ -46,6 +46,6 @@ public class AspireConfig : IConfig
         ["ASPNETCORE_URLS"] = "http://localhost:18888",
         ["ASPIRE_ALLOW_UNSECURED_TRANSPORT"] = "true",
         ["ASPIRE_DASHBOARD_AI_DISABLED"] = "true",
-        ["ASPIRE_VERSION_CHECK_DISABLED"] = "false"
+        ["ASPIRE_VERSION_CHECK_DISABLED"] = "true"
     };
 }

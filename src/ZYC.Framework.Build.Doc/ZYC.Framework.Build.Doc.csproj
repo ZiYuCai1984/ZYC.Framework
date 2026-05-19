@@ -4,9 +4,6 @@
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <EnableWpf>false</EnableWpf>
-  </PropertyGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>

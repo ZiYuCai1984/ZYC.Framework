@@ -2,13 +2,8 @@
 
   <Import Project="..\DefineConstants.props" />
 
-
   <PropertyGroup>
     <IgnoreFromPublish>true</IgnoreFromPublish>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <EnableWpf>false</EnableWpf>
   </PropertyGroup>
 
   <PropertyGroup>

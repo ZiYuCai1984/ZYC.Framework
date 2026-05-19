@@ -1,8 +1,10 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using Autofac;
+using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.Aspire.Abstractions;
 using ZYC.Framework.Modules.Aspire.Abstractions.Event;
 
@@ -12,15 +14,19 @@ namespace ZYC.Framework.Modules.Aspire.UI;
 internal partial class AspireView
 {
     public AspireView(
+        ITabManager tabManager,
         IAspireServiceManager aspireServiceManager,
         IEventAggregator eventAggregator,
         ILifetimeScope lifetimeScope) : base(lifetimeScope)
     {
+        TabManager = tabManager;
         AspireServiceManager = aspireServiceManager;
         EventAggregator = eventAggregator;
     }
 
     private CompositeDisposable CompositeDisposable { get; } = new();
+
+    private ITabManager TabManager { get; }
 
     private IAspireServiceManager AspireServiceManager { get; }
 
@@ -61,5 +67,11 @@ internal partial class AspireView
 
             await AspireServiceManager.StartServerAsync();
         }
+    }
+
+    protected override void OnNewWindowRequested(object? sender, CoreWebView2NewWindowRequestedEventArgs e)
+    {
+        e.Handled = true;
+        TabManager.NavigateAsync(e.Uri);
     }
 }

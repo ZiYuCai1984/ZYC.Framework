@@ -15,9 +15,9 @@ namespace ZYC.Framework.Notification.Toast;
 [RegisterSingleInstance]
 internal sealed class ToastStackPopupHost : IDisposable
 {
-    private const double EdgeMarginRight = 8;
+    private const double EdgeMarginHorizontal = 8;
 
-    private const double EdgeMarginBottom = 0;
+    private const double EdgeMarginVertical = 0;
 
     private const double ToastMinWidth = 240;
 
@@ -30,6 +30,7 @@ internal sealed class ToastStackPopupHost : IDisposable
     private readonly Dictionary<IToast, EventHandler> _closedHandlers = new();
 
     private readonly Dictionary<FrameworkElement, IToast> _elementToToast = new();
+
     private readonly Window _owner;
 
     private readonly Popup _popup;
@@ -94,6 +95,8 @@ internal sealed class ToastStackPopupHost : IDisposable
     private ToastConfig ToastConfig { get; }
 
     private int MaxToasts => ToastConfig.MaxToasts;
+
+    private ToastPlacement Placement => ToastConfig.Placement;
 
     private void OwnerOnClosed(object? sender, EventArgs e)
     {
@@ -250,13 +253,18 @@ internal sealed class ToastStackPopupHost : IDisposable
                          ?? Application.Current.MainWindow)!;
 
         var dpi = VisualTreeHelper.GetDpi(v);
-        var marginX = EdgeMarginRight * dpi.DpiScaleX;
-        var marginY = EdgeMarginBottom * dpi.DpiScaleY;
+        var marginX = EdgeMarginHorizontal * dpi.DpiScaleX;
+        var marginY = EdgeMarginVertical * dpi.DpiScaleY;
 
         var statusBarH = _statusBarView.GetActualHeight() * dpi.DpiScaleY;
 
-        var x = Math.Max(0, targetSize.Width - popupSize.Width - marginX);
-        var y = Math.Max(0, targetSize.Height - popupSize.Height - marginY - statusBarH);
+        var x = IsLeftPlacement()
+            ? Math.Min(marginX, Math.Max(0, targetSize.Width - popupSize.Width))
+            : Math.Max(0, targetSize.Width - popupSize.Width - marginX);
+
+        var y = IsTopPlacement()
+            ? Math.Min(marginY, Math.Max(0, targetSize.Height - popupSize.Height))
+            : Math.Max(0, targetSize.Height - popupSize.Height - marginY - statusBarH);
 
         x = Math.Round(x);
         y = Math.Round(y);
@@ -281,7 +289,9 @@ internal sealed class ToastStackPopupHost : IDisposable
         element.MaxWidth = ToastMaxWidth;
         element.MinHeight = ToastMinHeight;
         element.Height = double.NaN;
-        element.HorizontalAlignment = HorizontalAlignment.Right;
+        element.HorizontalAlignment = IsLeftPlacement()
+            ? HorizontalAlignment.Left
+            : HorizontalAlignment.Right;
         element.Margin = new Thickness(0, 0, 0, ToastGap);
 
         _stack.Children.Insert(0, element);
@@ -350,6 +360,16 @@ internal sealed class ToastStackPopupHost : IDisposable
         var x = _popup.HorizontalOffset;
         _popup.HorizontalOffset = x + 1;
         _popup.HorizontalOffset = x;
+    }
+
+    private bool IsLeftPlacement()
+    {
+        return Placement is ToastPlacement.TopLeft or ToastPlacement.BottomLeft;
+    }
+
+    private bool IsTopPlacement()
+    {
+        return Placement is ToastPlacement.TopLeft or ToastPlacement.TopRight;
     }
 
     public void Dispose()

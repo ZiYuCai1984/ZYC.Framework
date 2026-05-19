@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-  <PropertyGroup>
-    <EnableWpf>false</EnableWpf>
-  </PropertyGroup>
-  
+
   <PropertyGroup>
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>

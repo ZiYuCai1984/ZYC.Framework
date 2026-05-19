@@ -1,33 +1,24 @@
-﻿<Project>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-
-
-    
   <PropertyGroup>
-    <!--!WARNING Since other modules depend on wpf, this is the only way here-->
-    <EnableWpf>true</EnableWpf>
+    <TargetFramework>net10.0</TargetFramework>
+    <UseWPF>false</UseWPF>
   </PropertyGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<OutputPath>../_bin_dotnettool</OutputPath>-->
+    <NoDefaultExcludes>true</NoDefaultExcludes>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="DotnetToolSettings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Template\**\*.cs" />
     <Page Remove="Template\**\*.xaml" />
     <None Remove="Template\**\*" />
-    <Content Include="Template\**\*">
+    <None Include="Template\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+      <!--<Pack>true</Pack>
+      <PackagePath>tools\net10.0\any\Template\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>-->
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -47,10 +38,5 @@
     <ToolCommandName>zyc</ToolCommandName>
   </PropertyGroup>
 
-
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-
-  <!--!WARNING Bypass verification by manually importing the SDK -->
-  <Target Name="_PackToolValidation" Condition="'$(PackAsTool)' == 'true'" />
 
 </Project>
