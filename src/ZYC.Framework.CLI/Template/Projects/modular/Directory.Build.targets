@@ -1,4 +1,5 @@
 ﻿<Project>
+
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>_</DependentUpon>
@@ -17,4 +18,5 @@
   <ItemGroup>
     <PackageReference Update="ZYC.Framework.Alpha" Version="$(V_ZYC_Framework_Alpha)" />
   </ItemGroup>
+
 </Project>

@@ -2,6 +2,9 @@
   <PropertyGroup>
     <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
   </PropertyGroup>
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Modules.__PROJECT_NAME__.Abstractions\ZYC.Framework.Modules.__PROJECT_NAME__.Abstractions.csproj" />
   </ItemGroup>

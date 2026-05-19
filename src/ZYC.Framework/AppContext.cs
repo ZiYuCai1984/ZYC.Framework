@@ -87,6 +87,36 @@ internal partial class AppContext : IAppContext
                     logger.Error(e);
                 }
             });
+
+
+
+        appConfig.ObserveProperty(nameof(Abstractions.Config.AppConfig.AssociateUriScheme))
+            .Throttle(TimeSpan.FromMilliseconds(200))
+            .Subscribe(_ =>
+            {
+                try
+                {
+                    var executablePath = Environment.ProcessPath
+                                         ?? throw new InvalidOperationException("Failed to get current executable path.");
+
+                    
+                    if (appConfig.AssociateUriScheme)
+                    {
+                        UriSchemeAssociationTools.Associate(
+                            ProductInfo.Scheme,
+                            ProductInfo.ProductName,
+                            executablePath);
+                    }
+                    else
+                    {
+                        UriSchemeAssociationTools.Remove(ProductInfo.Scheme);
+                    }
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                }
+            });
     }
 
     private AppState AppState { get; }

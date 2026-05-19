@@ -34,6 +34,8 @@ public class Program
 
             await PackProductAsync();
 
+            await PackCliToolAsync();
+
             //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 #if PUBLISH_NUGET_ORG
         await DotnetNuGetTools.PushNuGetAsync(
@@ -46,6 +48,21 @@ public class Program
         {
             IOTools.DeleteFileIfExists(tempSlnFileName);
         }
+    }
+
+    private static async Task PackCliToolAsync()
+    {
+        IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
+
+        await DotnetNuGetTools.PackProjectAsync(
+            BuildEnvironment.CliToolCsprojPath, 
+            BuildEnvironment.CliToolOutputPath,
+            ProductInfo.Version,
+            false);
+
+        IOTools.CopyFile(
+            BuildEnvironment.CliToolPackageOutputPath,
+            BuildEnvironment.CliToolPackageTargetPath);
     }
 
     private static async Task GenerateDocAsync()
@@ -132,6 +149,7 @@ public class Program
         foreach (var file in allCsprojFiles)
         {
             var content = File.ReadAllText(file);
+            //!WARNING Temp code(Shit design)
             if (content.Contains("<IgnoreFromPublish>true</IgnoreFromPublish>"))
             {
                 continue;

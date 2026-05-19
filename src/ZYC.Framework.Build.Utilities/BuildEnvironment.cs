@@ -16,6 +16,16 @@ public static class BuildEnvironment
 
     public static string SrcFolder => GetProjectSrcFolderPath();
 
+    public static string CliToolCsprojPath => Path.Combine(SrcFolder, "ZYC.Framework.CLI", "ZYC.Framework.CLI.csproj");
+
+    public static string CliToolOutputPath => Path.Combine(SrcFolder, "_bin_tool");
+
+    public static string CliToolPackageOutputPath =>
+        Path.Combine(CliToolOutputPath, $"ZYC.Framework.CLI.{ProductInfo.Version}.nupkg");
+
+    public static string CliToolPackageTargetPath =>
+        Path.Combine(SrcFolder, $"ZYC.Framework.CLI.{ProductInfo.Version}.nupkg");
+
     public static string AppRootDirectoryPath => Path.Combine(SrcFolder, "_bin\\");
 
     public static string OutputPath => Path.Combine(AppRootDirectoryPath, $"{ProductInfo.Version}\\");
@@ -39,9 +49,9 @@ public static class BuildEnvironment
     public static string RuntimesPath_win_arm64 => Path.Combine(RuntimesPath, "win-arm64");
 
     public static string RuntimesPath_win10_arm64 => Path.Combine(RuntimesPath, "win10-arm64");
-    
+
     public static string RuntimesPath_win10_x86 => Path.Combine(RuntimesPath, "win10-x86");
-    
+
     public static string RuntimesPath_win_x86 => Path.Combine(RuntimesPath, "win-x86");
 
     public static string BuildProjectPath => Path.Combine(SrcFolder, "ZYC.Framework.Build.NuGet");

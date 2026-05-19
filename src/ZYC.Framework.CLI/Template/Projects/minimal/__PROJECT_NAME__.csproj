@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ZYC.Framework.Alpha" Version="__PACKAGE_VERSION__" />
   </ItemGroup>

@@ -54,15 +54,15 @@ internal class Program
 
 
 
-        optionRegister.AddOption<bool>(_ =>
-            {
-                var exeFile = Path.Combine(appContextDirectory, ProductInfoExtended.MainExeName);
-                Process.Start(new ProcessStartInfo(exeFile)
-                {
-                    WorkingDirectory = appContextDirectory
-                });
-            }, "--gui",
-            $"Start {ProductInfo.ProductName} with gui");
+        //optionRegister.AddOption<bool>(_ =>
+        //    {
+        //        var exeFile = Path.Combine(appContextDirectory, ProductInfoExtended.MainExeName);
+        //        Process.Start(new ProcessStartInfo(exeFile)
+        //        {
+        //            WorkingDirectory = appContextDirectory
+        //        });
+        //    }, "--gui",
+        //    $"Start {ProductInfo.ProductName} with gui");
 
 
         optionRegister.AddOption<bool>(_ =>

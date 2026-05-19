@@ -8,7 +8,7 @@ internal partial class Program
 {
     private static Mutex? Mutex { get; set; }
 
-    private static void EnsureSingleInstance()
+    private static void EnsureSingleInstance(Uri? startupUri)
     {
         //!WARNING Regardless of whether it is a singleton or not, the message should be sent first.
         NativeMethods.PostMessage(
@@ -42,7 +42,29 @@ internal partial class Program
         }
 
 
+        SendStartupUriToCurrentInstance(startupUri);
         AppContext.FocusExitProcess();
+    }
+
+    private static void SendStartupUriToCurrentInstance(Uri? startupUri)
+    {
+        if (startupUri == null)
+        {
+            return;
+        }
+
+        var pipeName = GetStartupUriPipeName();
+        if (string.IsNullOrWhiteSpace(pipeName))
+        {
+            return;
+        }
+
+        StartupUriPipeClient.TrySend(pipeName, startupUri);
+    }
+
+    private static string GetStartupUriPipeName()
+    {
+        return GetMutexId();
     }
 
     private static string GetMutexId()

@@ -6,29 +6,35 @@
 
 ## 🆕 New Features
 
-* Added a **Save Custom Layout** dialog with editable layout names and generated workspace-layout thumbnails
-* Added a **Manage Custom Layouts** dialog for renaming, deleting, and reordering saved workspace layouts
-* Added the bundled **ZYC.Indigo.Light** application theme based on MahApps.Metro resources
-* Added a reusable static-resource markup extension for theme resource aliases
+* Added startup URI support for `zyc://` links, including command-line parsing, single-instance forwarding, and navigation after tab restore completes
+* Added Windows installer registration for the `zyc` URL protocol
+* Added CLI tool packaging to the NuGet release build so `ZYC.Framework.CLI` is packed alongside the framework packages
 
 ---
 
 ## 🛠 Improvements
 
-* Reworked the **View** menu layout commands with explicit ordering and a dedicated custom-layout management entry
-* Moved custom-layout thumbnail generation into a shared builder used by the save and management flows
-* Updated custom-layout apply notifications to include the selected layout name
-* Sorted TaskManager entries by creation time with newest tasks first
-* Removed obsolete placeholder and duplicate custom-layout removal menu types
-* Removed the TextEditor module's direct **System.Text.Encoding.CodePages** package reference now that the package version is centrally managed
+* Converted the CLI project to SDK-style `net10.0` dotnet tool packaging and kept project templates in the CLI output
+* Simplified target framework selection so WPF projects default to `net10.0-windows`, while Abstractions and build tools stay on non-WPF `net10.0`
+* Moved opt-in Fody wiring into `Directory.Build.targets` after shared NuGet package version updates
+* Marked generated project and module template projects with `IgnoreFromPublish` so scaffolded templates stay out of product publish packaging
+* Updated Aspire package references to `13.3.3`
+* Refreshed README and quick-start version references for `1.3.0`
+* Added XML documentation for `IFileOpenMainMenuItemsProvider`
+
+---
+
+## ⚠️ Breaking Changes
+
+* Removed the unused `IFileNewMainMenuItemsProvider` abstraction and built-in `FileNewMainMenuItemsProvider`
+* Removed the legacy CLI `DotnetToolSettings.xml` packaging path and disabled the `--gui` CLI shortcut while the CLI is packaged as a .NET tool
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed CLI startup URI overrides so non-empty startup command values are applied to the terminal control
-* Kept toast popups visible while owned dialog windows are active
-* Preserved the original accent brush for main-window borders and active tab indicators after switching to the custom theme
+* Forwarded startup URI requests from secondary app launches to the already-running instance instead of dropping them during single-instance shutdown
+* Queued startup URI navigation until tab restore is complete so startup links can resolve against restored tab state
 
 ---
 
@@ -36,6 +42,7 @@
 
 ```bash
 dotnet add package ZYC.Framework.Alpha --version $(Version)
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
 ```
 
 ---

@@ -6,7 +6,18 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)nuget.targets" />
 
+
+  <PropertyGroup>
+    <EnableFody Condition="'$(EnableFody)' == ''">false</EnableFody>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EnableFody)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)FodyWeavers.xml"
+          Link="FodyWeavers.xml" />
+    <PackageReference Include="PropertyChanged.Fody" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)nuget.targets" />
 
 </Project>

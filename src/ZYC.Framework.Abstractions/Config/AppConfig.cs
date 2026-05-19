@@ -54,10 +54,14 @@ public class AppConfig : IConfig
     /// </summary>
     public CornerPreference CornerPreference { get; set; } = CornerPreference.DoNotRound;
 
-
     /// <summary>
     ///     Gets or sets a value indicating whether module load errors should be suppressed.
     ///     When set to true, errors will be caught or ignored rather than throwing an exception.
     /// </summary>
     public bool SuppressModuleLoadError { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the application's URI scheme should be associated with this application.
+    /// </summary>
+    public bool AssociateUriScheme { get; set; }
 }

@@ -15,18 +15,20 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <EnableWpf>true</EnableWpf>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(EnableWpf)' == 'true'">
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(EnableWpf)' != 'true' or $(MSBuildProjectName.EndsWith('.Abstractions'))">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Abstractions'))">
     <TargetFramework>net10.0</TargetFramework>
     <UseWPF>false</UseWPF>
   </PropertyGroup>
+
+  <PropertyGroup Condition="$(MSBuildProjectName.StartsWith('ZYC.Framework.Build.'))">
+    <TargetFramework>net10.0</TargetFramework>
+    <UseWPF>false</UseWPF>
+  </PropertyGroup>
+
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Abstractions'))">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -62,17 +64,6 @@
     <GenerateScopedCss>false</GenerateScopedCss>
   </PropertyGroup>
 
-
-
-  <PropertyGroup>
-    <EnableFody Condition="'$(EnableFody)' == ''">false</EnableFody>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(EnableFody)' == 'true'">
-    <None Include="$(MSBuildThisFileDirectory)FodyWeavers.xml"
-          Link="FodyWeavers.xml" />
-    <PackageReference Include="PropertyChanged.Fody" />
-  </ItemGroup>
 
 
   <PropertyGroup>

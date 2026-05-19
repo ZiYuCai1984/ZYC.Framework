@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ZYC.Framework.Abstractions">
       <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
