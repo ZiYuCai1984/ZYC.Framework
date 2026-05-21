@@ -13,14 +13,56 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 
 ---
 
-## 1. 🧱 Project Setup & Prerequisites
+## Recommended: Create with the dotnet tool
+
+Install or update the ZYC.Framework CLI tool:
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.1
+# If the tool is already installed:
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.1
+```
+
+Create a minimal host project:
+
+```bash
+zyc new WpfApp1
+```
+
+The default project template is `minimal`, which generates the same host shape described in the manual section below. You can also pass the template explicitly:
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+Use `modular` when you want a solution with an `Entry` project, a module project, and an `Abstractions` project:
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+Useful options:
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.1
+```
+
+Open the generated solution or project, set it as the startup project, and start debugging. The generated files already include the package reference, `Module.cs`, `ModuleConfig.json`, and an initial view.
+
+---
+
+## Manual Creation Method
+
+The following steps show the equivalent setup if you want to create the host project by hand.
+
+### 1. 🧱 Project Setup & Prerequisites
 
 1. **Create Project**: Create a new **WPF Application** targeting **.NET 10** (e.g., name it `WpfApp1`). ✨
 2. **Add NuGet Package**: Install the core framework package `ZYC.Framework.Alpha` via NuGet Package Manager. 📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.1" />
 </ItemGroup>
 ```
 
@@ -34,7 +76,7 @@ The framework provides its own unified entry point (`Entry.cs`). You **must dele
 
 ---
 
-## 2. ⚙️ Configure Assembly References
+### 2. ⚙️ Configure Assembly References
 
 To ensure the host correctly identifies and loads the abstraction interfaces, manually add the reference to the `Abstractions` assembly in your `.csproj` file: 🔗
 
@@ -48,7 +90,7 @@ To ensure the host correctly identifies and loads the abstraction interfaces, ma
 
 ---
 
-## 3. 🛠️ Implement the Business Module (Module.cs)
+### 3. 🛠️ Implement the Business Module (Module.cs)
 
 Create a `Module.cs` file in your project root. This class acts as the "brain" of your module, defining loading logic and registering UI pages to the host. 🧠
 
@@ -78,7 +120,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 Create the UI Component
+### 4. 🎨 Create the UI Component
 
 Create a new `UserControl1` (WPF User Control) and add the `[Register]` attribute. This allows the framework's Dependency Injection (DI) container to automatically recognize and manage it. 🖥️
 
@@ -99,7 +141,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 Add Module Configuration
+### 5. 📄 Add Module Configuration
 
 Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. Configure your project to copy it to `../settings/ModuleConfig.json` relative to the main executable. ⚙️
 
@@ -129,7 +171,7 @@ Add the following configuration to your `.csproj` file so `ModuleConfig.json` is
 
 ---
 
-## 6. ▶️ Run and Debug
+### 6. ▶️ Run and Debug
 
 1. **Set Startup Project**: Set this WPF project as the **Startup Project** of your solution.
 2. **Start Debugging**: Press `F5`.

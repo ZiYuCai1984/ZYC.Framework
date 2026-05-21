@@ -13,14 +13,56 @@
 
 ---
 
-## 1. 🧱 项目准备与前置条件
+## 推荐方式：通过 dotnet tool 创建
+
+安装或更新 ZYC.Framework CLI 工具：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.1
+# 如果已经安装过：
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.1
+```
+
+创建一个最小 Host 项目：
+
+```bash
+zyc new WpfApp1
+```
+
+默认项目模板是 `minimal`，它会生成与下面“手动创建方法”等价的 Host 结构。你也可以显式指定模板：
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+如果你需要一个包含 `Entry` 项目、模块项目和 `Abstractions` 项目的解决方案，可以使用 `modular`：
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+常用选项：
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.1
+```
+
+打开生成的解决方案或项目，将其设置为启动项目，然后开始调试。生成结果已经包含包引用、`Module.cs`、`ModuleConfig.json` 和初始视图。
+
+---
+
+## 手动创建方法
+
+如果你希望手动创建 Host 项目，可以按下面的等价步骤操作。
+
+### 1. 🧱 项目准备与前置条件
 
 1. **创建项目**：创建一个以 **.NET 10** 为目标框架的 **WPF Application**（例如命名为 `WpfApp1`）。✨
 2. **添加 NuGet 包**：通过 NuGet 包管理器安装核心包 `ZYC.Framework.Alpha`。📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.1" />
 </ItemGroup>
 ```
 
@@ -34,7 +76,7 @@
 
 ---
 
-## 2. ⚙️ 配置程序集引用
+### 2. ⚙️ 配置程序集引用
 
 为了让宿主正确识别并加载抽象接口，请在 `.csproj` 文件中手动添加对 `Abstractions` 程序集的引用。🔗
 
@@ -48,7 +90,7 @@
 
 ---
 
-## 3. 🛠️ 实现业务模块 (`Module.cs`)
+### 3. 🛠️ 实现业务模块 (`Module.cs`)
 
 在项目根目录下创建一个 `Module.cs` 文件。这个类相当于模块的“大脑”，负责定义加载逻辑，并向宿主注册 UI 页面。🧠
 
@@ -78,7 +120,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 创建 UI 组件
+### 4. 🎨 创建 UI 组件
 
 创建一个新的 `UserControl1`（WPF User Control），并添加 `[Register]` 特性。这样框架的依赖注入（DI）容器就能自动识别并管理它。🖥️
 
@@ -99,7 +141,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 添加模块配置文件
+### 5. 📄 添加模块配置文件
 
 在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。同时需要将它配置为相对于主程序生成到 `../settings/ModuleConfig.json`。⚙️
 
@@ -129,7 +171,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 运行与调试
+### 6. ▶️ 运行与调试
 
 1. **设置启动项目**：将这个 WPF 项目设置为解决方案的 **Startup Project**。
 2. **开始调试**：按下 `F5`。

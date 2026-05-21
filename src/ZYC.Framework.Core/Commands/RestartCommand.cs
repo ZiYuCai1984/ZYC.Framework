@@ -56,10 +56,10 @@ public class RestartCommand : CommandBase, IDisposable
     {
         try
         {
-            var fileName = AppContext.GetProcessFileName();
+            var filePath = AppContext.GetProcessFilePath();
             var argumentString = AppContext.GetArgumentString();
 
-            ProcessTools.Start(fileName, argumentString, IsAdministrator);
+            ProcessTools.Start(filePath, argumentString, IsAdministrator);
 
             //!WARNING Must save the configuration first and then try to restart
             AppContext.SaveAllConfig();

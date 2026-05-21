@@ -96,10 +96,7 @@ internal partial class AppContext : IAppContext
             {
                 try
                 {
-                    var executablePath = Environment.ProcessPath
-                                         ?? throw new InvalidOperationException("Failed to get current executable path.");
-
-                    
+                    var executablePath = GetProcessFilePath();
                     if (appConfig.AssociateUriScheme)
                     {
                         UriSchemeAssociationTools.Associate(
