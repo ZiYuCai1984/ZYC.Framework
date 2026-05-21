@@ -1,10 +1,7 @@
 ﻿using System.CommandLine;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using Autofac;
 using ZYC.CoreToolkit;
-using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.State;
 using ProductInfo = ZYC.Framework.Abstractions.ProductInfo;
@@ -51,7 +48,6 @@ internal class Program
         {
             module.RegisterCommandLineOption(container, optionRegister);
         }
-
 
 
         //optionRegister.AddOption<bool>(_ =>
@@ -169,7 +165,8 @@ internal class Program
                 && !string.IsNullOrWhiteSpace(targetFromArgument)
                 && !string.Equals(targetFromOption, targetFromArgument, StringComparison.Ordinal))
             {
-                context.Console.Error.Write($"Target was provided multiple times with different values.{Environment.NewLine}");
+                context.Console.Error.Write(
+                    $"Target was provided multiple times with different values.{Environment.NewLine}");
                 context.ExitCode = 1;
                 return;
             }
@@ -181,14 +178,16 @@ internal class Program
 
             if (string.IsNullOrWhiteSpace(target))
             {
-                context.Console.Error.Write($"Target is required. Pass --target <ModuleName> or provide <ModuleName> as positional argument.{Environment.NewLine}");
+                context.Console.Error.Write(
+                    $"Target is required. Pass --target <ModuleName> or provide <ModuleName> as positional argument.{Environment.NewLine}");
                 context.ExitCode = 1;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(sourceRoot))
             {
-                context.Console.Error.Write($"Source root is required. Pass --src-root <SourceRoot>.{Environment.NewLine}");
+                context.Console.Error.Write(
+                    $"Source root is required. Pass --src-root <SourceRoot>.{Environment.NewLine}");
                 context.ExitCode = 1;
                 return;
             }

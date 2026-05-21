@@ -45,6 +45,12 @@ public partial interface IAppContext
     string GetProcessFileName();
 
     /// <summary>
+    ///     Gets the current process file path.
+    /// </summary>
+    /// <returns>The process file path.</returns>
+    string GetProcessFilePath();
+
+    /// <summary>
     ///     Saves all configuration data.
     /// </summary>
     void SaveAllConfig();

@@ -13,14 +13,56 @@
 
 ---
 
-## 1. 🧱 プロジェクトの作成と前提条件
+## 推奨: dotnet tool で作成する
+
+ZYC.Framework CLI ツールをインストール、または更新します:
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.1
+# すでにインストール済みの場合:
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.1
+```
+
+最小構成の Host プロジェクトを作成します:
+
+```bash
+zyc new WpfApp1
+```
+
+既定のプロジェクト テンプレートは `minimal` です。これは下の手動手順と同じ Host 構成を生成します。テンプレートを明示することもできます:
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+`Entry` プロジェクト、モジュール プロジェクト、`Abstractions` プロジェクトを含むソリューションが必要な場合は `modular` を使います:
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+よく使うオプション:
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.1
+```
+
+生成されたソリューションまたはプロジェクトを開き、スタートアップ プロジェクトに設定してデバッグを開始します。生成済みファイルには、パッケージ参照、`Module.cs`、`ModuleConfig.json`、初期ビューが含まれています。
+
+---
+
+## 手動作成方法
+
+以下は、Host プロジェクトを手作業で作成したい場合の同等手順です。
+
+### 1. 🧱 プロジェクトの作成と前提条件
 
 1. **プロジェクトを作成**: **.NET 10** を対象にした新しい **WPF Application** を作成します（例: `WpfApp1`）。✨
 2. **NuGet パッケージを追加**: NuGet パッケージ マネージャーからコア パッケージ `ZYC.Framework.Alpha` をインストールします。📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.1" />
 </ItemGroup>
 ```
 
@@ -34,7 +76,7 @@
 
 ---
 
-## 2. ⚙️ アセンブリ参照の設定
+### 2. ⚙️ アセンブリ参照の設定
 
 ホストが抽象化インターフェイスを正しく認識して読み込めるように、`.csproj` ファイルに `Abstractions` アセンブリ参照を手動で追加します。🔗
 
@@ -48,7 +90,7 @@
 
 ---
 
-## 3. 🛠️ 業務モジュールを実装する (`Module.cs`)
+### 3. 🛠️ 業務モジュールを実装する (`Module.cs`)
 
 プロジェクト ルートに `Module.cs` ファイルを作成します。このクラスはモジュールの「頭脳」として機能し、読み込みロジックを定義しながら、ホストへ UI ページを登録します。🧠
 
@@ -78,7 +120,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 UI コンポーネントを作成する
+### 4. 🎨 UI コンポーネントを作成する
 
 新しい `UserControl1`（WPF User Control）を作成し、`[Register]` 属性を付与します。これにより、フレームワークの依存性注入（DI）コンテナーが自動的にこの型を認識して管理できます。🖥️
 
@@ -99,7 +141,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 モジュール構成ファイルを追加する
+### 5. 📄 モジュール構成ファイルを追加する
 
 プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。さらに、メイン実行ファイルを基準に `../settings/ModuleConfig.json` へコピーされるようにプロジェクトを設定します。⚙️
 
@@ -129,7 +171,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 実行とデバッグ
+### 6. ▶️ 実行とデバッグ
 
 1. **スタートアップ プロジェクトを設定**: この WPF プロジェクトをソリューションの **Startup Project** に設定します。
 2. **デバッグを開始**: `F5` を押します。

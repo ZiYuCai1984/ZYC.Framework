@@ -13,7 +13,49 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 
 ---
 
-## 1. 🧱 Project Setup & Prerequisites
+## Recommended: Create with the dotnet tool
+
+Install or update the ZYC.Framework CLI tool:
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+# If the tool is already installed:
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+```
+
+Create a minimal host project:
+
+```bash
+zyc new WpfApp1
+```
+
+The default project template is `minimal`, which generates the same host shape described in the manual section below. You can also pass the template explicitly:
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+Use `modular` when you want a solution with an `Entry` project, a module project, and an `Abstractions` project:
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+Useful options:
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version $(Version)
+```
+
+Open the generated solution or project, set it as the startup project, and start debugging. The generated files already include the package reference, `Module.cs`, `ModuleConfig.json`, and an initial view.
+
+---
+
+## Manual Creation Method
+
+The following steps show the equivalent setup if you want to create the host project by hand.
+
+### 1. 🧱 Project Setup & Prerequisites
 
 1. **Create Project**: Create a new **WPF Application** targeting **.NET 10** (e.g., name it `WpfApp1`). ✨
 2. **Add NuGet Package**: Install the core framework package `$(PackageId)` via NuGet Package Manager. 📦
@@ -34,7 +76,7 @@ The framework provides its own unified entry point (`Entry.cs`). You **must dele
 
 ---
 
-## 2. ⚙️ Configure Assembly References
+### 2. ⚙️ Configure Assembly References
 
 To ensure the host correctly identifies and loads the abstraction interfaces, manually add the reference to the `Abstractions` assembly in your `.csproj` file: 🔗
 
@@ -48,7 +90,7 @@ To ensure the host correctly identifies and loads the abstraction interfaces, ma
 
 ---
 
-## 3. 🛠️ Implement the Business Module (Module.cs)
+### 3. 🛠️ Implement the Business Module (Module.cs)
 
 Create a `Module.cs` file in your project root. This class acts as the "brain" of your module, defining loading logic and registering UI pages to the host. 🧠
 
@@ -78,7 +120,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 Create the UI Component
+### 4. 🎨 Create the UI Component
 
 Create a new `UserControl1` (WPF User Control) and add the `[Register]` attribute. This allows the framework's Dependency Injection (DI) container to automatically recognize and manage it. 🖥️
 
@@ -99,7 +141,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 Add Module Configuration
+### 5. 📄 Add Module Configuration
 
 Create a `ModuleConfig.json` file in the project root. This file serves as a "map" for the host, telling it which assemblies to load dynamically. Configure your project to copy it to `../settings/ModuleConfig.json` relative to the main executable. ⚙️
 
@@ -129,7 +171,7 @@ Add the following configuration to your `.csproj` file so `ModuleConfig.json` is
 
 ---
 
-## 6. ▶️ Run and Debug
+### 6. ▶️ Run and Debug
 
 1. **Set Startup Project**: Set this WPF project as the **Startup Project** of your solution.
 2. **Start Debugging**: Press `F5`.
@@ -147,7 +189,49 @@ The host will launch, scan `ModuleConfig.json`, and load the `WpfApp1` module. Y
 
 ---
 
-## 1. 🧱 プロジェクトの作成と前提条件
+## 推奨: dotnet tool で作成する
+
+ZYC.Framework CLI ツールをインストール、または更新します:
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+# すでにインストール済みの場合:
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+```
+
+最小構成の Host プロジェクトを作成します:
+
+```bash
+zyc new WpfApp1
+```
+
+既定のプロジェクト テンプレートは `minimal` です。これは下の手動手順と同じ Host 構成を生成します。テンプレートを明示することもできます:
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+`Entry` プロジェクト、モジュール プロジェクト、`Abstractions` プロジェクトを含むソリューションが必要な場合は `modular` を使います:
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+よく使うオプション:
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version $(Version)
+```
+
+生成されたソリューションまたはプロジェクトを開き、スタートアップ プロジェクトに設定してデバッグを開始します。生成済みファイルには、パッケージ参照、`Module.cs`、`ModuleConfig.json`、初期ビューが含まれています。
+
+---
+
+## 手動作成方法
+
+以下は、Host プロジェクトを手作業で作成したい場合の同等手順です。
+
+### 1. 🧱 プロジェクトの作成と前提条件
 
 1. **プロジェクトを作成**: **.NET 10** を対象にした新しい **WPF Application** を作成します（例: `WpfApp1`）。✨
 2. **NuGet パッケージを追加**: NuGet パッケージ マネージャーからコア パッケージ `$(PackageId)` をインストールします。📦
@@ -168,7 +252,7 @@ The host will launch, scan `ModuleConfig.json`, and load the `WpfApp1` module. Y
 
 ---
 
-## 2. ⚙️ アセンブリ参照の設定
+### 2. ⚙️ アセンブリ参照の設定
 
 ホストが抽象化インターフェイスを正しく認識して読み込めるように、`.csproj` ファイルに `Abstractions` アセンブリ参照を手動で追加します。🔗
 
@@ -182,7 +266,7 @@ The host will launch, scan `ModuleConfig.json`, and load the `WpfApp1` module. Y
 
 ---
 
-## 3. 🛠️ 業務モジュールを実装する (`Module.cs`)
+### 3. 🛠️ 業務モジュールを実装する (`Module.cs`)
 
 プロジェクト ルートに `Module.cs` ファイルを作成します。このクラスはモジュールの「頭脳」として機能し、読み込みロジックを定義しながら、ホストへ UI ページを登録します。🧠
 
@@ -212,7 +296,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 UI コンポーネントを作成する
+### 4. 🎨 UI コンポーネントを作成する
 
 新しい `UserControl1`（WPF User Control）を作成し、`[Register]` 属性を付与します。これにより、フレームワークの依存性注入（DI）コンテナーが自動的にこの型を認識して管理できます。🖥️
 
@@ -233,7 +317,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 モジュール構成ファイルを追加する
+### 5. 📄 モジュール構成ファイルを追加する
 
 プロジェクト ルートに `ModuleConfig.json` ファイルを作成します。このファイルはホストに対して、どのアセンブリを動的に読み込むかを伝える「マップ」として機能します。さらに、メイン実行ファイルを基準に `../settings/ModuleConfig.json` へコピーされるようにプロジェクトを設定します。⚙️
 
@@ -263,7 +347,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 実行とデバッグ
+### 6. ▶️ 実行とデバッグ
 
 1. **スタートアップ プロジェクトを設定**: この WPF プロジェクトをソリューションの **Startup Project** に設定します。
 2. **デバッグを開始**: `F5` を押します。
@@ -281,7 +365,49 @@ public partial class UserControl1
 
 ---
 
-## 1. 🧱 项目准备与前置条件
+## 推荐方式：通过 dotnet tool 创建
+
+安装或更新 ZYC.Framework CLI 工具：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+# 如果已经安装过：
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+```
+
+创建一个最小 Host 项目：
+
+```bash
+zyc new WpfApp1
+```
+
+默认项目模板是 `minimal`，它会生成与下面“手动创建方法”等价的 Host 结构。你也可以显式指定模板：
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+如果你需要一个包含 `Entry` 项目、模块项目和 `Abstractions` 项目的解决方案，可以使用 `modular`：
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+常用选项：
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version $(Version)
+```
+
+打开生成的解决方案或项目，将其设置为启动项目，然后开始调试。生成结果已经包含包引用、`Module.cs`、`ModuleConfig.json` 和初始视图。
+
+---
+
+## 手动创建方法
+
+如果你希望手动创建 Host 项目，可以按下面的等价步骤操作。
+
+### 1. 🧱 项目准备与前置条件
 
 1. **创建项目**：创建一个以 **.NET 10** 为目标框架的 **WPF Application**（例如命名为 `WpfApp1`）。✨
 2. **添加 NuGet 包**：通过 NuGet 包管理器安装核心包 `$(PackageId)`。📦
@@ -302,7 +428,7 @@ public partial class UserControl1
 
 ---
 
-## 2. ⚙️ 配置程序集引用
+### 2. ⚙️ 配置程序集引用
 
 为了让宿主正确识别并加载抽象接口，请在 `.csproj` 文件中手动添加对 `Abstractions` 程序集的引用。🔗
 
@@ -316,7 +442,7 @@ public partial class UserControl1
 
 ---
 
-## 3. 🛠️ 实现业务模块 (`Module.cs`)
+### 3. 🛠️ 实现业务模块 (`Module.cs`)
 
 在项目根目录下创建一个 `Module.cs` 文件。这个类相当于模块的“大脑”，负责定义加载逻辑，并向宿主注册 UI 页面。🧠
 
@@ -346,7 +472,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 创建 UI 组件
+### 4. 🎨 创建 UI 组件
 
 创建一个新的 `UserControl1`（WPF User Control），并添加 `[Register]` 特性。这样框架的依赖注入（DI）容器就能自动识别并管理它。🖥️
 
@@ -367,7 +493,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 添加模块配置文件
+### 5. 📄 添加模块配置文件
 
 在项目根目录创建一个 `ModuleConfig.json` 文件。这个文件相当于宿主的“地图”，用于告诉宿主要动态加载哪些程序集。同时需要将它配置为相对于主程序生成到 `../settings/ModuleConfig.json`。⚙️
 
@@ -397,7 +523,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 运行与调试
+### 6. ▶️ 运行与调试
 
 1. **设置启动项目**：将这个 WPF 项目设置为解决方案的 **Startup Project**。
 2. **开始调试**：按下 `F5`。
@@ -415,7 +541,49 @@ public partial class UserControl1
 
 ---
 
-## 1. 🧱 專案準備與前置條件
+## 建議方式：透過 dotnet tool 建立
+
+安裝或更新 ZYC.Framework CLI 工具：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+# 如果已經安裝過：
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+```
+
+建立一個最小 Host 專案：
+
+```bash
+zyc new WpfApp1
+```
+
+預設專案範本是 `minimal`，會產生與下方「手動建立方法」等價的 Host 結構。你也可以明確指定範本：
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+如果你需要一個包含 `Entry` 專案、模組專案與 `Abstractions` 專案的解決方案，可以使用 `modular`：
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+常用選項：
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version $(Version)
+```
+
+開啟產生的解決方案或專案，將其設為啟動專案，然後開始偵錯。產生結果已包含套件參考、`Module.cs`、`ModuleConfig.json` 與初始 View。
+
+---
+
+## 手動建立方法
+
+如果你希望手動建立 Host 專案，可以依照下方的等價步驟操作。
+
+### 1. 🧱 專案準備與前置條件
 
 1. **建立專案**：建立一個以 **.NET 10** 為目標框架的 **WPF Application**（例如命名為 `WpfApp1`）。✨
 2. **加入 NuGet 套件**：透過 NuGet 套件管理器安裝核心套件 `$(PackageId)`。📦
@@ -436,7 +604,7 @@ public partial class UserControl1
 
 ---
 
-## 2. ⚙️ 設定組件參考
+### 2. ⚙️ 設定組件參考
 
 為了讓宿主正確識別並載入抽象介面，請在 `.csproj` 檔案中手動加入對 `Abstractions` 組件的參考。🔗
 
@@ -450,7 +618,7 @@ public partial class UserControl1
 
 ---
 
-## 3. 🛠️ 實作業務模組 (`Module.cs`)
+### 3. 🛠️ 實作業務模組 (`Module.cs`)
 
 在專案根目錄建立一個 `Module.cs` 檔案。這個類別相當於模組的「大腦」，負責定義載入邏輯，並向宿主註冊 UI 頁面。🧠
 
@@ -480,7 +648,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 建立 UI 元件
+### 4. 🎨 建立 UI 元件
 
 建立一個新的 `UserControl1`（WPF User Control），並加入 `[Register]` 屬性。這樣框架的相依性注入（DI）容器就能自動識別並管理它。🖥️
 
@@ -501,7 +669,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 新增模組設定檔
+### 5. 📄 新增模組設定檔
 
 在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。同時需要將它設定為相對於主程式輸出到 `../settings/ModuleConfig.json`。⚙️
 
@@ -531,7 +699,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 執行與偵錯
+### 6. ▶️ 執行與偵錯
 
 1. **設定啟動專案**：將這個 WPF 專案設為方案的 **Startup Project**。
 2. **開始偵錯**：按下 `F5`。
@@ -549,7 +717,49 @@ public partial class UserControl1
 
 ---
 
-## 1. 🧱 프로젝트 준비 및 사전 요구 사항
+## 권장 방식: dotnet tool로 만들기
+
+ZYC.Framework CLI 도구를 설치하거나 업데이트합니다:
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+# 이미 설치되어 있다면:
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+```
+
+최소 Host 프로젝트를 만듭니다:
+
+```bash
+zyc new WpfApp1
+```
+
+기본 프로젝트 템플릿은 `minimal`이며, 아래의 수동 생성 방법과 같은 Host 구조를 생성합니다. 템플릿을 명시할 수도 있습니다:
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+`Entry` 프로젝트, 모듈 프로젝트, `Abstractions` 프로젝트를 포함하는 솔루션이 필요하다면 `modular`를 사용합니다:
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+자주 쓰는 옵션:
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version $(Version)
+```
+
+생성된 솔루션 또는 프로젝트를 열고 시작 프로젝트로 설정한 뒤 디버깅을 시작합니다. 생성된 파일에는 패키지 참조, `Module.cs`, `ModuleConfig.json`, 초기 View가 이미 포함되어 있습니다.
+
+---
+
+## 수동 생성 방법
+
+Host 프로젝트를 직접 만들고 싶다면 아래의 동등한 절차를 따르면 됩니다.
+
+### 1. 🧱 프로젝트 준비 및 사전 요구 사항
 
 1. **프로젝트 만들기**: **.NET 10**을 대상으로 하는 새 **WPF Application**을 만듭니다(예: `WpfApp1`). ✨
 2. **NuGet 패키지 추가**: NuGet 패키지 관리자를 통해 핵심 패키지 `$(PackageId)`를 설치합니다. 📦
@@ -570,7 +780,7 @@ public partial class UserControl1
 
 ---
 
-## 2. ⚙️ 어셈블리 참조 구성
+### 2. ⚙️ 어셈블리 참조 구성
 
 호스트가 추상화 인터페이스를 올바르게 식별하고 로드할 수 있도록 `.csproj` 파일에 `Abstractions` 어셈블리 참조를 수동으로 추가합니다. 🔗
 
@@ -584,7 +794,7 @@ public partial class UserControl1
 
 ---
 
-## 3. 🛠️ 비즈니스 모듈 구현 (`Module.cs`)
+### 3. 🛠️ 비즈니스 모듈 구현 (`Module.cs`)
 
 프로젝트 루트에 `Module.cs` 파일을 만듭니다. 이 클래스는 모듈의 "두뇌" 역할을 하며, 로드 로직을 정의하고 UI 페이지를 호스트에 등록합니다. 🧠
 
@@ -614,7 +824,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 UI 컴포넌트 만들기
+### 4. 🎨 UI 컴포넌트 만들기
 
 새 `UserControl1`(WPF User Control)을 만들고 `[Register]` 특성을 추가합니다. 그러면 프레임워크의 의존성 주입(DI) 컨테이너가 이 타입을 자동으로 인식하고 관리합니다. 🖥️
 
@@ -635,7 +845,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 모듈 구성 파일 추가
+### 5. 📄 모듈 구성 파일 추가
 
 프로젝트 루트에 `ModuleConfig.json` 파일을 만듭니다. 이 파일은 호스트에게 어떤 어셈블리를 동적으로 로드해야 하는지 알려 주는 "지도" 역할을 합니다. 또한 주 실행 파일 기준으로 `../settings/ModuleConfig.json`에 복사되도록 프로젝트를 설정해야 합니다. ⚙️
 
@@ -665,7 +875,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 실행 및 디버그
+### 6. ▶️ 실행 및 디버그
 
 1. **시작 프로젝트 설정**: 이 WPF 프로젝트를 솔루션의 **Startup Project**로 설정합니다.
 2. **디버그 시작**: `F5`를 누릅니다.

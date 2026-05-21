@@ -13,14 +13,56 @@
 
 ---
 
-## 1. 🧱 專案準備與前置條件
+## 建議方式：透過 dotnet tool 建立
+
+安裝或更新 ZYC.Framework CLI 工具：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.1
+# 如果已經安裝過：
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.1
+```
+
+建立一個最小 Host 專案：
+
+```bash
+zyc new WpfApp1
+```
+
+預設專案範本是 `minimal`，會產生與下方「手動建立方法」等價的 Host 結構。你也可以明確指定範本：
+
+```bash
+zyc new WpfApp1 --template minimal
+```
+
+如果你需要一個包含 `Entry` 專案、模組專案與 `Abstractions` 專案的解決方案，可以使用 `modular`：
+
+```bash
+zyc new MyCompany.Tools --template modular
+```
+
+常用選項：
+
+```bash
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.1
+```
+
+開啟產生的解決方案或專案，將其設為啟動專案，然後開始偵錯。產生結果已包含套件參考、`Module.cs`、`ModuleConfig.json` 與初始 View。
+
+---
+
+## 手動建立方法
+
+如果你希望手動建立 Host 專案，可以依照下方的等價步驟操作。
+
+### 1. 🧱 專案準備與前置條件
 
 1. **建立專案**：建立一個以 **.NET 10** 為目標框架的 **WPF Application**（例如命名為 `WpfApp1`）。✨
 2. **加入 NuGet 套件**：透過 NuGet 套件管理器安裝核心套件 `ZYC.Framework.Alpha`。📦
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.0" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.1" />
 </ItemGroup>
 ```
 
@@ -34,7 +76,7 @@
 
 ---
 
-## 2. ⚙️ 設定組件參考
+### 2. ⚙️ 設定組件參考
 
 為了讓宿主正確識別並載入抽象介面，請在 `.csproj` 檔案中手動加入對 `Abstractions` 組件的參考。🔗
 
@@ -48,7 +90,7 @@
 
 ---
 
-## 3. 🛠️ 實作業務模組 (`Module.cs`)
+### 3. 🛠️ 實作業務模組 (`Module.cs`)
 
 在專案根目錄建立一個 `Module.cs` 檔案。這個類別相當於模組的「大腦」，負責定義載入邏輯，並向宿主註冊 UI 頁面。🧠
 
@@ -78,7 +120,7 @@ internal class Module : ModuleBase
 
 ---
 
-## 4. 🎨 建立 UI 元件
+### 4. 🎨 建立 UI 元件
 
 建立一個新的 `UserControl1`（WPF User Control），並加入 `[Register]` 屬性。這樣框架的相依性注入（DI）容器就能自動識別並管理它。🖥️
 
@@ -99,7 +141,7 @@ public partial class UserControl1
 
 ---
 
-## 5. 📄 新增模組設定檔
+### 5. 📄 新增模組設定檔
 
 在專案根目錄建立一個 `ModuleConfig.json` 檔案。這個檔案相當於宿主的「地圖」，用來告訴宿主要動態載入哪些組件。同時需要將它設定為相對於主程式輸出到 `../settings/ModuleConfig.json`。⚙️
 
@@ -129,7 +171,7 @@ public partial class UserControl1
 
 ---
 
-## 6. ▶️ 執行與偵錯
+### 6. ▶️ 執行與偵錯
 
 1. **設定啟動專案**：將這個 WPF 專案設為方案的 **Startup Project**。
 2. **開始偵錯**：按下 `F5`。

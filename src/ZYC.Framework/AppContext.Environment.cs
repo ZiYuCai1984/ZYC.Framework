@@ -32,6 +32,11 @@ internal partial class AppContext
         return GetProcessFileName();
     }
 
+    string IAppContext.GetProcessFilePath()
+    {
+        return GetProcessFilePath();
+    }
+
     string IAppContext.GetArgumentString()
     {
         return GetArgumentString();
@@ -64,6 +69,12 @@ internal partial class AppContext
     {
         var fullFileName = Process.GetCurrentProcess().MainModule!.FileName;
         return Path.GetFileName(fullFileName);
+    }
+
+    public static string GetProcessFilePath()
+    {
+        var path = Process.GetCurrentProcess().MainModule!.FileName;
+        return path;
     }
 
     public static string GetArgumentString()
