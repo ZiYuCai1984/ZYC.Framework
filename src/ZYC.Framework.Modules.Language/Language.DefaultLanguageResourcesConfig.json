@@ -124,7 +124,15 @@
       "No custom layout saved.": "保存されたカスタムレイアウトはありません。",
       "Custom layout applied.": "カスタムレイアウトを適用しました。",
       "Localization Resources": "ローカライズリソース",
-      "Search localization": "ローカライズを検索"
+      "Search localization": "ローカライズを検索",
+      "NuGet Cache": "NuGet キャッシュ",
+      "Close": "閉じる",
+      "Close Other Tabs": "他のタブを閉じる",
+      "Manage Custom Layouts": "カスタムレイアウトを管理",
+      "Name": "名前",
+      "Open": "開く",
+      "Text File": "テキストファイル",
+      "Switch Version": "バージョンを切り替え"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -250,7 +258,15 @@
       "No custom layout saved.": "尚未保存自定义布局。",
       "Custom layout applied.": "已应用自定义布局。",
       "Localization Resources": "本地化资源",
-      "Search localization": "搜索本地化项"
+      "Search localization": "搜索本地化项",
+      "NuGet Cache": "NuGet 缓存",
+      "Close": "关闭",
+      "Close Other Tabs": "关闭其他标签页",
+      "Manage Custom Layouts": "管理自定义布局",
+      "Name": "名称",
+      "Open": "打开",
+      "Text File": "文本文件",
+      "Switch Version": "切换版本"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -376,7 +392,15 @@
       "No custom layout saved.": "尚未儲存自訂佈局。",
       "Custom layout applied.": "已套用自訂佈局。",
       "Localization Resources": "在地化資源",
-      "Search localization": "搜尋在地化項"
+      "Search localization": "搜尋在地化項",
+      "NuGet Cache": "NuGet 快取",
+      "Close": "關閉",
+      "Close Other Tabs": "關閉其他分頁",
+      "Manage Custom Layouts": "管理自訂佈局",
+      "Name": "名稱",
+      "Open": "開啟",
+      "Text File": "文字檔",
+      "Switch Version": "切換版本"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -502,7 +526,15 @@
       "No custom layout saved.": "저장된 사용자 지정 레이아웃이 없습니다.",
       "Custom layout applied.": "사용자 지정 레이아웃을 적용했습니다.",
       "Localization Resources": "현지화 리소스",
-      "Search localization": "로컬라이제이션 검색"
+      "Search localization": "로컬라이제이션 검색",
+      "NuGet Cache": "NuGet 캐시",
+      "Close": "닫기",
+      "Close Other Tabs": "다른 탭 닫기",
+      "Manage Custom Layouts": "사용자 지정 레이아웃 관리",
+      "Name": "이름",
+      "Open": "열기",
+      "Text File": "텍스트 파일",
+      "Switch Version": "버전 전환"
     }
   }
 }

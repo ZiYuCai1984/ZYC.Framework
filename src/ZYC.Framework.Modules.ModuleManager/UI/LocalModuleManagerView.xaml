@@ -5,84 +5,60 @@
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
                xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
-               xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
                xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
                xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+               xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
                xmlns:commands="clr-namespace:ZYC.Framework.Modules.ModuleManager.Commands"
+               xmlns:abstractions="clr-namespace:ZYC.Framework.Modules.ModuleManager.Abstractions;assembly=ZYC.Framework.Modules.ModuleManager.Abstractions"
                mc:Ignorable="d"
                d:DesignHeight="450" d:DesignWidth="800"
                Title="{localizations:L Local Modules}"
                DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto">
-        <ItemsControl x:Name="ItemsControl"
-                      ItemsSource="{Binding ModuleInfos}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="0 0 0 1"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Validation2}"
-                            Margin="0 0 16 0">
-                        <Grid>
-                            <Grid.IsEnabled>
-                                <MultiBinding
-                                    Converter="{converters:StringContainsToBoolMultiValueConverter Reverse=True}">
-                                    <Binding Path="ModulePendingDeleteAssemblyNames"
-                                             RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
-                                    <Binding Path="ModuleAssemblyName" />
-                                </MultiBinding>
-                            </Grid.IsEnabled>
-                            <Grid.Style>
-                                <Style TargetType="Grid">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Opacity" Value="0.5" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Grid.Style>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid Margin="0 8 0 16">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Grid Margin="0 4 4 4"
-                                      Background="Transparent">
+    <Grid>
+        <core:SplitView Visibility="{Binding ModulesCount,Converter={converters:IntToVisibilityConverter}}"
+                        Ratio="{Binding Source={markupEx:LifetimeScopeResolve abstractions:LocalModulePageState},Path=Ratio}">
+            <core:SplitView.LeftContent>
+                <Border Margin="0 8 0 0">
+                    <ListBox BorderThickness="0"
+                             ItemsSource="{Binding ModuleInfos}"
+                             SelectedItem="{Binding SelectedModuleInfo,Mode=TwoWay}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="8">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="64" />
+                                        <ColumnDefinition Width="40" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
+
                                     <core:HybridIcon
                                         HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
+                                        VerticalAlignment="Top"
                                         Width="24"
-                                        Height="24" 
+                                        Height="24"
                                         FontSize="16"
-                                        Icon="{Binding Icon}"/>
+                                        Icon="{Binding Icon}" />
 
-                                    <TextBlock Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Margin="8 0 0 0"
-                                               TextTrimming="WordEllipsis"
-                                               FontWeight="SemiBold"
-                                               Text="{Binding ModuleAssemblyName}" />
-                                </Grid>
+                                    <StackPanel Grid.Column="1"
+                                                Margin="8 0 0 0">
+                                        <TextBlock FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding ModuleAssemblyName}" />
+                                        <TextBlock Margin="0 4 0 0"
+                                                   Opacity="0.72"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding ModulePath}" />
 
-                                <Grid Grid.Row="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="64" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid>
-                                        <TextBlock HorizontalAlignment="Center"
-                                                   FontWeight="SemiBold"
+                                        <TextBlock Margin="0 4 0 0"
                                                    Foreground="Red"
-                                                   Text="*Deleted*">
+                                                   Text="Deleted">
                                             <TextBlock.Visibility>
                                                 <MultiBinding
                                                     Converter="{converters:StringContainsToVisibilityMultiValueConverter}">
@@ -92,6 +68,7 @@
                                                 </MultiBinding>
                                             </TextBlock.Visibility>
                                         </TextBlock>
+
                                         <Grid>
                                             <Grid.Visibility>
                                                 <MultiBinding
@@ -101,10 +78,8 @@
                                                     <Binding Path="ModuleAssemblyName" />
                                                 </MultiBinding>
                                             </Grid.Visibility>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       FontWeight="SemiBold"
-                                                       Foreground="Green"
-                                                       Text="*Enabled*">
+                                            <TextBlock Foreground="Green"
+                                                       Text="Enabled">
                                                 <TextBlock.Visibility>
                                                     <MultiBinding
                                                         Converter="{converters:StringContainsToVisibilityMultiValueConverter Reverse=True}">
@@ -114,10 +89,8 @@
                                                     </MultiBinding>
                                                 </TextBlock.Visibility>
                                             </TextBlock>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       FontWeight="SemiBold"
-                                                       Foreground="Red"
-                                                       Text="*Disabled*">
+                                            <TextBlock Foreground="Red"
+                                                       Text="Disabled">
                                                 <TextBlock.Visibility>
                                                     <MultiBinding
                                                         Converter="{converters:StringContainsToVisibilityMultiValueConverter}">
@@ -128,97 +101,206 @@
                                                 </TextBlock.Visibility>
                                             </TextBlock>
                                         </Grid>
-                                    </Grid>
-                                    <StackPanel Grid.Column="1"
-                                                Margin="8 0 0 0">
-
-                                        <TextBlock Margin="0 0 0 4">
-                                            <Run Text="Dependence on" />
-                                            <Run Text=" : " />
-                                            <Run Text="{Binding DependencyOn.Length,Mode=OneWay}" />
-                                        </TextBlock>
-
-                                        <TextBlock Text="No Item"
-                                                   Margin="32 0 0 4"
-                                                   Visibility="{Binding DependencyOn.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
-
-                                        <ItemsControl ItemsSource="{Binding DependencyOn}"
-                                                      Margin="32 0 0 0">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding ModuleAssemblyName}"
-                                                               Margin="0 0 0 4" />
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-
-                                        <TextBlock Margin="0 0 0 4">
-                                            <Run Text="Dependence by" />
-                                            <Run Text=" : " />
-                                            <Run Text="{Binding DependencyBy.Length,Mode=OneWay}" />
-                                        </TextBlock>
-
-                                        <TextBlock Text="No Item"
-                                                   Margin="32 0 0 4"
-                                                   Visibility="{Binding DependencyBy.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
-
-                                        <ItemsControl ItemsSource="{Binding DependencyBy}"
-                                                      Margin="32 0 0 0">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding ModuleAssemblyName}"
-                                                               Margin="0 0 0 4" />
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-
                                     </StackPanel>
-
                                 </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </core:SplitView.LeftContent>
 
-                            </Grid>
+            <core:SplitView.RightContent>
+                <Border Margin="0 8 0 0"
+                        Padding="16 16 0 16">
+                    <Grid>
+                        <ContentControl Content="{Binding SelectedModuleInfo}"
+                                        Visibility="{Binding SelectedModuleInfo,Converter={converters:NullToVisibilityConverter}}">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Column="1"
-                                        Orientation="Horizontal"
-                                        Margin="16 16 0 8"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top">
-                                <!--TODO Supports injecting custom operations-->
-                                <Button Margin="8 0  0 8"
-                                        Command="{markupEx:LifetimeScopeResolve commands:EnableModuleCommand}"
-                                        CommandParameter="{Binding .}">
-                                    <iconPacks:PackIconMaterial Kind="Check"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Width="16"
-                                                                Height="16" />
-                                </Button>
-                                <Button Margin="8 0  0 8"
-                                        Command="{markupEx:LifetimeScopeResolve commands:DisableModuleCommand}"
-                                        CommandParameter="{Binding .}">
-                                    <iconPacks:PackIconMaterial Kind="Cancel"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Width="16"
-                                                                Height="16" />
-                                </Button>
-                                <Button Margin="8 0 0 8"
-                                        Command="{markupEx:LifetimeScopeResolve commands:DeleteModuleCommand}"
-                                        CommandParameter="{Binding .}">
-                                    <iconPacks:PackIconMaterial Kind="TrashCanOutline"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Width="16"
-                                                                Height="16" />
-                                </Button>
-                            </StackPanel>
+                                        <DockPanel Margin="0 0 0 16">
+                                            <StackPanel DockPanel.Dock="Right"
+                                                        Orientation="Horizontal"
+                                                        Margin="16 0 0 0"
+                                                        VerticalAlignment="Center">
+                                                <StackPanel.IsEnabled>
+                                                    <MultiBinding
+                                                        Converter="{converters:StringContainsToBoolMultiValueConverter Reverse=True}">
+                                                        <Binding Path="ModulePendingDeleteAssemblyNames"
+                                                                 RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
+                                                        <Binding Path="ModuleAssemblyName" />
+                                                    </MultiBinding>
+                                                </StackPanel.IsEnabled>
+                                                <buttons:IconButton Text="Enable"
+                                                                    Kind="Check"
+                                                                    Command="{markupEx:LifetimeScopeResolve commands:EnableModuleCommand}"
+                                                                    CommandParameter="{Binding .}" />
+                                                <buttons:IconButton Text="Disable"
+                                                                    Kind="Cancel"
+                                                                    Margin="8 0 0 0"
+                                                                    Command="{markupEx:LifetimeScopeResolve commands:DisableModuleCommand}"
+                                                                    CommandParameter="{Binding .}" />
+                                                <buttons:IconButton Text="Delete"
+                                                                    Kind="TrashCanOutline"
+                                                                    Margin="8 0 0 0"
+                                                                    Command="{markupEx:LifetimeScopeResolve commands:DeleteModuleCommand}"
+                                                                    CommandParameter="{Binding .}" />
+                                            </StackPanel>
 
-                        </Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <core:HybridIcon
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    Width="32"
+                                                    Height="32"
+                                                    FontSize="20"
+                                                    Icon="{Binding Icon}" />
+                                                <StackPanel Margin="12 0 0 0">
+                                                    <TextBlock FontSize="16"
+                                                               FontWeight="SemiBold"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Text="{Binding ModuleAssemblyName}" />
+                                                    <Grid Margin="0 4 0 0">
+                                                        <TextBlock Foreground="Red"
+                                                                   Text="Deleted">
+                                                            <TextBlock.Visibility>
+                                                                <MultiBinding
+                                                                    Converter="{converters:StringContainsToVisibilityMultiValueConverter}">
+                                                                    <Binding Path="ModulePendingDeleteAssemblyNames"
+                                                                             RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
+                                                                    <Binding Path="ModuleAssemblyName" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Visibility>
+                                                        </TextBlock>
+                                                        <Grid>
+                                                            <Grid.Visibility>
+                                                                <MultiBinding
+                                                                    Converter="{converters:StringContainsToVisibilityMultiValueConverter Reverse=True}">
+                                                                    <Binding Path="ModulePendingDeleteAssemblyNames"
+                                                                             RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
+                                                                    <Binding Path="ModuleAssemblyName" />
+                                                                </MultiBinding>
+                                                            </Grid.Visibility>
+                                                            <TextBlock Foreground="Green"
+                                                                       Text="Enabled">
+                                                                <TextBlock.Visibility>
+                                                                    <MultiBinding
+                                                                        Converter="{converters:StringContainsToVisibilityMultiValueConverter Reverse=True}">
+                                                                        <Binding Path="ModuleDisabledAssemblyNames"
+                                                                                 RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
+                                                                        <Binding Path="ModuleAssemblyName" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Visibility>
+                                                            </TextBlock>
+                                                            <TextBlock Foreground="Red"
+                                                                       Text="Disabled">
+                                                                <TextBlock.Visibility>
+                                                                    <MultiBinding
+                                                                        Converter="{converters:StringContainsToVisibilityMultiValueConverter}">
+                                                                        <Binding Path="ModuleDisabledAssemblyNames"
+                                                                                 RelativeSource="{RelativeSource AncestorType=page:PageBase}" />
+                                                                        <Binding Path="ModuleAssemblyName" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Visibility>
+                                                            </TextBlock>
+                                                        </Grid>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
 
+                                        <Separator Grid.Row="1" />
 
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+                                        <ScrollViewer Grid.Row="2"
+                                                      Margin="0 16 0 0"
+                                                      HorizontalScrollBarVisibility="Disabled"
+                                                      VerticalScrollBarVisibility="Auto">
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="Module" />
+                                                <TextBlock Margin="16 4 0 12">
+                                                    <Run Text="Assembly" />
+                                                    <Run Text=" : " />
+                                                    <Run Text="{Binding ModuleAssemblyName,Mode=OneWay}" />
+                                                </TextBlock>
+                                                <TextBlock Margin="16 0 0 12"
+                                                           TextWrapping="Wrap">
+                                                    <Run Text="Path" />
+                                                    <Run Text=" : " />
+                                                    <Run Text="{Binding ModulePath,Mode=OneWay}" />
+                                                </TextBlock>
+
+                                                <TextBlock Margin="0 8 0 4"
+                                                           FontWeight="SemiBold"
+                                                           Text="Reference Assemblies" />
+                                                <TextBlock Text="No Item"
+                                                           Margin="16 0 0 12"
+                                                           Visibility="{Binding ReferenceAssemblyNames.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
+                                                <ItemsControl ItemsSource="{Binding ReferenceAssemblyNames}"
+                                                              Margin="16 0 0 12">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding .}"
+                                                                       Margin="0 0 0 4" />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+
+                                                <TextBlock Margin="0 8 0 4"
+                                                           FontWeight="SemiBold"
+                                                           Text="Dependence on" />
+                                                <TextBlock Text="No Item"
+                                                           Margin="16 0 0 12"
+                                                           Visibility="{Binding DependencyOn.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
+                                                <ItemsControl ItemsSource="{Binding DependencyOn}"
+                                                              Margin="16 0 0 12">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding ModuleAssemblyName}"
+                                                                       Margin="0 0 0 4" />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+
+                                                <TextBlock Margin="0 8 0 4"
+                                                           FontWeight="SemiBold"
+                                                           Text="Dependence by" />
+                                                <TextBlock Text="No Item"
+                                                           Margin="16 0 0 12"
+                                                           Visibility="{Binding DependencyBy.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
+                                                <ItemsControl ItemsSource="{Binding DependencyBy}"
+                                                              Margin="16 0 0 12">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding ModuleAssemblyName}"
+                                                                       Margin="0 0 0 4" />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Opacity="0.72"
+                                   Text="Select a local module"
+                                   Visibility="{Binding SelectedModuleInfo,Converter={converters:NullToVisibilityConverter Reverse=True}}" />
+                    </Grid>
+                </Border>
+            </core:SplitView.RightContent>
+        </core:SplitView>
+
+        <page:NoItemView
+            Visibility="{Binding ModulesCount,Converter={converters:IntToVisibilityConverter Reverse=True}}" />
+    </Grid>
 </page:PageBase>

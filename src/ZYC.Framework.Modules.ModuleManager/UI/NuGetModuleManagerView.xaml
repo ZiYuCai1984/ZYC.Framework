@@ -7,12 +7,12 @@
                xmlns:page="clr-namespace:ZYC.Framework.Core.Page;assembly=ZYC.Framework.Core"
                xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
                xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
-               xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
                xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
                xmlns:nugetCommands="clr-namespace:ZYC.Framework.Modules.NuGet.Abstractions.Commands;assembly=ZYC.Framework.Modules.NuGet.Abstractions"
                xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
                xmlns:commands="clr-namespace:ZYC.Framework.Modules.ModuleManager.Commands"
+               xmlns:abstractions="clr-namespace:ZYC.Framework.Modules.ModuleManager.Abstractions;assembly=ZYC.Framework.Modules.ModuleManager.Abstractions"
                mc:Ignorable="d"
                d:DesignHeight="450" d:DesignWidth="800"
                Title="{localizations:L NuGet Modules}"
@@ -24,7 +24,7 @@
             <buttons:IconButton Text="{localizations:L Clear nuget http cache}"
                                 Kind="DeleteOutline"
                                 Margin="0 0 8 0"
-                                Command="{markupEx:LifetimeScopeResolve nugetCommands:IClearNuGetHttpCacheCommand}"/>
+                                Command="{markupEx:LifetimeScopeResolve nugetCommands:IClearNuGetHttpCacheCommand}" />
             <buttons:IconButton Text="Refresh"
                                 Kind="Refresh"
                                 Command="{markupEx:LifetimeScopeResolve commands:RefreshNuGetModuleCommand}"
@@ -32,142 +32,170 @@
         </StackPanel>
     </page:PageBase.HeaderAdditionContent>
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding NuGetModules}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="0 0 0 1"
-                            BorderBrush="{DynamicResource MahApps.Brushes.Validation2}"
-                            Margin="0 0 16 0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid Margin="0 8 0 16">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Grid Margin="0 4 4 4"
-                                      Background="Transparent">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="64" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <core:HybridIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Width="24"
-                                            Height="24" 
-                                            FontSize="16"
-                                            Icon="{Binding Icon}"/>
-                                        <TextBlock Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Left"
-                                               Margin="8 0 0 0"
-                                               TextTrimming="WordEllipsis"
-                                               FontWeight="SemiBold"
-                                               Text="{Binding ModuleAssemblyName}" />
-                                    </Grid>
+        <core:SplitView Visibility="{Binding ModulesCount,Converter={converters:IntToVisibilityConverter}}"
+                        Ratio="{Binding Source={markupEx:LifetimeScopeResolve abstractions:NuGetModulePageState},Path=Ratio}">
+            <core:SplitView.LeftContent>
+                <Border Margin="0 8 0 0">
+                    <ListBox BorderThickness="0"
+                             ItemsSource="{Binding NuGetModules}"
+                             SelectedItem="{Binding SelectedNuGetModule,Mode=TwoWay}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
 
-                                    <Grid Grid.Row="1">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="64" />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       FontWeight="SemiBold"
-                                                   Foreground="Green"
-                                                   Text="*Installed*"
-                                                   Visibility="{Binding Installed,Converter={converters:BoolToVisibilityConverter}}" />
-                                        </Grid>
-                                        <StackPanel Grid.Column="1"
+                                    <core:HybridIcon
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Width="24"
+                                        Height="24"
+                                        FontSize="16"
+                                        Icon="{Binding Icon}" />
+
+                                    <StackPanel Grid.Column="1"
                                                 Margin="8 0 0 0">
-
-                                            <TextBlock Margin="0 0 0 4">
-                                            <Run Text="Dependence on" />
-                                            <Run Text=" : " />
-                                            <Run Text="{Binding DependencyOn.Length,Mode=OneWay}" />
-                                            </TextBlock>
-
-                                            <TextBlock Text="No Item"
-                                                   Margin="32 0 0 4"
-                                                   Visibility="{Binding DependencyOn.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
-
-                                            <ItemsControl ItemsSource="{Binding DependencyOn}"
-                                                      Margin="32 0 0 0">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding ModuleAssemblyName}"
-                                                               Margin="0 0 0 4" />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                            <TextBlock Margin="0 0 0 4">
-                                            <Run Text="Dependence by" />
-                                            <Run Text=" : " />
-                                            <Run Text="{Binding DependencyBy.Length,Mode=OneWay}" />
-                                            </TextBlock>
-
-                                            <TextBlock Text="No Item"
-                                                   Margin="32 0 0 4"
-                                                   Visibility="{Binding DependencyBy.Length,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />
-
-                                            <ItemsControl ItemsSource="{Binding DependencyBy}"
-                                                      Margin="32 0 0 0">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding ModuleAssemblyName}"
-                                                               Margin="0 0 0 4" />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                        </StackPanel>
-
-                                    </Grid>
-
+                                        <TextBlock FontWeight="SemiBold"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding PackageId}" />
+                                        <TextBlock Margin="0 4 0 0"
+                                                   Opacity="0.72"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding Version}" />
+                                        <TextBlock Margin="0 4 0 0"
+                                                   Foreground="Green"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding InstalledStatusText}"
+                                                   Visibility="{Binding Installed,Converter={converters:BoolToVisibilityConverter}}" />
+                                        <TextBlock Margin="0 4 0 0"
+                                                   Foreground="DarkOrange"
+                                                   Text="Update available"
+                                                   Visibility="{Binding HasAvailableUpdate,Converter={converters:BoolToVisibilityConverter}}" />
+                                    </StackPanel>
                                 </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </core:SplitView.LeftContent>
+            <core:SplitView.RightContent>
+                <Border
+                    Margin="0 8 0 0"
+                    Padding="16 16 0 16">
+                    <Grid>
+                        <ContentControl Content="{Binding SelectedNuGetModule}"
+                                        Visibility="{Binding SelectedNuGetModule,Converter={converters:NullToVisibilityConverter}}">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                                <StackPanel Grid.Column="1"
-                                        Orientation="Horizontal"
-                                        Margin="16 16 0 8"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top">
-                                    <!--TODO Supports injecting custom operations-->
-                                    <Button Margin="8 0  0 8"
-                                        Command="{markupEx:LifetimeScopeResolve commands:InstallNuGetModuleCommand}"
-                                        CommandParameter="{Binding .}">
-                                        <iconPacks:PackIconMaterial Kind="DownloadOutline"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Width="16"
-                                                                Height="16" />
-                                    </Button>
-                                    <Button Margin="8 0  0 8"
-                                        Command="{markupEx:LifetimeScopeResolve commands:UninstallNuGetModuleCommand}"
-                                        CommandParameter="{Binding .}">
-                                        <iconPacks:PackIconMaterial Kind="DeleteOutline"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Width="16"
-                                                                Height="16" />
-                                    </Button>
-                                </StackPanel>
+                                        <DockPanel Margin="0 0 0 16">
+                                            <StackPanel DockPanel.Dock="Right"
+                                                        Orientation="Horizontal"
+                                                        Margin="16 0 0 0"
+                                                        VerticalAlignment="Center">
+                                                <buttons:IconButton Text="{Binding InstallActionText}"
+                                                                    Kind="DownloadOutline"
+                                                                    Command="{markupEx:LifetimeScopeResolve commands:InstallNuGetModuleCommand}"
+                                                                    CommandParameter="{Binding .}" />
+                                                <buttons:IconButton Text="Uninstall"
+                                                                    Kind="DeleteOutline"
+                                                                    Margin="8 0 0 0"
+                                                                    Command="{markupEx:LifetimeScopeResolve commands:UninstallNuGetModuleCommand}"
+                                                                    CommandParameter="{Binding .}" />
+                                            </StackPanel>
 
-                            </Grid>
+                                            <StackPanel Orientation="Horizontal">
+                                                <core:HybridIcon
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    Width="32"
+                                                    Height="32"
+                                                    FontSize="20"
+                                                    Icon="{Binding Icon}" />
+                                                <StackPanel Margin="12 0 0 0">
+                                                    <TextBlock FontSize="16"
+                                                               FontWeight="SemiBold"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Text="{Binding PackageId}" />
+                                                    <TextBlock Margin="0 4 0 0"
+                                                               Opacity="0.72"
+                                                               Text="{Binding InstalledStatusText}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
 
+                                        <Separator Grid.Row="1" />
 
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                        <ScrollViewer Grid.Row="2"
+                                                      Margin="0 16 0 0"
+                                                      HorizontalScrollBarVisibility="Disabled"
+                                                      VerticalScrollBarVisibility="Auto">
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="Package" />
+                                                <TextBlock Margin="16 4 0 12">
+                                                    <Run Text="PackageId" />
+                                                    <Run Text=" : " />
+                                                    <Run Text="{Binding PackageId,Mode=OneWay}" />
+                                                </TextBlock>
+                                                <TextBlock Margin="16 0 0 12">
+                                                    <Run Text="Available Version" />
+                                                    <Run Text=" : " />
+                                                    <Run Text="{Binding Version,Mode=OneWay}" />
+                                                </TextBlock>
+                                                <TextBlock Margin="16 0 0 12">
+                                                    <Run Text="Installed Version" />
+                                                    <Run Text=" : " />
+                                                    <Run Text="{Binding InstalledVersionText,Mode=OneWay}" />
+                                                </TextBlock>
 
-        <page:NoItemView Visibility="{Binding ModulesCount,Converter={converters:IntToVisibilityConverter Reverse=True}}"/>
+                                                <TextBlock Margin="0 8 0 4"
+                                                           FontWeight="SemiBold"
+                                                           Text="Description" />
+                                                <TextBlock Margin="16 0 0 12"
+                                                           TextWrapping="Wrap"
+                                                           Text="{Binding Description}" />
+
+                                                <TextBlock Margin="0 8 0 4"
+                                                           FontWeight="SemiBold"
+                                                           Text="Release Notes" />
+                                                <TextBlock Margin="16 0 0 12"
+                                                           TextWrapping="Wrap"
+                                                           Text="{Binding PatchNote}" />
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Opacity="0.72"
+                                   Text="Select a NuGet module"
+                                   Visibility="{Binding SelectedNuGetModule,Converter={converters:NullToVisibilityConverter Reverse=True}}" />
+                    </Grid>
+                </Border>
+
+            </core:SplitView.RightContent>
+        </core:SplitView>
+
+        <page:NoItemView
+            Visibility="{Binding ModulesCount,Converter={converters:IntToVisibilityConverter Reverse=True}}" />
     </Grid>
 </page:PageBase>

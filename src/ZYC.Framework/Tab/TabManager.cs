@@ -231,6 +231,12 @@ internal partial class TabManager : ITabManager
     }
 
 
+    public Task ReloadAsync(ITabItemInstance instance)
+    {
+        //TODO-zyc ReloadAsync
+        throw new NotImplementedException();
+    }
+
     public async Task TabInternalNavigatingAsync(ITabItemInstance instance,Uri oriUri, Uri newUri)
     {
         if (!TabItemInstances.Contains(instance))

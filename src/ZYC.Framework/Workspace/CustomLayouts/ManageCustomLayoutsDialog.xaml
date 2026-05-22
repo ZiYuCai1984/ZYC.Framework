@@ -65,7 +65,7 @@
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Opacity="0.72"
-                           Text="No custom layouts"
+                           Text="{localizations:L No custom layouts}"
                            Visibility="{Binding HasLayouts, Converter={converters:BoolToVisibilityConverter Reverse=True}}" />
             </Grid>
         </Border>
@@ -78,7 +78,7 @@
                      Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" />
 
             <buttons:IconButton Kind="Pencil"
-                                Text="Rename"
+                                Text="{localizations:L Rename}"
                                 x:Name="RenameButton"
                                 Margin="0,12,0,0"
                                 Click="OnRenameButtonClick" />
@@ -87,20 +87,20 @@
                                 Margin="0,8,0,0"
                                 Click="OnDeleteButtonClick"
                                 Kind="Delete"
-                                Text="Delete" />
+                                Text="{localizations:L Delete}" />
 
             <Separator Margin="0,14,0,14" />
 
             <buttons:IconButton x:Name="MoveUpButton"
                                 Click="OnMoveUpButtonClick"
                                 Kind="ArrowUp"
-                                Text="Move Up" />
+                                Text="{localizations:L Move Up}" />
 
             <buttons:IconButton x:Name="MoveDownButton"
                                 Margin="0,8,0,0"
                                 Click="OnMoveDownButtonClick"
                                 Kind="ArrowDown"
-                                Text="Move Down" />
+                                Text="{localizations:L Move Down}" />
         </StackPanel>
 
         <StackPanel Grid.Row="1"
@@ -112,7 +112,7 @@
             <buttons:IconButton MinWidth="80"
                                 Kind="Close"
                                 Click="OnCloseButtonClick"
-                                Text="Close" />
+                                Text="{localizations:L Close}" />
         </StackPanel>
     </Grid>
 </core:DialogWindowBase>

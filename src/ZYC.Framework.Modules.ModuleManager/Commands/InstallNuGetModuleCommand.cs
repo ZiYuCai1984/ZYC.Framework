@@ -66,6 +66,7 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
 
         return !IsExecuting
                && !NuGetModuleState.InstalledModules.Any(t =>
-                   t.PackageId == module.PackageId && t.Version == module.Version);
+                   string.Equals(t.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase)
+                   && string.Equals(t.Version, module.Version, StringComparison.OrdinalIgnoreCase));
     }
 }

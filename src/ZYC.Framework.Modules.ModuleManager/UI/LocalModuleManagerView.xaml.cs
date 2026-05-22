@@ -12,6 +12,8 @@ namespace ZYC.Framework.Modules.ModuleManager.UI;
 [Register]
 public partial class LocalModuleManagerView
 {
+    private IModuleInfo? _selectedModuleInfo;
+
     public LocalModuleManagerView(
         IEventAggregator eventAggregator,
         ILocalModuleManager localModuleManager,
@@ -52,12 +54,39 @@ public partial class LocalModuleManagerView
 
     public ObservableCollection<IModuleInfo> ModuleInfos { get; } = new();
 
+    public int ModulesCount => ModuleInfos.Count;
+
+    public IModuleInfo? SelectedModuleInfo
+    {
+        get => _selectedModuleInfo;
+        set
+        {
+            if (ReferenceEquals(_selectedModuleInfo, value))
+            {
+                return;
+            }
+
+            _selectedModuleInfo = value;
+            OnPropertyChanged();
+        }
+    }
+
     protected override void InternalOnLoaded()
     {
+        var selectedModuleAssemblyName = SelectedModuleInfo?.ModuleAssemblyName;
         var modules = LocalModuleManager.GetModules();
+        ModuleInfos.Clear();
         foreach (var module in modules)
         {
             ModuleInfos.Add(module);
         }
+
+        OnPropertyChanged(nameof(ModulesCount));
+        SelectedModuleInfo = ModuleInfos.FirstOrDefault(module =>
+                                 string.Equals(
+                                     module.ModuleAssemblyName,
+                                     selectedModuleAssemblyName,
+                                     StringComparison.OrdinalIgnoreCase))
+                             ?? ModuleInfos.FirstOrDefault();
     }
 }

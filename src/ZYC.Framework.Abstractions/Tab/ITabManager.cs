@@ -76,14 +76,8 @@ public partial interface ITabManager
     ///     Searches for an existing tab with the specified URI and brings it into focus.
     /// </summary>
     /// <param name="uri">The URI of the tab to focus.</param>
-    Task FocusAsync(Uri uri);
-
-    /// <summary>
-    ///     Reloads the content of the tab corresponding to the specified URI.
-    /// </summary>
-    /// <param name="uri">The URI of the tab to reload.</param>
     [Obsolete]
-    Task ReloadAsync(Uri uri);
+    Task FocusAsync(Uri uri);
 
     /// <summary>
     ///     Asynchronously closes all open tabs across all workspaces.
@@ -93,6 +87,13 @@ public partial interface ITabManager
 
 public partial interface ITabManager
 {
+    /// <summary>
+    ///     Reloads the content of the tab corresponding to the specified URI.
+    /// </summary>
+    /// <param name="instance">>The tab item instance to reload.</param>
+    [MCPIgnore]
+    Task ReloadAsync(ITabItemInstance instance);
+
     /// <summary>
     ///     Handles internal navigation within a tab, transitioning from an old URI to a new one.
     /// </summary>
