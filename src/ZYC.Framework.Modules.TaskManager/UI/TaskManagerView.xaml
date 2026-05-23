@@ -60,263 +60,265 @@
                 Text="{localizations:L Clean up tasks}"
                 Command="{markupEx:LifetimeScopeResolve commands:ClearUpTasksCommand}" />
         </StackPanel>
-        <Border Grid.Row="1">
-            <ScrollViewer>
-                <ItemsControl
-                    Margin="0 8 0 0"
-                    ItemsSource="{Binding ManagedTasksCollectionView}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    SnapsToDevicePixels="True">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+        <ScrollViewer Grid.Row="1"
+                      Margin="0 8 0 0"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto"
+                      SnapsToDevicePixels="True">
+            <ItemsControl ItemsSource="{Binding ManagedTasksCollectionView}">
+                <ItemsControl.Resources>
+                    <Style x:Key="StatusStripStyle" TargetType="Border">
+                        <Setter Property="Background"
+                                Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Running}">
+                                <Setter Property="Background" Value="#2FA36B" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Paused}">
+                                <Setter Property="Background" Value="#D99028" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Faulted}">
+                                <Setter Property="Background" Value="#C0392B" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Canceled}">
+                                <Setter Property="Background" Value="#8A8A8A" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Completed}">
+                                <Setter Property="Background" Value="#4CAF72" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
 
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Margin" Value="0 0 12 12" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
+                    <Style x:Key="StateBadgeStyle" TargetType="Border">
+                        <Setter Property="Padding" Value="7 2" />
+                        <Setter Property="CornerRadius" Value="9" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Background"
+                                Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                        <Setter Property="BorderBrush"
+                                Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Running}">
+                                <Setter Property="Background" Value="#E6F6EE" />
+                                <Setter Property="BorderBrush" Value="#7ACB9A" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Paused}">
+                                <Setter Property="Background" Value="#FFF4E5" />
+                                <Setter Property="BorderBrush" Value="#F0B35A" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Faulted}">
+                                <Setter Property="Background" Value="#FDEAEA" />
+                                <Setter Property="BorderBrush" Value="#E07A7A" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Canceled}">
+                                <Setter Property="Background" Value="#F1F1F1" />
+                                <Setter Property="BorderBrush" Value="#BDBDBD" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}"
+                                         Value="{x:Static local:ManagedTaskState.Completed}">
+                                <Setter Property="Background" Value="#E8F7EF" />
+                                <Setter Property="BorderBrush" Value="#4CAF72" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
 
-                    <ItemsControl.Resources>
-                        <Style x:Key="ChipBorderStyle" TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10" />
-                            <Setter Property="Padding" Value="8 3" />
-                            <Setter Property="Margin" Value="0 0 8 8" />
-                            <Setter Property="BorderThickness" Value="1" />
-                            <Setter Property="Background"
-                                    Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
-                            <Setter Property="BorderBrush"
-                                    Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
-                        </Style>
+                    <Style x:Key="MetaTextStyle" TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="11" />
+                        <Setter Property="Opacity" Value="0.72" />
+                        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
 
-                        <Style x:Key="ChipTextStyle" TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="11" />
-                            <Setter Property="Opacity" Value="0.85" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
+                    <Style x:Key="ActionButtonStyle" TargetType="Button">
+                        <Setter Property="Width" Value="30" />
+                        <Setter Property="Height" Value="30" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="0 0 4 0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                </ItemsControl.Resources>
 
-                        <Style x:Key="ActionButtonStyle" TargetType="Button">
-                            <Setter Property="Width" Value="34" />
-                            <Setter Property="Height" Value="34" />
-                            <Setter Property="Padding" Value="0" />
-                            <Setter Property="Margin" Value="0 0 6 0" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0" />
-                        </Style>
-                    </ItemsControl.Resources>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Width="440"
-                                    MinHeight="130"
-                                    Padding="12"
-                                    CornerRadius="10"
-                                    BorderThickness="1"
-                                    Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-                                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
-                                <Grid>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border MinHeight="68"
+                                BorderThickness="0 0 0 1"
+                                Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4" />
+                                    <ColumnDefinition Width="2.1*" />
+                                    <ColumnDefinition Width="1.4*" />
+                                    <ColumnDefinition Width="156" />
+                                    <ColumnDefinition Width="112" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Style="{StaticResource StatusStripStyle}" />
+
+                                <Grid Grid.Column="1"
+                                      Margin="12 8 12 8"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Grid Grid.Column="0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid Grid.Row="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
+                                    <TextBlock FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding DefinitionId}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center" />
 
-                                            <TextBlock Grid.Column="0"
-                                                       FontSize="14"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding DefinitionId}"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       VerticalAlignment="Center" />
-                                            <Border Grid.Column="1"
-                                                    Padding="8 3"
-                                                    CornerRadius="10"
-                                                    Margin="10 0 0 0"
-                                                    VerticalAlignment="Center">
-                                                <Border.Style>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="Background"
-                                                                Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
-                                                        <Setter Property="BorderBrush"
-                                                                Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
-                                                        <Setter Property="BorderThickness" Value="1" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding State}"
-                                                                         Value="{x:Static local:ManagedTaskState.Running}">
-                                                                <Setter Property="Background" Value="#E6F6EE" />
-                                                                <Setter Property="BorderBrush" Value="#7ACB9A" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding State}"
-                                                                         Value="{x:Static local:ManagedTaskState.Paused}">
-                                                                <Setter Property="Background" Value="#FFF4E5" />
-                                                                <Setter Property="BorderBrush" Value="#F0B35A" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding State}"
-                                                                         Value="{x:Static local:ManagedTaskState.Faulted}">
-                                                                <Setter Property="Background" Value="#FDEAEA" />
-                                                                <Setter Property="BorderBrush" Value="#E07A7A" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding State}"
-                                                                         Value="{x:Static local:ManagedTaskState.Canceled}">
-                                                                <Setter Property="Background" Value="#F1F1F1" />
-                                                                <Setter Property="BorderBrush" Value="#BDBDBD" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding State}"
-                                                                         Value="{x:Static local:ManagedTaskState.Completed}">
-                                                                <Setter Property="Background" Value="#E8F7EF" />
-                                                                <Setter Property="BorderBrush" Value="#4CAF72" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="0"
+                                               Margin="0 5 0 0"
+                                               Style="{StaticResource MetaTextStyle}">
+                                        <Run Text="{Binding ProviderId,Mode=OneWay}" />
+                                        <Run Text=" / v" />
+                                        <Run Text="{Binding DefinitionVersion,Mode=OneWay}" />
+                                    </TextBlock>
 
-                                                <TextBlock FontSize="12"
-                                                           FontWeight="SemiBold"
-                                                           Text="{Binding State}" />
-                                            </Border>
-                                        </Grid>
-
-                                        <Grid Grid.Row="1"
-                                              Margin="0 8 0 0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <ProgressBar Height="8"
-                                                         Maximum="1"
-                                                         VerticalAlignment="Center">
-                                                <ProgressBar.Value>
-                                                    <MultiBinding
-                                                        Converter="{converters1:ProgressMultiValueConverter}">
-                                                        <Binding Path="Progress" Mode="OneWay" />
-                                                        <Binding Path="State" Mode="OneWay" />
-                                                    </MultiBinding>
-                                                </ProgressBar.Value>
-                                            </ProgressBar>
-
-                                            <TextBlock Grid.Column="1"
-                                                       Margin="10 0 0 0"
-                                                       FontSize="12"
-                                                       Opacity="0.85"
-                                                       VerticalAlignment="Center">
-                                                <TextBlock.Text>
-                                                    <MultiBinding
-                                                        Converter="{converters1:ProgressMultiValueConverter}"
-                                                        StringFormat="{}{0:P1}">
-                                                        <Binding Path="Progress" Mode="OneWay" />
-                                                        <Binding Path="State" Mode="OneWay" />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </Grid>
-
-
-                                        <TextBlock Grid.Row="2"
-                                                   Margin="0 8 0 0"
-                                                   Text="{Binding StatusText}"
-                                                   TextWrapping="Wrap"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Opacity="0.9" />
-                                        <TextBlock Grid.Row="3"
-                                                   Margin="0 6 0 0"
-                                                   Text="{Binding FaultText}"
-                                                   TextWrapping="Wrap"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Foreground="#C0392B">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding FaultText}" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-
-                                        <WrapPanel Grid.Row="4" Margin="0 10 0 0">
-                                            <Border Style="{StaticResource ChipBorderStyle}">
-                                                <TextBlock Style="{StaticResource ChipTextStyle}">
-                                                    <Run Text="Provider: " />
-                                                    <Run Text="{Binding ProviderId,Mode=OneWay}" />
-                                                </TextBlock>
-                                            </Border>
-
-                                            <Border Style="{StaticResource ChipBorderStyle}">
-                                                <TextBlock Style="{StaticResource ChipTextStyle}">
-                                                    <Run Text="Version: v" />
-                                                    <Run Text="{Binding DefinitionVersion,Mode=OneWay}" />
-                                                </TextBlock>
-                                            </Border>
-
-                                            <Border Style="{StaticResource ChipBorderStyle}">
-                                                <TextBlock Style="{StaticResource ChipTextStyle}"
-                                                           Text="{Binding CreatedAt, StringFormat=Created: {0:MM-dd HH:mm}}" />
-                                            </Border>
-
-                                            <Border Style="{StaticResource ChipBorderStyle}">
-                                                <TextBlock Style="{StaticResource ChipTextStyle}">
-                                                    <Run Text="PauseKind: " />
-                                                    <Run Text="{Binding PauseKind,Mode=OneWay}" />
-                                                </TextBlock>
-                                            </Border>
-                                        </WrapPanel>
-                                    </Grid>
-
-                                    <StackPanel Grid.Column="1"
-                                                Margin="14 0 0 0"
-                                                VerticalAlignment="Top"
-                                                Orientation="Horizontal">
-                                        <Button Style="{StaticResource ActionButtonStyle}"
-                                                Command="{markupEx:LifetimeScopeResolve commands:ResumeCommand}"
-                                                CommandParameter="{Binding Id}"
-                                                ToolTip="Resume">
-                                            <core:HybridIcon Width="18" Height="18" Icon="PlayCircleOutline" />
-                                        </Button>
-
-                                        <Button Style="{StaticResource ActionButtonStyle}"
-                                                Command="{markupEx:LifetimeScopeResolve commands:PauseCommand}"
-                                                CommandParameter="{Binding Id}"
-                                                ToolTip="Pause">
-                                            <core:HybridIcon Width="18" Height="18" Icon="PauseCircleOutline" />
-                                        </Button>
-
-                                        <Button Style="{StaticResource ActionButtonStyle}"
-                                                Command="{markupEx:LifetimeScopeResolve commands:CancelCommand}"
-                                                CommandParameter="{Binding Id}"
-                                                ToolTip="Cancel"
-                                                Margin="0">
-                                            <core:HybridIcon Width="18" Height="18" Icon="CloseCircleOutline" />
-                                        </Button>
-                                    </StackPanel>
+                                    <Border Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Margin="8 0 0 0"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource StateBadgeStyle}">
+                                        <TextBlock FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding State}"
+                                                   VerticalAlignment="Center" />
+                                    </Border>
                                 </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
 
+                                <Grid Grid.Column="2"
+                                      Margin="0 8 12 8"
+                                      VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding StatusText}"
+                                               TextTrimming="CharacterEllipsis"
+                                               Opacity="0.86" />
+                                    <TextBlock Text="{Binding FaultText}"
+                                               TextTrimming="CharacterEllipsis"
+                                               Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+                                               Foreground="#C0392B">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FaultText}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding FaultText}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-            </ScrollViewer>
+                                <Grid Grid.Column="3"
+                                      Margin="0 8 16 8"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ProgressBar Height="7"
+                                                 Maximum="1"
+                                                 VerticalAlignment="Center">
+                                        <ProgressBar.Value>
+                                            <MultiBinding Converter="{converters1:ProgressMultiValueConverter}">
+                                                <Binding Path="Progress" Mode="OneWay" />
+                                                <Binding Path="State" Mode="OneWay" />
+                                            </MultiBinding>
+                                        </ProgressBar.Value>
+                                    </ProgressBar>
+                                    <TextBlock Grid.Row="1"
+                                               Margin="0 5 0 0"
+                                               HorizontalAlignment="Right"
+                                               Style="{StaticResource MetaTextStyle}">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{converters1:ProgressMultiValueConverter}"
+                                                          StringFormat="{}{0:P1}">
+                                                <Binding Path="Progress" Mode="OneWay" />
+                                                <Binding Path="State" Mode="OneWay" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Grid>
 
-        </Border>
+                                <Grid Grid.Column="4"
+                                      Margin="0 8 12 8"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding CreatedAt, StringFormat={}{0:MM-dd HH:mm}}"
+                                               Style="{StaticResource MetaTextStyle}" />
+                                    <TextBlock Grid.Row="1"
+                                               Margin="0 5 0 0"
+                                               Text="{Binding PauseKind}"
+                                               Style="{StaticResource MetaTextStyle}" />
+                                </Grid>
+
+                                <StackPanel Grid.Column="5"
+                                            Margin="0 0 8 0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <Button Style="{StaticResource ActionButtonStyle}"
+                                            Command="{markupEx:LifetimeScopeResolve commands:ResumeCommand}"
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="Resume">
+                                        <core:HybridIcon Width="17" Height="17" Icon="PlayCircleOutline" />
+                                    </Button>
+
+                                    <Button Style="{StaticResource ActionButtonStyle}"
+                                            Command="{markupEx:LifetimeScopeResolve commands:PauseCommand}"
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="Pause">
+                                        <core:HybridIcon Width="17" Height="17" Icon="PauseCircleOutline" />
+                                    </Button>
+
+                                    <Button Style="{StaticResource ActionButtonStyle}"
+                                            Command="{markupEx:LifetimeScopeResolve commands:CancelCommand}"
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="Cancel"
+                                            Margin="0">
+                                        <core:HybridIcon Width="17" Height="17" Icon="CloseCircleOutline" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
         <!--!WARNING Binding ElementName directly to ItemControl's Items.Count seems reasonable here. However, on the first launch, when loading in the background, the binding will fail due to the visual tree loading order.-->
         <page:NoItemView Grid.Row="1"
                          Visibility="{Binding CollectionViewCount,Converter={converters:IntToVisibilityConverter Reverse=True},FallbackValue=Collapsed}" />

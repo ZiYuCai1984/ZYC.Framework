@@ -61,6 +61,9 @@ internal partial class TabManagerView : INotifyPropertyChanged
         EventAggregator.Subscribe<TabItemClosedEvent>(OnTabItemClosed)
             .DisposeWith(CompositeDisposable);
 
+        EventAggregator.Subscribe<TabItemReloadedEvent>(OnTabItemReloaded)
+            .DisposeWith(CompositeDisposable);
+
         EventAggregator.Subscribe<TabItemsMovedEvent>(OnTabItemsMoved)
             .DisposeWith(CompositeDisposable);
 
@@ -220,6 +223,29 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
         OnPropertyChanged(nameof(Uri));
         OnPropertyChanged(nameof(FocusedTabItemInstance));
+    }
+
+    private void OnTabItemReloaded(TabItemReloadedEvent e)
+    {
+        if (e.WorkspaceId != WorkspaceNode.Id)
+        {
+            return;
+        }
+
+        var index = TabItemSource.IndexOf(e.OldTabItemInstance);
+        if (index == -1)
+        {
+            index = Math.Min(e.InsertIndex, TabItemSource.Count);
+            TabItemSource.Insert(index, e.NewTabItemInstance);
+        }
+        else
+        {
+            TabItemSource[index] = e.NewTabItemInstance;
+        }
+
+        OnPropertyChanged(nameof(Uri));
+        OnPropertyChanged(nameof(FocusedTabItemInstance));
+        OnPropertyChanged(nameof(NavigateHistory));
     }
 
     private void OnNavigateCompleted(NavigateCompletedEvent e)

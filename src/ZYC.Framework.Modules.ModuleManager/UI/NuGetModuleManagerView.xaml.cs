@@ -4,6 +4,7 @@ using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.BusyWindow;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Core.Localizations;
+using ZYC.Framework.Modules.ModuleManager;
 using ZYC.Framework.Modules.ModuleManager.Abstractions;
 using ZYC.Framework.Modules.ModuleManager.Commands;
 using ZYC.Framework.Modules.NuGet.Abstractions;
@@ -13,6 +14,8 @@ namespace ZYC.Framework.Modules.ModuleManager.UI;
 [Register]
 internal sealed partial class NuGetModuleManagerView
 {
+    private INuGetModule? _selectedNuGetModule;
+
     public NuGetModuleManagerView(
         NuGetConfig nugetConfig,
         IAppBusyWindow appBusyWindow,
@@ -41,9 +44,28 @@ internal sealed partial class NuGetModuleManagerView
 
     private INuGetManager NuGetManager { get; }
 
+    private HashSet<string> LoadedPatchNoteKeys { get; } = new(StringComparer.OrdinalIgnoreCase);
+
     public ObservableCollection<INuGetModule> NuGetModules { get; } = new();
 
     public int ModulesCount => NuGetModules.Count;
+
+    public INuGetModule? SelectedNuGetModule
+    {
+        get => _selectedNuGetModule;
+        set
+        {
+            if (ReferenceEquals(_selectedNuGetModule, value))
+            {
+                return;
+            }
+
+            _selectedNuGetModule = value;
+            OnPropertyChanged();
+
+            _ = LoadPatchNoteAsync(value);
+        }
+    }
 
     protected override async void InternalOnLoaded()
     {
@@ -54,6 +76,8 @@ internal sealed partial class NuGetModuleManagerView
     public async Task RefreshNuGetModulesAsync()
     {
         var handler = AppBusyWindow.Enqueue();
+        var selectedPackageId = SelectedNuGetModule?.PackageId;
+        var selectedVersion = SelectedNuGetModule?.Version;
 
         handler.Title = $"{L.Translate("Fetching NuGet packages from")} {NugetConfig.Source}";
         try
@@ -66,6 +90,21 @@ internal sealed partial class NuGetModuleManagerView
             }
 
             OnPropertyChanged(nameof(ModulesCount));
+            SelectedNuGetModule = NuGetModules.FirstOrDefault(module =>
+                                    string.Equals(
+                                        module.PackageId,
+                                        selectedPackageId,
+                                        StringComparison.OrdinalIgnoreCase)
+                                    && string.Equals(
+                                        module.Version,
+                                        selectedVersion,
+                                        StringComparison.OrdinalIgnoreCase))
+                                ?? NuGetModules.FirstOrDefault(module =>
+                                    string.Equals(
+                                        module.PackageId,
+                                        selectedPackageId,
+                                        StringComparison.OrdinalIgnoreCase))
+                                ?? NuGetModules.FirstOrDefault();
         }
         catch (Exception e)
         {
@@ -75,6 +114,34 @@ internal sealed partial class NuGetModuleManagerView
         finally
         {
             handler.Close();
+        }
+    }
+
+    private async Task LoadPatchNoteAsync(INuGetModule? module)
+    {
+        if (module is not NuGetModule nugetModule)
+        {
+            return;
+        }
+
+        var key = $"{module.PackageId}|{module.Version}";
+        if (!LoadedPatchNoteKeys.Add(key))
+        {
+            return;
+        }
+
+        try
+        {
+            var patchNote = await NuGetManager.FetchReleaseNotesAsync(
+                module.PackageId,
+                module.Version);
+
+            nugetModule.PatchNote = patchNote ?? string.Empty;
+        }
+        catch (Exception e)
+        {
+            LoadedPatchNoteKeys.Remove(key);
+            Logger.Error(e);
         }
     }
 }

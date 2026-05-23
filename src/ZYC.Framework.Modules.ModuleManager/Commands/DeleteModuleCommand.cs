@@ -20,7 +20,12 @@ internal class DeleteModuleCommand : CommandBase
 
     public override bool CanExecute(object? parameter)
     {
-        var module = (IModuleInfo)parameter!;
+        if (parameter == null)
+        {
+            return false;
+        }
+
+        var module = (IModuleInfo)parameter;
         return !LocalModuleManager.IsModulePendingDelete(module);
     }
 

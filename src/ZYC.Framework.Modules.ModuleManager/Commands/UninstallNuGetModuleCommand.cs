@@ -64,6 +64,6 @@ internal class
 
         return !IsExecuting
                && NuGetModuleState.InstalledModules.Any(t =>
-                   t.PackageId == module.PackageId && t.Version == module.Version);
+                   string.Equals(t.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase));
     }
 }

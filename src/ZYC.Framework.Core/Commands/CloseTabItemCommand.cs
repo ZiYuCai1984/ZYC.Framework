@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions.State;
 using ZYC.Framework.Abstractions.Tab;
 
 namespace ZYC.Framework.Core.Commands;
@@ -7,16 +8,33 @@ namespace ZYC.Framework.Core.Commands;
 [RegisterSingleInstance]
 public class CloseTabItemCommand : CommandBase
 {
-    public CloseTabItemCommand(ITabManager tabManager)
+    public CloseTabItemCommand(
+        ITabManager tabManager,
+        TabItemLockState tabItemLockState)
     {
         TabManager = tabManager;
+        TabItemLockState = tabItemLockState;
+
+
+        tabItemLockState.ObserveAnyChange().Subscribe(_ =>
+        {
+            RaiseCanExecuteChanged();
+        });
     }
 
     private ITabManager TabManager { get; }
 
+    private TabItemLockState TabItemLockState { get; }
+
     public override bool CanExecute(object? parameter)
     {
-        return parameter != null;
+        if (parameter == null)
+        {
+            return false;
+        }
+
+        var instance = (ITabItemInstance)parameter;
+        return !TabItemLockState.TabItems.Contains(instance.TabReference);
     }
 
     protected override void InternalExecute(object? parameter)

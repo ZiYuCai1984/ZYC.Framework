@@ -22,6 +22,15 @@ internal partial class TabManager
         EventAggregator.Publish(new TabItemClosedEvent(workspaceId, instance));
     }
 
+    private void InvokeTabItemReloadedEvent(
+        Guid workspaceId,
+        ITabItemInstance oldInstance,
+        ITabItemInstance newInstance,
+        int insertIndex)
+    {
+        EventAggregator.Publish(new TabItemReloadedEvent(workspaceId, oldInstance, newInstance, insertIndex));
+    }
+
     public void InvokeTabItemsRestoreCompletedEvent()
     {
         DebuggerTools.CheckCalledOnce();

@@ -70,12 +70,14 @@ internal class NuGetModuleManager : INuGetModuleManager
                 continue;
             }
 
-            var installed = State.InstalledModules.Any(m => m.PackageId == result.Identity.Id);
+            var installedModule = State.InstalledModules.LastOrDefault(m =>
+                string.Equals(m.PackageId, result.Identity.Id, StringComparison.OrdinalIgnoreCase));
+
             modules.Add(new NuGetModule(
                 result.Identity.Id,
                 result.Identity.Version.ToNormalizedString(),
                 result.Description ?? string.Empty,
-                installed));
+                installedModule?.Version));
         }
 
         return modules.ToArray();
@@ -89,7 +91,9 @@ internal class NuGetModuleManager : INuGetModuleManager
             Version = module.Version
         };
 
-        var newModules = State.InstalledModules.ToList();
+        var newModules = State.InstalledModules
+            .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
+            .ToList();
         newModules.Add(newModule);
 
 
@@ -101,20 +105,24 @@ internal class NuGetModuleManager : INuGetModuleManager
 
         State.InstalledModules = newModules.ToArray();
 
-        var nugetModule = (NuGetModule)module;
-        nugetModule.Installed = true;
+        if (module is NuGetModule nugetModule)
+        {
+            nugetModule.InstalledVersion = module.Version;
+        }
     }
 
     public async Task UninstallAsync(INuGetModule module)
     {
-        var record = State.InstalledModules.FirstOrDefault(m => m.PackageId == module.PackageId);
+        var record = State.InstalledModules.FirstOrDefault(m =>
+            string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase));
         if (record == null)
         {
             return;
         }
 
-        var newModules = State.InstalledModules.ToList();
-        newModules.Remove(record);
+        var newModules = State.InstalledModules
+            .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
+            .ToList();
 
         await UpdateProjectAssetsJsonAsync(
             newModules.ToArray(),
@@ -124,8 +132,10 @@ internal class NuGetModuleManager : INuGetModuleManager
 
         State.InstalledModules = newModules.ToArray();
 
-        var nugetModule = (NuGetModule)module;
-        nugetModule.Installed = false;
+        if (module is NuGetModule nugetModule)
+        {
+            nugetModule.InstalledVersion = null;
+        }
     }
 
     public string GetNuGetModuleAssetsJsonPath()

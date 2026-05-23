@@ -100,16 +100,44 @@
 👉 **[快速開始指南 (quick-start.zh-TW.md)](docs/quick-start.zh-TW.md)**
 
 
-👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.1/ZYC.Framework.Setup.1.3.1.exe)**
+👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.2/ZYC.Framework.Setup.1.3.2.exe)**
 
-### 安裝
+### 建立專案
 
 
-你可以透過 NuGet 將核心套件加入專案：
+推薦的開始方式是全域 dotnet tool。先安裝或更新 CLI，然後透過 `zyc new` 建立 Host 專案：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.3.1
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.2
+zyc new MyCompany.Tools --template minimal
 ```
+
+
+如果需要手動整合，仍然可以透過 NuGet 直接加入核心套件：
+
+```bash
+dotnet add package ZYC.Framework.Alpha --version 1.3.2
+```
+
+---
+
+
+
+## 說明文件
+
+| 指南 | 用途 |
+| --- | --- |
+| [快速開始](docs/quick-start.zh-TW.md) | 建立專案，並了解手動建立的備用流程。 |
+| [架構](docs/architecture.zh-TW.md) | 理解啟動、模組載入、設定、導航和執行時服務。 |
+| [導航與 Workspace](docs/navigation-workspace.zh-TW.md) | 處理 URI 導航、Tab、Workspace 和還原時機。 |
+| [擴充點](docs/extension-points.zh-TW.md) | 查看模組可以擴充 Host 的公開位置。 |
+| [內建模組](docs/built-in-modules.zh-TW.md) | 查看內建模組及其主要職責。 |
+| [模組開發](docs/module-development.zh-TW.md) | 建構包含契約、`ModuleBase`、選單和 Tab 的執行時模組。 |
+| [專案模板](docs/project-templates.zh-TW.md) | 選擇並理解 `minimal` 與 `modular` CLI 模板。 |
+| [故障排查](docs/troubleshooting.zh-TW.md) | 診斷 CLI、模組載入、路由、NuGet 模組、Aspire 和終端問題。 |
+
+
 
 ---
 
@@ -138,26 +166,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.3.1
 
 ### 內建模組
 
-| 模組            | 說明           |
-| ------------- | ------------ |
-| About         | 應用基本資訊。      |
-| ApiReference  | 內建 API 文件瀏覽。 |
-| CLI           | 內建終端。        |
-| FileExplorer  | 檔案瀏覽器。       |
-| WebBrowser    | 內建瀏覽器。       |
-| Language      | 多語言管理。       |
-| Translator    | 翻譯服務整合。      |
-| Settings      | 設定管理。        |
-| Secrets       | 敏感設定管理。      |
-| TaskManager   | 任務管理與追蹤。     |
-| Update        | NuGet 更新。    |
-| NuGet         | 套件管理。        |
-| ModuleManager | 模組管理。        |
-| MCP.Server    | MCP 服務。      |
-| Aspire        | Aspire 工具整合。 |
-| Log           | 日誌功能。        |
-| BlazorDemo    | Blazor 整合示例。 |
-| Mock          | 測試模組。        |
+README 只保留高層功能概覽。目前模組清單、載入說明和模組職責請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
 
 ### 開發與交付
 

@@ -100,16 +100,44 @@ Please refer to the detailed guide:
 👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
 
 
-👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.1/ZYC.Framework.Setup.1.3.1.exe)**
+👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.2/ZYC.Framework.Setup.1.3.2.exe)**
 
-### Installation
+### Create a Project
 
 
-Install the core package via NuGet:
+The recommended way to start is the global dotnet tool. Install or update the CLI, then create a host project with `zyc new`:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.3.1
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.2
+zyc new MyCompany.Tools --template minimal
 ```
+
+
+For manual integration, the core package can still be added directly with NuGet:
+
+```bash
+dotnet add package ZYC.Framework.Alpha --version 1.3.2
+```
+
+---
+
+
+
+## Documentation
+
+| Guide | Purpose |
+| --- | --- |
+| [Quick Start](docs/quick-start.md) | Create a project and understand the manual fallback setup. |
+| [Architecture](docs/architecture.md) | Understand startup, module loading, configuration, navigation, and runtime services. |
+| [Navigation and Workspace](docs/navigation-workspace.md) | Work with URI navigation, tabs, workspaces, and restore timing. |
+| [Extension Points](docs/extension-points.md) | Find the public places where modules can extend the host. |
+| [Built-in Modules](docs/built-in-modules.md) | Review the built-in modules and their main responsibilities. |
+| [Module Development](docs/module-development.md) | Build a runtime module with contracts, `ModuleBase`, menus, and tabs. |
+| [Project Templates](docs/project-templates.md) | Choose and understand the `minimal` and `modular` CLI templates. |
+| [Troubleshooting](docs/troubleshooting.md) | Diagnose CLI, module loading, routing, NuGet module, Aspire, and terminal issues. |
+
+
 
 ---
 
@@ -136,26 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.3.1
 
 ### Built-in Modules
 
-| Module        | Description                                                           |
-| ------------- | --------------------------------------------------------------------- |
-| About         | Application metadata (version, author, description, copyright).       |
-| ApiReference  | Built-in API documentation viewer.                                    |
-| CLI           | Embedded terminal with command execution and parameter support.       |
-| FileExplorer  | Embedded file explorer for directory browsing.                        |
-| WebBrowser    | Embedded browser for web and local content.                           |
-| Language      | Language switching and localization resource management.              |
-| Translator    | Translation service integration.                                      |
-| Settings      | Unified configuration management UI.                                  |
-| Secrets       | Secure configuration editing and display.                             |
-| TaskManager   | Task queue, execution, pause/resume, cancel, and status tracking.     |
-| Update        | NuGet-based version checking and update workflow.                     |
-| NuGet         | Package search, download, dependency handling, and caching.           |
-| ModuleManager | Install, enable, disable, and manage local or NuGet modules.          |
-| MCP.Server    | Local MCP server exposing application capabilities.                   |
-| Aspire        | `Aspire` tool integration with service control and dashboard support. |
-| Log           | Logging infrastructure and log directory access.                      |
-| BlazorDemo    | Demonstrates `Blazor Server` integration.                             |
-| Mock          | Test module for validating framework capabilities.                    |
+The README keeps only the high-level feature summary. See [Built-in Modules](docs/built-in-modules.md) for the current module list, loading notes, and module responsibilities.
 
 ### Development & Delivery
 

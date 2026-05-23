@@ -8,15 +8,15 @@ namespace ZYC.Framework.Modules.ModuleManager;
 
 internal class NuGetModule : INuGetModule, INotifyPropertyChanged
 {
-    private bool _installed;
+    private string? _installedVersion;
     private string _patchNote = "";
 
-    public NuGetModule(string packageId, string version, string description, bool installed)
+    public NuGetModule(string packageId, string version, string description, string? installedVersion)
     {
         PackageId = packageId;
         Version = version;
         Description = description;
-        Installed = installed;
+        InstalledVersion = installedVersion;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -39,13 +39,50 @@ internal class NuGetModule : INuGetModule, INotifyPropertyChanged
 
     public string Version { get; }
 
-    public bool Installed
+    public string? InstalledVersion
     {
-        get => _installed;
+        get => _installedVersion;
         internal set
         {
-            _installed = value;
+            if (_installedVersion == value)
+            {
+                return;
+            }
+
+            _installedVersion = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(Installed));
+            OnPropertyChanged(nameof(InstalledVersionText));
+            OnPropertyChanged(nameof(InstalledStatusText));
+            OnPropertyChanged(nameof(InstallActionText));
+            OnPropertyChanged(nameof(HasAvailableUpdate));
+        }
+    }
+
+    public bool Installed => !string.IsNullOrWhiteSpace(InstalledVersion);
+
+    public string InstalledVersionText => InstalledVersion ?? "Not installed";
+
+    public bool HasAvailableUpdate => Installed
+                                      && !string.Equals(
+                                          InstalledVersion,
+                                          Version,
+                                          StringComparison.OrdinalIgnoreCase);
+
+    public string InstalledStatusText => Installed
+        ? $"Installed {InstalledVersion}"
+        : "Not installed";
+
+    public string InstallActionText
+    {
+        get
+        {
+            if (!Installed)
+            {
+                return "Install";
+            }
+
+            return HasAvailableUpdate ? "Update" : "Installed";
         }
     }
 

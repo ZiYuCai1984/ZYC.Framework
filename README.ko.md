@@ -100,16 +100,44 @@
 👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
 
 
-👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.1/ZYC.Framework.Setup.1.3.1.exe)**
+👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.2/ZYC.Framework.Setup.1.3.2.exe)**
 
-### 설치
+### 프로젝트 생성
 
 
-NuGet을 통해 코어 패키지를 설치할 수 있습니다:
+권장 시작 방식은 전역 dotnet tool입니다. CLI를 설치하거나 업데이트한 뒤 `zyc new`로 호스트 프로젝트를 만듭니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.3.1
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.2
+zyc new MyCompany.Tools --template minimal
 ```
+
+
+수동으로 통합해야 하는 경우 코어 패키지를 NuGet으로 직접 추가할 수 있습니다:
+
+```bash
+dotnet add package ZYC.Framework.Alpha --version 1.3.2
+```
+
+---
+
+
+
+## 문서
+
+| 가이드 | 목적 |
+| --- | --- |
+| [빠른 시작](docs/quick-start.ko.md) | 프로젝트를 만들고 수동 생성 대체 흐름을 이해합니다. |
+| [아키텍처](docs/architecture.ko.md) | 시작, 모듈 로딩, 구성, 탐색, 런타임 서비스를 이해합니다. |
+| [탐색과 워크스페이스](docs/navigation-workspace.ko.md) | URI 탐색, 탭, 워크스페이스, 복원 타이밍을 다룹니다. |
+| [확장 지점](docs/extension-points.ko.md) | 모듈이 호스트를 확장할 수 있는 공개 지점을 확인합니다. |
+| [내장 모듈](docs/built-in-modules.ko.md) | 내장 모듈과 주요 책임을 확인합니다. |
+| [모듈 개발](docs/module-development.ko.md) | 계약, `ModuleBase`, 메뉴, 탭을 포함한 런타임 모듈을 만듭니다. |
+| [프로젝트 템플릿](docs/project-templates.ko.md) | `minimal` 및 `modular` CLI 템플릿을 선택하고 이해합니다. |
+| [문제 해결](docs/troubleshooting.ko.md) | CLI, 모듈 로딩, 라우팅, NuGet 모듈, Aspire, 터미널 문제를 진단합니다. |
+
+
 
 ---
 
@@ -137,26 +165,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.3.1
 
 ### 내장 모듈
 
-| 모듈            | 설명             |
-| ------------- | -------------- |
-| About         | 애플리케이션 정보 표시.  |
-| ApiReference  | API 문서 뷰어.     |
-| CLI           | 내장 터미널.        |
-| FileExplorer  | 파일 탐색기.        |
-| WebBrowser    | 내장 브라우저.       |
-| Language      | 다국어 관리.        |
-| Translator    | 번역 서비스 통합.     |
-| Settings      | 설정 관리 UI.      |
-| Secrets       | 민감 설정 관리.      |
-| TaskManager   | 작업 관리 및 추적.    |
-| Update        | NuGet 기반 업데이트. |
-| NuGet         | 패키지 관리.        |
-| ModuleManager | 모듈 관리.         |
-| MCP.Server    | MCP 서버.        |
-| Aspire        | Aspire 도구 통합.  |
-| Log           | 로그 기능.         |
-| BlazorDemo    | Blazor 통합 데모.  |
-| Mock          | 테스트 모듈.        |
+README에는 높은 수준의 기능 요약만 유지합니다. 현재 모듈 목록, 로딩 참고 사항, 모듈 책임은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
 
 ### 개발 및 배포
 
