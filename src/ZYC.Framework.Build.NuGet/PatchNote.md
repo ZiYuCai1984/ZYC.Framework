@@ -6,35 +6,33 @@
 
 ## 🆕 New Features
 
-* Added startup URI support for `zyc://` links, including command-line parsing, single-instance forwarding, and navigation after tab restore completes
-* Added Windows installer registration for the `zyc` URL protocol
-* Added CLI tool packaging to the NuGet release build so `ZYC.Framework.CLI` is packed alongside the framework packages
+* Added tab reload support through `ITabManager.ReloadAsync(ITabItemInstance)`
+* Added a built-in tab header `Reload` context menu item
+* Added `TabItemReloadedEvent` so reload replacements can be observed by the shell and extensions
 
 ---
 
 ## 🛠 Improvements
 
-* Converted the CLI project to SDK-style `net10.0` dotnet tool packaging and kept project templates in the CLI output
-* Simplified target framework selection so WPF projects default to `net10.0-windows`, while Abstractions and build tools stay on non-WPF `net10.0`
-* Moved opt-in Fody wiring into `Directory.Build.targets` after shared NuGet package version updates
-* Marked generated project and module template projects with `IgnoreFromPublish` so scaffolded templates stay out of product publish packaging
-* Updated Aspire package references to `13.3.3`
-* Refreshed README and quick-start version references for `1.3.0`
-* Added XML documentation for `IFileOpenMainMenuItemsProvider`
+* Reloaded tabs now replace the existing tab at the same workspace position, keep focus when appropriate, and create a fresh instance even for single-instance tab routes
+* Reload requests now respect locked tabs and tab closing cancellation
+* Reordered built-in tab header context menu items so reload, close, lock, and move actions appear in a clearer sequence
+* Ignored `.claude/` workspace artifacts in source control
 
 ---
 
-## ⚠️ Breaking Changes
+## 📚 Documentation
 
-* Removed the unused `IFileNewMainMenuItemsProvider` abstraction and built-in `FileNewMainMenuItemsProvider`
-* Removed the legacy CLI `DotnetToolSettings.xml` packaging path and disabled the `--gui` CLI shortcut while the CLI is packaged as a .NET tool
+* Added expanded documentation for architecture, navigation/workspace behavior, extension points, built-in modules, module development, project templates, and troubleshooting
+* Added Japanese, Korean, Simplified Chinese, and Traditional Chinese documentation pages for the new topics
+* Updated the documentation table of contents to expose the new topic pages
+* Added the same documentation topics to the project documentation template output
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Forwarded startup URI requests from secondary app launches to the already-running instance instead of dropping them during single-instance shutdown
-* Queued startup URI navigation until tab restore is complete so startup links can resolve against restored tab state
+* Fixed module delete command availability checks so null command parameters return `false` instead of throwing during UI command evaluation
 
 ---
 

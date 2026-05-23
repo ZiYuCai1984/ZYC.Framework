@@ -11,5 +11,5 @@ internal partial class CloseOtherTabItemHeaderContextMenuItem : ITabItemHeaderCo
         InitializeComponent();
     }
 
-    public int Order => 20;
+    public int Order => 30;
 }

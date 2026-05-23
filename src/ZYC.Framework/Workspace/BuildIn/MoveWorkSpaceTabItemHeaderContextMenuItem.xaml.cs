@@ -52,7 +52,7 @@ internal partial class MoveWorkspaceTabItemHeaderContextMenuItem : ITabItemHeade
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public int Order => 50;
+    public int Order => 100;
 
     protected override void InternalOnMenuItemBaseLoaded()
     {

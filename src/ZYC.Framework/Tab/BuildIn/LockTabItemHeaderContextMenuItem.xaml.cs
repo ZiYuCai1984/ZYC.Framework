@@ -11,5 +11,5 @@ internal partial class LockTabItemHeaderContextMenuItem : ITabItemHeaderContextM
         InitializeComponent();
     }
 
-    public int Order => 30;
+    public int Order => 40;
 }

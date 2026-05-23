@@ -11,5 +11,5 @@ internal partial class UnlockTabItemHeaderContextMenuItem : ITabItemHeaderContex
         InitializeComponent();
     }
 
-    public int Order => 40;
+    public int Order => 50;
 }

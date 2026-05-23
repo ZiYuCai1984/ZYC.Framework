@@ -88,9 +88,9 @@ public partial interface ITabManager
 public partial interface ITabManager
 {
     /// <summary>
-    ///     Reloads the content of the tab corresponding to the specified URI.
+    ///     Reloads the specified tab by replacing it with a freshly created instance.
     /// </summary>
-    /// <param name="instance">>The tab item instance to reload.</param>
+    /// <param name="instance">The tab item instance to reload.</param>
     [MCPIgnore]
     Task ReloadAsync(ITabItemInstance instance);
 

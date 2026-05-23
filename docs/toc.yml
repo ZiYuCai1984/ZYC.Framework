@@ -1,3 +1,19 @@
 ﻿items:
 - name: Overview
   href: ../README.md
+- name: Quick Start
+  href: quick-start.md
+- name: Architecture
+  href: architecture.md
+- name: Navigation and Workspace
+  href: navigation-workspace.md
+- name: Extension Points
+  href: extension-points.md
+- name: Built-in Modules
+  href: built-in-modules.md
+- name: Module Development
+  href: module-development.md
+- name: Project Templates
+  href: project-templates.md
+- name: Troubleshooting
+  href: troubleshooting.md

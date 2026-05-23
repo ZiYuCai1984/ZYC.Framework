@@ -231,13 +231,55 @@ internal partial class TabManager : ITabManager
     }
 
 
-    public Task ReloadAsync(ITabItemInstance instance)
+    public async Task ReloadAsync(ITabItemInstance instance)
     {
-        //TODO-zyc ReloadAsync
-        throw new NotImplementedException();
+        if (!TabItemInstances.Contains(instance))
+        {
+            return;
+        }
+
+        if (TabItemLockState.TabItems.Contains(instance.TabReference))
+        {
+            return;
+        }
+
+        if (!instance.OnClosing())
+        {
+            return;
+        }
+
+        var workspaceId = GetWorkspaceIdFromTabItemInstance(instance);
+        var workspace = WorkspaceDictionary[workspaceId];
+        var insertIndex = WorkspaceTabItemInstanceListDictionary[workspace].IndexOf(instance);
+        var uri = instance.Uri;
+        var wasFocused = GetFocusedTabItemInstance(workspaceId) == instance;
+
+        DetachTabItemInstance(workspaceId, instance);
+
+        try
+        {
+            instance.Dispose();
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e);
+        }
+
+        var newInstance = await InternalNavigateAsync(
+            workspaceId,
+            uri,
+            insertIndex,
+            allowSingleReuse: false);
+
+        InvokeTabItemReloadedEvent(workspaceId, instance, newInstance, insertIndex);
+
+        if (wasFocused)
+        {
+            await FocusAsync(newInstance);
+        }
     }
 
-    public async Task TabInternalNavigatingAsync(ITabItemInstance instance,Uri oriUri, Uri newUri)
+    public async Task TabInternalNavigatingAsync(ITabItemInstance instance, Uri oriUri, Uri newUri)
     {
         if (!TabItemInstances.Contains(instance))
         {
@@ -272,18 +314,6 @@ internal partial class TabManager : ITabManager
         {
             await FocusAsync(instance);
         }
-    }
-
-    public async Task ReloadAsync(Uri uri)
-    {
-        var instance = TabItemInstances.FirstOrDefault(t => t.Uri == uri);
-        if (instance == null)
-        {
-            return;
-        }
-
-        await CloseAsync(instance);
-        await NavigateAsync(uri);
     }
 
     public async Task CloseAsync(ITabItemInstance instance)
@@ -474,7 +504,11 @@ internal partial class TabManager : ITabManager
     }
 
 
-    private async Task<ITabItemInstance> InternalNavigateAsync(Guid workspaceId, Uri uri)
+    private async Task<ITabItemInstance> InternalNavigateAsync(
+        Guid workspaceId,
+        Uri uri,
+        int? insertIndex = null,
+        bool allowSingleReuse = true)
     {
         AppendToHistory(workspaceId, uri);
 
@@ -493,7 +527,8 @@ internal partial class TabManager : ITabManager
                 var instances = TabItemInstances.ToArray();
 
                 //!WARNING Design defeat !!
-                if (item.IsSingle
+                if (allowSingleReuse
+                    && item.IsSingle
                     && instances.Count(t => UriTools.Equals(t.Uri, uri)) != 0)
                 {
                     instance = instances.First(t => UriTools.Equals(t.Uri, uri));
@@ -508,7 +543,7 @@ internal partial class TabManager : ITabManager
                     //!WARNING Resolve View in advance, if there are errors, they can be displayed on the page
                     _ = instance.View;
 
-                    AttachTabItemInstance(workspaceId, instance);
+                    AttachTabItemInstance(workspaceId, instance, insertIndex);
                 }
 
                 break;
@@ -518,7 +553,7 @@ internal partial class TabManager : ITabManager
             {
                 instance = LifetimeScope.Resolve<NotFoundTabItem>(
                     new TypedParameter(typeof(TabReference), new TabReference(uri)));
-                AttachTabItemInstance(workspaceId, instance);
+                AttachTabItemInstance(workspaceId, instance, insertIndex);
             }
         }
         catch (Exception e)
@@ -528,7 +563,7 @@ internal partial class TabManager : ITabManager
             instance = LifetimeScope.Resolve<ErrorTabItem>(
                 new TypedParameter(typeof(Exception), e),
                 new TypedParameter(typeof(TabReference), new TabReference(uri)));
-            AttachTabItemInstance(workspaceId, instance);
+            AttachTabItemInstance(workspaceId, instance, insertIndex);
         }
         finally
         {

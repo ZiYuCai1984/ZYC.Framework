@@ -134,14 +134,98 @@ The project deeply integrates **.NET Aspire** for distributed application orches
 
 👉 **[<!--doc-l10n:begin quickstart-demo-installer-link-->Download Demo Installer<!--doc-l10n:locale ja-->デモ インストーラーをダウンロード<!--doc-l10n:locale zh-CN-->下载 Demo 安装包<!--doc-l10n:locale zh-TW-->下載 Demo 安裝程式<!--doc-l10n:locale ko-->데모 설치 프로그램 다운로드<!--doc-l10n:end-->](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v$(Version)/ZYC.Framework.Setup.$(Version).exe)**
 
-### <!--doc-l10n:begin install-title-->Installation<!--doc-l10n:locale ja-->インストール<!--doc-l10n:locale zh-CN-->安装<!--doc-l10n:locale zh-TW-->安裝<!--doc-l10n:locale ko-->설치<!--doc-l10n:end-->
+### <!--doc-l10n:begin create-project-title-->Create a Project<!--doc-l10n:locale ja-->プロジェクト作成<!--doc-l10n:locale zh-CN-->创建项目<!--doc-l10n:locale zh-TW-->建立專案<!--doc-l10n:locale ko-->프로젝트 생성<!--doc-l10n:end-->
 
-<!--doc-meta: l10n install-lead -->
-<!--doc-l10n:begin install-lead-->Install the core package via NuGet:<!--doc-l10n:locale ja-->NuGet でコアパッケージを追加できます：<!--doc-l10n:locale zh-CN-->你可以通过 NuGet 直接将核心包引入你的项目：<!--doc-l10n:locale zh-TW-->你可以透過 NuGet 將核心套件加入專案：<!--doc-l10n:locale ko-->NuGet을 통해 코어 패키지를 설치할 수 있습니다:<!--doc-l10n:end-->
+<!--doc-meta: l10n cli-create-lead -->
+<!--doc-l10n:begin cli-create-lead-->The recommended way to start is the global dotnet tool. Install or update the CLI, then create a host project with `zyc new`:<!--doc-l10n:locale ja-->推奨される開始方法はグローバル dotnet tool です。CLI をインストールまたは更新し、`zyc new` でホスト プロジェクトを作成します：<!--doc-l10n:locale zh-CN-->推荐的开始方式是全局 dotnet tool。先安装或更新 CLI，然后通过 `zyc new` 创建 Host 项目：<!--doc-l10n:locale zh-TW-->推薦的開始方式是全域 dotnet tool。先安裝或更新 CLI，然後透過 `zyc new` 建立 Host 專案：<!--doc-l10n:locale ko-->권장 시작 방식은 전역 dotnet tool입니다. CLI를 설치하거나 업데이트한 뒤 `zyc new`로 호스트 프로젝트를 만듭니다:<!--doc-l10n:end-->
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version $(Version)
+dotnet tool update --global ZYC.Framework.CLI --version $(Version)
+zyc new MyCompany.Tools --template minimal
+```
+
+<!--doc-meta: l10n manual-package-lead -->
+<!--doc-l10n:begin manual-package-lead-->For manual integration, the core package can still be added directly with NuGet:<!--doc-l10n:locale ja-->手動で統合する場合は、コア パッケージを NuGet から直接追加することもできます：<!--doc-l10n:locale zh-CN-->如果需要手动集成，仍然可以通过 NuGet 直接添加核心包：<!--doc-l10n:locale zh-TW-->如果需要手動整合，仍然可以透過 NuGet 直接加入核心套件：<!--doc-l10n:locale ko-->수동으로 통합해야 하는 경우 코어 패키지를 NuGet으로 직접 추가할 수 있습니다:<!--doc-l10n:end-->
 
 ```bash
 dotnet add package $(PackageId) --version $(Version)
 ```
+
+---
+
+<!--doc-meta: section documentation -->
+<!--doc-l10n:begin documentation-->
+## Documentation
+
+| Guide | Purpose |
+| --- | --- |
+| [Quick Start](docs/quick-start.md) | Create a project and understand the manual fallback setup. |
+| [Architecture](docs/architecture.md) | Understand startup, module loading, configuration, navigation, and runtime services. |
+| [Navigation and Workspace](docs/navigation-workspace.md) | Work with URI navigation, tabs, workspaces, and restore timing. |
+| [Extension Points](docs/extension-points.md) | Find the public places where modules can extend the host. |
+| [Built-in Modules](docs/built-in-modules.md) | Review the built-in modules and their main responsibilities. |
+| [Module Development](docs/module-development.md) | Build a runtime module with contracts, `ModuleBase`, menus, and tabs. |
+| [Project Templates](docs/project-templates.md) | Choose and understand the `minimal` and `modular` CLI templates. |
+| [Troubleshooting](docs/troubleshooting.md) | Diagnose CLI, module loading, routing, NuGet module, Aspire, and terminal issues. |
+
+<!--doc-l10n:locale ja-->
+## ドキュメント
+
+| ガイド | 目的 |
+| --- | --- |
+| [クイックスタート](docs/quick-start.ja.md) | プロジェクト作成と手動セットアップの代替手順を確認します。 |
+| [アーキテクチャ](docs/architecture.ja.md) | 起動、モジュール ロード、構成、ナビゲーション、ランタイム サービスを理解します。 |
+| [ナビゲーションとワークスペース](docs/navigation-workspace.ja.md) | URI ナビゲーション、タブ、ワークスペース、復元タイミングを扱います。 |
+| [拡張ポイント](docs/extension-points.ja.md) | モジュールがホストを拡張できる公開ポイントを確認します。 |
+| [組み込みモジュール](docs/built-in-modules.ja.md) | 組み込みモジュールと主な責務を確認します。 |
+| [モジュール開発](docs/module-development.ja.md) | 契約、`ModuleBase`、メニュー、タブを持つ runtime module を作成します。 |
+| [プロジェクト テンプレート](docs/project-templates.ja.md) | `minimal` と `modular` の CLI テンプレートを選択・理解します。 |
+| [トラブルシューティング](docs/troubleshooting.ja.md) | CLI、モジュール ロード、ルーティング、NuGet モジュール、Aspire、ターミナルの問題を診断します。 |
+
+<!--doc-l10n:locale zh-CN-->
+## 文档
+
+| 指南 | 用途 |
+| --- | --- |
+| [快速开始](docs/quick-start.zh-CN.md) | 创建项目，并了解手动创建的备用流程。 |
+| [架构](docs/architecture.zh-CN.md) | 理解启动、模块加载、配置、导航和运行时服务。 |
+| [导航与 Workspace](docs/navigation-workspace.zh-CN.md) | 处理 URI 导航、Tab、Workspace 和恢复时机。 |
+| [扩展点](docs/extension-points.zh-CN.md) | 查看模块可以扩展 Host 的公开位置。 |
+| [内置模块](docs/built-in-modules.zh-CN.md) | 查看内置模块及其主要职责。 |
+| [模块开发](docs/module-development.zh-CN.md) | 构建包含契约、`ModuleBase`、菜单和 Tab 的运行时模块。 |
+| [项目模板](docs/project-templates.zh-CN.md) | 选择并理解 `minimal` 与 `modular` CLI 模板。 |
+| [故障排查](docs/troubleshooting.zh-CN.md) | 诊断 CLI、模块加载、路由、NuGet 模块、Aspire 和终端问题。 |
+
+<!--doc-l10n:locale zh-TW-->
+## 說明文件
+
+| 指南 | 用途 |
+| --- | --- |
+| [快速開始](docs/quick-start.zh-TW.md) | 建立專案，並了解手動建立的備用流程。 |
+| [架構](docs/architecture.zh-TW.md) | 理解啟動、模組載入、設定、導航和執行時服務。 |
+| [導航與 Workspace](docs/navigation-workspace.zh-TW.md) | 處理 URI 導航、Tab、Workspace 和還原時機。 |
+| [擴充點](docs/extension-points.zh-TW.md) | 查看模組可以擴充 Host 的公開位置。 |
+| [內建模組](docs/built-in-modules.zh-TW.md) | 查看內建模組及其主要職責。 |
+| [模組開發](docs/module-development.zh-TW.md) | 建構包含契約、`ModuleBase`、選單和 Tab 的執行時模組。 |
+| [專案模板](docs/project-templates.zh-TW.md) | 選擇並理解 `minimal` 與 `modular` CLI 模板。 |
+| [故障排查](docs/troubleshooting.zh-TW.md) | 診斷 CLI、模組載入、路由、NuGet 模組、Aspire 和終端問題。 |
+
+<!--doc-l10n:locale ko-->
+## 문서
+
+| 가이드 | 목적 |
+| --- | --- |
+| [빠른 시작](docs/quick-start.ko.md) | 프로젝트를 만들고 수동 생성 대체 흐름을 이해합니다. |
+| [아키텍처](docs/architecture.ko.md) | 시작, 모듈 로딩, 구성, 탐색, 런타임 서비스를 이해합니다. |
+| [탐색과 워크스페이스](docs/navigation-workspace.ko.md) | URI 탐색, 탭, 워크스페이스, 복원 타이밍을 다룹니다. |
+| [확장 지점](docs/extension-points.ko.md) | 모듈이 호스트를 확장할 수 있는 공개 지점을 확인합니다. |
+| [내장 모듈](docs/built-in-modules.ko.md) | 내장 모듈과 주요 책임을 확인합니다. |
+| [모듈 개발](docs/module-development.ko.md) | 계약, `ModuleBase`, 메뉴, 탭을 포함한 런타임 모듈을 만듭니다. |
+| [프로젝트 템플릿](docs/project-templates.ko.md) | `minimal` 및 `modular` CLI 템플릿을 선택하고 이해합니다. |
+| [문제 해결](docs/troubleshooting.ko.md) | CLI, 모듈 로딩, 라우팅, NuGet 모듈, Aspire, 터미널 문제를 진단합니다. |
+
+<!--doc-l10n:end-->
 
 ---
 
@@ -168,26 +252,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### Built-in Modules
 
-| Module        | Description                                                           |
-| ------------- | --------------------------------------------------------------------- |
-| About         | Application metadata (version, author, description, copyright).       |
-| ApiReference  | Built-in API documentation viewer.                                    |
-| CLI           | Embedded terminal with command execution and parameter support.       |
-| FileExplorer  | Embedded file explorer for directory browsing.                        |
-| WebBrowser    | Embedded browser for web and local content.                           |
-| Language      | Language switching and localization resource management.              |
-| Translator    | Translation service integration.                                      |
-| Settings      | Unified configuration management UI.                                  |
-| Secrets       | Secure configuration editing and display.                             |
-| TaskManager   | Task queue, execution, pause/resume, cancel, and status tracking.     |
-| Update        | NuGet-based version checking and update workflow.                     |
-| NuGet         | Package search, download, dependency handling, and caching.           |
-| ModuleManager | Install, enable, disable, and manage local or NuGet modules.          |
-| MCP.Server    | Local MCP server exposing application capabilities.                   |
-| Aspire        | `Aspire` tool integration with service control and dashboard support. |
-| Log           | Logging infrastructure and log directory access.                      |
-| BlazorDemo    | Demonstrates `Blazor Server` integration.                             |
-| Mock          | Test module for validating framework capabilities.                    |
+The README keeps only the high-level feature summary. See [Built-in Modules](docs/built-in-modules.md) for the current module list, loading notes, and module responsibilities.
 
 ### Development & Delivery
 
@@ -220,26 +285,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### 組み込みモジュール
 
-| モジュール         | 説明                    |
-| ------------- | --------------------- |
-| About         | バージョンや作者などの基本情報表示。    |
-| ApiReference  | アプリ内で API ドキュメントを閲覧。  |
-| CLI           | コマンド実行可能な内蔵ターミナル。     |
-| FileExplorer  | ディレクトリ閲覧用ファイルエクスプローラ。 |
-| WebBrowser    | Web / ローカルページ閲覧用ブラウザ。 |
-| Language      | 多言語切替とローカライズ管理。       |
-| Translator    | 翻訳サービス統合。             |
-| Settings      | 統合設定管理画面。             |
-| Secrets       | 機密設定の安全な管理。           |
-| TaskManager   | タスク管理と状態追跡。           |
-| Update        | NuGet ベースの更新機能。       |
-| NuGet         | NuGet パッケージ検索と管理。     |
-| ModuleManager | モジュールのインストール・有効化・管理。  |
-| MCP.Server    | ローカル MCP Server。      |
-| Aspire        | `Aspire` ツール統合。       |
-| Log           | ログ機能とログディレクトリ。        |
-| BlazorDemo    | Blazor Server 統合デモ。   |
-| Mock          | テスト用モジュール。            |
+README には概要だけを残します。現在のモジュール一覧、ロード時の注意点、各モジュールの責務は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
 
 ### 開発・配布
 
@@ -274,26 +320,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### 内置模块
 
-| 模块            | 说明                                   |
-| ------------- | ------------------------------------ |
-| About         | 显示应用基本信息，如版本、作者和描述。                  |
-| ApiReference  | 内置 API 文档查看页，可在应用内浏览生成的文档。           |
-| CLI           | 内嵌终端页面，支持命令执行和参数控制。                  |
-| FileExplorer  | 内置文件资源管理器视图，支持目录浏览。                  |
-| WebBrowser    | 内置浏览器模块，支持访问网页和本地内容。                 |
-| Language      | 提供多语言切换和本地化资源管理。                     |
-| Translator    | 提供翻译服务接入能力。                          |
-| Settings      | 统一的设置管理界面，支持查看、编辑和重置配置。              |
-| Secrets       | 提供敏感配置的安全查看与编辑。                      |
-| TaskManager   | 支持任务入队、执行、暂停、恢复、取消和状态追踪。             |
-| Update        | 基于 NuGet 的版本检查、下载和更新流程。              |
-| NuGet         | 提供 NuGet 包查询、下载、依赖处理和缓存管理。           |
-| ModuleManager | 管理本地模块和 NuGet 模块的安装、卸载、启用和禁用。        |
-| MCP.Server    | 提供本地 MCP Server，可将应用功能对外暴露为工具服务。     |
-| Aspire        | 提供 `Aspire` 工具下载、服务控制和 Dashboard 集成。 |
-| Log           | 提供日志功能和日志目录访问入口。                     |
-| BlazorDemo    | `Blazor Server` 集成示例模块。              |
-| Mock          | 用于测试和演示框架能力的模块。                      |
+README 只保留高层功能概览。当前模块清单、加载说明和模块职责请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
 
 ### 开发与交付
 
@@ -329,26 +356,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### 內建模組
 
-| 模組            | 說明           |
-| ------------- | ------------ |
-| About         | 應用基本資訊。      |
-| ApiReference  | 內建 API 文件瀏覽。 |
-| CLI           | 內建終端。        |
-| FileExplorer  | 檔案瀏覽器。       |
-| WebBrowser    | 內建瀏覽器。       |
-| Language      | 多語言管理。       |
-| Translator    | 翻譯服務整合。      |
-| Settings      | 設定管理。        |
-| Secrets       | 敏感設定管理。      |
-| TaskManager   | 任務管理與追蹤。     |
-| Update        | NuGet 更新。    |
-| NuGet         | 套件管理。        |
-| ModuleManager | 模組管理。        |
-| MCP.Server    | MCP 服務。      |
-| Aspire        | Aspire 工具整合。 |
-| Log           | 日誌功能。        |
-| BlazorDemo    | Blazor 整合示例。 |
-| Mock          | 測試模組。        |
+README 只保留高層功能概覽。目前模組清單、載入說明和模組職責請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
 
 ### 開發與交付
 
@@ -383,26 +391,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### 내장 모듈
 
-| 모듈            | 설명             |
-| ------------- | -------------- |
-| About         | 애플리케이션 정보 표시.  |
-| ApiReference  | API 문서 뷰어.     |
-| CLI           | 내장 터미널.        |
-| FileExplorer  | 파일 탐색기.        |
-| WebBrowser    | 내장 브라우저.       |
-| Language      | 다국어 관리.        |
-| Translator    | 번역 서비스 통합.     |
-| Settings      | 설정 관리 UI.      |
-| Secrets       | 민감 설정 관리.      |
-| TaskManager   | 작업 관리 및 추적.    |
-| Update        | NuGet 기반 업데이트. |
-| NuGet         | 패키지 관리.        |
-| ModuleManager | 모듈 관리.         |
-| MCP.Server    | MCP 서버.        |
-| Aspire        | Aspire 도구 통합.  |
-| Log           | 로그 기능.         |
-| BlazorDemo    | Blazor 통합 데모.  |
-| Mock          | 테스트 모듈.        |
+README에는 높은 수준의 기능 요약만 유지합니다. 현재 모듈 목록, 로딩 참고 사항, 모듈 책임은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
 
 ### 개발 및 배포
 

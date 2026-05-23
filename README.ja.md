@@ -102,14 +102,42 @@
 
 👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.2/ZYC.Framework.Setup.1.3.2.exe)**
 
-### インストール
+### プロジェクト作成
 
 
-NuGet でコアパッケージを追加できます：
+推奨される開始方法はグローバル dotnet tool です。CLI をインストールまたは更新し、`zyc new` でホスト プロジェクトを作成します：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.2
+zyc new MyCompany.Tools --template minimal
+```
+
+
+手動で統合する場合は、コア パッケージを NuGet から直接追加することもできます：
 
 ```bash
 dotnet add package ZYC.Framework.Alpha --version 1.3.2
 ```
+
+---
+
+
+
+## ドキュメント
+
+| ガイド | 目的 |
+| --- | --- |
+| [クイックスタート](docs/quick-start.ja.md) | プロジェクト作成と手動セットアップの代替手順を確認します。 |
+| [アーキテクチャ](docs/architecture.ja.md) | 起動、モジュール ロード、構成、ナビゲーション、ランタイム サービスを理解します。 |
+| [ナビゲーションとワークスペース](docs/navigation-workspace.ja.md) | URI ナビゲーション、タブ、ワークスペース、復元タイミングを扱います。 |
+| [拡張ポイント](docs/extension-points.ja.md) | モジュールがホストを拡張できる公開ポイントを確認します。 |
+| [組み込みモジュール](docs/built-in-modules.ja.md) | 組み込みモジュールと主な責務を確認します。 |
+| [モジュール開発](docs/module-development.ja.md) | 契約、`ModuleBase`、メニュー、タブを持つ runtime module を作成します。 |
+| [プロジェクト テンプレート](docs/project-templates.ja.md) | `minimal` と `modular` の CLI テンプレートを選択・理解します。 |
+| [トラブルシューティング](docs/troubleshooting.ja.md) | CLI、モジュール ロード、ルーティング、NuGet モジュール、Aspire、ターミナルの問題を診断します。 |
+
+
 
 ---
 
@@ -136,26 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.3.2
 
 ### 組み込みモジュール
 
-| モジュール         | 説明                    |
-| ------------- | --------------------- |
-| About         | バージョンや作者などの基本情報表示。    |
-| ApiReference  | アプリ内で API ドキュメントを閲覧。  |
-| CLI           | コマンド実行可能な内蔵ターミナル。     |
-| FileExplorer  | ディレクトリ閲覧用ファイルエクスプローラ。 |
-| WebBrowser    | Web / ローカルページ閲覧用ブラウザ。 |
-| Language      | 多言語切替とローカライズ管理。       |
-| Translator    | 翻訳サービス統合。             |
-| Settings      | 統合設定管理画面。             |
-| Secrets       | 機密設定の安全な管理。           |
-| TaskManager   | タスク管理と状態追跡。           |
-| Update        | NuGet ベースの更新機能。       |
-| NuGet         | NuGet パッケージ検索と管理。     |
-| ModuleManager | モジュールのインストール・有効化・管理。  |
-| MCP.Server    | ローカル MCP Server。      |
-| Aspire        | `Aspire` ツール統合。       |
-| Log           | ログ機能とログディレクトリ。        |
-| BlazorDemo    | Blazor Server 統合デモ。   |
-| Mock          | テスト用モジュール。            |
+README には概要だけを残します。現在のモジュール一覧、ロード時の注意点、各モジュールの責務は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
 
 ### 開発・配布
 

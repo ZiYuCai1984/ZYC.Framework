@@ -102,14 +102,42 @@
 
 👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.2/ZYC.Framework.Setup.1.3.2.exe)**
 
-### 安装
+### 创建项目
 
 
-你可以通过 NuGet 直接将核心包引入你的项目：
+推荐的开始方式是全局 dotnet tool。先安装或更新 CLI，然后通过 `zyc new` 创建 Host 项目：
+
+```bash
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.2
+zyc new MyCompany.Tools --template minimal
+```
+
+
+如果需要手动集成，仍然可以通过 NuGet 直接添加核心包：
 
 ```bash
 dotnet add package ZYC.Framework.Alpha --version 1.3.2
 ```
+
+---
+
+
+
+## 文档
+
+| 指南 | 用途 |
+| --- | --- |
+| [快速开始](docs/quick-start.zh-CN.md) | 创建项目，并了解手动创建的备用流程。 |
+| [架构](docs/architecture.zh-CN.md) | 理解启动、模块加载、配置、导航和运行时服务。 |
+| [导航与 Workspace](docs/navigation-workspace.zh-CN.md) | 处理 URI 导航、Tab、Workspace 和恢复时机。 |
+| [扩展点](docs/extension-points.zh-CN.md) | 查看模块可以扩展 Host 的公开位置。 |
+| [内置模块](docs/built-in-modules.zh-CN.md) | 查看内置模块及其主要职责。 |
+| [模块开发](docs/module-development.zh-CN.md) | 构建包含契约、`ModuleBase`、菜单和 Tab 的运行时模块。 |
+| [项目模板](docs/project-templates.zh-CN.md) | 选择并理解 `minimal` 与 `modular` CLI 模板。 |
+| [故障排查](docs/troubleshooting.zh-CN.md) | 诊断 CLI、模块加载、路由、NuGet 模块、Aspire 和终端问题。 |
+
+
 
 ---
 
@@ -137,26 +165,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.3.2
 
 ### 内置模块
 
-| 模块            | 说明                                   |
-| ------------- | ------------------------------------ |
-| About         | 显示应用基本信息，如版本、作者和描述。                  |
-| ApiReference  | 内置 API 文档查看页，可在应用内浏览生成的文档。           |
-| CLI           | 内嵌终端页面，支持命令执行和参数控制。                  |
-| FileExplorer  | 内置文件资源管理器视图，支持目录浏览。                  |
-| WebBrowser    | 内置浏览器模块，支持访问网页和本地内容。                 |
-| Language      | 提供多语言切换和本地化资源管理。                     |
-| Translator    | 提供翻译服务接入能力。                          |
-| Settings      | 统一的设置管理界面，支持查看、编辑和重置配置。              |
-| Secrets       | 提供敏感配置的安全查看与编辑。                      |
-| TaskManager   | 支持任务入队、执行、暂停、恢复、取消和状态追踪。             |
-| Update        | 基于 NuGet 的版本检查、下载和更新流程。              |
-| NuGet         | 提供 NuGet 包查询、下载、依赖处理和缓存管理。           |
-| ModuleManager | 管理本地模块和 NuGet 模块的安装、卸载、启用和禁用。        |
-| MCP.Server    | 提供本地 MCP Server，可将应用功能对外暴露为工具服务。     |
-| Aspire        | 提供 `Aspire` 工具下载、服务控制和 Dashboard 集成。 |
-| Log           | 提供日志功能和日志目录访问入口。                     |
-| BlazorDemo    | `Blazor Server` 集成示例模块。              |
-| Mock          | 用于测试和演示框架能力的模块。                      |
+README 只保留高层功能概览。当前模块清单、加载说明和模块职责请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
 
 ### 开发与交付
 
