@@ -17,18 +17,19 @@ namespace ZYC.Framework.Modules.ModuleManager;
 internal class NuGetModuleManager : INuGetModuleManager
 {
     public NuGetModuleManager(
-        
         NuGetConfig nugetConfig,
         INuGetManager nuGetManager,
         NuGetModuleConfig config,
         NuGetModuleState state,
-        IAppContext appContext)
+        IAppContext appContext,
+        NuGetModuleOperationCoordinator operationCoordinator)
     {
         NuGetConfig = nugetConfig;
         NuGetManager = nuGetManager;
         NuGetModuleConfig = config;
         State = state;
         AppContext = appContext;
+        OperationCoordinator = operationCoordinator;
     }
 
     private NuGetConfig NuGetConfig { get; }
@@ -41,101 +42,112 @@ internal class NuGetModuleManager : INuGetModuleManager
 
     private IAppContext AppContext { get; }
 
+    private NuGetModuleOperationCoordinator OperationCoordinator { get; }
+
     public async Task<INuGetModule[]> GetModulesAsync()
     {
-        var source = new PackageSource(NuGetConfig.Source);
-        var repository = Repository.Factory.GetCoreV3(source);
-        var search = await repository.GetResourceAsync<PackageSearchResource>(CancellationToken.None);
-        var filter = new SearchFilter(true)
+        return await OperationCoordinator.RunAsync(async () =>
         {
-            OrderBy = SearchOrderBy.Id
-        };
-        var results = await search.SearchAsync(
-            NuGetModuleConfig.SearchTerm,
-            filter,
-            NuGetModuleConfig.SearchSkip,
-            NuGetModuleConfig.SearchTake,
-            NullLogger.Instance,
-            CancellationToken.None);
-
-        var regex = new Regex(
-            NuGetModuleConfig.IncludeRegex,
-            RegexOptions.IgnoreCase);
-
-        var modules = new List<INuGetModule>();
-        foreach (var result in results)
-        {
-            if (!regex.IsMatch(result.Identity.Id))
+            var source = new PackageSource(NuGetConfig.Source);
+            var repository = Repository.Factory.GetCoreV3(source);
+            var search = await repository.GetResourceAsync<PackageSearchResource>(CancellationToken.None);
+            var filter = new SearchFilter(true)
             {
-                continue;
+                OrderBy = SearchOrderBy.Id
+            };
+            var results = await search.SearchAsync(
+                NuGetModuleConfig.SearchTerm,
+                filter,
+                NuGetModuleConfig.SearchSkip,
+                NuGetModuleConfig.SearchTake,
+                NullLogger.Instance,
+                CancellationToken.None);
+
+            var regex = new Regex(
+                NuGetModuleConfig.IncludeRegex,
+                RegexOptions.IgnoreCase);
+
+            var modules = new List<INuGetModule>();
+            foreach (var result in results)
+            {
+                if (!regex.IsMatch(result.Identity.Id))
+                {
+                    continue;
+                }
+
+                var installedModule = State.InstalledModules.LastOrDefault(m =>
+                    string.Equals(m.PackageId, result.Identity.Id, StringComparison.OrdinalIgnoreCase));
+
+                modules.Add(new NuGetModule(
+                    result.Identity.Id,
+                    result.Identity.Version.ToNormalizedString(),
+                    result.Description ?? string.Empty,
+                    installedModule?.Version));
             }
 
-            var installedModule = State.InstalledModules.LastOrDefault(m =>
-                string.Equals(m.PackageId, result.Identity.Id, StringComparison.OrdinalIgnoreCase));
-
-            modules.Add(new NuGetModule(
-                result.Identity.Id,
-                result.Identity.Version.ToNormalizedString(),
-                result.Description ?? string.Empty,
-                installedModule?.Version));
-        }
-
-        return modules.ToArray();
+            return modules.ToArray();
+        });
     }
 
     public async Task InstallAsync(INuGetModule module)
     {
-        var newModule = new InstalledNuGetModule
+        await OperationCoordinator.RunAsync(async () =>
         {
-            PackageId = module.PackageId,
-            Version = module.Version
-        };
+            var newModule = new InstalledNuGetModule
+            {
+                PackageId = module.PackageId,
+                Version = module.Version
+            };
 
-        var newModules = State.InstalledModules
-            .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        newModules.Add(newModule);
+            var newModules = State.InstalledModules
+                .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            newModules.Add(newModule);
 
 
-        await UpdateProjectAssetsJsonAsync(
-            newModules.ToArray(),
-            NuGetModuleConfig.TargetFramework,
-            NuGetConfig.Source,
-            GetNuGetModuleAssetsJsonPath());
+            await UpdateProjectAssetsJsonAsync(
+                newModules.ToArray(),
+                NuGetModuleConfig.TargetFramework,
+                NuGetConfig.Source,
+                GetNuGetModuleAssetsJsonPath());
 
-        State.InstalledModules = newModules.ToArray();
+            State.InstalledModules = newModules.ToArray();
 
-        if (module is NuGetModule nugetModule)
-        {
-            nugetModule.InstalledVersion = module.Version;
-        }
+            if (module is NuGetModule nugetModule)
+            {
+                nugetModule.InstalledVersion = module.Version;
+            }
+        });
     }
 
     public async Task UninstallAsync(INuGetModule module)
     {
-        var record = State.InstalledModules.FirstOrDefault(m =>
-            string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase));
-        if (record == null)
+        await OperationCoordinator.RunAsync(async () =>
         {
-            return;
-        }
+            var record = State.InstalledModules.FirstOrDefault(m =>
+                string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase));
+            if (record == null)
+            {
+                return;
+            }
 
-        var newModules = State.InstalledModules
-            .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+            var newModules = State.InstalledModules
+                .Where(m => !string.Equals(m.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-        await UpdateProjectAssetsJsonAsync(
-            newModules.ToArray(),
-            NuGetModuleConfig.TargetFramework,
-            NuGetConfig.Source,
-            GetNuGetModuleAssetsJsonPath());
+            await UpdateProjectAssetsJsonAsync(
+                newModules.ToArray(),
+                NuGetModuleConfig.TargetFramework,
+                NuGetConfig.Source,
+                GetNuGetModuleAssetsJsonPath());
 
-        State.InstalledModules = newModules.ToArray();
+            State.InstalledModules = newModules.ToArray();
 
-        if (module is NuGetModule nugetModule)
-        {
-            nugetModule.InstalledVersion = null;
-        }
+            if (module is NuGetModule nugetModule)
+            {
+                nugetModule.InstalledVersion = null;
+            }
+        });
     }
 
     public string GetNuGetModuleAssetsJsonPath()
