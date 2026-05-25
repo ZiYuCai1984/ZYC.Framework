@@ -322,6 +322,9 @@ internal partial class TabManagerView
 
         void OnElementGiveFeedback(object s, GiveFeedbackEventArgs args)
         {
+            args.UseDefaultCursors = false;
+            args.Handled = true;
+
             if (adorner == null)
             {
                 return;
@@ -334,6 +337,9 @@ internal partial class TabManagerView
             var top = mousePosInContainer.Y - element.ActualHeight / 2;
 
             adorner.UpdatePosition(left, top);
+
+            //!WARNING Force the drag adorner to repaint inside the OLE drag/drop message loop. (Without this, there will be problems in the release.)
+            layer?.Update();
         }
     }
 

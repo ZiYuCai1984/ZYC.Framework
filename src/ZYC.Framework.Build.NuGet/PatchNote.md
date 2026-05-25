@@ -6,33 +6,31 @@
 
 ## 🆕 New Features
 
-* Added tab reload support through `ITabManager.ReloadAsync(ITabItemInstance)`
-* Added a built-in tab header `Reload` context menu item
-* Added `TabItemReloadedEvent` so reload replacements can be observed by the shell and extensions
+* Added release artifacts and documentation references for ZYC.Framework `1.3.3`
 
 ---
 
 ## 🛠 Improvements
 
-* Reloaded tabs now replace the existing tab at the same workspace position, keep focus when appropriate, and create a fresh instance even for single-instance tab routes
-* Reload requests now respect locked tabs and tab closing cancellation
-* Reordered built-in tab header context menu items so reload, close, lock, and move actions appear in a clearer sequence
-* Ignored `.claude/` workspace artifacts in source control
+* Improved URI-based tab focusing so every matching tab instance can be brought into focus instead of stopping at the first match
+* Hardened background tab navigation by ignoring null tab descriptors during navigation startup
+* Made navigation history updates resilient by logging history update failures instead of letting them interrupt tab navigation
+* Improved tab drag feedback by forcing the drag adorner to repaint during the OLE drag/drop message loop
 
 ---
 
 ## 📚 Documentation
 
-* Added expanded documentation for architecture, navigation/workspace behavior, extension points, built-in modules, module development, project templates, and troubleshooting
-* Added Japanese, Korean, Simplified Chinese, and Traditional Chinese documentation pages for the new topics
-* Updated the documentation table of contents to expose the new topic pages
-* Added the same documentation topics to the project documentation template output
+* Updated README installer links from `1.3.2` to `1.3.3`
+* Updated CLI installation, CLI update, project template, and package reference examples from `1.3.2` to `1.3.3`
+* Applied the same version updates across English, Japanese, Korean, Simplified Chinese, and Traditional Chinese documentation
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed module delete command availability checks so null command parameters return `false` instead of throwing during UI command evaluation
+* Fixed tab drag preview refresh behavior that could fail to repaint correctly in release builds
+* Fixed URI focus behavior for multiple open tab instances that share the same route
 
 ---
 

@@ -17,13 +17,16 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
         IAppLogger<InstallNuGetModuleCommand> logger,
         ILifetimeScope lifetimeScope,
         INuGetModuleManager nuGetModuleManager,
-        NuGetModuleState nuGetModuleState) : base(lifetimeScope)
+        NuGetModuleState nuGetModuleState,
+        NuGetModuleOperationCoordinator operationCoordinator) : base(lifetimeScope)
     {
         BannerManager = bannerManager;
         ToastManager = toastManager;
         Logger = logger;
         NuGetModuleManager = nuGetModuleManager;
         NuGetModuleState = nuGetModuleState;
+        OperationCoordinator = operationCoordinator;
+        OperationCoordinator.IsExecutingChanged += (_, _) => RaiseCanExecuteChanged();
     }
 
     private IBannerManager BannerManager { get; }
@@ -36,17 +39,22 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
 
     private NuGetModuleState NuGetModuleState { get; }
 
+    private NuGetModuleOperationCoordinator OperationCoordinator { get; }
+
     protected override async Task InternalExecuteAsync(object? parameter)
     {
-        if (parameter == null)
+        if (parameter == null || OperationCoordinator.IsExecuting)
         {
             return;
         }
 
         try
         {
-            await NuGetModuleManager.InstallAsync((INuGetModule)parameter);
-            BannerManager.PromptRestart();
+            await OperationCoordinator.TryRunAsync(async () =>
+            {
+                await NuGetModuleManager.InstallAsync((INuGetModule)parameter);
+                BannerManager.PromptRestart();
+            });
         }
         catch (Exception e)
         {
@@ -65,6 +73,7 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
         var module = (INuGetModule)parameter;
 
         return !IsExecuting
+               && !OperationCoordinator.IsExecuting
                && !NuGetModuleState.InstalledModules.Any(t =>
                    string.Equals(t.PackageId, module.PackageId, StringComparison.OrdinalIgnoreCase)
                    && string.Equals(t.Version, module.Version, StringComparison.OrdinalIgnoreCase));

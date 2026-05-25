@@ -21,8 +21,8 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.3.2
-dotnet tool update -g ZYC.Framework.CLI --version 1.3.2
+dotnet tool install -g ZYC.Framework.CLI --version 1.3.3
+dotnet tool update -g ZYC.Framework.CLI --version 1.3.3
 ```
 
 Then verify the command:
@@ -109,7 +109,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.3.2
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.3.3
 ```
 
 ## `new-module` for Existing Source Trees

@@ -269,7 +269,7 @@ internal partial class TabManager : ITabManager
             workspaceId,
             uri,
             insertIndex,
-            allowSingleReuse: false);
+            false);
 
         InvokeTabItemReloadedEvent(workspaceId, instance, newInstance, insertIndex);
 
@@ -309,10 +309,12 @@ internal partial class TabManager : ITabManager
 
     public async Task FocusAsync(Uri uri)
     {
-        var instance = TabItemInstances.FirstOrDefault(t => t.Uri == uri);
-        if (instance != null)
+        foreach (var instance in TabItemInstances)
         {
-            await FocusAsync(instance);
+            if (instance.Uri == uri)
+            {
+                await FocusAsync(instance);
+            }
         }
     }
 
@@ -386,7 +388,10 @@ internal partial class TabManager : ITabManager
             var backgroundItems = navigation.TabItems.ToArray();
             foreach (var item in backgroundItems)
             {
-                await NavigateBackgroundAsync(workspaceId, item);
+                if (item != null)
+                {
+                    await NavigateBackgroundAsync(workspaceId, item);
+                }
             }
 
 
@@ -608,29 +613,37 @@ internal partial class TabManager : ITabManager
 
     private void AppendToHistory(Guid workspaceId, Uri uri)
     {
-        var navigationState = GetNavigationState(workspaceId);
-
-        var newList = new List<NavigationState.HistoryItem>(navigationState.History);
-
-        if (newList.Count > NavigationConfig.MaxHistoryNum)
+        try
         {
-            newList.Remove(newList.Last());
-        }
+            var navigationState = GetNavigationState(workspaceId);
 
-        foreach (var item in newList.ToArray())
-        {
-            if (item.Uri == uri.ToString())
+            var newList = new List<NavigationState.HistoryItem>(navigationState.History);
+
+            if (newList.Count > NavigationConfig.MaxHistoryNum)
             {
-                newList.Remove(item);
+                newList.Remove(newList.Last());
             }
-        }
 
-        newList.Insert(0, new NavigationState.HistoryItem
+            foreach (var item in newList.ToArray())
+            {
+                if (item.Uri == uri.ToString())
+                {
+                    newList.Remove(item);
+                }
+            }
+
+            newList.Insert(0, new NavigationState.HistoryItem
+            {
+                Time = DateTime.Now,
+                Uri = uri.ToString()
+            });
+            navigationState.History = newList.ToArray();
+        }
+        catch (Exception e)
         {
-            Time = DateTime.Now,
-            Uri = uri.ToString()
-        });
-        navigationState.History = newList.ToArray();
+            Debugger.Break();
+            Logger.Error(e);
+        }
     }
 
     /// <summary>

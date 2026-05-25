@@ -4,7 +4,6 @@ using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.BusyWindow;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Core.Localizations;
-using ZYC.Framework.Modules.ModuleManager;
 using ZYC.Framework.Modules.ModuleManager.Abstractions;
 using ZYC.Framework.Modules.ModuleManager.Commands;
 using ZYC.Framework.Modules.NuGet.Abstractions;
