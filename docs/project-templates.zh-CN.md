@@ -21,8 +21,8 @@ ZYC.Framework 通过 `dotnet tool` 命令支持两类常见脚手架任务：创
 以 .NET tool 方式安装或更新 CLI：
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.3.2
-dotnet tool update -g ZYC.Framework.CLI --version 1.3.2
+dotnet tool install -g ZYC.Framework.CLI --version 1.3.3
+dotnet tool update -g ZYC.Framework.CLI --version 1.3.3
 ```
 
 然后确认命令可用：
@@ -109,7 +109,7 @@ MyCompany.Tools/
 包含常用选项的示例：
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.3.2
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.3.3
 ```
 
 ## 面向已有源码树的 `new-module`
