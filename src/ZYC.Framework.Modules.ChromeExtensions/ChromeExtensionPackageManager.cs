@@ -7,30 +7,30 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
-using ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
+using ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 
-namespace ZYC.Framework.Modules.WebBrowser.ChromeWebStore;
+namespace ZYC.Framework.Modules.ChromeExtensions;
 
-[RegisterSingleInstanceAs(typeof(IChromeWebStoreExtensionPackageManager))]
-internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExtensionPackageManager, IDisposable
+[RegisterSingleInstanceAs(typeof(IChromeExtensionPackageManager))]
+internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, IDisposable
 {
     private readonly SemaphoreSlim _operationLock = new(1, 1);
 
-    public ChromeWebStoreExtensionPackageManager(
+    public ChromeExtensionPackageManager(
         IAppContext appContext,
-        ChromeWebStoreExtensionConfig config,
-        IChromeWebStoreExtensionPackageMetadataProvider packageMetadataProvider)
+        ChromeExtensionManagerConfig managerConfig,
+        IChromeExtensionPackageMetadataProvider packageMetadataProvider)
     {
         AppContext = appContext;
-        Config = config;
+        ManagerConfig = managerConfig;
         PackageMetadataProvider = packageMetadataProvider;
     }
 
     private IAppContext AppContext { get; }
 
-    private ChromeWebStoreExtensionConfig Config { get; }
+    private ChromeExtensionManagerConfig ManagerConfig { get; }
 
-    private IChromeWebStoreExtensionPackageMetadataProvider PackageMetadataProvider { get; }
+    private IChromeExtensionPackageMetadataProvider PackageMetadataProvider { get; }
 
     private HttpClient HttpClient { get; } = new()
     {
@@ -39,37 +39,36 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
 
     private string PackagesRoot => Path.Combine(
         AppContext.GetSettingsDirectory(),
-        "WebBrowser",
-        "ChromeWebStoreExtensions");
+        "ChromeExtensions");
 
-    public IReadOnlyList<ChromeWebStoreInstalledExtension> GetInstalledExtensions()
+    public IReadOnlyList<ChromeInstalledExtension> GetInstalledExtensions()
     {
         RefreshManifestInfo();
-        return Config.InstalledExtensions
+        return ManagerConfig.InstalledExtensions
             .OrderBy(t => t.DisplayName, StringComparer.OrdinalIgnoreCase)
             .ThenBy(t => t.ExtensionId, StringComparer.OrdinalIgnoreCase)
             .ToArray();
     }
 
-    public ChromeWebStoreInstalledExtension? GetInstalledExtension(string extensionId)
+    public ChromeInstalledExtension? GetInstalledExtension(string extensionId)
     {
-        var normalizedExtensionId = ChromeWebStoreExtensionId.Normalize(extensionId);
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
         return GetInstalledExtensions().FirstOrDefault(t =>
             string.Equals(t.ExtensionId, normalizedExtensionId, StringComparison.OrdinalIgnoreCase));
     }
 
     public bool IsInstalled(string extensionId)
     {
-        var normalizedExtensionId = ChromeWebStoreExtensionId.Normalize(extensionId);
-        return Config.InstalledExtensions.Any(t =>
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
+        return ManagerConfig.InstalledExtensions.Any(t =>
             string.Equals(t.ExtensionId, normalizedExtensionId, StringComparison.OrdinalIgnoreCase));
     }
 
-    public async Task<ChromeWebStoreInstalledExtension> InstallAsync(
+    public async Task<ChromeInstalledExtension> InstallAsync(
         string extensionId,
         CancellationToken cancellationToken = default)
     {
-        var normalizedExtensionId = ChromeWebStoreExtensionId.Normalize(extensionId);
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
 
         await _operationLock.WaitAsync(cancellationToken);
         try
@@ -92,7 +91,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
             await ExtractPackageAsync(packagePath, unpackedPath, cancellationToken);
             var manifestInfo = ReadExtensionManifestInfo(unpackedPath, metadata.ExtensionId);
 
-            var installed = new ChromeWebStoreInstalledExtension
+            var installed = new ChromeInstalledExtension
             {
                 Name = manifestInfo.Name,
                 ExtensionId = metadata.ExtensionId,
@@ -111,7 +110,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
                 InstalledAt = DateTimeOffset.UtcNow
             };
 
-            Config.InstalledExtensions = Config.InstalledExtensions
+            ManagerConfig.InstalledExtensions = ManagerConfig.InstalledExtensions
                 .Where(t => !string.Equals(t.ExtensionId, installed.ExtensionId, StringComparison.OrdinalIgnoreCase))
                 .Append(installed)
                 .OrderBy(t => t.DisplayName, StringComparer.OrdinalIgnoreCase)
@@ -131,18 +130,18 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
 
     public async Task<bool> UninstallAsync(string extensionId)
     {
-        var normalizedExtensionId = ChromeWebStoreExtensionId.Normalize(extensionId);
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
 
         await _operationLock.WaitAsync();
         try
         {
-            if (!Config.InstalledExtensions.Any(t =>
+            if (!ManagerConfig.InstalledExtensions.Any(t =>
                     string.Equals(t.ExtensionId, normalizedExtensionId, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
 
-            Config.InstalledExtensions = Config.InstalledExtensions
+            ManagerConfig.InstalledExtensions = ManagerConfig.InstalledExtensions
                 .Where(t => !string.Equals(t.ExtensionId, normalizedExtensionId, StringComparison.OrdinalIgnoreCase))
                 .ToArray();
 
@@ -166,7 +165,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
     private void RefreshManifestInfo()
     {
         var changed = false;
-        foreach (var installed in Config.InstalledExtensions)
+        foreach (var installed in ManagerConfig.InstalledExtensions)
         {
             changed |= TryRefreshManifestInfo(installed);
         }
@@ -177,7 +176,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
         }
     }
 
-    private string GetPackagePath(ChromeWebStoreExtensionPackageMetadata metadata)
+    private string GetPackagePath(ChromeExtensionPackageMetadata metadata)
     {
         var version = SanitizePathSegment(metadata.Version ?? "unknown");
         var packageFolder = Path.Combine(PackagesRoot, metadata.ExtensionId, version);
@@ -186,7 +185,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
         return Path.Combine(packageFolder, $"{metadata.ExtensionId}_{version}.crx");
     }
 
-    private string GetUnpackedPath(ChromeWebStoreExtensionPackageMetadata metadata)
+    private string GetUnpackedPath(ChromeExtensionPackageMetadata metadata)
     {
         var version = SanitizePathSegment(metadata.Version ?? "unknown");
         return Path.Combine(PackagesRoot, metadata.ExtensionId, version, "unpacked");
@@ -268,7 +267,7 @@ internal sealed class ChromeWebStoreExtensionPackageManager : IChromeWebStoreExt
         }
     }
 
-    private static bool TryRefreshManifestInfo(ChromeWebStoreInstalledExtension installed)
+    private static bool TryRefreshManifestInfo(ChromeInstalledExtension installed)
     {
         try
         {

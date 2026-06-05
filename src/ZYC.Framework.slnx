@@ -19,6 +19,8 @@
     <Project Path="ZYC.Framework.Modules.Aspire/ZYC.Framework.Modules.Aspire.csproj" />
     <Project Path="ZYC.Framework.Modules.BlazorDemo.Abstractions/ZYC.Framework.Modules.BlazorDemo.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.BlazorDemo/ZYC.Framework.Modules.BlazorDemo.csproj" />
+    <Project Path="ZYC.Framework.Modules.ChromeExtensions.Abstractions/ZYC.Framework.Modules.ChromeExtensions.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.ChromeExtensions/ZYC.Framework.Modules.ChromeExtensions.csproj" />
     <Project Path="ZYC.Framework.Modules.CLI.Abstractions/ZYC.Framework.Modules.CLI.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.CLI/ZYC.Framework.Modules.CLI.csproj" />
     <Project Path="ZYC.Framework.Modules.FileExplorer.Abstractions/ZYC.Framework.Modules.FileExplorer.Abstractions.csproj" />

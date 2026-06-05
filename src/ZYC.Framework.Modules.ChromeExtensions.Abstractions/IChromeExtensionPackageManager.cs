@@ -1,22 +1,22 @@
-﻿namespace ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
+﻿namespace ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 
 /// <summary>
 ///     Manages Chrome Web Store extension packages in the local application package store.
 /// </summary>
-public interface IChromeWebStoreExtensionPackageManager
+public interface IChromeExtensionPackageManager
 {
     /// <summary>
     ///     Gets all locally installed extension package records.
     /// </summary>
     /// <returns>The locally installed extension packages.</returns>
-    IReadOnlyList<ChromeWebStoreInstalledExtension> GetInstalledExtensions();
+    IReadOnlyList<ChromeInstalledExtension> GetInstalledExtensions();
 
     /// <summary>
     ///     Gets a locally installed extension package record by extension identifier.
     /// </summary>
     /// <param name="extensionId">The Chrome Web Store extension identifier or detail page URL.</param>
     /// <returns>The installed extension package record, or <c>null</c> when it is not installed locally.</returns>
-    ChromeWebStoreInstalledExtension? GetInstalledExtension(string extensionId);
+    ChromeInstalledExtension? GetInstalledExtension(string extensionId);
 
     /// <summary>
     ///     Determines whether the specified extension identifier is installed locally.
@@ -31,7 +31,7 @@ public interface IChromeWebStoreExtensionPackageManager
     /// <param name="extensionId">The Chrome Web Store extension identifier or detail page URL.</param>
     /// <param name="cancellationToken">A cancellation token used to cancel the operation.</param>
     /// <returns>The local extension package record.</returns>
-    Task<ChromeWebStoreInstalledExtension> InstallAsync(
+    Task<ChromeInstalledExtension> InstallAsync(
         string extensionId,
         CancellationToken cancellationToken = default);
 

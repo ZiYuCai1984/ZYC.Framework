@@ -1,9 +1,9 @@
-﻿namespace ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
+﻿namespace ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 
 /// <summary>
 ///     Describes Chrome Web Store package metadata returned by the update service.
 /// </summary>
-public sealed class ChromeWebStoreExtensionPackageMetadata
+public class ChromeExtensionPackageMetadata
 {
     /// <summary>
     ///     Gets or sets the Chrome Web Store extension identifier.

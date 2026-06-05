@@ -1,6 +1,6 @@
-﻿namespace ZYC.Framework.Modules.WebBrowser.ChromeWebStore;
+﻿namespace ZYC.Framework.Modules.ChromeExtensions;
 
-internal static class ChromeWebStoreExtensionId
+internal static class ChromeExtensionId
 {
     private const int ExtensionIdLength = 32;
     private const string ChromeWebStoreHost = "chromewebstore.google.com";

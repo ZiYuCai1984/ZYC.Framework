@@ -1,9 +1,9 @@
-﻿namespace ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
+﻿namespace ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 
 /// <summary>
 ///     Describes a Chrome Web Store extension package installed into the local package store.
 /// </summary>
-public sealed class ChromeWebStoreInstalledExtension
+public class ChromeInstalledExtension
 {
     /// <summary>
     ///     Gets or sets the display name read from the extension manifest.

@@ -1,29 +1,33 @@
 ﻿using System.Net.Http;
 using System.Xml.Linq;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
-using ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
+using ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 
-namespace ZYC.Framework.Modules.WebBrowser.ChromeWebStore;
+namespace ZYC.Framework.Modules.ChromeExtensions;
 
-[RegisterSingleInstanceAs(typeof(IChromeWebStoreExtensionPackageMetadataProvider))]
-internal sealed class ChromeWebStoreExtensionPackageMetadataProvider :
-    IChromeWebStoreExtensionPackageMetadataProvider,
+[RegisterSingleInstanceAs(typeof(IChromeExtensionPackageMetadataProvider))]
+internal class ChromeExtensionPackageMetadataProvider :
+    IChromeExtensionPackageMetadataProvider,
     IDisposable
 {
-    private const string UpdateServiceUri =
-        "https://clients2.google.com/service/update2/crx?response=updatecheck&prodversion=120.0.0.0&acceptformat=crx2,crx3&x=id%3D{0}%26uc";
+    public ChromeExtensionPackageMetadataProvider(ChromeExtensionManagerConfig chromeExtensionManagerConfig)
+    {
+        ChromeExtensionManagerConfig = chromeExtensionManagerConfig;
+    }
+
+    private ChromeExtensionManagerConfig ChromeExtensionManagerConfig { get; }
 
     private HttpClient HttpClient { get; } = new()
     {
         Timeout = TimeSpan.FromMinutes(5)
     };
 
-    public async Task<ChromeWebStoreExtensionPackageMetadata> GetPackageMetadataAsync(
+    public async Task<ChromeExtensionPackageMetadata> GetPackageMetadataAsync(
         string extensionId,
         CancellationToken cancellationToken = default)
     {
-        var normalizedExtensionId = ChromeWebStoreExtensionId.Normalize(extensionId);
-        var requestUri = string.Format(UpdateServiceUri, normalizedExtensionId);
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
+        var requestUri = string.Format(ChromeExtensionManagerConfig.UpdateServiceUri, normalizedExtensionId);
         var responseText = await HttpClient.GetStringAsync(requestUri, cancellationToken);
         return ParseMetadata(normalizedExtensionId, responseText);
     }
@@ -33,7 +37,7 @@ internal sealed class ChromeWebStoreExtensionPackageMetadataProvider :
         HttpClient.Dispose();
     }
 
-    private static ChromeWebStoreExtensionPackageMetadata ParseMetadata(
+    private static ChromeExtensionPackageMetadata ParseMetadata(
         string extensionId,
         string responseText)
     {
@@ -43,10 +47,10 @@ internal sealed class ChromeWebStoreExtensionPackageMetadataProvider :
         var updateCheckElement = appElement?.Elements()
             .FirstOrDefault(t => string.Equals(t.Name.LocalName, "updatecheck", StringComparison.OrdinalIgnoreCase));
 
-        var metadata = new ChromeWebStoreExtensionPackageMetadata
+        var metadata = new ChromeExtensionPackageMetadata
         {
             ExtensionId = extensionId,
-            StoreUrl = ChromeWebStoreExtensionId.CreateStoreUrl(extensionId),
+            StoreUrl = ChromeExtensionId.CreateStoreUrl(extensionId),
             AppStatus = ReadAttribute(appElement, "status"),
             UpdateCheckStatus = ReadAttribute(updateCheckElement, "status"),
             Version = ReadAttribute(updateCheckElement, "version"),
