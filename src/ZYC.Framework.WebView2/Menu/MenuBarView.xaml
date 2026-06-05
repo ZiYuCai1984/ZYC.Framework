@@ -10,6 +10,7 @@
              xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands;assembly=ZYC.Framework.Core"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
+             xmlns:menu="clr-namespace:ZYC.Framework.WebView2.Menu"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Height="32"
@@ -61,7 +62,7 @@
                                             BorderThickness="0" />
             </Button>
             <Button Command="{Binding RefreshCommand}"
-                    Visibility="{Binding HomePageCommand,Converter={converters:NullToVisibilityConverter}}">
+                    Visibility="{Binding RefreshCommand,Converter={converters:NullToVisibilityConverter}}">
                 <iconPacks:PackIconMaterial Kind="Refresh"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
@@ -92,22 +93,25 @@
                                 CommandParameter="{Binding .}" />
         </ItemsControl>
 
-        <ItemsControl Grid.Column="3"
-                      ItemsSource="{Binding  ExtendedMenuItems}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <buttons:IconButton
-                        Command="{Binding Command}"
-                        Kind="{Binding Icon}" >
-                        <buttons:IconButton.Text>
-                            <MultiBinding Converter="{converters:LocalizationMultiConverter}">
-                                <Binding Path="Title" />
-                                <Binding Path="Localization" />
-                            </MultiBinding>
-                        </buttons:IconButton.Text>
-                    </buttons:IconButton>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <!--!WARNING Design defeat !!It's using MenuBarView's DataContext here.-->
+        <Grid Grid.Column="3"
+              DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=menu:MenuBarView}}">
+            <ItemsControl ItemsSource="{Binding ExtendedMenuItems}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <buttons:IconButton
+                            Command="{Binding Command}"
+                            Kind="{Binding Icon}">
+                            <buttons:IconButton.Text>
+                                <MultiBinding Converter="{converters:LocalizationMultiConverter}">
+                                    <Binding Path="Title" />
+                                    <Binding Path="Localization" />
+                                </MultiBinding>
+                            </buttons:IconButton.Text>
+                        </buttons:IconButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </UserControl>

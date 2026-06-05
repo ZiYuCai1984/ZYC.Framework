@@ -7,10 +7,15 @@ namespace ZYC.Framework.Modules.WebBrowser.Abstractions.ChromeWebStore;
 ///     Stores locally managed Chrome Web Store extension packages for the web browser module.
 /// </summary>
 [Hidden]
-public sealed class ChromeWebStoreExtensionConfig : IConfig
+public class ChromeWebStoreExtensionConfig : IConfig
 {
     /// <summary>
     ///     Gets or sets the locally installed extension package records.
     /// </summary>
     public ChromeWebStoreInstalledExtension[] InstalledExtensions { get; set; } = [];
+
+    /// <summary>
+    ///     Gets or sets the Chrome Web Store home URL used by the extension store browser.
+    /// </summary>
+    public string StoreHomeUri { get; set; } = "https://chromewebstore.google.com/";
 }
