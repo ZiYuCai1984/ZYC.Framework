@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Reactive.Disposables;
@@ -17,8 +18,12 @@ namespace ZYC.Framework.WebView2;
 
 // ReSharper disable VirtualMemberNeverOverridden.Global
 // ReSharper disable UnusedMember.Global
-public abstract partial class WebViewHostBase : UserControl, IDisposable
+public abstract partial class WebViewHostBase : UserControl,
+    IDisposable,
+    INotifyPropertyChanged
 {
+    private CoreWebView2BrowserExtension[] _coreWebView2BrowserExtensions = [];
+
     protected WebViewHostBase(
         ILifetimeScope lifetimeScope)
     {
@@ -97,6 +102,7 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
     ///         --ignore-certificate-errors,
     ///         --proxy-server=http://localhost:10808,
     ///         --disable-web-security
+    ///         --load-extension="C:\extensions\ext1,C:\extensions\ext2,C:\extensions\ext3"
     ///     </para>
     /// </summary>
     /// <remarks>
@@ -119,6 +125,18 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
 
 
     protected virtual bool IsApplyFaviconChanged { get; set; }
+
+    public CoreWebView2BrowserExtension[] CoreWebView2BrowserExtensions
+    {
+        get => _coreWebView2BrowserExtensions;
+        set
+        {
+            _coreWebView2BrowserExtensions = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
 
     public async Task RefreshAsync()
@@ -192,6 +210,8 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
         await WebView2.EnsureCoreWebView2Async(env);
 
         HookEvent();
+
+        CoreWebView2BrowserExtensions = (await CoreWebView2.Profile.GetBrowserExtensionsAsync()).ToArray();
 
         await InternalWebViewHostLoadedAsync();
     }
@@ -326,6 +346,11 @@ public abstract partial class WebViewHostBase : UserControl, IDisposable
         }
 
         return true;
+    }
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
 

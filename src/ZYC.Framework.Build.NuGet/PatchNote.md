@@ -6,31 +6,25 @@
 
 ## 🆕 New Features
 
-* Added release artifacts and documentation references for ZYC.Framework `1.3.3`
+* Added a WebView2 plugins button and dialog to inspect loaded browser extensions, including name, ID, enabled state, and total count
+* Added support for forwarding configured custom browser arguments into the built-in Web Browser module, including extension-loading scenarios
+* Added a Tools menu entry for the built-in Web Browser module
 
 ---
 
 ## 🛠 Improvements
 
-* Improved URI-based tab focusing so every matching tab instance can be brought into focus instead of stopping at the first match
-* Hardened background tab navigation by ignoring null tab descriptors during navigation startup
-* Made navigation history updates resilient by logging history update failures instead of letting them interrupt tab navigation
-* Improved tab drag feedback by forcing the drag adorner to repaint during the OLE drag/drop message loop
-
----
-
-## 📚 Documentation
-
-* Updated README installer links from `1.3.2` to `1.3.3`
-* Updated CLI installation, CLI update, project template, and package reference examples from `1.3.2` to `1.3.3`
-* Applied the same version updates across English, Japanese, Korean, Simplified Chinese, and Traditional Chinese documentation
+* Improved the Chrome Extensions manager with manifest-based extension icons and localized labels for the page title, Chrome Web Store action, and empty selection state
+* Added localized resources for Plugins, Chrome Extensions, and Chrome Web Store across Japanese, Simplified Chinese, Traditional Chinese, and Korean
+* Extended the dialog manager so dialogs can be resolved with Autofac parameters when they need runtime payloads
+* Updated dependency versions for ZYC.CoreToolkit and Aspire, and added the WebView2 MahApps dependency required by the new dialog surface
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed tab drag preview refresh behavior that could fail to repaint correctly in release builds
-* Fixed URI focus behavior for multiple open tab instances that share the same route
+* Prevented the application busy window from stealing activation when displayed
+* Hardened extension icon loading with safe manifest parsing, path validation, caching, and fallback icons
 
 ---
 

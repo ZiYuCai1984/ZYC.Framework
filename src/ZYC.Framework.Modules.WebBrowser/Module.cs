@@ -12,6 +12,7 @@ internal class Module : ModuleBase
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         lifetimeScope.RegisterTabItemFactory<WebBrowserTabItemFactory>();
+        lifetimeScope.RegisterToolsMainMenuItem<WebBrowserMainMenuItem>();
 
         return Task.CompletedTask;
     }

@@ -29,9 +29,12 @@ internal partial class WebBrowserView
         Uri = uri;
         Instance = instance;
         WebBrowserConfig = webBrowserConfig;
+
+        CustomBrowserArguments.AddRange(webBrowserConfig.CustomBrowserArguments);
     }
 
     private IToastManager ToastManager { get; }
+
     private ILogger<WebBrowserView> Logger { get; }
 
     private IWebBrowserUriPolicy WebBrowserUriPolicy { get; }

@@ -11,21 +11,12 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
              xmlns:menu="clr-namespace:ZYC.Framework.WebView2.Menu"
+             xmlns:localCommands="clr-namespace:ZYC.Framework.WebView2.Commands"
+             xmlns:localConverters="clr-namespace:ZYC.Framework.WebView2.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Height="32"
              Visibility="{Binding IsMenuBarVisible,Converter={converters:BoolToVisibilityConverter}}">
-    <UserControl.Resources>
-        <Style TargetType="ItemsControl">
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -34,6 +25,11 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <ItemsControl>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
             <Button Command="{Binding GoBackCommand}"
                     Visibility="{Binding GoBackCommand,Converter={converters:NullToVisibilityConverter}}">
                 <iconPacks:PackIconMaterial Kind="ArrowLeft"
@@ -70,6 +66,7 @@
                                             Height="16"
                                             BorderThickness="0" />
             </Button>
+
         </ItemsControl>
 
         <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
@@ -82,6 +79,16 @@
             HorizontalContentAlignment="Stretch" />
 
         <ItemsControl Grid.Column="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <buttons:IconButton Kind="PuzzleOutline"
+                                Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}"
+                                Command="{markupEx:LifetimeScopeResolve localCommands:ShowPluginsDialogViewCommand}"
+                                CommandParameter="{Binding CoreWebView2BrowserExtensions}">
+            </buttons:IconButton>
             <buttons:IconButton
                 Command="{markupEx:LifetimeScopeResolve commands:CopyAndNotifyCommand}"
                 CommandParameter="{Binding WebView2.Source}"
@@ -97,6 +104,11 @@
         <Grid Grid.Column="3"
               DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=menu:MenuBarView}}">
             <ItemsControl ItemsSource="{Binding ExtendedMenuItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <buttons:IconButton

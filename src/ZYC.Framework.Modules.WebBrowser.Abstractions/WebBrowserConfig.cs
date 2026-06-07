@@ -11,4 +11,6 @@ public class WebBrowserConfig : IConfig
     ///     Gets or sets the initial URI that will be opened when the browser starts.
     /// </summary>
     public string StartupUri { get; set; } = "https://google.com";
+
+    public string[] CustomBrowserArguments { get; set; } = [];
 }

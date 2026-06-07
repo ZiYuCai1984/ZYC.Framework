@@ -10,16 +10,18 @@
                xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
                xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
                xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands;assembly=ZYC.Framework.Core"
+               xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
+               xmlns:ui="clr-namespace:ZYC.Framework.Modules.ChromeExtensions.UI"
                mc:Ignorable="d"
                d:DesignHeight="640"
                d:DesignWidth="1120"
-               Title="Chrome Extensions"
+               Title="{localizations:L Chrome Extensions}"
                DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <page:PageBase.HeaderAdditionContent>
         <StackPanel HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-            <buttons:IconButton Text="Chrome Web Store"
+            <buttons:IconButton Text="{localizations:L Chrome Web Store}"
                                 Kind="GoogleChrome"
                                 IsEnabled="{Binding IsNotBusy}"
                                 Click="OnOpenStoreButtonClick" />
@@ -56,7 +58,7 @@
                                                      Width="24"
                                                      Height="24"
                                                      FontSize="16"
-                                                     Icon="PuzzleOutline" />
+                                                     Icon="{Binding UnpackedPath, Converter={ui:ChromeExtensionIconConverter}}" />
 
                                     <StackPanel Grid.Column="1"
                                                 Margin="8 0 0 0">
@@ -120,7 +122,7 @@
                                                                  Width="32"
                                                                  Height="32"
                                                                  FontSize="20"
-                                                                 Icon="PuzzleOutline" />
+                                                                 Icon="{Binding UnpackedPath, Converter={ui:ChromeExtensionIconConverter}}" />
                                                 <StackPanel Margin="12 0 0 0">
                                                     <TextBlock FontSize="16"
                                                                FontWeight="SemiBold"
@@ -211,7 +213,7 @@
                         <TextBlock HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Opacity="0.72"
-                                   Text="Select a local extension"
+                                   Text="{localizations:L Select a local extension}"
                                    Visibility="{Binding SelectedInstalledExtension,Converter={converters:NullToVisibilityConverter Reverse=True}}" />
                     </Grid>
                 </Border>
