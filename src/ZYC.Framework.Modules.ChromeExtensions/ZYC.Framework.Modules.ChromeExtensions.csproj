@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Modules.ChromeExtensions.Abstractions\ZYC.Framework.Modules.ChromeExtensions.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" />
+    <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+</Project>

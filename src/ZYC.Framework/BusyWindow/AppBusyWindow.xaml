@@ -12,7 +12,7 @@
         Topmost="True"
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
-        ShowActivated="True"
+        ShowActivated="False"
         WindowStyle="SingleBorderWindow"
         Height="120"
         Width="400"

@@ -5,4 +5,9 @@
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
   </ItemGroup>
+  <!--<ItemGroup>
+    <Reference Include="ZYC.Framework.Abstractions">
+      <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>-->
 </Project>

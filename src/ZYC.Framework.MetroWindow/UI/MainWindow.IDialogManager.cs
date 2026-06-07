@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Autofac;
+using Autofac.Core;
 using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.MetroWindow.UI;
@@ -17,9 +18,21 @@ internal partial class MainWindow : IDialogManager
         ShowCore<T>();
     }
 
-    private void ShowCore<T>() where T : IDialog
+    public void Show<T>(params object[] parameters) where T : IDialog
     {
-        var dialog = LifetimeScope.Resolve<T>();
+        var p = parameters.Cast<Parameter>().ToArray();
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.Invoke(() => ShowCore<T>(p));
+            return;
+        }
+
+        ShowCore<T>(p);
+    }
+
+    private void ShowCore<T>(params Parameter[] parameters) where T : IDialog
+    {
+        var dialog = LifetimeScope.Resolve<T>(parameters);
         if (dialog is not Window dialogWindow)
         {
             throw new InvalidOperationException(

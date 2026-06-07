@@ -16,7 +16,8 @@ public class UpdateConfig : IConfig
 #if DEBUG
         = false;
 #else
-        = true;
+        //= true;
+        = false;
 #endif
 
     /// <summary>

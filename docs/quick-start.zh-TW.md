@@ -18,9 +18,9 @@
 安裝或更新 ZYC.Framework CLI 工具：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.3.3
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.4
 # 如果已經安裝過：
-dotnet tool update --global ZYC.Framework.CLI --version 1.3.3
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.4
 ```
 
 建立一個最小 Host 專案：
@@ -44,7 +44,7 @@ zyc new MyCompany.Tools --template modular
 常用選項：
 
 ```bash
-zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.3
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.4
 ```
 
 開啟產生的解決方案或專案，將其設為啟動專案，然後開始偵錯。產生結果已包含套件參考、`Module.cs`、`ModuleConfig.json` 與初始 View。
@@ -62,7 +62,7 @@ zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.3.3
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.3" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.3.4" />
 </ItemGroup>
 ```
 

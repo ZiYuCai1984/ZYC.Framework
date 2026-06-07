@@ -10,6 +10,14 @@
     <ProjectReference
       Include="..\ZYC.Framework.Modules.Chronosynchronicity.Abstractions\ZYC.Framework.Modules.Chronosynchronicity.Abstractions.csproj" />
   </ItemGroup>
+  <!--<ItemGroup>
+    <Reference Include="ZYC.Framework.Core">
+      <HintPath>$(OutputPath)ZYC.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ZYC.Framework.Abstractions">
+      <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>-->
   <ItemGroup>
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
   </ItemGroup>

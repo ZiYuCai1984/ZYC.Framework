@@ -5,6 +5,7 @@
     <PackageReference Include="ZYC.CoreToolkit" />
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
     <PackageReference Include="ZYC.CoreToolkit.Extensions.WebView2" />
+    <PackageReference Include="MahApps.Metro" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Thirdparty\ZYC.Titanium.Web.Proxy\ZYC.Titanium.Web.Proxy.csproj" />
