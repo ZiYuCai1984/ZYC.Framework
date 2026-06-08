@@ -14,6 +14,7 @@ namespace ZYC.Framework.Modules.ChromeExtensions;
 [RegisterSingleInstanceAs(typeof(IChromeExtensionPackageManager))]
 internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, IDisposable
 {
+    private readonly HttpClient? _httpClient = null;
     private readonly SemaphoreSlim _operationLock = new(1, 1);
 
     public ChromeExtensionPackageManager(
@@ -32,7 +33,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
 
     private IChromeExtensionPackageMetadataProvider PackageMetadataProvider { get; }
 
-    private HttpClient HttpClient { get; } = new()
+    private HttpClient HttpClient => _httpClient ?? new HttpClient
     {
         Timeout = TimeSpan.FromMinutes(5)
     };
@@ -73,7 +74,8 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
         await _operationLock.WaitAsync(cancellationToken);
         try
         {
-            var metadata = await PackageMetadataProvider.GetPackageMetadataAsync(normalizedExtensionId, cancellationToken);
+            var metadata =
+                await PackageMetadataProvider.GetPackageMetadataAsync(normalizedExtensionId, cancellationToken);
             if (!metadata.HasPackage)
             {
                 throw new InvalidOperationException(
@@ -574,6 +576,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
             }
             catch (JsonException)
             {
+                // ReSharper disable once RedundantJumpStatement
                 continue;
             }
         }

@@ -10,6 +10,8 @@ internal class ChromeExtensionPackageMetadataProvider :
     IChromeExtensionPackageMetadataProvider,
     IDisposable
 {
+    private readonly HttpClient? _httpClient = null;
+
     public ChromeExtensionPackageMetadataProvider(ChromeExtensionManagerConfig chromeExtensionManagerConfig)
     {
         ChromeExtensionManagerConfig = chromeExtensionManagerConfig;
@@ -17,7 +19,7 @@ internal class ChromeExtensionPackageMetadataProvider :
 
     private ChromeExtensionManagerConfig ChromeExtensionManagerConfig { get; }
 
-    private HttpClient HttpClient { get; } = new()
+    private HttpClient HttpClient => _httpClient ?? new HttpClient
     {
         Timeout = TimeSpan.FromMinutes(5)
     };

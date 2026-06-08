@@ -12,6 +12,7 @@
              xmlns:converters="clr-namespace:ZYC.Framework.Core.Converters;assembly=ZYC.Framework.Core"
              xmlns:menu="clr-namespace:ZYC.Framework.WebView2.Menu"
              xmlns:localCommands="clr-namespace:ZYC.Framework.WebView2.Commands"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:localConverters="clr-namespace:ZYC.Framework.WebView2.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -84,11 +85,31 @@
                     <StackPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <buttons:IconButton Kind="PuzzleOutline"
-                                Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}"
-                                Command="{markupEx:LifetimeScopeResolve localCommands:ShowPluginsDialogViewCommand}"
-                                CommandParameter="{Binding CoreWebView2BrowserExtensions}">
-            </buttons:IconButton>
+            <mah:SplitButton
+                BorderThickness="1"
+                Padding="0"
+                VerticalContentAlignment="Center"
+                BorderBrush="{StaticResource MahApps.Brushes.Gray6}"
+                Background="{StaticResource MahApps.Brushes.Gray10}"
+                Command="{markupEx:LifetimeScopeResolve localCommands:ShowPluginsDialogViewCommand}"
+                CommandParameter="{Binding CoreWebView2BrowserExtensions}">
+                <mah:SplitButton.Icon>
+                    <DockPanel>
+                        <iconPacks:PackIconMaterial Kind="PuzzleOutline" 
+                                                    Height="16"
+                                                    Width="16"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Left"
+                                                    Margin="8 0 8 0"/>
+                        <TextBlock FontSize="10"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Black"
+                                   Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}">
+                        </TextBlock>
+                    </DockPanel>
+                </mah:SplitButton.Icon>
+            </mah:SplitButton>
             <buttons:IconButton
                 Command="{markupEx:LifetimeScopeResolve commands:CopyAndNotifyCommand}"
                 CommandParameter="{Binding WebView2.Source}"
