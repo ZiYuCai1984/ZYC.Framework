@@ -6,6 +6,7 @@ using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.WebBrowser.Abstractions;
+using ZYC.Framework.WebView2.Menu;
 
 namespace ZYC.Framework.Modules.WebBrowser.UI;
 
@@ -68,27 +69,16 @@ internal partial class WebBrowserView
         return Task.CompletedTask;
     }
 
-    //protected override async void OnNavigationStarting(
-    //    object? sender,
-    //    CoreWebView2NavigationStartingEventArgs e)
-    //{
-    //    try
-    //    {
-    //        base.OnNavigationStarting(sender, e);
-
-    //        var target = e.Uri;
-    //        await Instance.TabInternalNavigatingAsync(new Uri(target));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Logger.Error(ex);
-    //        ToastManager.PromptException(ex);
-    //    }
-    //}
+    protected override ExtendedMenuItem[] GetPluginMenuItems()
+    {
+        var extendedMenuItems = new List<ExtendedMenuItem>();
+        extendedMenuItems.Add(LifetimeScope.Resolve<ManagePluginsExtendItem>());
+        return extendedMenuItems.ToArray();
+    }
 
     protected override async void OnSourceChanged(object? sender, CoreWebView2SourceChangedEventArgs e)
     {
-        //!WARNING Pending test
+        //!WARNING Replaced the OnNavigationStarting
         try
         {
             base.OnSourceChanged(sender, e);

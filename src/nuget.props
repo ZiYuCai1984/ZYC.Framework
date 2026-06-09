@@ -9,10 +9,12 @@
     <V_Aspire>13.4.2</V_Aspire>
   </PropertyGroup>
 
-
   <PropertyGroup>
     <V_ZYC_CoreToolkit_Extensions_Fxc>3.8.4</V_ZYC_CoreToolkit_Extensions_Fxc>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Package_Root_Directory_ZYC_Framework>$(MSBuildThisFileDirectory)../</Package_Root_Directory_ZYC_Framework>
+  </PropertyGroup>
 
 </Project>

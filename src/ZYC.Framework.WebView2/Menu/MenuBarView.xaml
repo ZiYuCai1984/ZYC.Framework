@@ -89,24 +89,70 @@
                 BorderThickness="1"
                 Padding="0"
                 VerticalContentAlignment="Center"
+                mah:ControlsHelper.CornerRadius="3"
                 BorderBrush="{StaticResource MahApps.Brushes.Gray6}"
                 Background="{StaticResource MahApps.Brushes.Gray10}"
                 Command="{markupEx:LifetimeScopeResolve localCommands:ShowPluginsDialogViewCommand}"
-                CommandParameter="{Binding CoreWebView2BrowserExtensions}">
+                CommandParameter="{Binding CoreWebView2BrowserExtensions}"
+                ItemsSource="{Binding PluginMenuItems,RelativeSource={RelativeSource FindAncestor,AncestorType=menu:MenuBarView}}"
+                SelectionChanged="OnPluginMenuItemSelectionChanged">
+
+                <mah:SplitButton.ButtonArrowStyle>
+                    <Style BasedOn="{StaticResource MahApps.Styles.Button.Split.Arrow}"
+                           TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasItems,RelativeSource={RelativeSource TemplatedParent}}"
+                                         Value="False">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.45" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mah:SplitButton.ButtonArrowStyle>
+
+                <mah:SplitButton.ItemTemplate>
+                    <DataTemplate DataType="{x:Type menu:ExtendedMenuItem}">
+                        <DockPanel MinWidth="160"
+                                   Margin="2"
+                                   Height="26">
+                            <ContentPresenter x:Name="Icon"
+                                              DockPanel.Dock="Left"
+                                              Margin="5 0 8 0"
+                                              Content="{Binding Icon,Converter={converters:PackIconMaterialConverter}}" />
+                            <TextBlock x:Name="Text"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{converters:LocalizationMultiConverter}">
+                                        <Binding Path="Title" />
+                                        <Binding Path="Localization" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DockPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
+                                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Icon}" Value="">
+                                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </mah:SplitButton.ItemTemplate>
+
                 <mah:SplitButton.Icon>
                     <DockPanel>
-                        <iconPacks:PackIconMaterial Kind="PuzzleOutline" 
+                        <iconPacks:PackIconMaterial Kind="PuzzleOutline"
                                                     Height="16"
                                                     Width="16"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
                                                     DockPanel.Dock="Left"
-                                                    Margin="8 0 8 0"/>
+                                                    Margin="8 0 8 0" />
                         <TextBlock FontSize="10"
                                    VerticalAlignment="Center"
                                    FontWeight="Black"
-                                   Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}">
-                        </TextBlock>
+                                   Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}" />
                     </DockPanel>
                 </mah:SplitButton.Icon>
             </mah:SplitButton>
@@ -134,6 +180,7 @@
                     <DataTemplate>
                         <buttons:IconButton
                             Command="{Binding Command}"
+                            CommandParameter="{Binding CommandParameter}"
                             Kind="{Binding Icon}">
                             <buttons:IconButton.Text>
                                 <MultiBinding Converter="{converters:LocalizationMultiConverter}">
