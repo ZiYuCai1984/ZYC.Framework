@@ -1,4 +1,6 @@
-﻿namespace ZYC.Framework.Modules.ChromeExtensions;
+﻿using System.Security.Cryptography;
+
+namespace ZYC.Framework.Modules.ChromeExtensions;
 
 internal static class ChromeExtensionId
 {
@@ -71,6 +73,32 @@ internal static class ChromeExtensionId
         }
 
         return value.All(c => c is >= 'a' and <= 'p');
+    }
+
+    public static string FromPublicKey(ReadOnlySpan<byte> publicKey)
+    {
+        Span<byte> hash = stackalloc byte[32];
+        SHA256.HashData(publicKey, hash);
+        return FromCrxIdBytes(hash[..16]);
+    }
+
+    public static string FromCrxIdBytes(ReadOnlySpan<byte> crxId)
+    {
+        if (crxId.Length != ExtensionIdLength / 2)
+        {
+            throw new ArgumentException(
+                $"Invalid CRX id byte length <{crxId.Length}>.",
+                nameof(crxId));
+        }
+
+        Span<char> chars = stackalloc char[ExtensionIdLength];
+        for (var i = 0; i < crxId.Length; i++)
+        {
+            chars[i * 2] = (char)('a' + ((crxId[i] >> 4) & 0x0F));
+            chars[i * 2 + 1] = (char)('a' + (crxId[i] & 0x0F));
+        }
+
+        return new string(chars);
     }
 
     public static string CreateStoreUrl(string extensionId)

@@ -127,7 +127,7 @@ public partial class WebViewHostBase
         }
 
         IsMenuBarSetuped = true;
-
+        //TODO-zyc SetupMenuBar
         var menuBarView = LifetimeScope.Resolve<MenuBarView>(
             new NamedParameter("extendedMenuItems", WebViewHostBaseExtendedMenuItems),
             new NamedParameter("pluginMenuItems", GetPluginMenuItems()));

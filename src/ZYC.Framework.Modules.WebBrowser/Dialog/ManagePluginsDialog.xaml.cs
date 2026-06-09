@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Microsoft.Extensions.Logging;
@@ -9,13 +8,13 @@ using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Modules.ChromeExtensions.Abstractions;
 using ZYC.Framework.Modules.WebBrowser.Abstractions;
+using ZYC.Framework.WebView2;
 
 namespace ZYC.Framework.Modules.WebBrowser.Dialog;
 
 [Register]
 internal partial class ManagePluginsDialog : INotifyPropertyChanged
 {
-    private const string LoadExtensionArgumentName = "--load-extension";
     private string _searchText = "";
 
     public ManagePluginsDialog(
@@ -91,8 +90,10 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
 
         try
         {
-            var paths = GetConfiguredExtensionPaths().ToList();
-            if (!paths.Any(path => SamePath(path, item.UnpackedPath)))
+            var paths = WebBrowserPluginArgumentTools
+                .GetConfiguredExtensionPaths(WebBrowserConfig.CustomBrowserArguments)
+                .ToList();
+            if (!paths.Any(path => WebBrowserPluginArgumentTools.SamePath(path, item.UnpackedPath)))
             {
                 paths.Add(item.UnpackedPath);
             }
@@ -117,8 +118,9 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
 
         try
         {
-            var paths = GetConfiguredExtensionPaths()
-                .Where(path => !SamePath(path, item.UnpackedPath))
+            var paths = WebBrowserPluginArgumentTools
+                .GetConfiguredExtensionPaths(WebBrowserConfig.CustomBrowserArguments)
+                .Where(path => !WebBrowserPluginArgumentTools.SamePath(path, item.UnpackedPath))
                 .ToArray();
 
             CommitConfiguredExtensionPaths(paths);
@@ -136,7 +138,9 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
     {
         try
         {
-            var configuredPaths = GetConfiguredExtensionPaths().ToArray();
+            var configuredPaths = WebBrowserPluginArgumentTools
+                .GetConfiguredExtensionPaths(WebBrowserConfig.CustomBrowserArguments)
+                .ToArray();
             var searchText = SearchText.Trim();
 
             PluginItems.Clear();
@@ -145,7 +149,7 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
             {
                 PluginItems.Add(new ManagePluginItem(
                     installed,
-                    configuredPaths.Any(path => SamePath(path, installed.UnpackedPath))));
+                    configuredPaths.Any(path => WebBrowserPluginArgumentTools.SamePath(path, installed.UnpackedPath))));
             }
 
             OnPropertyChanged(nameof(HasPluginItems));
@@ -160,66 +164,18 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
 
     private void CommitConfiguredExtensionPaths(IEnumerable<string> paths)
     {
-        var configuredPaths = paths
-            .Where(path => !string.IsNullOrWhiteSpace(path))
-            .GroupBy(NormalizePath, StringComparer.OrdinalIgnoreCase)
-            .Select(group => group.First())
-            .ToArray();
-
-        var customBrowserArguments = WebBrowserConfig.CustomBrowserArguments
-            .Where(argument => !IsLoadExtensionArgument(argument))
-            .ToList();
-
-        if (configuredPaths.Length > 0)
-        {
-            customBrowserArguments.Add(BuildLoadExtensionArgument(configuredPaths));
-        }
-
-        WebBrowserConfig.CustomBrowserArguments = customBrowserArguments.ToArray();
+        SetConfiguredExtensionPaths(WebBrowserConfig, paths);
         AppContext.SaveAllConfig();
     }
 
-    private IReadOnlyList<string> GetConfiguredExtensionPaths()
+
+    public static void SetConfiguredExtensionPaths(
+        WebBrowserConfig webBrowserConfig,
+        IEnumerable<string> paths)
     {
-        return WebBrowserConfig.CustomBrowserArguments
-            .Where(IsLoadExtensionArgument)
-            .SelectMany(ReadLoadExtensionArgumentPaths)
-            .Where(path => !string.IsNullOrWhiteSpace(path))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-    }
-
-    private static string BuildLoadExtensionArgument(IEnumerable<string> paths)
-    {
-        var value = string.Join(",", paths.Select(path => path.Trim().Trim('"')));
-        return $"{LoadExtensionArgumentName}=\"{value}\"";
-    }
-
-    private static IEnumerable<string> ReadLoadExtensionArgumentPaths(string argument)
-    {
-        var trimmed = argument.Trim();
-        var equalsIndex = trimmed.IndexOf('=');
-        if (equalsIndex < 0 || equalsIndex >= trimmed.Length - 1)
-        {
-            return Array.Empty<string>();
-        }
-
-        var value = trimmed[(equalsIndex + 1)..].Trim().Trim('"', '\'');
-        return value
-            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Select(path => path.Trim().Trim('"', '\''));
-    }
-
-    private static bool IsLoadExtensionArgument(string argument)
-    {
-        var trimmed = argument.Trim();
-        if (!trimmed.StartsWith(LoadExtensionArgumentName, StringComparison.OrdinalIgnoreCase))
-        {
-            return false;
-        }
-
-        return trimmed.Length == LoadExtensionArgumentName.Length
-               || trimmed[LoadExtensionArgumentName.Length] == '=';
+        webBrowserConfig.CustomBrowserArguments = WebBrowserPluginArgumentTools.ReplaceConfiguredExtensionPaths(
+            webBrowserConfig.CustomBrowserArguments,
+            paths);
     }
 
     private static bool IsMatch(ChromeInstalledExtension extension, string searchText)
@@ -237,31 +193,6 @@ internal partial class ManagePluginsDialog : INotifyPropertyChanged
     private static bool Contains(string value, string searchText)
     {
         return value.Contains(searchText, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static bool SamePath(string left, string right)
-    {
-        if (string.IsNullOrWhiteSpace(left) || string.IsNullOrWhiteSpace(right))
-        {
-            return false;
-        }
-
-        return string.Equals(NormalizePath(left), NormalizePath(right), StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static string NormalizePath(string path)
-    {
-        var normalized = path.Trim().Trim('"', '\'');
-        try
-        {
-            normalized = Path.GetFullPath(normalized);
-        }
-        catch
-        {
-            // Keep the raw value if it is not a normal file-system path.
-        }
-
-        return normalized.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
     }
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
