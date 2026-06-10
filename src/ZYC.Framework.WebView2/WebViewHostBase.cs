@@ -155,7 +155,8 @@ public abstract partial class WebViewHostBase : UserControl,
         var options = new CoreWebView2EnvironmentOptions
         {
             AdditionalBrowserArguments = AdditionalBrowserArguments,
-            AreBrowserExtensionsEnabled = true
+            AreBrowserExtensionsEnabled = true,
+            IsCustomCrashReportingEnabled = false
         };
         return CoreWebView2Environment.CreateAsync(
             null,
@@ -210,11 +211,19 @@ public abstract partial class WebViewHostBase : UserControl,
         var env = await GetCoreWebView2Environment();
         await WebView2.EnsureCoreWebView2Async(env);
 
+        OnWebViewHostApplySettings();
+
         HookEvent();
 
         CoreWebView2BrowserExtensions = (await CoreWebView2.Profile.GetBrowserExtensionsAsync()).ToArray();
 
         await InternalWebViewHostLoadedAsync();
+    }
+
+    protected virtual void OnWebViewHostApplySettings()
+    {
+        CoreWebView2.Settings.IsReputationCheckingRequired = false;
+        CoreWebView2.Settings.HiddenPdfToolbarItems = CoreWebView2PdfToolbarItems.None;
     }
 
     private IErrorView? ResolveErrorView(Exception e)

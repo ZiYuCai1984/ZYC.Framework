@@ -20,6 +20,11 @@ public partial class WebViewHostBase
 
         CompositeDisposable.Dispose();
 
+        //!WARNING WebView2.Dispose() releases the WebView2 control/runtime resources only.
+        // Browser-extension native messaging hosts, for example Codex extension-host.exe,
+        // are external processes started by the extension/native-messaging layer and may
+        // remain alive after the WebView2 browser process exits if the host does not stop
+        // itself when its native messaging pipe is closed.
         WebView2.Dispose();
         InnerHttpClient.Dispose();
     }
