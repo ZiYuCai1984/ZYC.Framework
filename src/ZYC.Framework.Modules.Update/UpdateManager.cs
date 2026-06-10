@@ -13,6 +13,10 @@ namespace ZYC.Framework.Modules.Update;
 [RegisterSingleInstanceAs(typeof(IUpdateManager))]
 internal class UpdateManager : IUpdateManager
 {
+    private const string DownloadCompletedStatusText = "Download completed.";
+
+    private const string DownloadingStatusText = "Downloading update package...";
+
     private readonly SemaphoreSlim _gate = new(1, 1);
 
     public UpdateManager(
@@ -122,7 +126,12 @@ internal class UpdateManager : IUpdateManager
 
     public async Task<UpdateContext> DownloadProductAsync(NewProduct product, CancellationToken token)
     {
-        await UpdateUpdateContextAsync(UpdateStatus.Downloading, UpdateContext.NewProduct, token);
+        await UpdateUpdateContextAsync(
+            UpdateStatus.Downloading,
+            product,
+            CancellationToken.None,
+            downloadProgress: 0,
+            downloadStatusText: DownloadingStatusText);
         var processedPackages = new HashSet<string>();
 
         try
@@ -133,12 +142,58 @@ internal class UpdateManager : IUpdateManager
                 processedPackages,
                 token);
 
-            return await UpdateUpdateContextAsync(UpdateStatus.ApplyPending, product, token);
+            token.ThrowIfCancellationRequested();
+
+            return await UpdateUpdateContextAsync(
+                UpdateStatus.ApplyPending,
+                product,
+                CancellationToken.None,
+                downloadProgress: 1,
+                downloadStatusText: DownloadCompletedStatusText);
+        }
+        catch (OperationCanceledException)
+        {
+            await UpdateUpdateContextAsync(UpdateStatus.UpdateAvailable, product, CancellationToken.None);
+            throw;
         }
         catch (Exception e)
         {
             Logger.Error(e);
-            return await UpdateUpdateContextAsync(UpdateStatus.DownloadFaulted, product, token, e);
+            return await UpdateUpdateContextAsync(UpdateStatus.DownloadFaulted, product, CancellationToken.None, e);
+        }
+    }
+
+    public async Task<UpdateContext> ReportDownloadProgressAsync(
+        double progress,
+        string? statusText = null,
+        CancellationToken token = default)
+    {
+        var entered = false;
+        try
+        {
+            await _gate.WaitAsync(token).ConfigureAwait(false);
+            entered = true;
+
+            if (UpdateContext.UpdateStatus != UpdateStatus.Downloading)
+            {
+                return UpdateContext;
+            }
+
+            UpdateContext = new UpdateContext(
+                UpdateContext.UpdateStatus,
+                UpdateContext.NewProduct,
+                UpdateContext.Exception,
+                Math.Clamp(progress, 0, 1),
+                statusText ?? UpdateContext.DownloadStatusText);
+            EventAggregator.Publish(new UpdateContextChangedEvent(UpdateContext));
+            return UpdateContext;
+        }
+        finally
+        {
+            if (entered)
+            {
+                _gate.Release();
+            }
         }
     }
 
@@ -159,19 +214,26 @@ internal class UpdateManager : IUpdateManager
         UpdateStatus status,
         NewProduct? newProduct,
         CancellationToken token,
-        Exception? exception = null)
+        Exception? exception = null,
+        double? downloadProgress = null,
+        string? downloadStatusText = null)
     {
+        var entered = false;
         try
         {
             await _gate.WaitAsync(token).ConfigureAwait(false);
+            entered = true;
 
-            UpdateContext = new UpdateContext(status, newProduct, exception);
+            UpdateContext = new UpdateContext(status, newProduct, exception, downloadProgress, downloadStatusText);
             EventAggregator.Publish(new UpdateContextChangedEvent(UpdateContext));
             return UpdateContext;
         }
         finally
         {
-            _gate.Release();
+            if (entered)
+            {
+                _gate.Release();
+            }
         }
     }
 

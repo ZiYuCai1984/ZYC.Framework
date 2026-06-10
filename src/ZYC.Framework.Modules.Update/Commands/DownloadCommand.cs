@@ -28,7 +28,14 @@ internal class DownloadCommand : AsyncCommandBase
             UpdateTaskProvider.ProviderId,
             DownloadNewProductDefinition.DefinitionId, 1, product.ToJsonText());
 
-        await managedTask.Completion;
+        try
+        {
+            await managedTask.Completion;
+        }
+        catch (OperationCanceledException)
+        {
+            // The task manager already records and publishes the canceled state.
+        }
     }
 
     public override bool CanExecute(object? parameter)

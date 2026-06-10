@@ -582,6 +582,7 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
             };
 
             UpdateRecord(nr);
+            _tasks[nr.Id].TrySetCanceled();
             EventAggregator.Publish(new ManagedTaskCanceledEvent(nr));
             await FlushAsync(ct);
             return;
