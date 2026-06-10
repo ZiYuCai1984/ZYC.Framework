@@ -104,7 +104,7 @@ public partial class WebViewHostBase
 
     protected virtual ExtendedMenuItem[] WebViewHostBaseExtendedMenuItems { get; } = [];
 
-    protected virtual ExtendedMenuItem[] GetPluginMenuItems()
+    protected virtual PluginExtendedMenuItem[] GetPluginMenuItems()
     {
         return [];
     }
@@ -127,10 +127,10 @@ public partial class WebViewHostBase
         }
 
         IsMenuBarSetuped = true;
-        //TODO-zyc SetupMenuBar
+
         var menuBarView = LifetimeScope.Resolve<MenuBarView>(
-            new NamedParameter("extendedMenuItems", WebViewHostBaseExtendedMenuItems),
-            new NamedParameter("pluginMenuItems", GetPluginMenuItems()));
+            new TypedParameter(typeof(ExtendedMenuItem[]), WebViewHostBaseExtendedMenuItems),
+            new TypedParameter(typeof(PluginExtendedMenuItem[]), GetPluginMenuItems()));
         menuBarView.DataContext = this;
 
         MainGrid.Children.Add(menuBarView);

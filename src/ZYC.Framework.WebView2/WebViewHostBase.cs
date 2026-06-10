@@ -48,6 +48,7 @@ public abstract partial class WebViewHostBase : UserControl,
         MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         MainGrid.RowDefinitions.Add(new RowDefinition());
 
+        //!WARNING Design defeat !!
         SetupMenuBar();
 
         WebView2.SetValue(Grid.RowProperty, 1);

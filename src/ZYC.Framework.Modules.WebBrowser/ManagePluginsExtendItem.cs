@@ -5,7 +5,7 @@ using ZYC.Framework.WebView2.Menu;
 namespace ZYC.Framework.Modules.WebBrowser;
 
 [Register]
-internal class ManagePluginsExtendItem : ExtendedMenuItem
+internal class ManagePluginsExtendItem : PluginExtendedMenuItem
 {
     public ManagePluginsExtendItem(ManagePluginsCommand managePluginsCommand)
     {

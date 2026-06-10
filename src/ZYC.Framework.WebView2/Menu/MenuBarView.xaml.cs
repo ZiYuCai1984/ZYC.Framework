@@ -8,7 +8,7 @@ internal partial class MenuBarView
 {
     public MenuBarView(
         ExtendedMenuItem[] extendedMenuItems,
-        ExtendedMenuItem[] pluginMenuItems)
+        PluginExtendedMenuItem[] pluginMenuItems)
     {
         ExtendedMenuItems = extendedMenuItems;
         PluginMenuItems = pluginMenuItems;
@@ -18,12 +18,12 @@ internal partial class MenuBarView
 
     public ExtendedMenuItem[] ExtendedMenuItems { get; }
 
-    public ExtendedMenuItem[] PluginMenuItems { get; }
+    public PluginExtendedMenuItem[] PluginMenuItems { get; }
 
     private void OnPluginMenuItemSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not MahApps.Metro.Controls.SplitButton splitButton
-            || splitButton.SelectedItem is not ExtendedMenuItem item)
+            || splitButton.SelectedItem is not PluginExtendedMenuItem item)
         {
             return;
         }

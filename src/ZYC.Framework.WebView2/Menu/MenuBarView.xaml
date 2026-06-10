@@ -111,7 +111,7 @@
                 </mah:SplitButton.ButtonArrowStyle>
 
                 <mah:SplitButton.ItemTemplate>
-                    <DataTemplate DataType="{x:Type menu:ExtendedMenuItem}">
+                    <DataTemplate DataType="{x:Type menu:PluginExtendedMenuItem}">
                         <DockPanel MinWidth="160"
                                    Margin="2"
                                    Height="26">
