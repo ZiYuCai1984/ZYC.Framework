@@ -4,7 +4,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.ChromeExtensions.Abstractions;
@@ -14,6 +16,7 @@ namespace ZYC.Framework.Modules.ChromeExtensions;
 [RegisterSingleInstanceAs(typeof(IChromeExtensionPackageManager))]
 internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, IDisposable
 {
+    private readonly HttpClient? _httpClient = null;
     private readonly SemaphoreSlim _operationLock = new(1, 1);
 
     public ChromeExtensionPackageManager(
@@ -32,7 +35,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
 
     private IChromeExtensionPackageMetadataProvider PackageMetadataProvider { get; }
 
-    private HttpClient HttpClient { get; } = new()
+    private HttpClient HttpClient => _httpClient ?? new HttpClient
     {
         Timeout = TimeSpan.FromMinutes(5)
     };
@@ -73,7 +76,8 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
         await _operationLock.WaitAsync(cancellationToken);
         try
         {
-            var metadata = await PackageMetadataProvider.GetPackageMetadataAsync(normalizedExtensionId, cancellationToken);
+            var metadata =
+                await PackageMetadataProvider.GetPackageMetadataAsync(normalizedExtensionId, cancellationToken);
             if (!metadata.HasPackage)
             {
                 throw new InvalidOperationException(
@@ -89,6 +93,12 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
 
             var unpackedPath = GetUnpackedPath(metadata);
             await ExtractPackageAsync(packagePath, unpackedPath, cancellationToken);
+            if (!TrySyncManifestKey(packagePath, unpackedPath, metadata.ExtensionId))
+            {
+                throw new InvalidOperationException(
+                    $"Unable to synchronize manifest key for extension <{metadata.ExtensionId}> from package <{packagePath}>.");
+            }
+
             var manifestInfo = ReadExtensionManifestInfo(unpackedPath, metadata.ExtensionId);
 
             var installed = new ChromeInstalledExtension
@@ -101,9 +111,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
                 PackagePath = packagePath,
                 UnpackedPath = unpackedPath,
                 PopupPagePath = manifestInfo.PopupPagePath,
-                PopupPageUrl = manifestInfo.PopupPageUrl,
                 OptionsPagePath = manifestInfo.OptionsPagePath,
-                OptionsPageUrl = manifestInfo.OptionsPageUrl,
                 SizeBytes = metadata.SizeBytes,
                 HashSha256 = metadata.HashSha256,
                 Fingerprint = metadata.Fingerprint,
@@ -278,6 +286,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
                 return false;
             }
 
+            TrySyncManifestKey(installed.PackagePath, installed.UnpackedPath, installed.ExtensionId);
             var manifestInfo = ReadExtensionManifestInfo(installed.UnpackedPath, installed.ExtensionId);
             var changed = false;
             changed |= UpdateValueIfChanged(value => installed.Name = value, installed.Name, manifestInfo.Name);
@@ -286,17 +295,9 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
                 installed.PopupPagePath,
                 manifestInfo.PopupPagePath);
             changed |= UpdateValueIfChanged(
-                value => installed.PopupPageUrl = value,
-                installed.PopupPageUrl,
-                manifestInfo.PopupPageUrl);
-            changed |= UpdateValueIfChanged(
                 value => installed.OptionsPagePath = value,
                 installed.OptionsPagePath,
                 manifestInfo.OptionsPagePath);
-            changed |= UpdateValueIfChanged(
-                value => installed.OptionsPageUrl = value,
-                installed.OptionsPageUrl,
-                manifestInfo.OptionsPageUrl);
 
             return changed;
         }
@@ -478,6 +479,303 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
         }
     }
 
+    private static bool TrySyncManifestKey(
+        string packagePath,
+        string unpackedPath,
+        string extensionId)
+    {
+        if (string.IsNullOrWhiteSpace(packagePath)
+            || !File.Exists(packagePath)
+            || string.IsNullOrWhiteSpace(unpackedPath))
+        {
+            return false;
+        }
+
+        var manifestPath = Path.Combine(unpackedPath, "manifest.json");
+        if (!File.Exists(manifestPath)
+            || !TryReadManifestKeyFromPackage(packagePath, extensionId, out var manifestKey))
+        {
+            return false;
+        }
+
+        UpdateManifestKey(manifestPath, manifestKey);
+        return true;
+    }
+
+    private static bool TryReadManifestKeyFromPackage(
+        string packagePath,
+        string extensionId,
+        out string manifestKey)
+    {
+        manifestKey = "";
+
+        using var packageStream = File.OpenRead(packagePath);
+        Span<byte> header = stackalloc byte[12];
+        packageStream.ReadExactly(header);
+
+        if (header[0] != (byte)'C'
+            || header[1] != (byte)'r'
+            || header[2] != (byte)'2'
+            || header[3] != (byte)'4')
+        {
+            throw new InvalidOperationException($"Package <{packagePath}> is not a CRX file.");
+        }
+
+        var normalizedExtensionId = ChromeExtensionId.Normalize(extensionId);
+        var version = BinaryPrimitives.ReadUInt32LittleEndian(header[4..8]);
+        return version switch
+        {
+            2 => TryReadCrx2ManifestKey(packageStream, header, normalizedExtensionId, out manifestKey),
+            3 => TryReadCrx3ManifestKey(packageStream, header, normalizedExtensionId, out manifestKey),
+            _ => throw new InvalidOperationException($"Unsupported CRX version <{version}>.")
+        };
+    }
+
+    private static bool TryReadCrx2ManifestKey(
+        Stream packageStream,
+        ReadOnlySpan<byte> header,
+        string extensionId,
+        out string manifestKey)
+    {
+        manifestKey = "";
+
+        packageStream.Seek(sizeof(uint), SeekOrigin.Current);
+
+        var publicKeyLength = checked((int)BinaryPrimitives.ReadUInt32LittleEndian(header[8..12]));
+        if (publicKeyLength <= 0)
+        {
+            throw new InvalidOperationException($"Invalid CRX2 public key length <{publicKeyLength}>.");
+        }
+
+        var publicKey = new byte[publicKeyLength];
+        packageStream.ReadExactly(publicKey);
+
+        if (!string.Equals(
+                ChromeExtensionId.FromPublicKey(publicKey),
+                extensionId,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        manifestKey = Convert.ToBase64String(publicKey);
+        return true;
+    }
+
+    private static bool TryReadCrx3ManifestKey(
+        Stream packageStream,
+        ReadOnlySpan<byte> header,
+        string extensionId,
+        out string manifestKey)
+    {
+        manifestKey = "";
+
+        var headerSize = checked((int)BinaryPrimitives.ReadUInt32LittleEndian(header[8..12]));
+        if (headerSize <= 0)
+        {
+            throw new InvalidOperationException($"Invalid CRX3 header size <{headerSize}>.");
+        }
+
+        var headerBytes = new byte[headerSize];
+        packageStream.ReadExactly(headerBytes);
+
+        string? signedHeaderExtensionId = null;
+        var publicKeys = new List<byte[]>();
+        foreach (var field in ReadLengthDelimitedProtoFields(headerBytes))
+        {
+            switch (field.FieldNumber)
+            {
+                case 2:
+                case 3:
+                    if (TryReadProofPublicKey(field.Value, out var publicKey))
+                    {
+                        publicKeys.Add(publicKey);
+                    }
+
+                    break;
+                case 10000:
+                    if (TryReadSignedHeaderExtensionId(field.Value, out var crxId))
+                    {
+                        signedHeaderExtensionId = crxId;
+                    }
+
+                    break;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(signedHeaderExtensionId)
+            && !string.Equals(signedHeaderExtensionId, extensionId, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"CRX3 signed header id <{signedHeaderExtensionId}> does not match expected extension id <{extensionId}>.");
+        }
+
+        foreach (var publicKey in publicKeys)
+        {
+            if (string.Equals(
+                    ChromeExtensionId.FromPublicKey(publicKey),
+                    extensionId,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                manifestKey = Convert.ToBase64String(publicKey);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryReadSignedHeaderExtensionId(byte[] signedHeaderData, out string extensionId)
+    {
+        foreach (var field in ReadLengthDelimitedProtoFields(signedHeaderData))
+        {
+            if (field.FieldNumber == 1
+                && field.Value.Length == 16)
+            {
+                extensionId = ChromeExtensionId.FromCrxIdBytes(field.Value);
+                return true;
+            }
+        }
+
+        extensionId = "";
+        return false;
+    }
+
+    private static bool TryReadProofPublicKey(byte[] proofData, out byte[] publicKey)
+    {
+        foreach (var field in ReadLengthDelimitedProtoFields(proofData))
+        {
+            if (field.FieldNumber == 1
+                && field.Value.Length > 0)
+            {
+                publicKey = field.Value;
+                return true;
+            }
+        }
+
+        publicKey = [];
+        return false;
+    }
+
+    private static List<ProtoLengthDelimitedField> ReadLengthDelimitedProtoFields(ReadOnlySpan<byte> buffer)
+    {
+        var fields = new List<ProtoLengthDelimitedField>();
+        var offset = 0;
+        while (offset < buffer.Length)
+        {
+            if (!TryReadProtoVarint(buffer, ref offset, out var tag))
+            {
+                throw new InvalidOperationException("Invalid protobuf field tag.");
+            }
+
+            var fieldNumber = checked((int)(tag >> 3));
+            var wireType = (int)(tag & 0x07);
+            switch (wireType)
+            {
+                case 0:
+                    if (!TryReadProtoVarint(buffer, ref offset, out _))
+                    {
+                        throw new InvalidOperationException("Invalid protobuf varint field value.");
+                    }
+
+                    break;
+                case 1:
+                    if (buffer.Length - offset < 8)
+                    {
+                        throw new InvalidOperationException("Invalid protobuf fixed64 field length.");
+                    }
+
+                    offset += 8;
+                    break;
+                case 2:
+                    if (!TryReadProtoVarint(buffer, ref offset, out var lengthVarint))
+                    {
+                        throw new InvalidOperationException("Invalid protobuf length-delimited field length.");
+                    }
+
+                    var length = checked((int)lengthVarint);
+                    if (length < 0
+                        || buffer.Length - offset < length)
+                    {
+                        throw new InvalidOperationException("Invalid protobuf length-delimited field payload.");
+                    }
+
+                    fields.Add(new ProtoLengthDelimitedField(
+                        fieldNumber,
+                        buffer.Slice(offset, length).ToArray()));
+                    offset += length;
+                    break;
+                case 5:
+                    if (buffer.Length - offset < 4)
+                    {
+                        throw new InvalidOperationException("Invalid protobuf fixed32 field length.");
+                    }
+
+                    offset += 4;
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unsupported protobuf wire type <{wireType}>.");
+            }
+        }
+
+        return fields;
+    }
+
+    private static bool TryReadProtoVarint(
+        ReadOnlySpan<byte> buffer,
+        ref int offset,
+        out ulong value)
+    {
+        value = 0;
+        var shift = 0;
+        while (offset < buffer.Length
+               && shift < 64)
+        {
+            var current = buffer[offset++];
+            value |= (ulong)(current & 0x7F) << shift;
+            if ((current & 0x80) == 0)
+            {
+                return true;
+            }
+
+            shift += 7;
+        }
+
+        value = 0;
+        return false;
+    }
+
+    private static bool UpdateManifestKey(string manifestPath, string manifestKey)
+    {
+        var bytes = File.ReadAllBytes(manifestPath);
+        var hasUtf8Bom = bytes.Length >= 3
+                         && bytes[0] == 0xEF
+                         && bytes[1] == 0xBB
+                         && bytes[2] == 0xBF;
+        var manifestText = File.ReadAllText(manifestPath);
+        var jsonNode = JsonNode.Parse(manifestText) as JsonObject
+                       ?? throw new InvalidOperationException($"Invalid manifest JSON at <{manifestPath}>.");
+
+        if (string.Equals(jsonNode["key"]?.GetValue<string>(), manifestKey, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        jsonNode["key"] = manifestKey;
+
+        var updatedManifestText = jsonNode.ToJsonString(new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+        if (manifestText.Contains("\r\n", StringComparison.Ordinal))
+        {
+            updatedManifestText = updatedManifestText.Replace("\n", "\r\n", StringComparison.Ordinal);
+        }
+
+        File.WriteAllText(manifestPath, updatedManifestText, new UTF8Encoding(hasUtf8Bom));
+        return true;
+    }
+
     private static ChromeWebStoreExtensionManifestInfo ReadExtensionManifestInfo(
         string unpackedPath,
         string extensionId)
@@ -504,9 +802,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
         return new ChromeWebStoreExtensionManifestInfo(
             string.IsNullOrWhiteSpace(name) ? extensionId : name,
             popupPagePath,
-            CreateExtensionPageUrl(extensionId, popupPagePath),
-            optionsPagePath,
-            CreateExtensionPageUrl(extensionId, optionsPagePath));
+            optionsPagePath);
     }
 
     private static string? ReadPopupPagePath(JsonElement manifest)
@@ -520,26 +816,6 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
     {
         return ReadNestedJsonString(manifest, "options_ui", "page")
                ?? ReadJsonString(manifest, "options_page");
-    }
-
-    private static string CreateExtensionPageUrl(string extensionId, string pagePath)
-    {
-        if (string.IsNullOrWhiteSpace(pagePath))
-        {
-            return "";
-        }
-
-        if (Uri.TryCreate(pagePath, UriKind.Absolute, out var absoluteUri))
-        {
-            return absoluteUri.Scheme.Equals("chrome-extension", StringComparison.OrdinalIgnoreCase)
-                ? absoluteUri.ToString()
-                : "";
-        }
-
-        var normalizedPagePath = pagePath.Trim().Replace('\\', '/').TrimStart('/');
-        return string.IsNullOrWhiteSpace(normalizedPagePath)
-            ? ""
-            : $"chrome-extension://{extensionId}/{normalizedPagePath}";
     }
 
     private static string? ResolveLocalizedMessage(
@@ -574,6 +850,7 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
             }
             catch (JsonException)
             {
+                // ReSharper disable once RedundantJumpStatement
                 continue;
             }
         }
@@ -660,7 +937,9 @@ internal class ChromeExtensionPackageManager : IChromeExtensionPackageManager, I
     private sealed record ChromeWebStoreExtensionManifestInfo(
         string Name,
         string PopupPagePath,
-        string PopupPageUrl,
-        string OptionsPagePath,
-        string OptionsPageUrl);
+        string OptionsPagePath);
+
+    private sealed record ProtoLengthDelimitedField(
+        int FieldNumber,
+        byte[] Value);
 }

@@ -104,6 +104,11 @@ public partial class WebViewHostBase
 
     protected virtual ExtendedMenuItem[] WebViewHostBaseExtendedMenuItems { get; } = [];
 
+    protected virtual PluginExtendedMenuItem[] GetPluginMenuItems()
+    {
+        return [];
+    }
+
     internal void RaiseMenuBarCommandsCanExecuteChanged()
     {
         GoBackCommand?.RaiseCanExecuteChanged();
@@ -124,7 +129,8 @@ public partial class WebViewHostBase
         IsMenuBarSetuped = true;
 
         var menuBarView = LifetimeScope.Resolve<MenuBarView>(
-            new TypedParameter(typeof(ExtendedMenuItem[]), WebViewHostBaseExtendedMenuItems));
+            new TypedParameter(typeof(ExtendedMenuItem[]), WebViewHostBaseExtendedMenuItems),
+            new TypedParameter(typeof(PluginExtendedMenuItem[]), GetPluginMenuItems()));
         menuBarView.DataContext = this;
 
         MainGrid.Children.Add(menuBarView);

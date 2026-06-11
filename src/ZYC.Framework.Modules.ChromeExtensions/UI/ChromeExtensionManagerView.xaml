@@ -195,13 +195,13 @@
                                                            TextWrapping="Wrap">
                                                     <Run Text="Popup" />
                                                     <Run Text=" : " />
-                                                    <Run Text="{Binding PopupPageUrl,Mode=OneWay}" />
+                                                    <Run Text="{Binding PopupPagePath,Mode=OneWay}" />
                                                 </TextBlock>
                                                 <TextBlock Margin="16 0 0 12"
                                                            TextWrapping="Wrap">
                                                     <Run Text="Options" />
                                                     <Run Text=" : " />
-                                                    <Run Text="{Binding OptionsPageUrl,Mode=OneWay}" />
+                                                    <Run Text="{Binding OptionsPagePath,Mode=OneWay}" />
                                                 </TextBlock>
                                             </StackPanel>
                                         </ScrollViewer>

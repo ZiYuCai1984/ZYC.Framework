@@ -16,6 +16,14 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <PackageReference Update="ZYC.CoreToolkit.CodeGenerator" Version="$(V_ZYC_CoreToolkit)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime;build;native;contentfiles;analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+
   <!--!WARNING The value of $(NuGetPackageRoot) is inconsistent between the restore and build (it is empty during restore), $(NuGetPackageRoot) cannot be used here. !!-->
   <!--<Import Project="$(USERPROFILE)\.nuget\packages\ZYC.CoreToolkit\$(V_ZYC_CoreToolkit)\nuget.targets"></Import>-->
 

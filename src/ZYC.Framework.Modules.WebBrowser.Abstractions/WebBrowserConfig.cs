@@ -12,5 +12,11 @@ public class WebBrowserConfig : IConfig
     /// </summary>
     public string StartupUri { get; set; } = "https://google.com";
 
+    /// <summary>
+    ///     Gets or sets additional browser command-line arguments passed to the WebView2 environment.
+    /// </summary>
+    /// <remarks>
+    ///     Use this for browser startup switches such as <c>--load-extension="C:\extensions\ext1,C:\extensions\ext2"</c>.
+    /// </remarks>
     public string[] CustomBrowserArguments { get; set; } = [];
 }

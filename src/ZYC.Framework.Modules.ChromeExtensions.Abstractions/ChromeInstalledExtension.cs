@@ -52,15 +52,10 @@ public class ChromeInstalledExtension
     public string PopupPagePath { get; set; } = "";
 
     /// <summary>
-    ///     Gets or sets the extension toolbar popup page URL.
-    /// </summary>
-    public string PopupPageUrl { get; set; } = "";
-
-    /// <summary>
     ///     Gets a value indicating whether the extension has a toolbar popup page.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool HasPopupPage => !string.IsNullOrWhiteSpace(PopupPageUrl);
+    public bool HasPopupPage => !string.IsNullOrWhiteSpace(PopupPagePath);
 
     /// <summary>
     ///     Gets or sets the extension options page path read from the extension manifest.
@@ -68,15 +63,10 @@ public class ChromeInstalledExtension
     public string OptionsPagePath { get; set; } = "";
 
     /// <summary>
-    ///     Gets or sets the extension options page URL.
-    /// </summary>
-    public string OptionsPageUrl { get; set; } = "";
-
-    /// <summary>
     ///     Gets a value indicating whether the extension has an options page.
     /// </summary>
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool HasOptionsPage => !string.IsNullOrWhiteSpace(OptionsPageUrl);
+    public bool HasOptionsPage => !string.IsNullOrWhiteSpace(OptionsPagePath);
 
     /// <summary>
     ///     Gets or sets the local package size in bytes.

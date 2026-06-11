@@ -45,7 +45,7 @@ public static class ProductInfo
     /// <summary>
     ///     Gets the product version string.
     /// </summary>
-    public static string Version => "1.3.4";
+    public static string Version => "1.3.5";
 
     /// <summary>
     ///     Gets the product description.

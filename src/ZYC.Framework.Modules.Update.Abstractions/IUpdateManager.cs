@@ -48,6 +48,27 @@ public interface IUpdateManager
     /// </returns>
     Task<UpdateContext> DownloadProductAsync(NewProduct product, CancellationToken token);
 
+    /// <summary>
+    ///     Reports download progress and publishes an updated <see cref="UpdateContext" />.
+    /// </summary>
+    /// <param name="progress">
+    ///     The download progress value, where 0 means not started and 1 means complete.
+    /// </param>
+    /// <param name="statusText">
+    ///     Optional status text to display with the progress value.
+    /// </param>
+    /// <param name="token">
+    ///     A cancellation token used to cancel the progress update.
+    /// </param>
+    /// <returns>
+    ///     A task that completes with the updated <see cref="UpdateContext" />.
+    /// </returns>
+    [MCPIgnore]
+    Task<UpdateContext> ReportDownloadProgressAsync(
+        double progress,
+        string? statusText = null,
+        CancellationToken token = default);
+
 
     /// <summary>
     ///     Downloads the update payload for the specified product and updates the current context with download progress and

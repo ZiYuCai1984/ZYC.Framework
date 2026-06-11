@@ -100,7 +100,7 @@
 👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
 
 
-👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.4/ZYC.Framework.Setup.1.3.4.exe)**
+👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.5/ZYC.Framework.Setup.1.3.5.exe)**
 
 ### 프로젝트 생성
 
@@ -108,8 +108,8 @@
 권장 시작 방식은 전역 dotnet tool입니다. CLI를 설치하거나 업데이트한 뒤 `zyc new`로 호스트 프로젝트를 만듭니다:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.3.4
-dotnet tool update --global ZYC.Framework.CLI --version 1.3.4
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.5
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.5
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 수동으로 통합해야 하는 경우 코어 패키지를 NuGet으로 직접 추가할 수 있습니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.3.4
+dotnet add package ZYC.Framework.Alpha --version 1.3.5
 ```
 
 ---

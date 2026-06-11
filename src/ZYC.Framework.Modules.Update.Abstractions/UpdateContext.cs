@@ -28,14 +28,24 @@ public class UpdateContext
     /// <param name="exception">
     ///     The exception associated with a faulted operation, if any.
     /// </param>
+    /// <param name="downloadProgress">
+    ///     The current download progress, if a download is running or has just completed.
+    /// </param>
+    /// <param name="downloadStatusText">
+    ///     The current download status text, if a download is running or has just completed.
+    /// </param>
     public UpdateContext(
         UpdateStatus updateStatus,
         NewProduct? newProduct = null,
-        Exception? exception = null)
+        Exception? exception = null,
+        double? downloadProgress = null,
+        string? downloadStatusText = null)
     {
         UpdateStatus = updateStatus;
         NewProduct = newProduct;
         Exception = exception;
+        DownloadProgress = downloadProgress;
+        DownloadStatusText = downloadStatusText;
     }
 
     /// <summary>
@@ -52,4 +62,14 @@ public class UpdateContext
     ///     Gets the exception captured during the last operation, if any.
     /// </summary>
     public Exception? Exception { get; }
+
+    /// <summary>
+    ///     Gets the current download progress, if available.
+    /// </summary>
+    public double? DownloadProgress { get; }
+
+    /// <summary>
+    ///     Gets the current download status text, if available.
+    /// </summary>
+    public string? DownloadStatusText { get; }
 }

@@ -58,6 +58,10 @@ internal sealed partial class UpdateView
 
     public IProduct? NewProduct => UpdateContext.NewProduct;
 
+    public double DownloadProgress => UpdateContext.DownloadProgress ?? 0;
+
+    public string DownloadStatusText => UpdateContext.DownloadStatusText ?? "";
+
     private UpdateContext UpdateContext => UpdateManager.GetCurrentUpdateContext();
 
 
@@ -66,6 +70,8 @@ internal sealed partial class UpdateView
         OnPropertyChanged(nameof(UpdateException));
         OnPropertyChanged(nameof(NewProduct));
         OnPropertyChanged(nameof(UpdateStatus));
+        OnPropertyChanged(nameof(DownloadProgress));
+        OnPropertyChanged(nameof(DownloadStatusText));
     }
 
     protected override void InternalOnLoaded()

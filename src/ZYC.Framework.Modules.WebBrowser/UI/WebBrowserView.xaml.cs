@@ -68,27 +68,10 @@ internal partial class WebBrowserView
         return Task.CompletedTask;
     }
 
-    //protected override async void OnNavigationStarting(
-    //    object? sender,
-    //    CoreWebView2NavigationStartingEventArgs e)
-    //{
-    //    try
-    //    {
-    //        base.OnNavigationStarting(sender, e);
-
-    //        var target = e.Uri;
-    //        await Instance.TabInternalNavigatingAsync(new Uri(target));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Logger.Error(ex);
-    //        ToastManager.PromptException(ex);
-    //    }
-    //}
 
     protected override async void OnSourceChanged(object? sender, CoreWebView2SourceChangedEventArgs e)
     {
-        //!WARNING Pending test
+        //!WARNING Replaced the OnNavigationStarting
         try
         {
             base.OnSourceChanged(sender, e);

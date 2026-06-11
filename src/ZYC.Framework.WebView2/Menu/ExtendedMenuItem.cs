@@ -10,5 +10,7 @@ public class ExtendedMenuItem
 
     public ICommand? Command { get; set; }
 
+    public object? CommandParameter { get; set; }
+
     public bool Localization { get; set; } = true;
 }

@@ -8,7 +8,7 @@ internal class PluginsButtonTextConverter : ValueConverterBase<CoreWebView2Brows
 {
     protected override string InternalConvert(CoreWebView2BrowserExtension[] value)
     {
-        return $"{L.Translate("Plugins")} {value.Length}";
+        return $"{L.Translate("Plugins")} ({value.Length})";
     }
 
     protected override CoreWebView2BrowserExtension[] InternalConvertBack(string value)

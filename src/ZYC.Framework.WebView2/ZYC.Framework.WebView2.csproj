@@ -8,6 +8,9 @@
     <PackageReference Include="MahApps.Metro" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit.CodeGenerator" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Thirdparty\ZYC.Titanium.Web.Proxy\ZYC.Titanium.Web.Proxy.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
