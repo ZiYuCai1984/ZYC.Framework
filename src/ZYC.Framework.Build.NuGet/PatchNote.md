@@ -6,25 +6,28 @@
 
 ## 🆕 New Features
 
-* Added a WebView2 plugins button and dialog to inspect loaded browser extensions, including name, ID, enabled state, and total count
-* Added support for forwarding configured custom browser arguments into the built-in Web Browser module, including extension-loading scenarios
-* Added a Tools menu entry for the built-in Web Browser module
+* Added a Web Browser plugin manager dialog for searching installed Chrome extension packages and adding or removing them from the browser startup configuration
+* Added a WebView2 plugin split-button menu with quick access to plugin management and installed extension popup/options pages
+* Added update download progress reporting, including status text and a percentage progress bar in the update UI
+* Added support for configuring custom WebView2 browser arguments, including `--load-extension` startup scenarios
 
 ---
 
 ## 🛠 Improvements
 
-* Improved the Chrome Extensions manager with manifest-based extension icons and localized labels for the page title, Chrome Web Store action, and empty selection state
-* Added localized resources for Plugins, Chrome Extensions, and Chrome Web Store across Japanese, Simplified Chinese, Traditional Chinese, and Korean
-* Extended the dialog manager so dialogs can be resolved with Autofac parameters when they need runtime payloads
-* Updated dependency versions for ZYC.CoreToolkit and Aspire, and added the WebView2 MahApps dependency required by the new dialog surface
+* Stabilized Chrome extension package identity by synchronizing the CRX public key into unpacked manifests and validating CRX2/CRX3 package headers
+* Improved extension page navigation by storing manifest page paths in package metadata and resolving `chrome-extension://` URLs against the runtime-loaded extension ID
+* Improved the WebView2 menu extension model with plugin-specific menu items and command parameters
+* Updated WebView2 startup settings to disable custom crash reporting and reputation checking for embedded browser hosts
+* Updated package metadata, documentation, and multilingual install examples for version 1.3.5
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Prevented the application busy window from stealing activation when displayed
-* Hardened extension icon loading with safe manifest parsing, path validation, caching, and fallback icons
+* Fixed canceled update download tasks so cancellation is recorded and the download command does not surface an expected cancellation as a failure
+* Restored the update context to the available-update state when a download is canceled
+* Corrected the plugin count display format and the localized Dev Tools resource key
 
 ---
 
