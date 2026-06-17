@@ -211,7 +211,8 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
         SetFocusedWorkspace(workspace);
 
 
-        //!WARNING Considering the life cycle of TabItem objects and their movement in multiple Workspaces, child lifetimeScope is not used here.
+        //!WARNING Considering the life cycle of TabItem objects and their movement in multiple Workspaces,
+        // child lifetimeScope is not used here.
 
         return LifetimeScope.Resolve<TabManagerView>(
             new TypedParameter(typeof(WorkspaceNode), workspace),
