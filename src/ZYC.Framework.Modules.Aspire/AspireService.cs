@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -16,7 +17,7 @@ internal partial class AspireService
         IToastManager toastManager,
         IEventAggregator eventAggregator,
         Uri dashboardUri,
-        IAppLogger<AspireService> logger,
+        ILogger<AspireService> logger,
         DistributedApplication distributedApplication)
     {
         ToastManager = toastManager;
@@ -40,7 +41,7 @@ internal partial class AspireService
 
     private Uri DashboardUri { get; }
 
-    private IAppLogger<AspireService> Logger { get; }
+    private ILogger<AspireService> Logger { get; }
 
     private DistributedApplication DistributedApplication { get; }
 

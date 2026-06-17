@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Autofac;
 using ZYC.CoreToolkit.Abstractions.Settings;
@@ -217,7 +217,7 @@ public static class ModuleTools
     }
 
 
-    private static void CleanupModule(string dllFile, IAppLogger? logger = null)
+    private static void CleanupModule(string dllFile, ILogger? logger = null)
     {
         var timeout = TimeSpan.FromSeconds(8);
 

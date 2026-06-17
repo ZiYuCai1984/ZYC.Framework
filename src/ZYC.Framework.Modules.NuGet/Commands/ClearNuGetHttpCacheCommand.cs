@@ -1,4 +1,5 @@
-﻿using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+﻿using Microsoft.Extensions.Logging;
+using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Core.Commands;
 using ZYC.Framework.Modules.NuGet.Abstractions;
@@ -11,14 +12,14 @@ internal class ClearNuGetHttpCacheCommand : AsyncCommandBase, IClearNuGetHttpCac
 {
     public ClearNuGetHttpCacheCommand(
         INuGetManager nuGetManager, 
-        IAppLogger<ClearNuGetHttpCacheCommand> logger)
+        ILogger<ClearNuGetHttpCacheCommand> logger)
     {
         NuGetManager = nuGetManager;
         Logger = logger;
     }
 
     private INuGetManager NuGetManager { get; }
-    private IAppLogger<ClearNuGetHttpCacheCommand> Logger { get; }
+    private ILogger<ClearNuGetHttpCacheCommand> Logger { get; }
 
     protected override async Task InternalExecuteAsync(object? parameter)
     {

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification;
@@ -16,7 +17,7 @@ internal class BannerManager : IBannerManager
     public BannerManager(
         IAppContext appContext,
         ILifetimeScope lifetimeScope,
-        IAppLogger<BannerManager> logger)
+        ILogger<BannerManager> logger)
     {
         AppContext = appContext;
         LifetimeScope = lifetimeScope;
@@ -27,7 +28,7 @@ internal class BannerManager : IBannerManager
 
     private ILifetimeScope LifetimeScope { get; }
 
-    private IAppLogger<BannerManager> Logger { get; }
+    private ILogger<BannerManager> Logger { get; }
 
     public void PromptRestart()
     {

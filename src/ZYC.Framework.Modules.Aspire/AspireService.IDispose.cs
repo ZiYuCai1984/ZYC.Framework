@@ -1,4 +1,6 @@
-﻿namespace ZYC.Framework.Modules.Aspire;
+﻿using ZYC.Framework.Abstractions;
+
+namespace ZYC.Framework.Modules.Aspire;
 
 internal partial class AspireService : IDisposable
 {

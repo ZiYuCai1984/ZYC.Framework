@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAPICodePack.Controls;
 using Microsoft.WindowsAPICodePack.Shell;
 using ZYC.CoreToolkit;
@@ -14,7 +15,7 @@ namespace ZYC.Framework.Modules.FileExplorer.UI;
 internal partial class FileExplorerView : IDisposable
 {
     public FileExplorerView(
-        IAppLogger<FileExplorerView> logger,
+        ILogger<FileExplorerView> logger,
         Uri uri,
         IFileExplorerTabItemInstance fileExplorerTabItemInstance,
         IAppContext appContext)
@@ -35,7 +36,7 @@ internal partial class FileExplorerView : IDisposable
     }
 
 
-    private IAppLogger<FileExplorerView> Logger { get; }
+    private ILogger<FileExplorerView> Logger { get; }
     private IFileExplorerTabItemInstance FileExplorerTabItemInstance { get; }
     private IAppContext AppContext { get; }
 

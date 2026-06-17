@@ -114,7 +114,6 @@ internal partial class Program
         builder.RegisterGeneric(typeof(Infrastructure.NullLogger<>))
             .As(typeof(IAppLogger<>));
 
-
         builder.RegisterInstance(NullLoggerFactory.Instance)
             .As<ILoggerFactory>()
             .SingleInstance();

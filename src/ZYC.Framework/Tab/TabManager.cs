@@ -1,8 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using Autofac;
+using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -23,7 +24,7 @@ internal partial class TabManager : ITabManager
         IParallelWorkspaceManager parallelWorkspaceManager,
         ITabItemFactoryManager tabItemFactoryManager,
         NavigationConfig navigationConfig,
-        IAppLogger<TabManager> logger,
+        ILogger<TabManager> logger,
         ILifetimeScope lifetimeScope,
         TabItemLockState tabItemLockState)
     {
@@ -45,7 +46,7 @@ internal partial class TabManager : ITabManager
 
     private NavigationConfig NavigationConfig { get; }
 
-    private IAppLogger<TabManager> Logger { get; }
+    private ILogger<TabManager> Logger { get; }
 
     private ILifetimeScope LifetimeScope { get; }
 

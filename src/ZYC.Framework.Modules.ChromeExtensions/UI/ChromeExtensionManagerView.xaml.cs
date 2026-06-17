@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.BusyWindow;
@@ -18,7 +19,7 @@ internal partial class ChromeExtensionManagerView
         IDialogManager dialogManager,
         IAppBusyWindow appBusyWindow,
         IToastManager toastManager,
-        IAppLogger<ChromeExtensionManagerView> logger,
+        ILogger<ChromeExtensionManagerView> logger,
         IChromeExtensionPackageManager packageManager,
         ChromeExtensionPackageStoreEvents packageStoreEvents)
     {
@@ -38,7 +39,7 @@ internal partial class ChromeExtensionManagerView
 
     private IToastManager ToastManager { get; }
 
-    private IAppLogger<ChromeExtensionManagerView> Logger { get; }
+    private ILogger<ChromeExtensionManagerView> Logger { get; }
 
     private IChromeExtensionPackageManager PackageManager { get; }
 

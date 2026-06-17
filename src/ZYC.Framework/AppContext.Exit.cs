@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.Framework.Abstractions;
 
@@ -34,7 +35,7 @@ internal partial class AppContext
         FocusExitProcess(Logger);
     }
 
-    public static void FocusExitProcess(IAppLogger<AppContext>? logger = null)
+    public static void FocusExitProcess(ILogger<AppContext>? logger = null)
     {
         logger?.Warn("Focus exit !!");
         TaskbarIcon?.TryDispose();

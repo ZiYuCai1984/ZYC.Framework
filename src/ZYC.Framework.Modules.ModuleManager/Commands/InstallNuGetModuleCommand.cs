@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Banner;
@@ -14,7 +15,7 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
     public InstallNuGetModuleCommand(
         IBannerManager bannerManager,
         IToastManager toastManager,
-        IAppLogger<InstallNuGetModuleCommand> logger,
+        ILogger<InstallNuGetModuleCommand> logger,
         ILifetimeScope lifetimeScope,
         INuGetModuleManager nuGetModuleManager,
         NuGetModuleState nuGetModuleState,
@@ -33,7 +34,7 @@ internal class InstallNuGetModuleCommand : AsyncPairCommandBase<InstallNuGetModu
 
     private IToastManager ToastManager { get; }
 
-    private IAppLogger<InstallNuGetModuleCommand> Logger { get; }
+    private ILogger<InstallNuGetModuleCommand> Logger { get; }
 
     private INuGetModuleManager NuGetModuleManager { get; }
 

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Banner;
@@ -15,7 +16,7 @@ internal class
     public UninstallNuGetModuleCommand(
         IBannerManager bannerManager,
         IToastManager toastManager,
-        IAppLogger<InstallNuGetModuleCommand> logger,
+        ILogger<InstallNuGetModuleCommand> logger,
         ILifetimeScope lifetimeScope,
         INuGetModuleManager nuGetModuleManager,
         NuGetModuleState nuGetModuleState,
@@ -32,7 +33,7 @@ internal class
 
     private IBannerManager BannerManager { get; }
     private IToastManager ToastManager { get; }
-    private IAppLogger<InstallNuGetModuleCommand> Logger { get; }
+    private ILogger<InstallNuGetModuleCommand> Logger { get; }
     private INuGetModuleManager NuGetModuleManager { get; }
 
     private NuGetModuleState NuGetModuleState { get; }

@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
 using ZYC.CoreToolkit.Extensions.Autofac;
@@ -24,7 +25,7 @@ internal partial class AppContext : IAppContext
         AppState appState,
         ILifetimeScope lifetimeScope,
         ModuleBase[] modules,
-        IAppLogger<AppContext> logger,
+        ILogger<AppContext> logger,
         AppConfig appConfig)
     {
         InitializeComponent();
@@ -122,7 +123,7 @@ internal partial class AppContext : IAppContext
 
     private ModuleBase[] Modules { get; }
 
-    private IAppLogger<AppContext> Logger { get; }
+    private ILogger<AppContext> Logger { get; }
 
     private AppConfig AppConfig { get; }
 

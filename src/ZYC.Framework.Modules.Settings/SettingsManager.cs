@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using Namotion.Reflection;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
@@ -32,7 +33,7 @@ public partial class SettingsManager : ISettingsManager
         IConfig[] configs,
         IAppContext appContext,
         ILifetimeScope lifetimeScope,
-        IAppLogger<SettingsManager> logger)
+        ILogger<SettingsManager> logger)
     {
         ToastManager = toastManager;
         EventAggregator = eventAggregator;
@@ -51,7 +52,7 @@ public partial class SettingsManager : ISettingsManager
 
     private ILifetimeScope LifetimeScope { get; }
 
-    private IAppLogger<SettingsManager> Logger { get; }
+    private ILogger<SettingsManager> Logger { get; }
 
     private ISettingsView? SettingsView { get; set; }
 
@@ -197,7 +198,7 @@ public partial class SettingsManager : ISettingsManager
         PropertyInfo property,
         SettingItem item,
         object? newValue,
-        IAppLogger<SettingsManager> logger)
+        ILogger<SettingsManager> logger)
     {
         try
         {
@@ -245,7 +246,7 @@ public partial class SettingsManager : ISettingsManager
         PropertyInfo property,
         SettingItem item,
         object? newValue,
-        IAppLogger<SettingsManager> logger)
+        ILogger<SettingsManager> logger)
     {
         try
         {
@@ -282,7 +283,7 @@ public partial class SettingsManager : ISettingsManager
         PropertyInfo property,
         SettingItem item,
         object? newValue,
-        IAppLogger<SettingsManager> logger)
+        ILogger<SettingsManager> logger)
     {
         try
         {

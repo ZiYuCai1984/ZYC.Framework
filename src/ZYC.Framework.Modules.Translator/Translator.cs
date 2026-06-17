@@ -1,5 +1,6 @@
-﻿using System.Reflection;
-using LibreTranslate.Net;
+﻿using LibreTranslate.Net;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.Translator.Abstractions;
@@ -9,7 +10,7 @@ namespace ZYC.Framework.Modules.Translator;
 [RegisterSingleInstanceAs(typeof(ITranslator))]
 internal class Translator : ITranslator
 {
-    public Translator(IAppLogger<Translator> logger, TranslatorConfig translatorConfig)
+    public Translator(ILogger<Translator> logger, TranslatorConfig translatorConfig)
     {
         Logger = logger;
         TranslatorConfig = translatorConfig;
@@ -24,7 +25,7 @@ internal class Translator : ITranslator
             null);
     }
 
-    private IAppLogger<Translator> Logger { get; }
+    private ILogger<Translator> Logger { get; }
     private TranslatorConfig TranslatorConfig { get; }
 
     private LibreTranslate.Net.LibreTranslate LibreTranslate { get; }

@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -14,7 +15,7 @@ public class RestartCommand : CommandBase, IDisposable
     public RestartCommand(
         IAppContext appContext,
         IEventAggregator eventAggregator,
-        IAppLogger<RestartCommand> logger,
+        ILogger<RestartCommand> logger,
         DesktopWindowState desktopWindowState)
     {
         AppContext = appContext;
@@ -32,7 +33,7 @@ public class RestartCommand : CommandBase, IDisposable
 
     private IAppContext AppContext { get; }
 
-    private IAppLogger<RestartCommand> Logger { get; }
+    private ILogger<RestartCommand> Logger { get; }
 
     private DesktopWindowState DesktopWindowState { get; }
 

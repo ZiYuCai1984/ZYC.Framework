@@ -2,11 +2,11 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.Update.Abstractions;
 using ZYC.MdXaml;
-using ZYC.MdXaml.MdXaml;
 
 namespace ZYC.Framework.Modules.Update.UI;
 
@@ -15,7 +15,7 @@ internal partial class UpdateAvailableView
 {
     public UpdateAvailableView(
         ILifetimeScope lifetimeScope,
-        IAppLogger<UpdateAvailableView> logger)
+        ILogger<UpdateAvailableView> logger)
     {
         LifetimeScope = lifetimeScope;
         Logger = logger;
@@ -29,7 +29,7 @@ internal partial class UpdateAvailableView
 
     private IProduct? Product => LifetimeScope.Resolve<IUpdateManager>().GetCurrentUpdateContext().NewProduct;
 
-    private IAppLogger<UpdateAvailableView> Logger { get; }
+    private ILogger<UpdateAvailableView> Logger { get; }
 
     private void OnUpdateAvailableViewLoaded(object sender, RoutedEventArgs e)
     {

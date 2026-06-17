@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.BusyWindow;
@@ -19,7 +20,7 @@ internal sealed partial class NuGetModuleManagerView
         NuGetConfig nugetConfig,
         IAppBusyWindow appBusyWindow,
         IToastManager toastManager,
-        IAppLogger<NuGetModuleManagerView> logger,
+        ILogger<NuGetModuleManagerView> logger,
         RefreshNuGetModuleCommand refreshNuGetModuleCommand,
         INuGetModuleManager nuGetModuleManager,
         INuGetManager nuGetManager)
@@ -36,7 +37,7 @@ internal sealed partial class NuGetModuleManagerView
     private NuGetConfig NugetConfig { get; }
     private IAppBusyWindow AppBusyWindow { get; }
     private IToastManager ToastManager { get; }
-    private IAppLogger<NuGetModuleManagerView> Logger { get; }
+    private ILogger<NuGetModuleManagerView> Logger { get; }
     private RefreshNuGetModuleCommand RefreshNuGetModuleCommand { get; }
 
     private INuGetModuleManager NuGetModuleManager { get; }

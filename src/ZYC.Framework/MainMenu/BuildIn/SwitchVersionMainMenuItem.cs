@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Autofac;
+using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.MainMenu;
@@ -24,7 +25,7 @@ internal class SwitchVersionMainMenuItem : MainMenuItemsProvider
         IProduct product,
         AppState appState,
         IBannerManager bannerManager,
-        IAppLogger<SwitchVersionMainMenuItem> logger) : base(lifetimeScope)
+        ILogger<SwitchVersionMainMenuItem> logger) : base(lifetimeScope)
     {
         Info = new MenuItemInfo
         {

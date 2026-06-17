@@ -1,5 +1,6 @@
-﻿using System.IO;
+﻿using Microsoft.Extensions.Logging;
 using NuGet.Versioning;
+using System.IO;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -23,7 +24,7 @@ internal class UpdateManager : IUpdateManager
         IEventAggregator eventAggregator,
         INuGetManager nugetManager,
         ITaskManager taskManager,
-        IAppLogger<UpdateManager> logger,
+        ILogger<UpdateManager> logger,
         IAppContext appContext,
         IProduct product,
         UpdateConfig updateConfig)
@@ -42,7 +43,7 @@ internal class UpdateManager : IUpdateManager
     private IEventAggregator EventAggregator { get; }
     private INuGetManager NuGetManager { get; }
     private ITaskManager TaskManager { get; }
-    private IAppLogger<UpdateManager> Logger { get; }
+    private ILogger<UpdateManager> Logger { get; }
 
     private IAppContext AppContext { get; }
 

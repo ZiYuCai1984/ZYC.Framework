@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
@@ -16,7 +17,7 @@ internal class ToastManager : IToastManager
     public ToastManager(
         IAppContext appContext,
         ILifetimeScope lifetimeScope,
-        IAppLogger<ToastManager> logger)
+        ILogger<ToastManager> logger)
     {
         AppContext = appContext;
         LifetimeScope = lifetimeScope;
@@ -30,7 +31,7 @@ internal class ToastManager : IToastManager
 
     private ILifetimeScope LifetimeScope { get; }
 
-    private IAppLogger<ToastManager> Logger { get; }
+    private ILogger<ToastManager> Logger { get; }
 
     public void Prompt<T>() where T : IToast
     {

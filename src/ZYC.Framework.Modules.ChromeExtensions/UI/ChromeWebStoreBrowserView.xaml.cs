@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -24,7 +25,7 @@ internal sealed partial class ChromeWebStoreBrowserView
         ILifetimeScope lifetimeScope,
         IAppBusyWindow appBusyWindow,
         IToastManager toastManager,
-        IAppLogger<ChromeWebStoreBrowserView> logger,
+        ILogger<ChromeWebStoreBrowserView> logger,
         IChromeExtensionPackageMetadataProvider packageMetadataProvider,
         IChromeExtensionPackageManager packageManager,
         ChromeExtensionManagerConfig chromeExtensionManagerConfig,
@@ -45,7 +46,7 @@ internal sealed partial class ChromeWebStoreBrowserView
 
     private IToastManager ToastManager { get; }
 
-    private IAppLogger<ChromeWebStoreBrowserView> Logger { get; }
+    private ILogger<ChromeWebStoreBrowserView> Logger { get; }
 
     private IChromeExtensionPackageMetadataProvider PackageMetadataProvider { get; }
 

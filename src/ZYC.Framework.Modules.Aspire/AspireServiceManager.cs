@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using Autofac;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions;
 using ZYC.CoreToolkit.Dotnet;
@@ -21,7 +22,7 @@ internal sealed partial class AspireServiceManager : IAspireServiceManager, IDis
         IEventAggregator eventAggregator,
         AspireServiceEnvironment aspireServiceEnvironment,
         ILifetimeScope lifetimeScope,
-        IAppLogger<AspireServiceManager> logger)
+        ILogger<AspireServiceManager> logger)
     {
         AspireConfig = aspireConfig;
         ToastManager = toastManager;
@@ -48,7 +49,7 @@ internal sealed partial class AspireServiceManager : IAspireServiceManager, IDis
 
     private ILifetimeScope LifetimeScope { get; }
 
-    private IAppLogger<AspireServiceManager> Logger { get; }
+    private ILogger<AspireServiceManager> Logger { get; }
 
     private AspireService? AspireService { get; set; }
 

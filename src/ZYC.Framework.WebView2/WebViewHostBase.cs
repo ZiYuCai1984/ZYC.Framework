@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Autofac;
+using Microsoft.Extensions.Logging;
+using Microsoft.Web.WebView2.Core;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
@@ -7,8 +10,6 @@ using System.Reactive.Disposables.Fluent;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Autofac;
-using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.WebView2;
 using ZYC.Framework.Abstractions;
@@ -31,7 +32,7 @@ public abstract partial class WebViewHostBase : UserControl,
 
         LifetimeScope = lifetimeScope;
 
-        Logger = lifetimeScope.Resolve<IAppLogger<WebViewHostBase>>();
+        Logger = lifetimeScope.Resolve<ILogger<WebViewHostBase>>();
         AppContext = lifetimeScope.Resolve<IAppContext>();
 
         EventDisposables.Hook(
@@ -63,7 +64,7 @@ public abstract partial class WebViewHostBase : UserControl,
 
     protected HttpClient InnerHttpClient { get; } = new();
 
-    private IAppLogger<WebViewHostBase> Logger { get; }
+    private ILogger<WebViewHostBase> Logger { get; }
 
     private IAppContext AppContext { get; }
 
