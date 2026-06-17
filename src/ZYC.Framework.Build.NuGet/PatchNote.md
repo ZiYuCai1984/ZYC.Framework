@@ -6,28 +6,24 @@
 
 ## 🆕 New Features
 
-* Added a Web Browser plugin manager dialog for searching installed Chrome extension packages and adding or removing them from the browser startup configuration
-* Added a WebView2 plugin split-button menu with quick access to plugin management and installed extension popup/options pages
-* Added update download progress reporting, including status text and a percentage progress bar in the update UI
-* Added support for configuring custom WebView2 browser arguments, including `--load-extension` startup scenarios
+* Added compatibility updates for ZYC.CoreToolkit 3.9.4 and Aspire 13.4.5
+* Added version 1.3.6 package metadata for framework runtime and NuGet publishing
 
 ---
 
 ## 🛠 Improvements
 
-* Stabilized Chrome extension package identity by synchronizing the CRX public key into unpacked manifests and validating CRX2/CRX3 package headers
-* Improved extension page navigation by storing manifest page paths in package metadata and resolving `chrome-extension://` URLs against the runtime-loaded extension ID
-* Improved the WebView2 menu extension model with plugin-specific menu items and command parameters
-* Updated WebView2 startup settings to disable custom crash reporting and reputation checking for embedded browser hosts
-* Updated package metadata, documentation, and multilingual install examples for version 1.3.5
+* Updated README and multilingual documentation install examples, demo download links, and project template samples for version 1.3.6
+* Simplified WebView2 plugin menu item initialization to align with the generated menu model
+* Polished the WebView2 plugin split-button text weight for a lighter menu appearance
+* Clarified the workspace tab lifetime-scope warning comment for future maintenance
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed canceled update download tasks so cancellation is recorded and the download command does not surface an expected cancellation as a failure
-* Restored the update context to the available-update state when a download is canceled
-* Corrected the plugin count display format and the localized Dev Tools resource key
+* Prevented Aspire service disposal from breaking teardown when `DistributedApplication.Dispose()` raises an assembly version mismatch; the exception is now captured and logged
+* Kept Aspire service cleanup resilient by disposing local gates and composite subscriptions before attempting distributed application disposal
 
 ---
 

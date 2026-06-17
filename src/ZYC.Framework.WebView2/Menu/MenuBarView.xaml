@@ -151,7 +151,7 @@
                                                     Margin="8 0 8 0" />
                         <TextBlock FontSize="10"
                                    VerticalAlignment="Center"
-                                   FontWeight="Black"
+                                   FontWeight="Bold"
                                    Text="{Binding CoreWebView2BrowserExtensions,Converter={localConverters:PluginsButtonTextConverter}}" />
                     </DockPanel>
                 </mah:SplitButton.Icon>
