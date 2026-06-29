@@ -150,8 +150,6 @@ internal partial class AppContext : IAppContext
         }
     }
 
-
-
     public void UpdateStartupVersion(string version)
     {
         AppState.StartupVersion = version;

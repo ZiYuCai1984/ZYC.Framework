@@ -12,7 +12,7 @@ using ZYC.Framework.Abstractions.Workspace;
 namespace ZYC.Framework.Workspace.CustomLayouts;
 
 [Register]
-internal sealed partial class ManageCustomLayoutsDialog : INotifyPropertyChanged
+internal partial class ManageCustomLayoutsDialog : INotifyPropertyChanged
 {
     private string _editName = "";
     private bool _hasLayouts;

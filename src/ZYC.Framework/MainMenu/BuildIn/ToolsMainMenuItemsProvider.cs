@@ -8,7 +8,8 @@ namespace ZYC.Framework.MainMenu.BuildIn;
 [RegisterSingleInstanceAs(typeof(IToolsMainMenuItemsProvider))]
 internal class ToolsMainMenuItemsProvider : MainMenuItemsProvider, IToolsMainMenuItemsProvider
 {
-    public ToolsMainMenuItemsProvider(ILifetimeScope lifetimeScope) : base(lifetimeScope)
+    public ToolsMainMenuItemsProvider(
+        ILifetimeScope lifetimeScope) : base(lifetimeScope)
     {
         Info = new MenuItemInfo
         {
@@ -16,6 +17,8 @@ internal class ToolsMainMenuItemsProvider : MainMenuItemsProvider, IToolsMainMen
             Icon = null,
             Priority = MainMenuPriority.Tools
         };
+
+        RegisterSubItem<OverrideMutexIdMainMenuItem>();
     }
 
     public override MenuItemInfo Info { get; }

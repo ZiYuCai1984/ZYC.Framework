@@ -6,24 +6,25 @@
 
 ## 🆕 New Features
 
-* Added compatibility updates for ZYC.CoreToolkit 3.9.4 and Aspire 13.4.5
-* Added version 1.3.6 package metadata for framework runtime and NuGet publishing
+* Added a Tools menu entry for editing the mutex override ID without manually changing files
+* Added a dedicated mutex override dialog with save/delete actions, localized UI text, and restart prompts after changes
 
 ---
 
 ## 🛠 Improvements
 
-* Updated README and multilingual documentation install examples, demo download links, and project template samples for version 1.3.6
-* Simplified WebView2 plugin menu item initialization to align with the generated menu model
-* Polished the WebView2 plugin split-button text weight for a lighter menu appearance
-* Clarified the workspace tab lifetime-scope warning comment for future maintenance
+* Updated package metadata, documentation, CLI examples, and project template references for version 1.3.7
+* Raised NuGet module search defaults to the NuGet.org request limit and clamped configured values between 1 and 1000
+* Improved minimize behavior so windows hidden from the taskbar are hidden instead of minimized
+* Made restart banners stay visible until dismissed, so restart-required actions are less likely to disappear unnoticed
+* Centralized mutex ID generation in `MutexTools` and reused it for single-instance startup and startup-URI pipe naming
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Prevented Aspire service disposal from breaking teardown when `DistributedApplication.Dispose()` raises an assembly version mismatch; the exception is now captured and logged
-* Kept Aspire service cleanup resilient by disposing local gates and composite subscriptions before attempting distributed application disposal
+* Kept custom layout management compatible with framework extension points that need non-sealed dialog classes
+* Refined mutex override persistence so save/delete flows use the same startup mutex path
 
 ---
 

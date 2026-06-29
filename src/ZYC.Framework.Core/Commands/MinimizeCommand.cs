@@ -16,6 +16,12 @@ public class MinimizeCommand : CommandBase
 
     protected override void InternalExecute(object? parameter)
     {
-        MainWindow.SetWindowState(WindowState.Minimized);
+        if (MainWindow.GetShowInTaskbar())
+        {
+            MainWindow.SetWindowState(WindowState.Minimized);
+            return;
+        }
+
+        MainWindow.Hide();
     }
 }
