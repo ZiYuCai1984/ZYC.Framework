@@ -11,6 +11,8 @@ using ZYC.Framework.Abstractions.Notification;
 
 namespace ZYC.Framework.Notification.Banner;
 
+// ReSharper disable InconsistentNaming
+
 [Register]
 public sealed class BottomBannerPopupHost : NotificationPopupHost
 {
@@ -63,7 +65,7 @@ public sealed class BottomBannerPopupHost : NotificationPopupHost
 
         _hooked = true;
 
-        popup.Opened += (_, __) =>
+        popup.Opened += (_, _) =>
         {
             // Get the host Window (follow updates when the window moves).
             _ownerWindow ??= Window.GetWindow(popup.PlacementTarget);
@@ -82,7 +84,7 @@ public sealed class BottomBannerPopupHost : NotificationPopupHost
             ScheduleForcePosition(popup);
         };
 
-        popup.Closed += (_, __) =>
+        popup.Closed += (_, _) =>
         {
             if (_ownerWindow != null)
             {

@@ -136,7 +136,16 @@
       "Name": "名前",
       "Open": "開く",
       "Text File": "テキストファイル",
-      "Switch Version": "バージョンを切り替え"
+      "Switch Version": "バージョンを切り替え",
+      "Save": "保存",
+      "Override Mutex Id": "Mutex ID を上書き",
+      "Mutex override": "Mutex 上書き",
+      "Delete mutex-override": "mutex-override を削除",
+      "Mutex override is required.": "Mutex 上書き値は必須です。",
+      "Mutex override cannot contain backslash or control characters.": "Mutex 上書き値にバックスラッシュまたは制御文字は使用できません。",
+      "Mutex override saved.": "Mutex 上書き値を保存しました。",
+      "Mutex override does not exist.": "Mutex 上書き値は存在しません。",
+      "Mutex override removed.": "Mutex 上書き値を削除しました。"
     },
     "zh": {
       "Hello World": "你好世界",
@@ -274,7 +283,16 @@
       "Name": "名称",
       "Open": "打开",
       "Text File": "文本文件",
-      "Switch Version": "切换版本"
+      "Switch Version": "切换版本",
+      "Save": "保存",
+      "Override Mutex Id": "覆盖 Mutex ID",
+      "Mutex override": "Mutex 覆盖值",
+      "Delete mutex-override": "删除 mutex-override",
+      "Mutex override is required.": "Mutex 覆盖值不能为空。",
+      "Mutex override cannot contain backslash or control characters.": "Mutex 覆盖值不能包含反斜杠或控制字符。",
+      "Mutex override saved.": "已保存 Mutex 覆盖值。",
+      "Mutex override does not exist.": "Mutex 覆盖值不存在。",
+      "Mutex override removed.": "已删除 Mutex 覆盖值。"
     },
     "zt": {
       "Hello World": "你好世界",
@@ -412,7 +430,16 @@
       "Name": "名稱",
       "Open": "開啟",
       "Text File": "文字檔",
-      "Switch Version": "切換版本"
+      "Switch Version": "切換版本",
+      "Save": "儲存",
+      "Override Mutex Id": "覆寫 Mutex ID",
+      "Mutex override": "Mutex 覆寫值",
+      "Delete mutex-override": "刪除 mutex-override",
+      "Mutex override is required.": "Mutex 覆寫值不可為空。",
+      "Mutex override cannot contain backslash or control characters.": "Mutex 覆寫值不能包含反斜線或控制字元。",
+      "Mutex override saved.": "已儲存 Mutex 覆寫值。",
+      "Mutex override does not exist.": "Mutex 覆寫值不存在。",
+      "Mutex override removed.": "已刪除 Mutex 覆寫值。"
     },
     "ko": {
       "Hello World": "안녕하세요 세계",
@@ -550,7 +577,16 @@
       "Name": "이름",
       "Open": "열기",
       "Text File": "텍스트 파일",
-      "Switch Version": "버전 전환"
+      "Switch Version": "버전 전환",
+      "Save": "저장",
+      "Override Mutex Id": "Mutex ID 재정의",
+      "Mutex override": "Mutex 재정의 값",
+      "Delete mutex-override": "mutex-override 삭제",
+      "Mutex override is required.": "Mutex 재정의 값이 필요합니다.",
+      "Mutex override cannot contain backslash or control characters.": "Mutex 재정의 값에는 백슬래시 또는 제어 문자를 사용할 수 없습니다.",
+      "Mutex override saved.": "Mutex 재정의 값을 저장했습니다.",
+      "Mutex override does not exist.": "Mutex 재정의 값이 없습니다.",
+      "Mutex override removed.": "Mutex 재정의 값을 삭제했습니다."
     }
   }
 }

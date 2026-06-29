@@ -21,6 +21,8 @@ public class NotificationBase : UserControl, INotification
         CloseNotificationCommand = new RelayCommand(_ => true, _ => CloseNow());
     }
 
+    protected virtual bool AutoDismiss => true;
+
     private Storyboard? FadeOutStoryboard { get; set; }
 
     public ICommand CloseNotificationCommand { get; }
@@ -40,6 +42,11 @@ public class NotificationBase : UserControl, INotification
         }
 
         _started = true;
+
+        if (!AutoDismiss)
+        {
+            return;
+        }
 
         var fadeOutAnimation = new DoubleAnimation
         {

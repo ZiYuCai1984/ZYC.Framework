@@ -4,4 +4,5 @@ namespace ZYC.Framework.Core.Notification.Banner;
 
 public class BannerBase : NotificationBase, IBanner
 {
+    protected override bool AutoDismiss { get; } = false;
 }
