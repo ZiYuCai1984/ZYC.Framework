@@ -14,10 +14,13 @@ public class NuGetModuleConfig : IConfig
     public string SearchTerm { get; set; } = "ZYC.Framework.Modules.";
 
     /// <summary>
-    ///     Gets or sets the maximum number of search results to retrieve
-    ///     from the NuGet query.
+    ///     Gets or sets the requested maximum number of NuGet search results.
     /// </summary>
-    public int SearchTake { get; set; } = 1024;
+    /// <remarks>
+    ///     NuGet.org limits a single search request to 1000 results; larger
+    ///     configured values are clamped before querying.
+    /// </remarks>
+    public int SearchTake { get; set; } = 1000;
 
     /// <summary>
     ///     Gets or sets the number of search results to skip when performing

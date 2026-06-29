@@ -1,6 +1,4 @@
-﻿using ZYC.CoreToolkit;
-using ZYC.Framework.Abstractions;
-using ZYC.Framework.Core;
+﻿using ZYC.Framework.Core;
 
 namespace ZYC.Framework;
 
@@ -17,7 +15,7 @@ internal partial class Program
             IntPtr.Zero,
             IntPtr.Zero);
 
-        var mutexId = GetMutexId();
+        var mutexId = MutexTools.GetMutexId();
         if (string.IsNullOrEmpty(mutexId))
         {
             return;
@@ -64,23 +62,6 @@ internal partial class Program
 
     private static string GetStartupUriPipeName()
     {
-        return GetMutexId();
-    }
-
-    private static string GetMutexId()
-    {
-        var userName = "";
-
-        try
-        {
-            userName = AccountTools.GetCurrentUserName();
-        }
-        catch
-        {
-            //ignore
-        }
-
-        //!WARNING Dealing with multi-user
-        return $"{userName}-{ProductInfo.PackageId}";
+        return MutexTools.GetMutexId();
     }
 }

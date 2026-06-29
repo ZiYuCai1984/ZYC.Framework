@@ -16,6 +16,10 @@ namespace ZYC.Framework.Modules.ModuleManager;
 [RegisterSingleInstanceAs(typeof(INuGetModuleManager))]
 internal class NuGetModuleManager : INuGetModuleManager
 {
+    private const int MinSearchTake = 1;
+
+    private const int MaxSearchTake = 1000;
+
     public NuGetModuleManager(
         NuGetConfig nugetConfig,
         INuGetManager nuGetManager,
@@ -55,11 +59,15 @@ internal class NuGetModuleManager : INuGetModuleManager
             {
                 OrderBy = SearchOrderBy.Id
             };
+            var searchTake = Math.Clamp(
+                NuGetModuleConfig.SearchTake,
+                MinSearchTake,
+                MaxSearchTake);
             var results = await search.SearchAsync(
                 NuGetModuleConfig.SearchTerm,
                 filter,
                 NuGetModuleConfig.SearchSkip,
-                NuGetModuleConfig.SearchTake,
+                searchTake,
                 NullLogger.Instance,
                 CancellationToken.None);
 
