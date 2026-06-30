@@ -14,14 +14,14 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/BottomRightDropDownButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/TopRightDropDownButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <mah:DropDownButton
         Background="Transparent"
         BorderBrush="Transparent"
-        ItemsSource="{Binding MainMenuItems}">
+        ItemsSource="{Binding AccountMenuItems}">
         <mah:DropDownButton.Content>
             <StackPanel Orientation="Horizontal">
                 <core:HybridIcon HorizontalAlignment="Center"
@@ -43,6 +43,7 @@
                 <Setter Property="Icon"
                         Value="{Binding Icon}" />
                 <Setter Property="Command" Value="{Binding  Command}" />
+                <Setter Property="CommandParameter" Value="{Binding  CommandParameter}" />
                 <Setter Property="Header">
                     <Setter.Value>
                         <MultiBinding Converter="{converters:LocalizationMultiConverter}">
