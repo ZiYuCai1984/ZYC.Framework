@@ -2,11 +2,9 @@
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.MainMenu;
-using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Modules.Accounts.Abstractions;
 using ZYC.Framework.Modules.Accounts.Abstractions.Event;
 using ZYC.Framework.Modules.Accounts.Commands;
@@ -20,13 +18,11 @@ internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropert
         SignInCommand signInCommand,
         SignOutCommand signOutCommand,
         IAccountManager accountManager,
-        IEventAggregator eventAggregator,
-        IToastManager toastManager)
+        IEventAggregator eventAggregator)
     {
         SignInCommand = signInCommand;
         SignOutCommand = signOutCommand;
         AccountManager = accountManager;
-        ToastManager = toastManager;
 
         InitializeComponent();
 
@@ -44,7 +40,6 @@ internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropert
 
     private IAccountManager AccountManager { get; }
 
-    private IToastManager ToastManager { get; }
 
     public AccountProviderDescriptor[] Providers => AccountManager.GetProviders();
 
@@ -98,85 +93,6 @@ internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropert
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnButtonClick(object sender, RoutedEventArgs e)
-    {
-        ////TODO-zyc OnButtonClick
-        //if (sender is not Button button)
-        //{
-        //    return;
-        //}
-
-        //var contextMenu = new ContextMenu();
-        //var signInMenuItem = new MenuItem { Header = "Sign in" };
-        //foreach (var provider in Providers)
-        //{
-        //    signInMenuItem.Items.Add(
-        //        new MenuItem
-        //        {
-        //            Header = provider.DisplayName,
-        //            Command = SignInCommand,
-        //            CommandParameter = provider.Id,
-        //            IsEnabled = provider.IsEnabled
-        //        });
-        //}
-
-        //contextMenu.Items.Add(signInMenuItem);
-        //contextMenu.Items.Add(new Separator());
-        //contextMenu.Items.Add(
-        //    new MenuItem
-        //    {
-        //        Header = "Sign out",
-        //        Command = SignOutCommand,
-        //        IsEnabled = IsSignedIn
-        //    });
-
-        //button.ContextMenu = contextMenu;
-        //contextMenu.PlacementTarget = button;
-        //contextMenu.IsOpen = true;
-    }
-
-    //private void SignInAsync(string providerId)
-    //{
-    //    _ = ExecuteSignInAsync(providerId);
-    //}
-
-    //private async Task ExecuteSignInAsync(string providerId)
-    //{
-    //    try
-    //    {
-    //        await AccountManager.SignInAsync(providerId, CancellationToken.None);
-    //        Refresh();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        ToastManager.PromptException(ex);
-    //    }
-    //}
-
-    //private void SignOutAsync()
-    //{
-    //    _ = ExecuteSignOutAsync();
-    //}
-
-    //private async Task ExecuteSignOutAsync()
-    //{
-    //    var session = CurrentSession;
-    //    if (session == null)
-    //    {
-    //        return;
-    //    }
-
-    //    try
-    //    {
-    //        await AccountManager.SignOutAsync(session.Profile.ProviderId, CancellationToken.None);
-    //        Refresh();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        ToastManager.PromptException(ex);
-    //    }
-    //}
 
     private void Refresh()
     {
