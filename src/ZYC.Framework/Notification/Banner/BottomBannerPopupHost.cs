@@ -14,10 +14,11 @@ namespace ZYC.Framework.Notification.Banner;
 // ReSharper disable InconsistentNaming
 
 [Register]
-public sealed class BottomBannerPopupHost : NotificationPopupHost
+public class BottomBannerPopupHost : NotificationPopupHost
 {
     private const double BannerHeight = 48;
 
+    // ReSharper disable InconsistentNaming
     private const uint SWP_NOZORDER = 0x0004;
     private const uint SWP_NOACTIVATE = 0x0010;
 

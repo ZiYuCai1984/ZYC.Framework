@@ -26,7 +26,7 @@ public class ToastBase : NotificationBase, IToast
     {
         var border = new Border
         {
-            CornerRadius = new CornerRadius(12),
+            CornerRadius = new CornerRadius(4),
             Padding = new Thickness(12),
             Margin = new Thickness(0),
             ClipToBounds = true,

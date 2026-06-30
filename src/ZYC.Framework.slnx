@@ -11,6 +11,8 @@
   </Folder>
   <Folder Name="/Deprecated/" />
   <Folder Name="/Modules/">
+    <Project Path="ZYC.Framework.Modules.Accounts.Abstractions/ZYC.Framework.Modules.Accounts.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Accounts/ZYC.Framework.Modules.Accounts.csproj" />
     <Project Path="ZYC.Framework.Modules.About.Abstractions/ZYC.Framework.Modules.About.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.About/ZYC.Framework.Modules.About.csproj" />
     <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
