@@ -9,7 +9,6 @@ internal class Module : ModuleBase
 {
     public override string Icon => GitHubAccountModuleConstants.Icon;
 
-
     public override async Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         await Task.CompletedTask;

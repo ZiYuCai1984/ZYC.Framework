@@ -7,6 +7,7 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.Accounts.Abstractions;
+using ZYC.Framework.Modules.Accounts.GitHub.Abstractions;
 
 namespace ZYC.Framework.Modules.Accounts.GitHub;
 
@@ -27,7 +28,7 @@ internal partial class GitHubAccountProvider : IAccountProvider
 
     public GitHubAccountProvider(
         ITabManager tabManager,
-        AccountsConfig accountsConfig,
+        GitHubAccountConfig accountsConfig,
         IAccountTokenStore tokenStore,
         IToastManager toastManager,
         GitHubAuthenticationCallbackBroker callbackBroker)
@@ -41,7 +42,7 @@ internal partial class GitHubAccountProvider : IAccountProvider
 
     private ITabManager TabManager { get; }
 
-    private AccountsConfig AccountsConfig { get; }
+    private GitHubAccountConfig AccountsConfig { get; }
 
     private IAccountTokenStore TokenStore { get; }
 

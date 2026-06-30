@@ -1,11 +1,11 @@
 ﻿using ZYC.CoreToolkit.Abstractions.Settings;
 
-namespace ZYC.Framework.Modules.Accounts.Abstractions;
+namespace ZYC.Framework.Modules.Accounts.GitHub.Abstractions;
 
 /// <summary>
 ///     Configures built-in account providers.
 /// </summary>
-public class AccountsConfig : IConfig
+public class GitHubAccountConfig : IConfig
 {
     /// <summary>
     ///     Gets or sets the client id of the application's GitHub OAuth app.

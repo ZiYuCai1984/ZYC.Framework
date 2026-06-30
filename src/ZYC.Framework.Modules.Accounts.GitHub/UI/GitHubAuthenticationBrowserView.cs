@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
-using ZYC.Framework.Modules.Accounts.Abstractions;
+using ZYC.Framework.Modules.Accounts.GitHub.Abstractions;
 using ZYC.Framework.WebView2;
 
 namespace ZYC.Framework.Modules.Accounts.GitHub.UI;
@@ -11,7 +11,7 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
 {
     public GitHubAuthenticationBrowserView(
         ILifetimeScope lifetimeScope,
-        AccountsConfig accountsConfig,
+        GitHubAccountConfig accountsConfig,
         GitHubAuthenticationCallbackBroker callbackBroker,
         Uri authorizationUri) : base(lifetimeScope)
     {
@@ -20,7 +20,7 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
         AuthorizationUri = authorizationUri;
     }
 
-    private AccountsConfig AccountsConfig { get; }
+    private GitHubAccountConfig AccountsConfig { get; }
 
     private GitHubAuthenticationCallbackBroker CallbackBroker { get; }
 
