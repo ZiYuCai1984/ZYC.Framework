@@ -2,19 +2,21 @@
 <Solution>
   <Folder Name="/Archived/" />
   <Folder Name="/Build/">
-    <Project Path="ZYC.Framework.Build.Doc/ZYC.Framework.Build.Doc.csproj" Id="b40209a7-662c-4948-aa2a-5cab99f627ad" />
+    <Project Path="ZYC.Framework.Build.Doc/ZYC.Framework.Build.Doc.csproj" />
     <Project Path="ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj" />
     <Project Path="ZYC.Framework.Build.NewModule/ZYC.Framework.Build.NewModule.csproj" />
     <Project Path="ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj" />
-    <Project Path="ZYC.Framework.Build.ProductVersion/ZYC.Framework.Build.ProductVersion.csproj" Id="310c5d4a-74ed-4304-b85d-c0e4e45e6c61" />
-    <Project Path="ZYC.Framework.Build.Utilities/ZYC.Framework.Build.Utilities.csproj" Id="d64c08fc-a661-45a8-be99-ba9ac94f3463" />
+    <Project Path="ZYC.Framework.Build.ProductVersion/ZYC.Framework.Build.ProductVersion.csproj" />
+    <Project Path="ZYC.Framework.Build.Utilities/ZYC.Framework.Build.Utilities.csproj" />
   </Folder>
   <Folder Name="/Deprecated/" />
   <Folder Name="/Modules/">
-    <Project Path="ZYC.Framework.Modules.Accounts.Abstractions/ZYC.Framework.Modules.Accounts.Abstractions.csproj" />
-    <Project Path="ZYC.Framework.Modules.Accounts/ZYC.Framework.Modules.Accounts.csproj" />
     <Project Path="ZYC.Framework.Modules.About.Abstractions/ZYC.Framework.Modules.About.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.About/ZYC.Framework.Modules.About.csproj" />
+    <Project Path="ZYC.Framework.Modules.Accounts.Abstractions/ZYC.Framework.Modules.Accounts.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Accounts.GitHub.Abstractions/ZYC.Framework.Modules.Accounts.GitHub.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.Accounts.GitHub/ZYC.Framework.Modules.Accounts.GitHub.csproj" />
+    <Project Path="ZYC.Framework.Modules.Accounts/ZYC.Framework.Modules.Accounts.csproj" />
     <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
     <Project Path="ZYC.Framework.Modules.Aspire.Abstractions/ZYC.Framework.Modules.Aspire.Abstractions.csproj" />

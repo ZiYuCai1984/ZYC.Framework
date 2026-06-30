@@ -5,7 +5,7 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.Accounts.Abstractions;
 
-namespace ZYC.Framework.Modules.Accounts.Storage;
+namespace ZYC.Framework.Modules.Accounts;
 
 [RegisterSingleInstanceAs(typeof(IAccountTokenStore))]
 internal class DpapiAccountTokenStore : IAccountTokenStore

@@ -71,7 +71,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Child="{Binding View}" />
+                        <ContentControl Content="{Binding View}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

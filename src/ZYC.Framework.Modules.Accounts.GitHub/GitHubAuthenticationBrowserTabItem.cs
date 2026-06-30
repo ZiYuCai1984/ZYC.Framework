@@ -2,9 +2,9 @@
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Core.Tab;
-using ZYC.Framework.Modules.Accounts.UI;
+using ZYC.Framework.Modules.Accounts.GitHub.UI;
 
-namespace ZYC.Framework.Modules.Accounts;
+namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 [Register]
 internal class GitHubAuthenticationBrowserTabItem : TabItemInstanceBase<GitHubAuthenticationBrowserView>

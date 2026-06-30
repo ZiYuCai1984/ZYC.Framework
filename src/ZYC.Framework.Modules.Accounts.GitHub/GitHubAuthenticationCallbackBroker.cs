@@ -1,6 +1,6 @@
 ﻿using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 
-namespace ZYC.Framework.Modules.Accounts.Providers;
+namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 [RegisterSingleInstance]
 internal class GitHubAuthenticationCallbackBroker

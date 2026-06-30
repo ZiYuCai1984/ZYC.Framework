@@ -1,4 +1,4 @@
-﻿namespace ZYC.Framework.Modules.Accounts.Providers;
+﻿namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 internal class GitHubAuthenticationCallback
 {

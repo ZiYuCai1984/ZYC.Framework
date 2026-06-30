@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac;
-using ZYC.Framework.Core;
+using ZYC.Framework.Abstractions.WindowTitle;
 using ZYC.Framework.Modules.Accounts.Abstractions;
 
 namespace ZYC.Framework.Modules.Accounts;
@@ -14,7 +14,7 @@ internal class Module : ModuleBase
         var accountManager = lifetimeScope.Resolve<IAccountManager>();
         await accountManager.InitializeAsync(CancellationToken.None);
 
-        lifetimeScope.RegisterDefaultStatucBarItem<AccountsStatusBarItem>();
-        lifetimeScope.RegisterTabItemFactory<GitHubAuthenticationBrowserTabItemFactory>();
+        var windowTitleExtendManager = lifetimeScope.Resolve<IWindowTitleExtendManager>();
+        windowTitleExtendManager.RegisterItem<AccountsWindowTitleItem>();
     }
 }

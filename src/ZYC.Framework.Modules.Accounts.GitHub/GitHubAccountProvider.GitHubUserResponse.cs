@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ZYC.Framework.Modules.Accounts.Providers;
+namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 internal partial class GitHubAccountProvider
 {

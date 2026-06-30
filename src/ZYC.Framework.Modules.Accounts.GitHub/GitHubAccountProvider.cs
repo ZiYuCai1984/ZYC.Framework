@@ -8,12 +8,12 @@ using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Modules.Accounts.Abstractions;
 
-namespace ZYC.Framework.Modules.Accounts.Providers;
+namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 [RegisterSingleInstanceAs(typeof(IAccountProvider))]
 internal partial class GitHubAccountProvider : IAccountProvider
 {
-    private const string ProviderId = AccountProviderIds.GitHub;
+    private const string ProviderId = "GitHub";
     private const string TokenCacheKey = "oauth";
     private const string AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
     private const string AccessTokenEndpoint = "https://github.com/login/oauth/access_token";
@@ -181,7 +181,7 @@ internal partial class GitHubAccountProvider : IAccountProvider
         if (!string.IsNullOrWhiteSpace(callback.Error))
         {
             throw new InvalidOperationException(
-                $"GitHub authorization failed: {callback.ErrorDescription ?? callback.Error}");
+                $"GitHub authorization failed: {callback.ErrorDescription}");
         }
 
         if (!string.Equals(callback.Nonce, context.Nonce, StringComparison.Ordinal))

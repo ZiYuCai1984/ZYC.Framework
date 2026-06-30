@@ -13,9 +13,9 @@ using ZYC.Framework.Modules.Accounts.Abstractions.Event;
 namespace ZYC.Framework.Modules.Accounts.UI;
 
 [RegisterSingleInstance]
-internal partial class AccountsStatusBarItemView : IDisposable, INotifyPropertyChanged
+internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropertyChanged
 {
-    public AccountsStatusBarItemView(
+    public AccountsWindowTitleItemView(
         IAccountManager accountManager,
         IEventAggregator eventAggregator,
         IToastManager toastManager)
@@ -46,7 +46,23 @@ internal partial class AccountsStatusBarItemView : IDisposable, INotifyPropertyC
 
     public bool IsSignedIn => CurrentSession != null;
 
-    public string Icon => IsSignedIn ? "AccountCheckOutline" : "AccountCircleOutline";
+    public string Icon
+    {
+        get
+        {
+            if (!IsSignedIn)
+            {
+                return "AccountCircleOutline";
+            }
+
+            if (CurrentSession?.Profile.AvatarUri != null)
+            {
+                return CurrentSession?.Profile.AvatarUri.ToString()!;
+            }
+
+            return "AccountCheckOutline";
+        }
+    }
 
     public string DisplayText
     {
@@ -76,6 +92,7 @@ internal partial class AccountsStatusBarItemView : IDisposable, INotifyPropertyC
 
     private void OnButtonClick(object sender, RoutedEventArgs e)
     {
+        //TODO-zyc OnButtonClick
         if (sender is not Button button)
         {
             return;

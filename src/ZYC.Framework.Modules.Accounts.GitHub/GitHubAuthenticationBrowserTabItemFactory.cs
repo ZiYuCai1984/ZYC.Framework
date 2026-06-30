@@ -4,7 +4,7 @@ using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Core;
 
-namespace ZYC.Framework.Modules.Accounts;
+namespace ZYC.Framework.Modules.Accounts.GitHub;
 
 [Register]
 internal class GitHubAuthenticationBrowserTabItemFactory : TabItemFactoryBase

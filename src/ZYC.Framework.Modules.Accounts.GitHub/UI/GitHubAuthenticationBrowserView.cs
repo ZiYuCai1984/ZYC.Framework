@@ -2,10 +2,9 @@
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Modules.Accounts.Abstractions;
-using ZYC.Framework.Modules.Accounts.Providers;
 using ZYC.Framework.WebView2;
 
-namespace ZYC.Framework.Modules.Accounts.UI;
+namespace ZYC.Framework.Modules.Accounts.GitHub.UI;
 
 [Register]
 internal class GitHubAuthenticationBrowserView : WebViewHostBase
