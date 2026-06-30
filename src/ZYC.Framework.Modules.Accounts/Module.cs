@@ -15,5 +15,6 @@ internal class Module : ModuleBase
         await accountManager.InitializeAsync(CancellationToken.None);
 
         lifetimeScope.RegisterDefaultStatucBarItem<AccountsStatusBarItem>();
+        lifetimeScope.RegisterTabItemFactory<GitHubAuthenticationBrowserTabItemFactory>();
     }
 }

@@ -1,13 +1,8 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.Tab;
@@ -16,7 +11,7 @@ using ZYC.Framework.Modules.Accounts.Abstractions;
 namespace ZYC.Framework.Modules.Accounts.Providers;
 
 [RegisterSingleInstanceAs(typeof(IAccountProvider))]
-internal class GitHubAccountProvider : IAccountProvider
+internal partial class GitHubAccountProvider : IAccountProvider
 {
     private const string ProviderId = AccountProviderIds.GitHub;
     private const string TokenCacheKey = "oauth";
@@ -24,7 +19,6 @@ internal class GitHubAccountProvider : IAccountProvider
     private const string AccessTokenEndpoint = "https://github.com/login/oauth/access_token";
     private const string UserEndpoint = "https://api.github.com/user";
     private const string EmailsEndpoint = "https://api.github.com/user/emails";
-    private const string LoopbackPath = "/github/callback/";
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
@@ -35,20 +29,25 @@ internal class GitHubAccountProvider : IAccountProvider
         ITabManager tabManager,
         AccountsConfig accountsConfig,
         IAccountTokenStore tokenStore,
-        IToastManager toastManager)
+        IToastManager toastManager,
+        GitHubAuthenticationCallbackBroker callbackBroker)
     {
         TabManager = tabManager;
         AccountsConfig = accountsConfig;
         TokenStore = tokenStore;
         ToastManager = toastManager;
+        CallbackBroker = callbackBroker;
     }
 
     private ITabManager TabManager { get; }
+
     private AccountsConfig AccountsConfig { get; }
 
     private IAccountTokenStore TokenStore { get; }
 
     private IToastManager ToastManager { get; }
+
+    private GitHubAuthenticationCallbackBroker CallbackBroker { get; }
 
     public AccountProviderDescriptor Descriptor => new()
     {
@@ -97,20 +96,27 @@ internal class GitHubAccountProvider : IAccountProvider
         CancellationToken cancellationToken)
     {
         EnsureClientId();
+        EnsureTokenExchangeConfiguration();
 
-        var configuredRedirectUri = GetConfiguredRedirectUri();
-        using var loopbackListener = CreateLoopbackListener(configuredRedirectUri);
-        var context = CreateAuthorizationContext(configuredRedirectUri, loopbackListener.RedirectUri);
+        var context = CreateAuthorizationContext();
         var authorizationUri = CreateAuthorizationUri(context, scopes);
+        using var timeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeoutTokenSource.CancelAfter(TimeSpan.FromSeconds(GetAuthorizationTimeoutSeconds()));
 
-        await TabManager.NavigateAsync(authorizationUri);
-
+        await TabManager.NavigateAsync(GitHubAuthenticationBrowserTabItemFactory.CreateUri(authorizationUri));
         ToastManager.PromptMessage(ToastMessage.Info("Complete GitHub sign-in in browser.", false));
 
-        var callback = await WaitForAuthorizationCallbackAsync(
-            loopbackListener,
-            context,
-            cancellationToken);
+        GitHubAuthenticationCallback callback;
+        try
+        {
+            callback = await CallbackBroker.WaitAsync(context.Nonce, timeoutTokenSource.Token);
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            throw new TimeoutException("GitHub authorization callback timed out.");
+        }
+
+        ValidateAuthorizationCallback(callback, context);
 
         var response = await ExchangeAuthorizationCodeAsync(
             callback.Code,
@@ -120,8 +126,7 @@ internal class GitHubAccountProvider : IAccountProvider
 
         if (!string.IsNullOrWhiteSpace(response.Error))
         {
-            throw new InvalidOperationException(
-                $"GitHub authorization-code exchange failed: {response.ErrorDescription ?? response.Error}");
+            throw new InvalidOperationException(CreateTokenExchangeFailureMessage(response));
         }
 
         if (string.IsNullOrWhiteSpace(response.AccessToken))
@@ -138,43 +143,18 @@ internal class GitHubAccountProvider : IAccountProvider
         };
     }
 
-    private GitHubLoopbackCallbackListener CreateLoopbackListener(Uri? configuredRedirectUri)
-    {
-        if (configuredRedirectUri != null && IsLoopbackRedirectUri(configuredRedirectUri))
-        {
-            return GitHubLoopbackCallbackListener.Start(
-                configuredRedirectUri.Host,
-                configuredRedirectUri.Port,
-                configuredRedirectUri.AbsolutePath);
-        }
-
-        return GitHubLoopbackCallbackListener.Start(
-            "127.0.0.1",
-            AccountsConfig.GitHubLoopbackPort,
-            LoopbackPath);
-    }
-
-    private GitHubAuthorizationContext CreateAuthorizationContext(
-        Uri? configuredRedirectUri,
-        Uri localCallbackUri)
+    private GitHubAuthorizationContext CreateAuthorizationContext()
     {
         var nonce = CreateOpaqueValue(32);
         var codeVerifier = CreateOpaqueValue(64);
-        var isRedirectRelay = configuredRedirectUri != null && !IsLoopbackRedirectUri(configuredRedirectUri);
-        var localCallbackWithNonce = AppendQuery(
-            localCallbackUri.ToString(),
-            new Dictionary<string, string>
-            {
-                ["nonce"] = nonce
-            });
+        var deepLinkUri = CreateDeepLinkUri(nonce);
 
         return new GitHubAuthorizationContext
         {
-            RedirectUri = configuredRedirectUri ?? localCallbackUri,
-            State = isRedirectRelay ? localCallbackWithNonce : nonce,
+            RedirectUri = GetConfiguredRedirectUri(),
+            State = Uri.EscapeDataString(deepLinkUri.ToString()),
             Nonce = nonce,
-            CodeVerifier = codeVerifier,
-            IsRedirectRelay = isRedirectRelay
+            CodeVerifier = codeVerifier
         };
     }
 
@@ -194,29 +174,8 @@ internal class GitHubAccountProvider : IAccountProvider
             }));
     }
 
-    private async Task<GitHubAuthorizationCallback> WaitForAuthorizationCallbackAsync(
-        GitHubLoopbackCallbackListener listener,
-        GitHubAuthorizationContext context,
-        CancellationToken cancellationToken)
-    {
-        using var timeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutTokenSource.CancelAfter(TimeSpan.FromSeconds(GetAuthorizationTimeoutSeconds()));
-
-        try
-        {
-            var callback = await listener.WaitForCallbackAsync(timeoutTokenSource.Token);
-            ValidateAuthorizationCallback(callback, context);
-
-            return callback;
-        }
-        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
-        {
-            throw new TimeoutException("GitHub authorization callback timed out.");
-        }
-    }
-
     private static void ValidateAuthorizationCallback(
-        GitHubAuthorizationCallback callback,
+        GitHubAuthenticationCallback callback,
         GitHubAuthorizationContext context)
     {
         if (!string.IsNullOrWhiteSpace(callback.Error))
@@ -225,20 +184,13 @@ internal class GitHubAccountProvider : IAccountProvider
                 $"GitHub authorization failed: {callback.ErrorDescription ?? callback.Error}");
         }
 
-        if (context.IsRedirectRelay)
+        if (!string.Equals(callback.Nonce, context.Nonce, StringComparison.Ordinal))
         {
-            if (!string.Equals(callback.Nonce, context.Nonce, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("GitHub authorization nonce validation failed.");
-            }
-
-            if (!string.IsNullOrWhiteSpace(callback.State)
-                && !string.Equals(callback.State, context.State, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("GitHub authorization state validation failed.");
-            }
+            throw new InvalidOperationException("GitHub authorization nonce validation failed.");
         }
-        else if (!string.Equals(callback.State, context.State, StringComparison.Ordinal))
+
+        if (!string.IsNullOrWhiteSpace(callback.State)
+            && !StateEquals(callback.State, context.State))
         {
             throw new InvalidOperationException("GitHub authorization state validation failed.");
         }
@@ -442,11 +394,12 @@ internal class GitHubAccountProvider : IAccountProvider
         return scopes.Length == 0 ? ["read:user"] : scopes;
     }
 
-    private Uri? GetConfiguredRedirectUri()
+    private Uri GetConfiguredRedirectUri()
     {
         if (string.IsNullOrWhiteSpace(AccountsConfig.GitHubRedirectUri))
         {
-            return null;
+            throw new InvalidOperationException(
+                "GitHub WebView2 authentication requires AccountsConfig.GitHubRedirectUri.");
         }
 
         if (!Uri.TryCreate(AccountsConfig.GitHubRedirectUri.Trim(), UriKind.Absolute, out var redirectUri))
@@ -455,6 +408,25 @@ internal class GitHubAccountProvider : IAccountProvider
         }
 
         return redirectUri;
+    }
+
+    private Uri CreateDeepLinkUri(string nonce)
+    {
+        var rawUri = string.IsNullOrWhiteSpace(AccountsConfig.GitHubDeepLinkUri)
+            ? "vscode://vscode.github-authentication/did-authenticate"
+            : AccountsConfig.GitHubDeepLinkUri.Trim();
+
+        if (!Uri.TryCreate(rawUri, UriKind.Absolute, out _))
+        {
+            throw new InvalidOperationException("AccountsConfig.GitHubDeepLinkUri must be an absolute URI.");
+        }
+
+        return new Uri(AppendQuery(
+            rawUri,
+            new Dictionary<string, string>
+            {
+                ["nonce"] = nonce
+            }));
     }
 
     private int GetAuthorizationTimeoutSeconds()
@@ -473,6 +445,24 @@ internal class GitHubAccountProvider : IAccountProvider
         }
     }
 
+    private void EnsureTokenExchangeConfiguration()
+    {
+        if (!string.IsNullOrWhiteSpace(AccountsConfig.GitHubTokenExchangeEndpoint))
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(AccountsConfig.GitHubClientSecret))
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            "GitHub direct authorization-code exchange requires AccountsConfig.GitHubClientSecret. "
+            + "Configure your GitHub OAuth app secret or set AccountsConfig.GitHubTokenExchangeEndpoint "
+            + "to a server-side token exchange endpoint.");
+    }
+
     private static GitHubAccessTokenResponse DeserializeTokenResponse(string payload)
     {
         var tokenResponse = JsonSerializer.Deserialize<GitHubAccessTokenResponse>(payload, JsonSerializerOptions);
@@ -484,12 +474,16 @@ internal class GitHubAccountProvider : IAccountProvider
         return tokenResponse;
     }
 
-
-    private static bool IsLoopbackRedirectUri(Uri redirectUri)
+    private static string CreateTokenExchangeFailureMessage(GitHubAccessTokenResponse response)
     {
-        return string.Equals(redirectUri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
-               && (string.Equals(redirectUri.Host, "127.0.0.1", StringComparison.OrdinalIgnoreCase)
-                   || string.Equals(redirectUri.Host, "localhost", StringComparison.OrdinalIgnoreCase));
+        if (string.Equals(response.Error, "incorrect_client_credentials", StringComparison.OrdinalIgnoreCase))
+        {
+            return "GitHub authorization-code exchange failed: GitHub rejected the configured OAuth client "
+                   + "credentials. Verify AccountsConfig.GitHubClientId and AccountsConfig.GitHubClientSecret, "
+                   + "or use AccountsConfig.GitHubTokenExchangeEndpoint for server-side exchange.";
+        }
+
+        return $"GitHub authorization-code exchange failed: {response.ErrorDescription ?? response.Error}";
     }
 
     private static bool ScopeContains(string grantedScope, string[] requestedScopes)
@@ -502,6 +496,13 @@ internal class GitHubAccountProvider : IAccountProvider
     {
         var granted = SplitScopes(grantedScope);
         return requestedScopes.Any(t => granted.Contains(t, StringComparer.OrdinalIgnoreCase));
+    }
+
+    private static bool StateEquals(string actualState, string expectedState)
+    {
+        return string.Equals(actualState, expectedState, StringComparison.Ordinal)
+               || string.Equals(DecodeRepeatedly(actualState), DecodeRepeatedly(expectedState),
+                   StringComparison.Ordinal);
     }
 
     private static string[] SplitScopes(string scope)
@@ -529,6 +530,23 @@ internal class GitHubAccountProvider : IAccountProvider
             .Replace('/', '_');
     }
 
+    private static string DecodeRepeatedly(string value)
+    {
+        var current = value;
+        for (var i = 0; i < 2; i++)
+        {
+            var decoded = Uri.UnescapeDataString(current);
+            if (string.Equals(decoded, current, StringComparison.Ordinal))
+            {
+                break;
+            }
+
+            current = decoded;
+        }
+
+        return current;
+    }
+
     private static string AppendQuery(string uri, Dictionary<string, string> parameters)
     {
         var builder = new StringBuilder(uri);
@@ -544,234 +562,5 @@ internal class GitHubAccountProvider : IAccountProvider
         }
 
         return builder.ToString();
-    }
-
-    private static Dictionary<string, string> ParseQuery(string query)
-    {
-        if (query.StartsWith("?", StringComparison.Ordinal))
-        {
-            query = query[1..];
-        }
-
-        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var pair in query.Split('&', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var equalsIndex = pair.IndexOf('=', StringComparison.Ordinal);
-            var key = equalsIndex < 0 ? pair : pair[..equalsIndex];
-            var value = equalsIndex < 0 ? "" : pair[(equalsIndex + 1)..];
-            values[Uri.UnescapeDataString(key.Replace("+", " ", StringComparison.Ordinal))] =
-                Uri.UnescapeDataString(value.Replace("+", " ", StringComparison.Ordinal));
-        }
-
-        return values;
-    }
-
-    private class GitHubAuthorizationContext
-    {
-        public Uri RedirectUri { get; init; } = null!;
-
-        public string State { get; init; } = "";
-
-        public string Nonce { get; init; } = "";
-
-        public string CodeVerifier { get; init; } = "";
-
-        public bool IsRedirectRelay { get; init; }
-    }
-
-    private class GitHubAuthorizationCallback
-    {
-        public string Code { get; set; } = "";
-
-        public string State { get; set; } = "";
-
-        public string Nonce { get; set; } = "";
-
-        public string Error { get; set; } = "";
-
-        public string ErrorDescription { get; set; } = "";
-    }
-
-    private class GitHubLoopbackCallbackListener : IDisposable
-    {
-        private readonly TcpListener _listener;
-        private readonly string _path;
-
-        private GitHubLoopbackCallbackListener(TcpListener listener, string host, string path)
-        {
-            _listener = listener;
-            _path = NormalizePath(path);
-
-            var port = ((IPEndPoint)_listener.LocalEndpoint).Port;
-            RedirectUri = new Uri($"http://{host}:{port}{_path}");
-        }
-
-        public Uri RedirectUri { get; }
-
-        public static GitHubLoopbackCallbackListener Start(string host, int port, string path)
-        {
-            var listener = new TcpListener(IPAddress.Loopback, Math.Max(port, 0));
-            listener.Start();
-
-            return new GitHubLoopbackCallbackListener(listener, host, path);
-        }
-
-        public async Task<GitHubAuthorizationCallback> WaitForCallbackAsync(CancellationToken cancellationToken)
-        {
-            using var tcpClient = await _listener.AcceptTcpClientAsync(cancellationToken);
-            await using var stream = tcpClient.GetStream();
-            using var reader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
-
-            var requestLine = await reader.ReadLineAsync(cancellationToken);
-            while (!string.IsNullOrEmpty(await reader.ReadLineAsync(cancellationToken)))
-            {
-                // Drain headers before responding.
-            }
-
-            var callback = ParseCallback(requestLine);
-            await WriteResponseAsync(stream, callback.Error, cancellationToken);
-
-            return callback;
-        }
-
-        public void Dispose()
-        {
-            _listener.Stop();
-        }
-
-        private GitHubAuthorizationCallback ParseCallback(string? requestLine)
-        {
-            if (string.IsNullOrWhiteSpace(requestLine))
-            {
-                return new GitHubAuthorizationCallback
-                {
-                    Error = "invalid_request",
-                    ErrorDescription = "The local callback request was empty."
-                };
-            }
-
-            var parts = requestLine.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 2 || !string.Equals(parts[0], "GET", StringComparison.OrdinalIgnoreCase))
-            {
-                return new GitHubAuthorizationCallback
-                {
-                    Error = "invalid_request",
-                    ErrorDescription = "The local callback request was not a GET request."
-                };
-            }
-
-            var uri = Uri.TryCreate(parts[1], UriKind.Absolute, out var absoluteUri)
-                ? absoluteUri
-                : new Uri($"http://127.0.0.1{parts[1]}");
-            if (!string.Equals(NormalizePath(uri.AbsolutePath), _path, StringComparison.OrdinalIgnoreCase))
-            {
-                return new GitHubAuthorizationCallback
-                {
-                    Error = "invalid_request",
-                    ErrorDescription = "The local callback path did not match the expected path."
-                };
-            }
-
-            var query = ParseQuery(uri.Query);
-            return new GitHubAuthorizationCallback
-            {
-                Code = query.GetValueOrDefault("code") ?? "",
-                State = query.GetValueOrDefault("state") ?? "",
-                Nonce = query.GetValueOrDefault("nonce") ?? "",
-                Error = query.GetValueOrDefault("error") ?? "",
-                ErrorDescription = query.GetValueOrDefault("error_description") ?? ""
-            };
-        }
-
-        private static async Task WriteResponseAsync(
-            NetworkStream stream,
-            string error,
-            CancellationToken cancellationToken)
-        {
-            var title = string.IsNullOrWhiteSpace(error) ? "GitHub sign-in complete" : "GitHub sign-in failed";
-            var body = "<!doctype html><html><head><meta charset=\"utf-8\"><title>"
-                       + WebUtility.HtmlEncode(title)
-                       + "</title></head><body><h1>"
-                       + WebUtility.HtmlEncode(title)
-                       + "</h1><p>You can close this window.</p></body></html>";
-            var bodyBytes = Encoding.UTF8.GetBytes(body);
-            var header = Encoding.ASCII.GetBytes(
-                "HTTP/1.1 200 OK\r\n"
-                + "Content-Type: text/html; charset=utf-8\r\n"
-                + $"Content-Length: {bodyBytes.Length}\r\n"
-                + "Connection: close\r\n\r\n");
-
-            await stream.WriteAsync(header, cancellationToken);
-            await stream.WriteAsync(bodyBytes, cancellationToken);
-        }
-
-        private static string NormalizePath(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path) || path == "/")
-            {
-                return LoopbackPath;
-            }
-
-            return path.StartsWith("/", StringComparison.Ordinal) ? path : "/" + path;
-        }
-    }
-
-    private class GitHubTokenRecord
-    {
-        public string AccessToken { get; set; } = "";
-
-        public string TokenType { get; set; } = "bearer";
-
-        public string Scope { get; set; } = "";
-
-        public DateTimeOffset CreatedAt { get; set; }
-    }
-
-    private class GitHubAccessTokenResponse
-    {
-        [JsonPropertyName("access_token")]
-        public string AccessToken { get; set; } = "";
-
-        [JsonPropertyName("token_type")]
-        public string? TokenType { get; set; }
-
-        [JsonPropertyName("scope")]
-        public string? Scope { get; set; }
-
-        [JsonPropertyName("error")]
-        public string? Error { get; set; }
-
-        [JsonPropertyName("error_description")]
-        public string? ErrorDescription { get; set; }
-    }
-
-    private class GitHubUserResponse
-    {
-        [JsonPropertyName("login")]
-        public string Login { get; set; } = "";
-
-        [JsonPropertyName("id")]
-        public long Id { get; set; }
-
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-
-        [JsonPropertyName("email")]
-        public string? Email { get; set; }
-
-        [JsonPropertyName("avatar_url")]
-        public string? AvatarUrl { get; set; }
-    }
-
-    private class GitHubEmailResponse
-    {
-        [JsonPropertyName("email")]
-        public string Email { get; set; } = "";
-
-        [JsonPropertyName("primary")]
-        public bool Primary { get; set; }
-
-        [JsonPropertyName("verified")]
-        public bool Verified { get; set; }
     }
 }
