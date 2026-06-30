@@ -97,13 +97,13 @@ public static class PopupPlacementTools
             var a2 = a0.FlipV();
             var a3 = a0.FlipH().FlipV();
 
-            return new[]
-            {
+            return
+            [
                 MakePlacement(a0, popupSize, targetSize, extraOffset),
                 MakePlacement(a1, popupSize, targetSize, extraOffset),
                 MakePlacement(a2, popupSize, targetSize, extraOffset),
                 MakePlacement(a3, popupSize, targetSize, extraOffset)
-            };
+            ];
         };
     }
 

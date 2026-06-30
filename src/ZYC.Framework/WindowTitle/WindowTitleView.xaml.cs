@@ -54,6 +54,7 @@ internal partial class WindowTitleView : IDisposable
     private IEventAggregator EventAggregator { get; }
 
     private IQuickBarManager QuickBarManager { get; }
+
     private IWindowTitleExtendManager WindowTitleExtendManager { get; }
 
     private IWindowTitleManager WindowTitleManager { get; }

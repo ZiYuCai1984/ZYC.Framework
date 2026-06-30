@@ -6,25 +6,28 @@
 
 ## 🆕 New Features
 
-* Added a Tools menu entry for editing the mutex override ID without manually changing files
-* Added a dedicated mutex override dialog with save/delete actions, localized UI text, and restart prompts after changes
+* Added a provider-based Accounts module with session management, sign-in/sign-out commands, and protected token storage
+* Added a window-title account menu that displays the current account state and exposes provider sign-in/sign-out actions
+* Added GitHub account sign-in through an internal WebView2 OAuth flow with PKCE, state/nonce validation, redirect relay support, and callback interception
+* Added a dedicated GitHub account module and configuration surface for client id, redirect URI, deep-link URI, scopes, API version, and token exchange endpoint settings
 
 ---
 
 ## 🛠 Improvements
 
-* Updated package metadata, documentation, CLI examples, and project template references for version 1.3.7
-* Raised NuGet module search defaults to the NuGet.org request limit and clamped configured values between 1 and 1000
-* Improved minimize behavior so windows hidden from the taskbar are hidden instead of minimized
-* Made restart banners stay visible until dismissed, so restart-required actions are less likely to disappear unnoticed
-* Centralized mutex ID generation in `MutexTools` and reused it for single-instance startup and startup-URI pipe naming
+* Moved the GitHub account provider into its own module so more account providers can be added without coupling them to the core Accounts module
+* Added a reusable top-right drop-down button style and updated the window-title extension host for richer embedded controls
+* Refined toast and account-menu presentation to better match the compact title-bar UI
+* Updated package metadata, documentation, CLI examples, project template references, and installer links for version 1.3.8
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Kept custom layout management compatible with framework extension points that need non-sealed dialog classes
-* Refined mutex override persistence so save/delete flows use the same startup mutex path
+* Kept GitHub OAuth completion inside the application by intercepting configured deep-link callbacks from WebView2 navigation, external URI launches, and new-window requests
+* Improved GitHub token exchange validation so missing direct secrets or server-side exchange endpoints fail with clearer configuration errors
+* Removed obsolete account-menu click handling and unused dependencies after moving the UI to command-backed drop-down items
+* Kept banner popup hosting extensible for framework extension points
 
 ---
 
