@@ -30,9 +30,12 @@ At startup, the module loader scans the application directory for assemblies nam
 | Module | Main surface | Notes |
 | --- | --- | --- |
 | `About` | About menu and routed tab | Shows product/about information. |
+| `Accounts` | Window title extension and account services | Initializes provider-based account sessions and exposes sign-in/sign-out actions. |
+| `Accounts.GitHub` | GitHub OAuth WebView2 tab | Provides a GitHub account provider and callback handling for sign-in. |
 | `ApiReference` | About menu and WebView2 tab | Hosts API reference content. |
 | `Aspire` | Tools menu, routed tab, status bar | Starts and monitors Aspire resources; resolves `IExtensionResourcesProvider` contributions. |
 | `BlazorDemo` | Tools menu and routed tab | Demonstrates Blazor integration inside the desktop host. |
+| `ChromeExtensions` | Extensions menu and routed tab | Manages locally installed Chrome Web Store extension packages for WebBrowser. |
 | `CLI` | Tools menu and terminal tab | Hosts the embedded terminal and loads terminal native dependencies. |
 | `FileExplorer` | File menu and routed tab | Opens file-system browsing surfaces. |
 | `FileExplorer.Features` | File menu sub-provider | Adds recent-path style File menu features on top of FileExplorer contracts. |
@@ -52,7 +55,7 @@ At startup, the module loader scans the application directory for assemblies nam
 
 ## Shell and Diagnostics Modules
 
-`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, and `ApiReference` are mostly shell or operational modules. They make the framework easier to inspect, configure, and maintain.
+`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `Accounts`, `ChromeExtensions`, and `ApiReference` are mostly shell or operational modules. They make the framework easier to inspect, configure, and maintain.
 
 These modules usually register menu items and routed tabs from `LoadAsync`. Some also register services earlier:
 
@@ -60,11 +63,15 @@ These modules usually register menu items and routed tabs from `LoadAsync`. Some
 - `Language` registers language-resource adapters and loads default language resources.
 - `Secrets` registers an adapter from config objects to `ISecrets`.
 - `TaskManager` initializes `ITaskManager` before exposing its UI.
+- `Accounts` initializes `IAccountManager` and registers a window-title account surface.
+- `ChromeExtensions` registers the extension package manager tab under Extensions.
 - `Update` subscribes after all modules load and waits for `TabManagerRestoreCompleted` before startup checks.
 
 ## Navigation and Content Modules
 
 `WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
+
+`Accounts.GitHub` and `ChromeExtensions` also use WebView2-backed tabs for provider sign-in and Chrome Web Store package discovery. They are still loaded as regular modules; their browser-specific behavior is handled through WebView2 infrastructure and module contracts.
 
 If one of these modules opens the wrong tab or a Not Found tab, check the registered `ITabItemFactory`, route attributes, factory priority, and the URI being passed to `ITabManager.NavigateAsync(...)`.
 

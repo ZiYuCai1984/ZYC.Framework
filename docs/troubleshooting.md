@@ -130,6 +130,12 @@ Concrete `IConfig` and `IState` types are loaded from the settings directory whi
 - confirm the settings file is under the host settings directory, not the source tree;
 - do not put only the contract type in an abstractions assembly and expect runtime state to be created from it.
 
+## Single Instance and Mutex Override
+
+The host derives the single-instance mutex id from product information unless `settings/mutex-id.override` exists. Use Tools > Override Mutex Id to create, update, or delete that file.
+
+After changing the override, restart the host. The mutex and startup URI pipe name are created during startup, so a running process does not switch identities immediately. If side-by-side instances, startup URI forwarding, or foreground-window activation behave unexpectedly, check the current `mutex-id.override` file first.
+
 ## NuGet Modules
 
 ModuleManager installs NuGet modules by restoring a temporary project and writing the resolved runtime asset graph to `settings/nuget.module.assets.json`. The host reads that file during the next startup.
@@ -141,6 +147,10 @@ If a NuGet module was installed but is not active:
 - confirm the package contains a compatible runtime assembly for the host target, currently `net10.0-windows`;
 - check whether the installed module assembly is disabled in `ModuleConfig.DisabledAssemblyNames`;
 - reinstall or remove and install again if the assets file points to stale package content.
+
+If a known package does not appear in search results, remember that NuGet search runs before `IncludeRegex`. A package missing from the returned NuGet page never reaches the regex filter. Check `NuGetModuleConfig.SearchTerm`, `SearchSkip`, and `SearchTake`; `SearchTake` is clamped to the NuGet.org single-request limit of 1000, so use `SearchSkip` for later pages.
+
+Install, uninstall, and refresh share the same module-assets pipeline and are serialized by the ModuleManager operation coordinator. If those commands appear disabled, wait for the current restore/search operation to finish before starting another one.
 
 ## Aspire and Sidecar Resources
 

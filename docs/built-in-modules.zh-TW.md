@@ -30,9 +30,12 @@
 | Module | 主要表面 | 說明 |
 | --- | --- | --- |
 | `About` | About 選單與路由 Tab | 顯示產品/about 資訊。 |
+| `Accounts` | 視窗標題列擴充與帳號服務 | 初始化 provider-based account session，並暴露登入/登出操作。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 Tab | 提供 GitHub account provider 與登入 callback 處理。 |
 | `ApiReference` | About 選單與 WebView2 Tab | 承載 API reference 內容。 |
 | `Aspire` | Tools 選單、路由 Tab、狀態列 | 啟動與監控 Aspire resources；解析 `IExtensionResourcesProvider` 貢獻。 |
 | `BlazorDemo` | Tools 選單與路由 Tab | 示範桌面 Host 內的 Blazor 整合。 |
+| `ChromeExtensions` | Extensions 選單與路由 Tab | 管理 WebBrowser 使用的本地 Chrome Web Store extension packages。 |
 | `CLI` | Tools 選單與終端 Tab | 承載嵌入式終端，並載入終端 native dependencies。 |
 | `FileExplorer` | File 選單與路由 Tab | 開啟檔案系統瀏覽表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契約之上新增 recent-path 類 File 選單能力。 |
@@ -52,7 +55,7 @@
 
 ## Shell 與診斷模組
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` 主要是 Shell 或維運類模組。它們讓框架更容易檢查、設定與維護。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` 主要是 Shell 或維運類模組。它們讓框架更容易檢查、設定與維護。
 
 這些模組通常從 `LoadAsync` 註冊選單項目與路由 Tab。有些模組也會更早註冊服務：
 
@@ -60,11 +63,15 @@
 - `Language` 註冊 language-resource adapters，並載入 default language resources。
 - `Secrets` 註冊從 config objects 到 `ISecrets` 的 adapter。
 - `TaskManager` 在暴露 UI 前初始化 `ITaskManager`。
+- `Accounts` 初始化 `IAccountManager`，並註冊視窗標題列帳號表面。
+- `ChromeExtensions` 在 Extensions 下註冊 extension package manager Tab。
 - `Update` 在所有模組載入後訂閱事件，並在啟動檢查前等待 `TabManagerRestoreCompleted`。
 
 ## 導覽與內容模組
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向使用者的內容表面。它們都依賴 Tab routing，而不是由 Shell 直接建構 View。
+
+`Accounts.GitHub` 與 `ChromeExtensions` 也使用 WebView2-backed tabs，分別用於 provider 登入與 Chrome Web Store package discovery。它們仍然作為一般模組載入；瀏覽器相關行為由 WebView2 infrastructure 與 module contracts 承載。
 
 如果這些模組開啟了錯誤 Tab 或 Not Found Tab，請檢查已註冊的 `ITabItemFactory`、route attributes、factory priority，以及傳給 `ITabManager.NavigateAsync(...)` 的 URI。
 

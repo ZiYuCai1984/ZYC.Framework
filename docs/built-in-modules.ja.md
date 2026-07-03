@@ -30,9 +30,12 @@
 | Module | 主な面 | 補足 |
 | --- | --- | --- |
 | `About` | About メニューとルーティング タブ | 製品/about 情報を表示する。 |
+| `Accounts` | タイトルバー拡張とアカウント サービス | Provider ベースの account session を初期化し、sign-in/sign-out 操作を公開する。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 タブ | GitHub account provider と sign-in callback 処理を提供する。 |
 | `ApiReference` | About メニューと WebView2 タブ | API reference content をホストする。 |
 | `Aspire` | Tools メニュー、ルーティング タブ、ステータスバー | Aspire resources を開始・監視し、`IExtensionResourcesProvider` の寄与を解決する。 |
 | `BlazorDemo` | Tools メニューとルーティング タブ | デスクトップ Host 内の Blazor 統合を示す。 |
+| `ChromeExtensions` | Extensions メニューとルーティング タブ | WebBrowser 用のローカル Chrome Web Store extension packages を管理する。 |
 | `CLI` | Tools メニューと terminal タブ | 組み込み terminal をホストし、terminal native dependencies をロードする。 |
 | `FileExplorer` | File メニューとルーティング タブ | ファイル システム閲覧面を開く。 |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts の上に recent-path 系機能を追加する。 |
@@ -52,7 +55,7 @@
 
 ## Shell と Diagnostics モジュール
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` は主に Shell/運用系モジュールです。Framework の確認、設定、保守をしやすくします。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` は主に Shell/運用系モジュールです。Framework の確認、設定、保守をしやすくします。
 
 これらのモジュールは通常 `LoadAsync` からメニュー項目とルーティング タブを登録します。一部はより早い段階でサービスも登録します。
 
@@ -60,11 +63,15 @@
 - `Language` は language-resource adapters を登録し、default language resources を読み込みます。
 - `Secrets` は config objects から `ISecrets` への adapter を登録します。
 - `TaskManager` は UI 公開前に `ITaskManager` を初期化します。
+- `Accounts` は `IAccountManager` を初期化し、タイトルバーの account surface を登録します。
+- `ChromeExtensions` は extension package manager タブを Extensions 配下に登録します。
 - `Update` はすべてのモジュールがロードされた後に購読し、起動時チェック前に `TabManagerRestoreCompleted` を待ちます。
 
 ## Navigation と Content モジュール
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
+
+`Accounts.GitHub` と `ChromeExtensions` も provider sign-in と Chrome Web Store package discovery のために WebView2 ベースのタブを使います。どちらも通常のモジュールとしてロードされ、browser-specific behavior は WebView2 infrastructure と module contracts を通じて扱います。
 
 これらのモジュールが誤ったタブや Not Found タブを開く場合は、登録済み `ITabItemFactory`、route attributes、factory priority、`ITabManager.NavigateAsync(...)` に渡している URI を確認してください。
 

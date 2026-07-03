@@ -30,9 +30,12 @@
 | Module | 主要表面 | 说明 |
 | --- | --- | --- |
 | `About` | About 菜单和路由 Tab | 显示产品/about 信息。 |
+| `Accounts` | 窗口标题栏扩展和账号服务 | 初始化 provider-based account session，并暴露登录/退出操作。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 Tab | 提供 GitHub account provider 和登录回调处理。 |
 | `ApiReference` | About 菜单和 WebView2 Tab | 承载 API reference 内容。 |
 | `Aspire` | Tools 菜单、路由 Tab、状态栏 | 启动和监控 Aspire resources；解析 `IExtensionResourcesProvider` 贡献。 |
 | `BlazorDemo` | Tools 菜单和路由 Tab | 演示桌面 Host 内的 Blazor 集成。 |
+| `ChromeExtensions` | Extensions 菜单和路由 Tab | 管理 WebBrowser 使用的本地 Chrome Web Store extension packages。 |
 | `CLI` | Tools 菜单和终端 Tab | 承载嵌入式终端，并加载终端 native dependencies。 |
 | `FileExplorer` | File 菜单和路由 Tab | 打开文件系统浏览表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契约之上添加 recent-path 类 File 菜单能力。 |
@@ -52,7 +55,7 @@
 
 ## Shell 与诊断模块
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` 主要是 Shell 或运维类模块。它们让框架更容易检查、配置和维护。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` 主要是 Shell 或运维类模块。它们让框架更容易检查、配置和维护。
 
 这些模块通常从 `LoadAsync` 注册菜单项和路由 Tab。有些模块也会更早注册服务：
 
@@ -60,11 +63,15 @@
 - `Language` 注册 language-resource adapters，并加载 default language resources。
 - `Secrets` 注册从 config objects 到 `ISecrets` 的 adapter。
 - `TaskManager` 在暴露 UI 前初始化 `ITaskManager`。
+- `Accounts` 初始化 `IAccountManager`，并注册窗口标题栏账号表面。
+- `ChromeExtensions` 在 Extensions 下注册 extension package manager Tab。
 - `Update` 在所有模块加载后订阅事件，并在启动检查前等待 `TabManagerRestoreCompleted`。
 
 ## 导航与内容模块
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
+
+`Accounts.GitHub` 和 `ChromeExtensions` 也使用 WebView2-backed tabs，分别用于 provider 登录和 Chrome Web Store package discovery。它们仍然作为普通模块加载；浏览器相关行为由 WebView2 infrastructure 与 module contracts 承载。
 
 如果这些模块打开了错误 Tab 或 Not Found Tab，请检查已注册的 `ITabItemFactory`、route attributes、factory priority，以及传给 `ITabManager.NavigateAsync(...)` 的 URI。
 

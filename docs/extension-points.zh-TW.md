@@ -19,6 +19,7 @@ ZYC.Framework 的擴展大多透過模組與 Autofac 註冊。模組隨 Host 載
 | URI Tab | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`。 |
 | 簡單 View Tab | `ISimpleTabItemFactoryManager.Register(...)` | 內建 `SimpleTabItemFactory`。 |
 | 主選單 | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` 與主選單 View。 |
+| 視窗標題列 | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`。 |
 | 工作區選單 | `IWorkspaceMenuManager` | `WorkspaceMenuView`。 |
 | 工作區內容選單 Manager | `IWorkspaceContextMenuManager` | Manager 存在並提供排序；在接線內容選單表面時使用。 |
 | Tab 標頭右鍵選單 | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`。 |
@@ -75,6 +76,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 選單排序先依 `Anchor`，再依同一組內的 `Priority`。`MainMenuManager` 會在 Anchor 組之間插入分隔符，並遞迴排序子項。
 
 只有當模組需要一個包含多個子命令的父選單時，才建立模組自己的 `IMainMenuItemsProvider`。如果只有一個命令，把 `IMainMenuItem` 註冊到既有 Provider 即可。
+
+## 視窗標題列
+
+緊湊的 command-style title-bar buttons 使用 `IWindowTitleManager`；較豐富的標題列內容使用 `IWindowTitleExtendManager`。擴充項實作 `IWindowTitleExtendItem`，並回傳要顯示在標題列中的 view object。
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+這個 surface 適合需要靠近 window chrome 常駐顯示的 module-owned status 或 account controls。使用者收藏類快捷入口應使用 quick bar items，而不是模組私有標題列 UI。
 
 ## 工作區選單
 

@@ -207,6 +207,10 @@ ZYC.Framework supports native WPF views and hybrid web content.
 
 The `Translator` module is an example of this pattern: it resolves `ICommandlineResourcesProvider` and registers a command-line resource for `libretranslate`.
 
+`ZYC.Framework.Modules.Accounts` is a provider-based account shell. It owns session initialization, `IAccountManager`, protected token storage, and the window-title account UI. Provider modules such as `ZYC.Framework.Modules.Accounts.GitHub` contribute `IAccountProvider` implementations and can register their own authentication tab factories, including WebView2-backed OAuth flows.
+
+`ZYC.Framework.Modules.ChromeExtensions` keeps browser extension package management separate from the browser runtime. It downloads and unpacks Chrome Web Store packages, reads manifest metadata, and synchronizes the unpacked manifest key so WebView2 can use stable extension identities. `ZYC.Framework.Modules.WebBrowser` consumes the installed package list, updates `WebBrowserConfig.CustomBrowserArguments` with `--load-extension`, and uses the live `CoreWebView2BrowserExtension` data exposed by `ZYC.Framework.WebView2` for runtime plugin UI.
+
 ## MCP Exposure
 
 The MCP server module exposes application capabilities through interface annotations.
@@ -452,6 +456,10 @@ ZYC.Framework はネイティブ WPF View とハイブリッド Web コンテン
 `ZYC.Framework.Modules.Aspire` は .NET Aspire を統合します。`AspireService.Build(...)` は `DistributedApplicationBuilder` を作成し、既存の Autofac lifetime scope で構成し、`AspireConfig.Environment` を適用し、すべての `IExtensionResourcesProvider` 実装を解決します。拡張モジュールは、コア Aspire モジュールを変更せずに子リソースを Aspire アプリへ差し込めます。
 
 `Translator` モジュールはこのパターンの例です。`ICommandlineResourcesProvider` を解決し、`libretranslate` 用のコマンドライン リソースを登録します。
+
+`ZYC.Framework.Modules.Accounts` は provider-based account shell です。Session initialization、`IAccountManager`、protected token storage、タイトルバーの account UI を持ちます。`ZYC.Framework.Modules.Accounts.GitHub` のような provider module は `IAccountProvider` 実装を提供し、WebView2 ベースの OAuth flow を含む独自の authentication tab factory を登録できます。
+
+`ZYC.Framework.Modules.ChromeExtensions` は browser extension package management を browser runtime から分離します。Chrome Web Store package をダウンロード/展開し、manifest metadata を読み取り、WebView2 が安定した extension identity を使えるよう unpacked manifest key を同期します。`ZYC.Framework.Modules.WebBrowser` は installed package list を利用して `WebBrowserConfig.CustomBrowserArguments` の `--load-extension` を更新し、`ZYC.Framework.WebView2` が公開する live `CoreWebView2BrowserExtension` data を runtime plugin UI に使います。
 
 ## MCP 公開
 
@@ -699,6 +707,10 @@ ZYC.Framework 支持原生 WPF View 和混合 Web 内容。
 
 `Translator` 模块是这个模式的一个例子：它解析 `ICommandlineResourcesProvider`，并为 `libretranslate` 注册命令行资源。
 
+`ZYC.Framework.Modules.Accounts` 是 provider-based account shell。它负责 session 初始化、`IAccountManager`、受保护的 token 存储，以及窗口标题栏账号 UI。`ZYC.Framework.Modules.Accounts.GitHub` 这类 provider module 提供 `IAccountProvider` 实现，并可注册自己的 authentication tab factory，包括 WebView2-backed OAuth flow。
+
+`ZYC.Framework.Modules.ChromeExtensions` 将 browser extension package management 与 browser runtime 分离。它下载并解包 Chrome Web Store package，读取 manifest metadata，并同步 unpacked manifest key，让 WebView2 可以使用稳定的 extension identity。`ZYC.Framework.Modules.WebBrowser` 消费已安装包列表，把 `--load-extension` 写入 `WebBrowserConfig.CustomBrowserArguments`，并使用 `ZYC.Framework.WebView2` 暴露的 live `CoreWebView2BrowserExtension` data 构建 runtime plugin UI。
+
 ## MCP 暴露
 
 MCP Server 模块通过接口注解暴露应用能力。
@@ -945,6 +957,10 @@ ZYC.Framework 支援原生 WPF View 與混合 Web 內容。
 
 `Translator` 模組是這個模式的例子：它解析 `ICommandlineResourcesProvider`，並為 `libretranslate` 註冊命令列資源。
 
+`ZYC.Framework.Modules.Accounts` 是 provider-based account shell。它負責 session 初始化、`IAccountManager`、受保護的 token 儲存，以及視窗標題列帳號 UI。`ZYC.Framework.Modules.Accounts.GitHub` 這類 provider module 提供 `IAccountProvider` 實作，並可註冊自己的 authentication tab factory，包括 WebView2-backed OAuth flow。
+
+`ZYC.Framework.Modules.ChromeExtensions` 將 browser extension package management 與 browser runtime 分離。它下載並解包 Chrome Web Store package，讀取 manifest metadata，並同步 unpacked manifest key，讓 WebView2 可以使用穩定的 extension identity。`ZYC.Framework.Modules.WebBrowser` 消費已安裝 package list，把 `--load-extension` 寫入 `WebBrowserConfig.CustomBrowserArguments`，並使用 `ZYC.Framework.WebView2` 暴露的 live `CoreWebView2BrowserExtension` data 建構 runtime plugin UI。
+
 ## MCP 暴露
 
 MCP Server 模組透過介面註解暴露應用能力。
@@ -1190,6 +1206,10 @@ ZYC.Framework는 네이티브 WPF View와 하이브리드 Web 콘텐츠를 지�
 `ZYC.Framework.Modules.Aspire`는 .NET Aspire를 통합합니다. `AspireService.Build(...)`는 `DistributedApplicationBuilder`를 만들고, 기존 Autofac lifetime scope로 구성하며, `AspireConfig.Environment`를 적용하고, 모든 `IExtensionResourcesProvider` 구현을 해석합니다. 확장 모듈은 핵심 Aspire 모듈을 수정하지 않고도 자식 리소스를 Aspire 앱에 연결할 수 있습니다.
 
 `Translator` 모듈은 이 패턴의 예입니다. `ICommandlineResourcesProvider`를 해석하고 `libretranslate`용 명령줄 리소스를 등록합니다.
+
+`ZYC.Framework.Modules.Accounts`는 provider-based account shell입니다. Session initialization, `IAccountManager`, protected token storage, 창 제목 표시줄 account UI를 소유합니다. `ZYC.Framework.Modules.Accounts.GitHub` 같은 provider module은 `IAccountProvider` 구현을 제공하고 WebView2 기반 OAuth flow를 포함한 자체 authentication tab factory를 등록할 수 있습니다.
+
+`ZYC.Framework.Modules.ChromeExtensions`는 browser extension package management를 browser runtime에서 분리합니다. Chrome Web Store package를 다운로드하고 압축을 풀며, manifest metadata를 읽고, WebView2가 안정적인 extension identity를 사용할 수 있도록 unpacked manifest key를 동기화합니다. `ZYC.Framework.Modules.WebBrowser`는 installed package list를 사용해 `WebBrowserConfig.CustomBrowserArguments`의 `--load-extension`을 갱신하고, `ZYC.Framework.WebView2`가 노출하는 live `CoreWebView2BrowserExtension` data를 runtime plugin UI에 사용합니다.
 
 ## MCP 노출
 
