@@ -19,6 +19,7 @@ ZYC.Framework の拡張は、主にモジュールと Autofac を通して登録
 | URI タブ | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`。 |
 | Simple view tabs | `ISimpleTabItemFactoryManager.Register(...)` | 組み込み `SimpleTabItemFactory`。 |
 | メインメニュー | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` とメインメニュー View。 |
+| ウィンドウ タイトル | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`。 |
 | ワークスペース メニュー | `IWorkspaceMenuManager` | `WorkspaceMenuView`。 |
 | ワークスペース コンテキストメニュー manager | `IWorkspaceContextMenuManager` | Manager は存在し、項目をソートします。コンテキストメニュー面を接続するときに使います。 |
 | タブ ヘッダー コンテキストメニュー | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`。 |
@@ -75,6 +76,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 メニュー順はまず `Anchor`、同じ anchor 内で `Priority` によって決まります。`MainMenuManager` は anchor グループ間にセパレーターを挿入し、子項目も再帰的にソートします。
 
 複数の子コマンドを持つ親メニューが必要な場合だけ、モジュール専用の `IMainMenuItemsProvider` を作ります。1 つのコマンドなら、既存 provider に `IMainMenuItem` を登録します。
+
+## ウィンドウ タイトル
+
+コンパクトな command-style title-bar buttons には `IWindowTitleManager`、よりリッチな title-bar content には `IWindowTitleExtendManager` を使います。Extension item は `IWindowTitleExtendItem` を実装し、タイトルバーに表示する view object を返します。
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+この surface は、window chrome の近くに常時表示したい module-owned status や account controls に使います。ユーザーが選ぶ shortcuts には、module-owned title-bar UI ではなく quick bar items を使います。
 
 ## ワークスペース メニュー
 

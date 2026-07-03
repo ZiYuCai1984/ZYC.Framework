@@ -207,6 +207,10 @@ ZYC.Framework 支持原生 WPF View 和混合 Web 内容。
 
 `Translator` 模块是这个模式的一个例子：它解析 `ICommandlineResourcesProvider`，并为 `libretranslate` 注册命令行资源。
 
+`ZYC.Framework.Modules.Accounts` 是 provider-based account shell。它负责 session 初始化、`IAccountManager`、受保护的 token 存储，以及窗口标题栏账号 UI。`ZYC.Framework.Modules.Accounts.GitHub` 这类 provider module 提供 `IAccountProvider` 实现，并可注册自己的 authentication tab factory，包括 WebView2-backed OAuth flow。
+
+`ZYC.Framework.Modules.ChromeExtensions` 将 browser extension package management 与 browser runtime 分离。它下载并解包 Chrome Web Store package，读取 manifest metadata，并同步 unpacked manifest key，让 WebView2 可以使用稳定的 extension identity。`ZYC.Framework.Modules.WebBrowser` 消费已安装包列表，把 `--load-extension` 写入 `WebBrowserConfig.CustomBrowserArguments`，并使用 `ZYC.Framework.WebView2` 暴露的 live `CoreWebView2BrowserExtension` data 构建 runtime plugin UI。
+
 ## MCP 暴露
 
 MCP Server 模块通过接口注解暴露应用能力。

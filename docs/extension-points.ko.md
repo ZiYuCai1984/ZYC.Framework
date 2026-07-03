@@ -19,6 +19,7 @@ ZYC.Framework 확장은 대부분 모듈과 Autofac을 통해 등록됩니다. �
 | URI 탭 | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`. |
 | 단순 뷰 탭 | `ISimpleTabItemFactoryManager.Register(...)` | 내장 `SimpleTabItemFactory`. |
 | 메인 메뉴 | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager`와 메인 메뉴 뷰. |
+| 창 제목 표시줄 | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`. |
 | 워크스페이스 메뉴 | `IWorkspaceMenuManager` | `WorkspaceMenuView`. |
 | 워크스페이스 컨텍스트 메뉴 manager | `IWorkspaceContextMenuManager` | Manager는 존재하며 항목을 정렬합니다. 컨텍스트 메뉴 표면을 연결할 때 사용합니다. |
 | 탭 헤더 컨텍스트 메뉴 | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`. |
@@ -75,6 +76,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 메뉴 정렬은 먼저 `Anchor`, 같은 anchor 그룹 안에서는 `Priority`로 결정됩니다. `MainMenuManager`는 anchor 그룹 사이에 separator를 넣고 하위 항목도 재귀적으로 정렬합니다.
 
 여러 하위 명령을 가진 부모 메뉴가 필요할 때만 모듈 소유 `IMainMenuItemsProvider`를 만듭니다. 명령이 하나라면 기존 provider 아래에 `IMainMenuItem`을 등록합니다.
+
+## 창 제목 표시줄
+
+컴팩트한 command-style title-bar buttons에는 `IWindowTitleManager`를, 더 풍부한 title-bar content에는 `IWindowTitleExtendManager`를 사용합니다. Extension item은 `IWindowTitleExtendItem`을 구현하고 제목 표시줄에 표시할 view object를 반환합니다.
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+이 surface는 window chrome 근처에 계속 보여야 하는 module-owned status나 account controls에 적합합니다. 사용자가 즐겨찾는 shortcuts에는 module-owned title-bar UI 대신 quick bar items를 사용합니다.
 
 ## 워크스페이스 메뉴
 

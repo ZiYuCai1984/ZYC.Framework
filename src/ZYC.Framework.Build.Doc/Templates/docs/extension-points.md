@@ -19,6 +19,7 @@ ZYC.Framework extensions are mostly registered through modules and Autofac. A mo
 | URI tabs | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`. |
 | Simple view tabs | `ISimpleTabItemFactoryManager.Register(...)` | Built-in `SimpleTabItemFactory`. |
 | Main menu | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` and main menu views. |
+| Window title | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`. |
 | Workspace menu | `IWorkspaceMenuManager` | `WorkspaceMenuView`. |
 | Workspace context menu manager | `IWorkspaceContextMenuManager` | Manager exists and sorts items; use it when wiring a context-menu surface. |
 | Tab header context menu | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`. |
@@ -75,6 +76,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 Menu ordering uses `Anchor` first and `Priority` inside the anchor group. `MainMenuManager` inserts separators between anchor groups and sorts sub-items recursively.
 
 Create a module-owned `IMainMenuItemsProvider` only when the module needs a parent menu with multiple child commands. For one command, register an `IMainMenuItem` under an existing provider.
+
+## Window Title
+
+Use `IWindowTitleManager` for compact command-style title-bar buttons and `IWindowTitleExtendManager` for richer title-bar content. Extension items implement `IWindowTitleExtendItem` and return the view object that should be displayed in the title bar.
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+Use this surface for module-owned status or account controls that must stay visible near the window chrome. Use quick bar items for user-favorited shortcuts instead of module-owned title-bar UI.
 
 ## Workspace Menus
 
@@ -225,6 +242,7 @@ ZYC.Framework の拡張は、主にモジュールと Autofac を通して登録
 | URI タブ | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`。 |
 | Simple view tabs | `ISimpleTabItemFactoryManager.Register(...)` | 組み込み `SimpleTabItemFactory`。 |
 | メインメニュー | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` とメインメニュー View。 |
+| ウィンドウ タイトル | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`。 |
 | ワークスペース メニュー | `IWorkspaceMenuManager` | `WorkspaceMenuView`。 |
 | ワークスペース コンテキストメニュー manager | `IWorkspaceContextMenuManager` | Manager は存在し、項目をソートします。コンテキストメニュー面を接続するときに使います。 |
 | タブ ヘッダー コンテキストメニュー | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`。 |
@@ -281,6 +299,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 メニュー順はまず `Anchor`、同じ anchor 内で `Priority` によって決まります。`MainMenuManager` は anchor グループ間にセパレーターを挿入し、子項目も再帰的にソートします。
 
 複数の子コマンドを持つ親メニューが必要な場合だけ、モジュール専用の `IMainMenuItemsProvider` を作ります。1 つのコマンドなら、既存 provider に `IMainMenuItem` を登録します。
+
+## ウィンドウ タイトル
+
+コンパクトな command-style title-bar buttons には `IWindowTitleManager`、よりリッチな title-bar content には `IWindowTitleExtendManager` を使います。Extension item は `IWindowTitleExtendItem` を実装し、タイトルバーに表示する view object を返します。
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+この surface は、window chrome の近くに常時表示したい module-owned status や account controls に使います。ユーザーが選ぶ shortcuts には、module-owned title-bar UI ではなく quick bar items を使います。
 
 ## ワークスペース メニュー
 
@@ -431,6 +465,7 @@ ZYC.Framework 的扩展大多通过模块和 Autofac 注册。模块随 Host 加
 | URI Tab | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`。 |
 | 简单视图 Tab | `ISimpleTabItemFactoryManager.Register(...)` | 内置 `SimpleTabItemFactory`。 |
 | 主菜单 | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` 和主菜单 View。 |
+| 窗口标题栏 | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`。 |
 | 工作区菜单 | `IWorkspaceMenuManager` | `WorkspaceMenuView`。 |
 | 工作区上下文菜单 Manager | `IWorkspaceContextMenuManager` | Manager 存在并提供排序；在接线上下文菜单表面时使用。 |
 | Tab 头部右键菜单 | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`。 |
@@ -487,6 +522,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 菜单排序先按 `Anchor`，再按同一组内的 `Priority`。`MainMenuManager` 会在 Anchor 组之间插入分隔符，并递归排序子项。
 
 只有当模块需要一个包含多个子命令的父菜单时，才创建模块自己的 `IMainMenuItemsProvider`。如果只有一个命令，把 `IMainMenuItem` 注册到现有 Provider 即可。
+
+## 窗口标题栏
+
+紧凑的 command-style title-bar buttons 使用 `IWindowTitleManager`；更丰富的标题栏内容使用 `IWindowTitleExtendManager`。扩展项实现 `IWindowTitleExtendItem`，并返回要显示在标题栏中的 view object。
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+这个 surface 适合需要靠近 window chrome 常驻显示的 module-owned status 或 account controls。用户收藏类快捷入口应使用 quick bar items，而不是模块私有标题栏 UI。
 
 ## 工作区菜单
 
@@ -637,6 +688,7 @@ ZYC.Framework 的擴展大多透過模組與 Autofac 註冊。模組隨 Host 載
 | URI Tab | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`。 |
 | 簡單 View Tab | `ISimpleTabItemFactoryManager.Register(...)` | 內建 `SimpleTabItemFactory`。 |
 | 主選單 | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` 與主選單 View。 |
+| 視窗標題列 | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`。 |
 | 工作區選單 | `IWorkspaceMenuManager` | `WorkspaceMenuView`。 |
 | 工作區內容選單 Manager | `IWorkspaceContextMenuManager` | Manager 存在並提供排序；在接線內容選單表面時使用。 |
 | Tab 標頭右鍵選單 | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`。 |
@@ -693,6 +745,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 選單排序先依 `Anchor`，再依同一組內的 `Priority`。`MainMenuManager` 會在 Anchor 組之間插入分隔符，並遞迴排序子項。
 
 只有當模組需要一個包含多個子命令的父選單時，才建立模組自己的 `IMainMenuItemsProvider`。如果只有一個命令，把 `IMainMenuItem` 註冊到既有 Provider 即可。
+
+## 視窗標題列
+
+緊湊的 command-style title-bar buttons 使用 `IWindowTitleManager`；較豐富的標題列內容使用 `IWindowTitleExtendManager`。擴充項實作 `IWindowTitleExtendItem`，並回傳要顯示在標題列中的 view object。
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+這個 surface 適合需要靠近 window chrome 常駐顯示的 module-owned status 或 account controls。使用者收藏類快捷入口應使用 quick bar items，而不是模組私有標題列 UI。
 
 ## 工作區選單
 
@@ -843,6 +911,7 @@ ZYC.Framework 확장은 대부분 모듈과 Autofac을 통해 등록됩니다. �
 | URI 탭 | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`. |
 | 단순 뷰 탭 | `ISimpleTabItemFactoryManager.Register(...)` | 내장 `SimpleTabItemFactory`. |
 | 메인 메뉴 | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager`와 메인 메뉴 뷰. |
+| 창 제목 표시줄 | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`. |
 | 워크스페이스 메뉴 | `IWorkspaceMenuManager` | `WorkspaceMenuView`. |
 | 워크스페이스 컨텍스트 메뉴 manager | `IWorkspaceContextMenuManager` | Manager는 존재하며 항목을 정렬합니다. 컨텍스트 메뉴 표면을 연결할 때 사용합니다. |
 | 탭 헤더 컨텍스트 메뉴 | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`. |
@@ -899,6 +968,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 메뉴 정렬은 먼저 `Anchor`, 같은 anchor 그룹 안에서는 `Priority`로 결정됩니다. `MainMenuManager`는 anchor 그룹 사이에 separator를 넣고 하위 항목도 재귀적으로 정렬합니다.
 
 여러 하위 명령을 가진 부모 메뉴가 필요할 때만 모듈 소유 `IMainMenuItemsProvider`를 만듭니다. 명령이 하나라면 기존 provider 아래에 `IMainMenuItem`을 등록합니다.
+
+## 창 제목 표시줄
+
+컴팩트한 command-style title-bar buttons에는 `IWindowTitleManager`를, 더 풍부한 title-bar content에는 `IWindowTitleExtendManager`를 사용합니다. Extension item은 `IWindowTitleExtendItem`을 구현하고 제목 표시줄에 표시할 view object를 반환합니다.
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+이 surface는 window chrome 근처에 계속 보여야 하는 module-owned status나 account controls에 적합합니다. 사용자가 즐겨찾는 shortcuts에는 module-owned title-bar UI 대신 quick bar items를 사용합니다.
 
 ## 워크스페이스 메뉴
 

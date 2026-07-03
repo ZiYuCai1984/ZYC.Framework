@@ -19,6 +19,7 @@ ZYC.Framework extensions are mostly registered through modules and Autofac. A mo
 | URI tabs | `ITabItemFactoryManager.RegisterFactory<T>()` | `TabManager.InternalNavigateAsync(...)`. |
 | Simple view tabs | `ISimpleTabItemFactoryManager.Register(...)` | Built-in `SimpleTabItemFactory`. |
 | Main menu | `IMainMenuManager`, `IMainMenuItemsProvider` | `MainMenuManager` and main menu views. |
+| Window title | `IWindowTitleManager`, `IWindowTitleExtendManager` | `WindowTitleView`. |
 | Workspace menu | `IWorkspaceMenuManager` | `WorkspaceMenuView`. |
 | Workspace context menu manager | `IWorkspaceContextMenuManager` | Manager exists and sorts items; use it when wiring a context-menu surface. |
 | Tab header context menu | `ITabItemHeaderContextMenuItemView` | `TabItemHeaderContextMenuItemsResolver`. |
@@ -75,6 +76,22 @@ public override Task LoadAsync(ILifetimeScope lifetimeScope)
 Menu ordering uses `Anchor` first and `Priority` inside the anchor group. `MainMenuManager` inserts separators between anchor groups and sorts sub-items recursively.
 
 Create a module-owned `IMainMenuItemsProvider` only when the module needs a parent menu with multiple child commands. For one command, register an `IMainMenuItem` under an existing provider.
+
+## Window Title
+
+Use `IWindowTitleManager` for compact command-style title-bar buttons and `IWindowTitleExtendManager` for richer title-bar content. Extension items implement `IWindowTitleExtendItem` and return the view object that should be displayed in the title bar.
+
+```csharp
+public override Task LoadAsync(ILifetimeScope lifetimeScope)
+{
+    lifetimeScope.Resolve<IWindowTitleExtendManager>()
+        .RegisterItem<ReportsWindowTitleItem>();
+
+    return Task.CompletedTask;
+}
+```
+
+Use this surface for module-owned status or account controls that must stay visible near the window chrome. Use quick bar items for user-favorited shortcuts instead of module-owned title-bar UI.
 
 ## Workspace Menus
 

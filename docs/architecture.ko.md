@@ -207,6 +207,10 @@ ZYC.Framework는 네이티브 WPF View와 하이브리드 Web 콘텐츠를 지�
 
 `Translator` 모듈은 이 패턴의 예입니다. `ICommandlineResourcesProvider`를 해석하고 `libretranslate`용 명령줄 리소스를 등록합니다.
 
+`ZYC.Framework.Modules.Accounts`는 provider-based account shell입니다. Session initialization, `IAccountManager`, protected token storage, 창 제목 표시줄 account UI를 소유합니다. `ZYC.Framework.Modules.Accounts.GitHub` 같은 provider module은 `IAccountProvider` 구현을 제공하고 WebView2 기반 OAuth flow를 포함한 자체 authentication tab factory를 등록할 수 있습니다.
+
+`ZYC.Framework.Modules.ChromeExtensions`는 browser extension package management를 browser runtime에서 분리합니다. Chrome Web Store package를 다운로드하고 압축을 풀며, manifest metadata를 읽고, WebView2가 안정적인 extension identity를 사용할 수 있도록 unpacked manifest key를 동기화합니다. `ZYC.Framework.Modules.WebBrowser`는 installed package list를 사용해 `WebBrowserConfig.CustomBrowserArguments`의 `--load-extension`을 갱신하고, `ZYC.Framework.WebView2`가 노출하는 live `CoreWebView2BrowserExtension` data를 runtime plugin UI에 사용합니다.
+
 ## MCP 노출
 
 MCP Server 모듈은 인터페이스 주석을 통해 애플리케이션 기능을 노출합니다.

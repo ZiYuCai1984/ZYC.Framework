@@ -207,6 +207,10 @@ ZYC.Framework はネイティブ WPF View とハイブリッド Web コンテン
 
 `Translator` モジュールはこのパターンの例です。`ICommandlineResourcesProvider` を解決し、`libretranslate` 用のコマンドライン リソースを登録します。
 
+`ZYC.Framework.Modules.Accounts` は provider-based account shell です。Session initialization、`IAccountManager`、protected token storage、タイトルバーの account UI を持ちます。`ZYC.Framework.Modules.Accounts.GitHub` のような provider module は `IAccountProvider` 実装を提供し、WebView2 ベースの OAuth flow を含む独自の authentication tab factory を登録できます。
+
+`ZYC.Framework.Modules.ChromeExtensions` は browser extension package management を browser runtime から分離します。Chrome Web Store package をダウンロード/展開し、manifest metadata を読み取り、WebView2 が安定した extension identity を使えるよう unpacked manifest key を同期します。`ZYC.Framework.Modules.WebBrowser` は installed package list を利用して `WebBrowserConfig.CustomBrowserArguments` の `--load-extension` を更新し、`ZYC.Framework.WebView2` が公開する live `CoreWebView2BrowserExtension` data を runtime plugin UI に使います。
+
 ## MCP 公開
 
 MCP Server モジュールは、インターフェイス注釈を通じてアプリケーション機能を公開します。

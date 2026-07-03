@@ -130,6 +130,12 @@ zyc new MyCompany.Tools --template minimal
 - settings ファイルがソース ツリーではなく、ホストの settings ディレクトリにあることを確認します。
 - contract 型だけを abstractions アセンブリに置いて、そこからランタイム state が作成されると期待しないでください。
 
+## シングル インスタンスと Mutex override
+
+`settings/mutex-id.override` が存在しない限り、ホストは製品情報から single-instance mutex id を作ります。Tools > Override Mutex Id でこのファイルを作成、更新、削除できます。
+
+Override を変更した後はホストを再起動してください。Mutex と startup URI pipe 名は起動時に作られるため、実行中のプロセスはすぐには identity を切り替えません。Side-by-side instance、startup URI forwarding、foreground-window activation が想定外に動く場合は、まず現在の `mutex-id.override` を確認します。
+
 ## NuGet モジュール
 
 ModuleManager は一時プロジェクトを restore し、解決された runtime asset graph を `settings/nuget.module.assets.json` に書き込んで NuGet モジュールをインストールします。ホストは次回起動時にそのファイルを読み取ります。
@@ -141,6 +147,10 @@ NuGet モジュールをインストールしたのに有効にならない場�
 - パッケージが現在のホスト ターゲットである `net10.0-windows` と互換の runtime assembly を含むことを確認します。
 - インストール済みモジュール アセンブリが `ModuleConfig.DisabledAssemblyNames` で無効化されていないか確認します。
 - assets ファイルが古いパッケージ内容を指す場合は、再インストールまたは削除後に再インストールします。
+
+既知のパッケージが検索結果に出ない場合、NuGet search は `IncludeRegex` より先に実行される点に注意してください。返された NuGet page に含まれないパッケージは regex filter に届きません。`NuGetModuleConfig.SearchTerm`、`SearchSkip`、`SearchTake` を確認します。`SearchTake` は NuGet.org の 1 request 上限である 1000 に clamp されるため、後続ページには `SearchSkip` を使います。
+
+Install、uninstall、refresh は同じ module-assets pipeline を共有し、ModuleManager operation coordinator により直列化されます。これらの command が無効に見える場合は、現在の restore/search operation が完了するまで待ってから次の操作を開始してください。
 
 ## Aspire とサイドカー リソース
 

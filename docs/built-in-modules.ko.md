@@ -30,9 +30,12 @@
 | Module | 주요 표면 | 설명 |
 | --- | --- | --- |
 | `About` | About 메뉴와 라우팅 탭 | 제품/about 정보를 표시합니다. |
+| `Accounts` | 창 제목 표시줄 확장과 계정 서비스 | Provider 기반 account session을 초기화하고 sign-in/sign-out 작업을 노출합니다. |
+| `Accounts.GitHub` | GitHub OAuth WebView2 탭 | GitHub account provider와 sign-in callback 처리를 제공합니다. |
 | `ApiReference` | About 메뉴와 WebView2 탭 | API reference content를 호스트합니다. |
 | `Aspire` | Tools 메뉴, 라우팅 탭, 상태 표시줄 | Aspire resources를 시작하고 모니터링하며 `IExtensionResourcesProvider` 기여를 resolve합니다. |
 | `BlazorDemo` | Tools 메뉴와 라우팅 탭 | 데스크톱 Host 안의 Blazor 통합을 시연합니다. |
+| `ChromeExtensions` | Extensions 메뉴와 라우팅 탭 | WebBrowser가 사용할 로컬 Chrome Web Store extension packages를 관리합니다. |
 | `CLI` | Tools 메뉴와 터미널 탭 | 내장 터미널을 호스트하고 terminal native dependencies를 로드합니다. |
 | `FileExplorer` | File 메뉴와 라우팅 탭 | 파일 시스템 탐색 표면을 엽니다. |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts 위에 recent-path 계열 File 메뉴 기능을 추가합니다. |
@@ -52,7 +55,7 @@
 
 ## Shell 및 Diagnostics 모듈
 
-`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `ApiReference`는 주로 Shell 또는 운영 모듈입니다. Framework를 검사, 설정, 유지관리하기 쉽게 합니다.
+`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `Accounts`, `ChromeExtensions`, `ApiReference`는 주로 Shell 또는 운영 모듈입니다. Framework를 검사, 설정, 유지관리하기 쉽게 합니다.
 
 이 모듈들은 보통 `LoadAsync`에서 메뉴 항목과 라우팅 탭을 등록합니다. 일부는 더 이른 단계에서 서비스도 등록합니다.
 
@@ -60,11 +63,15 @@
 - `Language`는 language-resource adapters를 등록하고 default language resources를 로드합니다.
 - `Secrets`는 config objects에서 `ISecrets`로 가는 adapter를 등록합니다.
 - `TaskManager`는 UI를 노출하기 전에 `ITaskManager`를 초기화합니다.
+- `Accounts`는 `IAccountManager`를 초기화하고 창 제목 표시줄 계정 표면을 등록합니다.
+- `ChromeExtensions`는 Extensions 아래에 extension package manager 탭을 등록합니다.
 - `Update`는 모든 모듈이 로드된 뒤 구독하고 시작 확인 전에 `TabManagerRestoreCompleted`를 기다립니다.
 
 ## Navigation 및 Content 모듈
 
 `WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
+
+`Accounts.GitHub`와 `ChromeExtensions`도 provider sign-in과 Chrome Web Store package discovery를 위해 WebView2 기반 탭을 사용합니다. 둘 다 일반 모듈로 로드되며 browser-specific behavior는 WebView2 infrastructure와 module contracts를 통해 처리합니다.
 
 이 모듈들이 잘못된 탭이나 Not Found 탭을 열면 등록된 `ITabItemFactory`, route attributes, factory priority, `ITabManager.NavigateAsync(...)`에 전달되는 URI를 확인하세요.
 

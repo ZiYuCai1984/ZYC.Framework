@@ -30,9 +30,12 @@ At startup, the module loader scans the application directory for assemblies nam
 | Module | Main surface | Notes |
 | --- | --- | --- |
 | `About` | About menu and routed tab | Shows product/about information. |
+| `Accounts` | Window title extension and account services | Initializes provider-based account sessions and exposes sign-in/sign-out actions. |
+| `Accounts.GitHub` | GitHub OAuth WebView2 tab | Provides a GitHub account provider and callback handling for sign-in. |
 | `ApiReference` | About menu and WebView2 tab | Hosts API reference content. |
 | `Aspire` | Tools menu, routed tab, status bar | Starts and monitors Aspire resources; resolves `IExtensionResourcesProvider` contributions. |
 | `BlazorDemo` | Tools menu and routed tab | Demonstrates Blazor integration inside the desktop host. |
+| `ChromeExtensions` | Extensions menu and routed tab | Manages locally installed Chrome Web Store extension packages for WebBrowser. |
 | `CLI` | Tools menu and terminal tab | Hosts the embedded terminal and loads terminal native dependencies. |
 | `FileExplorer` | File menu and routed tab | Opens file-system browsing surfaces. |
 | `FileExplorer.Features` | File menu sub-provider | Adds recent-path style File menu features on top of FileExplorer contracts. |
@@ -52,7 +55,7 @@ At startup, the module loader scans the application directory for assemblies nam
 
 ## Shell and Diagnostics Modules
 
-`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, and `ApiReference` are mostly shell or operational modules. They make the framework easier to inspect, configure, and maintain.
+`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `Accounts`, `ChromeExtensions`, and `ApiReference` are mostly shell or operational modules. They make the framework easier to inspect, configure, and maintain.
 
 These modules usually register menu items and routed tabs from `LoadAsync`. Some also register services earlier:
 
@@ -60,11 +63,15 @@ These modules usually register menu items and routed tabs from `LoadAsync`. Some
 - `Language` registers language-resource adapters and loads default language resources.
 - `Secrets` registers an adapter from config objects to `ISecrets`.
 - `TaskManager` initializes `ITaskManager` before exposing its UI.
+- `Accounts` initializes `IAccountManager` and registers a window-title account surface.
+- `ChromeExtensions` registers the extension package manager tab under Extensions.
 - `Update` subscribes after all modules load and waits for `TabManagerRestoreCompleted` before startup checks.
 
 ## Navigation and Content Modules
 
 `WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
+
+`Accounts.GitHub` and `ChromeExtensions` also use WebView2-backed tabs for provider sign-in and Chrome Web Store package discovery. They are still loaded as regular modules; their browser-specific behavior is handled through WebView2 infrastructure and module contracts.
 
 If one of these modules opens the wrong tab or a Not Found tab, check the registered `ITabItemFactory`, route attributes, factory priority, and the URI being passed to `ITabManager.NavigateAsync(...)`.
 
@@ -108,9 +115,12 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | Module | 主な面 | 補足 |
 | --- | --- | --- |
 | `About` | About メニューとルーティング タブ | 製品/about 情報を表示する。 |
+| `Accounts` | タイトルバー拡張とアカウント サービス | Provider ベースの account session を初期化し、sign-in/sign-out 操作を公開する。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 タブ | GitHub account provider と sign-in callback 処理を提供する。 |
 | `ApiReference` | About メニューと WebView2 タブ | API reference content をホストする。 |
 | `Aspire` | Tools メニュー、ルーティング タブ、ステータスバー | Aspire resources を開始・監視し、`IExtensionResourcesProvider` の寄与を解決する。 |
 | `BlazorDemo` | Tools メニューとルーティング タブ | デスクトップ Host 内の Blazor 統合を示す。 |
+| `ChromeExtensions` | Extensions メニューとルーティング タブ | WebBrowser 用のローカル Chrome Web Store extension packages を管理する。 |
 | `CLI` | Tools メニューと terminal タブ | 組み込み terminal をホストし、terminal native dependencies をロードする。 |
 | `FileExplorer` | File メニューとルーティング タブ | ファイル システム閲覧面を開く。 |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts の上に recent-path 系機能を追加する。 |
@@ -130,7 +140,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Shell と Diagnostics モジュール
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` は主に Shell/運用系モジュールです。Framework の確認、設定、保守をしやすくします。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` は主に Shell/運用系モジュールです。Framework の確認、設定、保守をしやすくします。
 
 これらのモジュールは通常 `LoadAsync` からメニュー項目とルーティング タブを登録します。一部はより早い段階でサービスも登録します。
 
@@ -138,11 +148,15 @@ When documenting or troubleshooting module loading, start from the compiled outp
 - `Language` は language-resource adapters を登録し、default language resources を読み込みます。
 - `Secrets` は config objects から `ISecrets` への adapter を登録します。
 - `TaskManager` は UI 公開前に `ITaskManager` を初期化します。
+- `Accounts` は `IAccountManager` を初期化し、タイトルバーの account surface を登録します。
+- `ChromeExtensions` は extension package manager タブを Extensions 配下に登録します。
 - `Update` はすべてのモジュールがロードされた後に購読し、起動時チェック前に `TabManagerRestoreCompleted` を待ちます。
 
 ## Navigation と Content モジュール
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
+
+`Accounts.GitHub` と `ChromeExtensions` も provider sign-in と Chrome Web Store package discovery のために WebView2 ベースのタブを使います。どちらも通常のモジュールとしてロードされ、browser-specific behavior は WebView2 infrastructure と module contracts を通じて扱います。
 
 これらのモジュールが誤ったタブや Not Found タブを開く場合は、登録済み `ITabItemFactory`、route attributes、factory priority、`ITabManager.NavigateAsync(...)` に渡している URI を確認してください。
 
@@ -186,9 +200,12 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | Module | 主要表面 | 说明 |
 | --- | --- | --- |
 | `About` | About 菜单和路由 Tab | 显示产品/about 信息。 |
+| `Accounts` | 窗口标题栏扩展和账号服务 | 初始化 provider-based account session，并暴露登录/退出操作。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 Tab | 提供 GitHub account provider 和登录回调处理。 |
 | `ApiReference` | About 菜单和 WebView2 Tab | 承载 API reference 内容。 |
 | `Aspire` | Tools 菜单、路由 Tab、状态栏 | 启动和监控 Aspire resources；解析 `IExtensionResourcesProvider` 贡献。 |
 | `BlazorDemo` | Tools 菜单和路由 Tab | 演示桌面 Host 内的 Blazor 集成。 |
+| `ChromeExtensions` | Extensions 菜单和路由 Tab | 管理 WebBrowser 使用的本地 Chrome Web Store extension packages。 |
 | `CLI` | Tools 菜单和终端 Tab | 承载嵌入式终端，并加载终端 native dependencies。 |
 | `FileExplorer` | File 菜单和路由 Tab | 打开文件系统浏览表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契约之上添加 recent-path 类 File 菜单能力。 |
@@ -208,7 +225,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Shell 与诊断模块
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` 主要是 Shell 或运维类模块。它们让框架更容易检查、配置和维护。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` 主要是 Shell 或运维类模块。它们让框架更容易检查、配置和维护。
 
 这些模块通常从 `LoadAsync` 注册菜单项和路由 Tab。有些模块也会更早注册服务：
 
@@ -216,11 +233,15 @@ When documenting or troubleshooting module loading, start from the compiled outp
 - `Language` 注册 language-resource adapters，并加载 default language resources。
 - `Secrets` 注册从 config objects 到 `ISecrets` 的 adapter。
 - `TaskManager` 在暴露 UI 前初始化 `ITaskManager`。
+- `Accounts` 初始化 `IAccountManager`，并注册窗口标题栏账号表面。
+- `ChromeExtensions` 在 Extensions 下注册 extension package manager Tab。
 - `Update` 在所有模块加载后订阅事件，并在启动检查前等待 `TabManagerRestoreCompleted`。
 
 ## 导航与内容模块
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
+
+`Accounts.GitHub` 和 `ChromeExtensions` 也使用 WebView2-backed tabs，分别用于 provider 登录和 Chrome Web Store package discovery。它们仍然作为普通模块加载；浏览器相关行为由 WebView2 infrastructure 与 module contracts 承载。
 
 如果这些模块打开了错误 Tab 或 Not Found Tab，请检查已注册的 `ITabItemFactory`、route attributes、factory priority，以及传给 `ITabManager.NavigateAsync(...)` 的 URI。
 
@@ -264,9 +285,12 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | Module | 主要表面 | 說明 |
 | --- | --- | --- |
 | `About` | About 選單與路由 Tab | 顯示產品/about 資訊。 |
+| `Accounts` | 視窗標題列擴充與帳號服務 | 初始化 provider-based account session，並暴露登入/登出操作。 |
+| `Accounts.GitHub` | GitHub OAuth WebView2 Tab | 提供 GitHub account provider 與登入 callback 處理。 |
 | `ApiReference` | About 選單與 WebView2 Tab | 承載 API reference 內容。 |
 | `Aspire` | Tools 選單、路由 Tab、狀態列 | 啟動與監控 Aspire resources；解析 `IExtensionResourcesProvider` 貢獻。 |
 | `BlazorDemo` | Tools 選單與路由 Tab | 示範桌面 Host 內的 Blazor 整合。 |
+| `ChromeExtensions` | Extensions 選單與路由 Tab | 管理 WebBrowser 使用的本地 Chrome Web Store extension packages。 |
 | `CLI` | Tools 選單與終端 Tab | 承載嵌入式終端，並載入終端 native dependencies。 |
 | `FileExplorer` | File 選單與路由 Tab | 開啟檔案系統瀏覽表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契約之上新增 recent-path 類 File 選單能力。 |
@@ -286,7 +310,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Shell 與診斷模組
 
-`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`ApiReference` 主要是 Shell 或維運類模組。它們讓框架更容易檢查、設定與維護。
+`Settings`、`Language`、`Secrets`、`Log`、`TaskManager`、`ModuleManager`、`Update`、`About`、`Accounts`、`ChromeExtensions`、`ApiReference` 主要是 Shell 或維運類模組。它們讓框架更容易檢查、設定與維護。
 
 這些模組通常從 `LoadAsync` 註冊選單項目與路由 Tab。有些模組也會更早註冊服務：
 
@@ -294,11 +318,15 @@ When documenting or troubleshooting module loading, start from the compiled outp
 - `Language` 註冊 language-resource adapters，並載入 default language resources。
 - `Secrets` 註冊從 config objects 到 `ISecrets` 的 adapter。
 - `TaskManager` 在暴露 UI 前初始化 `ITaskManager`。
+- `Accounts` 初始化 `IAccountManager`，並註冊視窗標題列帳號表面。
+- `ChromeExtensions` 在 Extensions 下註冊 extension package manager Tab。
 - `Update` 在所有模組載入後訂閱事件，並在啟動檢查前等待 `TabManagerRestoreCompleted`。
 
 ## 導覽與內容模組
 
 `WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向使用者的內容表面。它們都依賴 Tab routing，而不是由 Shell 直接建構 View。
+
+`Accounts.GitHub` 與 `ChromeExtensions` 也使用 WebView2-backed tabs，分別用於 provider 登入與 Chrome Web Store package discovery。它們仍然作為一般模組載入；瀏覽器相關行為由 WebView2 infrastructure 與 module contracts 承載。
 
 如果這些模組開啟了錯誤 Tab 或 Not Found Tab，請檢查已註冊的 `ITabItemFactory`、route attributes、factory priority，以及傳給 `ITabManager.NavigateAsync(...)` 的 URI。
 
@@ -342,9 +370,12 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | Module | 주요 표면 | 설명 |
 | --- | --- | --- |
 | `About` | About 메뉴와 라우팅 탭 | 제품/about 정보를 표시합니다. |
+| `Accounts` | 창 제목 표시줄 확장과 계정 서비스 | Provider 기반 account session을 초기화하고 sign-in/sign-out 작업을 노출합니다. |
+| `Accounts.GitHub` | GitHub OAuth WebView2 탭 | GitHub account provider와 sign-in callback 처리를 제공합니다. |
 | `ApiReference` | About 메뉴와 WebView2 탭 | API reference content를 호스트합니다. |
 | `Aspire` | Tools 메뉴, 라우팅 탭, 상태 표시줄 | Aspire resources를 시작하고 모니터링하며 `IExtensionResourcesProvider` 기여를 resolve합니다. |
 | `BlazorDemo` | Tools 메뉴와 라우팅 탭 | 데스크톱 Host 안의 Blazor 통합을 시연합니다. |
+| `ChromeExtensions` | Extensions 메뉴와 라우팅 탭 | WebBrowser가 사용할 로컬 Chrome Web Store extension packages를 관리합니다. |
 | `CLI` | Tools 메뉴와 터미널 탭 | 내장 터미널을 호스트하고 terminal native dependencies를 로드합니다. |
 | `FileExplorer` | File 메뉴와 라우팅 탭 | 파일 시스템 탐색 표면을 엽니다. |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts 위에 recent-path 계열 File 메뉴 기능을 추가합니다. |
@@ -364,7 +395,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Shell 및 Diagnostics 모듈
 
-`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `ApiReference`는 주로 Shell 또는 운영 모듈입니다. Framework를 검사, 설정, 유지관리하기 쉽게 합니다.
+`Settings`, `Language`, `Secrets`, `Log`, `TaskManager`, `ModuleManager`, `Update`, `About`, `Accounts`, `ChromeExtensions`, `ApiReference`는 주로 Shell 또는 운영 모듈입니다. Framework를 검사, 설정, 유지관리하기 쉽게 합니다.
 
 이 모듈들은 보통 `LoadAsync`에서 메뉴 항목과 라우팅 탭을 등록합니다. 일부는 더 이른 단계에서 서비스도 등록합니다.
 
@@ -372,11 +403,15 @@ When documenting or troubleshooting module loading, start from the compiled outp
 - `Language`는 language-resource adapters를 등록하고 default language resources를 로드합니다.
 - `Secrets`는 config objects에서 `ISecrets`로 가는 adapter를 등록합니다.
 - `TaskManager`는 UI를 노출하기 전에 `ITaskManager`를 초기화합니다.
+- `Accounts`는 `IAccountManager`를 초기화하고 창 제목 표시줄 계정 표면을 등록합니다.
+- `ChromeExtensions`는 Extensions 아래에 extension package manager 탭을 등록합니다.
 - `Update`는 모든 모듈이 로드된 뒤 구독하고 시작 확인 전에 `TabManagerRestoreCompleted`를 기다립니다.
 
 ## Navigation 및 Content 모듈
 
 `WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
+
+`Accounts.GitHub`와 `ChromeExtensions`도 provider sign-in과 Chrome Web Store package discovery를 위해 WebView2 기반 탭을 사용합니다. 둘 다 일반 모듈로 로드되며 browser-specific behavior는 WebView2 infrastructure와 module contracts를 통해 처리합니다.
 
 이 모듈들이 잘못된 탭이나 Not Found 탭을 열면 등록된 `ITabItemFactory`, route attributes, factory priority, `ITabManager.NavigateAsync(...)`에 전달되는 URI를 확인하세요.
 
