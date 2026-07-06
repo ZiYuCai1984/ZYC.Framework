@@ -100,7 +100,7 @@
 👉 **[快速開始指南 (quick-start.zh-TW.md)](docs/quick-start.zh-TW.md)**
 
 
-👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.8/ZYC.Framework.Setup.1.3.8.exe)**
+👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.3.9/ZYC.Framework.Setup.1.3.9.exe)**
 
 ### 建立專案
 
@@ -108,8 +108,8 @@
 推薦的開始方式是全域 dotnet tool。先安裝或更新 CLI，然後透過 `zyc new` 建立 Host 專案：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.3.8
-dotnet tool update --global ZYC.Framework.CLI --version 1.3.8
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.9
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.9
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 如果需要手動整合，仍然可以透過 NuGet 直接加入核心套件：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.3.8
+dotnet add package ZYC.Framework.Alpha --version 1.3.9
 ```
 
 ---

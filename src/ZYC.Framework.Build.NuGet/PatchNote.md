@@ -6,28 +6,25 @@
 
 ## 🆕 New Features
 
-* Added a provider-based Accounts module with session management, sign-in/sign-out commands, and protected token storage
-* Added a window-title account menu that displays the current account state and exposes provider sign-in/sign-out actions
-* Added GitHub account sign-in through an internal WebView2 OAuth flow with PKCE, state/nonce validation, redirect relay support, and callback interception
-* Added a dedicated GitHub account module and configuration surface for client id, redirect URI, deep-link URI, scopes, API version, and token exchange endpoint settings
+* Added documentation coverage for the Accounts, Accounts.GitHub, and ChromeExtensions modules in the architecture and built-in module guides
+* Added window-title extension point guidance for IWindowTitleManager, IWindowTitleExtendManager, and module-owned title-bar content
 
 ---
 
 ## 🛠 Improvements
 
-* Moved the GitHub account provider into its own module so more account providers can be added without coupling them to the core Accounts module
-* Added a reusable top-right drop-down button style and updated the window-title extension host for richer embedded controls
-* Refined toast and account-menu presentation to better match the compact title-bar UI
-* Updated package metadata, documentation, CLI examples, project template references, and installer links for version 1.3.8
+* Updated Aspire hosting to configure ProjectDirectory, Aspire:Store:Path, DcpPublisher:CliPath, and DcpPublisher:DashboardPath through builder configuration
+* Removed the reflection-based DCP options override and kept host-builder discovery in a focused Aspire partial class
+* Updated package metadata, documentation, CLI examples, project template references, generated docs, and installer links for version 1.3.9
+* Updated dependencies to ZYC.CoreToolkit 3.9.6 and Aspire 13.4.6
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Kept GitHub OAuth completion inside the application by intercepting configured deep-link callbacks from WebView2 navigation, external URI launches, and new-window requests
-* Improved GitHub token exchange validation so missing direct secrets or server-side exchange endpoints fail with clearer configuration errors
-* Removed obsolete account-menu click handling and unused dependencies after moving the UI to command-backed drop-down items
-* Kept banner popup hosting extensible for framework extension points
+* Kept Aspire state under the framework settings directory by introducing a dedicated aspire-store path
+* Preserved updated Aspire sidecar path resolution for orchestration and dashboard packages without relying on internal DCP option members
+* Clarified troubleshooting guidance for mutex overrides, NuGet search pagination, and serialized ModuleManager install/uninstall/refresh operations
 
 ---
 

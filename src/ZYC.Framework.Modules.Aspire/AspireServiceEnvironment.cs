@@ -122,6 +122,10 @@ public class AspireServiceEnvironment
 
     public string AspireToolsFolder => Path.Combine(AppContext.GetSettingsDirectory(), "aspire-tools");
 
+    public string AppHostDirectory => AppContext.GetCurrentDirectory();
+
+    public string AspireStorePath => Path.Combine(AppContext.GetSettingsDirectory(), "aspire-store");
+
     public string OrchestrationPackageName => "aspire.hosting.orchestration.win-x64";
 
     public string DashboardPackageName => "aspire.dashboard.sdk.win-x64";
