@@ -14,9 +14,11 @@ internal partial class AspireService
 {
     public static AspireService Build(ILifetimeScope lifetimeScope)
     {
+        var aspireServiceEnvironment = lifetimeScope.Resolve<AspireServiceEnvironment>();
         var options = new DistributedApplicationOptions
         {
-            AssemblyName = typeof(Module).Assembly.GetName().Name
+            AssemblyName = typeof(Module).Assembly.GetName().Name,
+            ProjectDirectory = aspireServiceEnvironment.AppHostDirectory
         };
 
         var builder = DistributedApplication.CreateBuilder(options);
@@ -26,14 +28,11 @@ internal partial class AspireService
             new AutofacChildScopeServiceProviderFactory(lifetimeScope));
 
         var aspireConfig = lifetimeScope.Resolve<AspireConfig>();
+        ConfigureAspireRuntimePaths(builder, aspireServiceEnvironment);
         foreach (var kv in aspireConfig.Environment)
         {
             builder.Configuration[kv.Key] = kv.Value;
         }
-
-        var aspireServiceEnvironment = lifetimeScope.Resolve<AspireServiceEnvironment>();
-
-        HackDcpOptions(builder, aspireServiceEnvironment);
 
         var extensionResourcesProviders = lifetimeScope.Resolve<IExtensionResourcesProvider[]>();
         foreach (var provider in extensionResourcesProviders)
@@ -72,6 +71,16 @@ internal partial class AspireService
                 new TypedParameter(typeof(DistributedApplication), app),
                 new TypedParameter(typeof(Uri), dashboardUri));
         return aspireService;
+    }
+
+
+    private static void ConfigureAspireRuntimePaths(
+        IDistributedApplicationBuilder builder,
+        AspireServiceEnvironment aspireServiceEnvironment)
+    {
+        builder.Configuration["Aspire:Store:Path"] = aspireServiceEnvironment.AspireStorePath;
+        builder.Configuration["DcpPublisher:CliPath"] = aspireServiceEnvironment.OrchestrationCliPath;
+        builder.Configuration["DcpPublisher:DashboardPath"] = aspireServiceEnvironment.DashboardPath;
     }
 
 

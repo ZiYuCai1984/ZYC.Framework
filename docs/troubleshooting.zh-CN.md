@@ -33,8 +33,8 @@
 推荐的创建流程使用全局 dotnet tool：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.3.8
-dotnet tool update --global ZYC.Framework.CLI --version 1.3.8
+dotnet tool install --global ZYC.Framework.CLI --version 1.3.9
+dotnet tool update --global ZYC.Framework.CLI --version 1.3.9
 zyc new MyCompany.Tools --template minimal
 ```
 
