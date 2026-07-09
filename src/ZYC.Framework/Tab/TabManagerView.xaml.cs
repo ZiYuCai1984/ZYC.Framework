@@ -307,7 +307,14 @@ internal partial class TabManagerView : INotifyPropertyChanged
         }
 
         var element = (FrameworkElement)sender;
-        CloseTabItemCommand.Execute(element.DataContext);
+        //!WARNING WPF may replace an item container's DataContext with BindingOperations.DisconnectedSource while a closed tab header is being removed from the visual tree.
+        if (element.DataContext is not ITabItemInstance instance)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        CloseTabItemCommand.Execute(instance);
         e.Handled = true;
     }
 }
