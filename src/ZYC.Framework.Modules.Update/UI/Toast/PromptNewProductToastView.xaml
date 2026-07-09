@@ -45,8 +45,7 @@
         <buttons:IconButton Grid.Row="1"
                             Kind="KeyboardReturn"
                             Text="{localizations:L Go to update page}"
-                            Command="{markupEx:LifetimeScopeResolve commands:NavigateCommand}"
-                            CommandParameter="{Binding TargetUri}"
+                            Click="OnNavigateButtonClick"
                             HorizontalAlignment="Right" />
 
     </Grid>

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+﻿using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.State;
 using ZYC.Framework.Abstractions.Tab;
 
@@ -28,23 +27,21 @@ public class CloseTabItemCommand : CommandBase
 
     public override bool CanExecute(object? parameter)
     {
-        if (parameter == null)
+        if (parameter is not ITabItemInstance instance)
         {
             return false;
         }
 
-        var instance = (ITabItemInstance)parameter;
         return !TabItemLockState.TabItems.Contains(instance.TabReference);
     }
 
     protected override void InternalExecute(object? parameter)
     {
-        if (parameter == null)
+        if (parameter is not ITabItemInstance instance)
         {
-            Debugger.Break();
+            return;
         }
 
-        var instance = (ITabItemInstance)parameter!;
-        TabManager.CloseAsync(instance);
+        _ = TabManager.CloseAsync(instance);
     }
 }
