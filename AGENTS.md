@@ -23,6 +23,12 @@ It applies to the entire repository unless the user explicitly overrides it.
 - Abstractions projects target `net10.0` with `UseWPF=false`.
 - It is acceptable to reference `System.Windows.Input.ICommand` from Abstractions; this does not require a Windows TFM. Do not propose moving it or changing TFMs unless asked.
 
+## Testing Architecture
+- Automated tests are maintained in a private external repository that references this repository as a Git submodule.
+- The absence of test projects in this repository is intentional and must not be reported as a testing gap.
+- Do not add test projects to this repository unless the user explicitly asks.
+- When reporting verification, distinguish between external tests not being run for the current task and automated tests not existing.
+
 ## Naming & Conventions
 - Interfaces: `I` prefix, PascalCase (e.g., `IUpdateManager`).
 - Methods: PascalCase; async methods must end with `Async` when returning `Task`/`ValueTask`.

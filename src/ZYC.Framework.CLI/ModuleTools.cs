@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Autofac;
@@ -153,6 +152,10 @@ public static class ModuleTools
                     instance.ModulePath = assembly.Location;
                     instance.IsEnabled = true;
                     instance.ReferenceAssemblyNames = ResolveModuleDependencyOn(assembly);
+
+                    //!WARNING Register as ModuleBase so AppContext can resolve the NuGet module and call UnloadAsync on exit.
+                    builder.RegisterInstance(instance)
+                        .As<ModuleBase>();
 
                     instance.RegisterAsync(builder).Wait();
 
