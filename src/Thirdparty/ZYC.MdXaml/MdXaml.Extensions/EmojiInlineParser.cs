@@ -39,6 +39,12 @@ internal sealed class EmojiInlineParser : IInlineParser
         int i = firstMatch.Index;
         int j = firstMatch.Index + firstMatch.Length;
 
+        // Pair regional indicators so country flags render as one glyph.
+        if (j - i == 2 && IsRegionalIndicator(text, i) && IsRegionalIndicator(text, j))
+        {
+            j += 2;
+        }
+
         // Expand the matched "start" into a full emoji sequence.
         ExpandEmojiCluster(text, ref j);
 
@@ -162,6 +168,12 @@ internal sealed class EmojiInlineParser : IInlineParser
             (c >= '\u2934' && c <= '\u2935') ||
             (c >= '\u2B05' && c <= '\u2B55') ||
             c == '\u2763' || c == '\u2764';
+    }
+
+    private static bool IsRegionalIndicator(string s, int i)
+    {
+        // Regional indicator A..Z: U+1F1E6..U+1F1FF => high surrogate D83C + DDE6..DDFF
+        return i + 1 < s.Length && s[i] == '\uD83C' && s[i + 1] >= '\uDDE6' && s[i + 1] <= '\uDDFF';
     }
 
     private static bool TryConsumeTagChar(string s, ref int j)

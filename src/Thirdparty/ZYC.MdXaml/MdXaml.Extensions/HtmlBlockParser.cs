@@ -62,12 +62,8 @@ internal sealed class HtmlBlockParser : IBlockParser
             SupportTextAlignment = supportTextAlignment
         };
 
-        var blocks = renderer.RenderBlocks(root).ToArray();
-        if (blocks.Length == 0)
-        {
-            return null!;
-        }
-
-        return blocks;
+        // Comments, doctypes and fully-rejected content yield no blocks;
+        // still consume the text so the raw markup is not shown as a paragraph.
+        return renderer.RenderBlocks(root).ToArray();
     }
 }

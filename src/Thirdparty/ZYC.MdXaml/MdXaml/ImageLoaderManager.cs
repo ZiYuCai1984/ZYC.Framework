@@ -21,7 +21,12 @@ namespace ZYC.MdXaml
 {
     internal class ImageLoaderManager
     {
-        private static readonly HttpClient s_client = new();
+        // Sync callers (DisabledLazyLoad) block the UI thread on this client;
+        // keep the timeout well below the 100s HttpClient default.
+        private static readonly HttpClient s_client = new()
+        {
+            Timeout = TimeSpan.FromSeconds(15),
+        };
 
         private readonly IDictionary<Uri, WeakReference<BitmapImage>> _resultCache
             = new ConcurrentDictionary<Uri, WeakReference<BitmapImage>>();
