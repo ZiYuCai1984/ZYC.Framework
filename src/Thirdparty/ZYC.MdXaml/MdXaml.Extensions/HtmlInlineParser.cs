@@ -35,14 +35,10 @@ internal sealed class HtmlInlineParser : IInlineParser
 
         HtmlDomSanitizer.Sanitize(root, markdownHtmlContext);
 
-        // Render Inlines from wrapper children
+        // Render Inlines from wrapper children.
+        // Sanitized-away content yields no inlines; still consume the text
+        // so the raw markup is not shown literally.
         var renderer = new WpfHtmlRenderer(markdownHtmlContext);
-        var inlines = renderer.RenderInlines(root).ToArray();
-        if (inlines.Length == 0)
-        {
-            return null!;
-        }
-
-        return inlines;
+        return renderer.RenderInlines(root).ToArray();
     }
 }

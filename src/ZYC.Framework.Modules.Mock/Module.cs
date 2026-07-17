@@ -32,6 +32,8 @@ internal class Module : ModuleBase
             new MockTabItemInfo(typeof(TestTaskManagerView)));
         mockTabItemFactory.RegisterMockTabItem(
             new MockTabItemInfo(typeof(TestCLIView)));
+        mockTabItemFactory.RegisterMockTabItem(
+            new MockTabItemInfo(typeof(TestMarkdownView)));
         //mockTabItemFactory.RegisterMockTabItem(
         //    new MockTabItemInfo(typeof(TestShaderView)));
 

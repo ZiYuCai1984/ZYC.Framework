@@ -604,20 +604,23 @@ namespace ZYC.MdXaml
             }
             else if (!TryOpen(new Uri(BaseUri, source)))
             {
+                bool opened;
+
                 if (Uri.IsWellFormedUriString(AssetPathRoot, UriKind.Absolute))
                 {
                     var assetUri = new Uri(new Uri(AssetPathRoot), source);
-                    TryOpen(assetUri);
+                    opened = TryOpen(assetUri);
                 }
                 else
                 {
                     var assetPath = Path.Combine(AssetPathRoot, source.ToString());
-                    TryOpen(new Uri(assetPath));
+                    opened = TryOpen(new Uri(assetPath));
                 }
-            }
-            else
-            {
-                Debug.WriteLine($"Failed to open markdown from relative path '{source}': not found");
+
+                if (!opened)
+                {
+                    Debug.WriteLine($"Failed to open markdown from relative path '{source}': not found");
+                }
             }
         }
 
@@ -633,7 +636,11 @@ namespace ZYC.MdXaml
                         return scroll;
 
                     if (child is Visual vis)
-                        return Find(vis);
+                    {
+                        var found = Find(vis);
+                        if (found is not null)
+                            return found;
+                    }
                 }
 
                 return null;

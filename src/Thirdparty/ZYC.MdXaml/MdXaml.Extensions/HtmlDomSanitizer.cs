@@ -36,6 +36,13 @@ internal static class HtmlDomSanitizer
 
         if (!HtmlAllowList.IsAllowedTag(name))
         {
+            // Sanitize children first: Unwrap moves them into the parent,
+            // where the caller's snapshot iteration never visits them again.
+            foreach (var child in el.Children.ToArray())
+            {
+                SanitizeElement(child, ctx);
+            }
+
             Unwrap(el);
             return;
         }

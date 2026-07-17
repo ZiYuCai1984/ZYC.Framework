@@ -6,7 +6,6 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.Update.Abstractions;
 using ZYC.MdXaml;
-using ZYC.MdXaml.MdXaml;
 
 namespace ZYC.Framework.Modules.Update.UI;
 
@@ -40,6 +39,7 @@ internal partial class UpdateAvailableView
             var markdownScrollViewer = new MarkdownScrollViewer();
 
             markdownScrollViewer.Syntax = SyntaxVersion.MdXaml;
+            markdownScrollViewer.ClickAction = ClickAction.SafetyOpenBrowser;
             markdownScrollViewer.VerticalAlignment = VerticalAlignment.Stretch;
             markdownScrollViewer.HorizontalAlignment = HorizontalAlignment.Stretch;
             markdownScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;

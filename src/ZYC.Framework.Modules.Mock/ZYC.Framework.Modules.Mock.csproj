@@ -17,6 +17,7 @@
     <ProjectReference Include="..\ZYC.Framework.Modules.TaskManager.Abstractions\ZYC.Framework.Modules.TaskManager.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
+    <ProjectReference Include="..\Thirdparty\ZYC.MdXaml\ZYC.MdXaml.csproj" />
   </ItemGroup>
   <Target BeforeTargets="PrepareForBuild" Name="BuildShader">
     <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/Crt.ps Shaders/Crt.fx" />

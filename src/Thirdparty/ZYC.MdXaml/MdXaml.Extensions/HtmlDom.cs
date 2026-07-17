@@ -8,9 +8,19 @@ internal static class HtmlDom
     public static IElement ParseAsWrapper(string html)
     {
         var parser = new HtmlParser();
-        // Wrap fragment so we can always return a single root element.
-        var id = "__wpf_md_html_root__";
-        var doc = parser.ParseDocument($"<div id='{id}'>{html}</div>");
-        return doc.GetElementById(id)!;
+
+        // Fragment parsing (innerHTML semantics): unlike string-wrapping the
+        // fragment in a "<div>", stray end tags cannot close the wrapper and
+        // silently drop the remaining content.
+        var document = parser.ParseDocument(string.Empty);
+        var wrapper = document.CreateElement("div");
+
+        var nodes = parser.ParseFragment(html, wrapper);
+        foreach (var node in nodes.ToArray())
+        {
+            wrapper.AppendChild(node);
+        }
+
+        return wrapper;
     }
 }

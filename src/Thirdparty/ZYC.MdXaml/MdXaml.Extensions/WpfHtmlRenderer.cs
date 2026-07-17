@@ -1,15 +1,16 @@
 ﻿using AngleSharp.Dom;
 using SharpVectors.Converters;
 using SharpVectors.Renderers.Wpf;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -333,6 +334,9 @@ internal sealed class WpfHtmlRenderer
         return list;
     }
 
+    // HTML spec cap for colspan; also bounds column allocation for hostile input.
+    private const int MaxTableSpan = 1000;
+
     private Table? MakeTable(IElement tableEl)
     {
         // Collect rows from thead/tbody or direct tr
@@ -378,7 +382,7 @@ internal sealed class WpfHtmlRenderer
                 var count = 0;
                 foreach (var cell in cells)
                 {
-                    count += ParseInt(cell.GetAttribute("colspan"), 1);
+                    count += Math.Clamp(ParseInt(cell.GetAttribute("colspan"), 1), 1, MaxTableSpan);
                 }
 
                 maxCols = Math.Max(maxCols, count);
@@ -389,6 +393,8 @@ internal sealed class WpfHtmlRenderer
         {
             return null;
         }
+
+        maxCols = Math.Min(maxCols, MaxTableSpan);
 
         var table = new Table
         {
@@ -436,8 +442,8 @@ internal sealed class WpfHtmlRenderer
 
                     cell.Blocks.Add(p);
 
-                    cell.ColumnSpan = Math.Max(1, ParseInt(cellEl.GetAttribute("colspan"), 1));
-                    cell.RowSpan = Math.Max(1, ParseInt(cellEl.GetAttribute("rowspan"), 1));
+                    cell.ColumnSpan = Math.Clamp(ParseInt(cellEl.GetAttribute("colspan"), 1), 1, MaxTableSpan);
+                    cell.RowSpan = Math.Clamp(ParseInt(cellEl.GetAttribute("rowspan"), 1), 1, MaxTableSpan);
 
                     row.Cells.Add(cell);
                 }
@@ -505,6 +511,24 @@ internal sealed class WpfHtmlRenderer
             Margin = new Thickness(8, 6, 0, 0)
         };
 
+        // The nested viewer swallows wheel events even with hidden scrollbars;
+        // re-raise them from the expander so the outer document keeps scrolling.
+        viewer.PreviewMouseWheel += (s, e) =>
+        {
+            if (e.Handled)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = UIElement.MouseWheelEvent,
+                Source = s,
+            };
+            expander.RaiseEvent(eventArg);
+        };
+
         expander.Content = viewer;
 
         return new BlockUIContainer(expander);
@@ -547,7 +571,9 @@ internal sealed class WpfHtmlRenderer
 
     private static string NormalizeHtmlTextCollapseWhitespace(string s)
     {
-        s = WebUtility.HtmlDecode(s).Replace("\0", "");
+        // AngleSharp already decodes entities in text nodes; decoding again
+        // would turn literal "&lt;" (written as "&amp;lt;") into "<".
+        s = s.Replace("\0", "");
 
         // collapse any whitespace sequence into a single space (HTML behavior)
         var sb = new StringBuilder(s.Length);
@@ -772,6 +798,17 @@ internal sealed class WpfHtmlRenderer
             {
                 link.NavigateUri = resolved;
             }
+
+            // Same click pipeline as markdown-syntax links. Keep the raw href
+            // as the parameter so "#anchor" jumps keep working.
+            link.CommandParameter = href;
+            link.Command = _ctx?.HyperlinkCommand;
+
+            var callback = _ctx?.OnHyperLinkClicked;
+            if (callback is not null)
+            {
+                link.Click += new CallbackHolder(callback).Clicked;
+            }
         }
 
         foreach (var child in el.ChildNodes)
@@ -832,12 +869,12 @@ internal sealed class WpfHtmlRenderer
         };
 
 
-        if (TryParseDouble(el.GetAttribute("width"), out var w))
+        if (TryParseDouble(el.GetAttribute("width"), out var w) && IsValidImageSize(w))
         {
             img.Width = w;
         }
 
-        if (TryParseDouble(el.GetAttribute("height"), out var h))
+        if (TryParseDouble(el.GetAttribute("height"), out var h) && IsValidImageSize(h))
         {
             img.Height = h;
         }
@@ -858,16 +895,39 @@ internal sealed class WpfHtmlRenderer
             if (uri.Scheme == Uri.UriSchemeHttp
                     || uri.Scheme == Uri.UriSchemeHttps)
             {
-                var imageSource = LoadImage(uri);
-                if (imageSource != null)
+                // Never block the transform (UI) thread on the network:
+                // show the element immediately and fill the source later.
+                if (TryGetCachedImage(uri, out var cached))
                 {
-                    img.Source = imageSource;
-                    inlines.Add(new InlineUIContainer(box)
-                    {
-                        BaselineAlignment = BaselineAlignment.Center
-                    });
+                    img.Source = cached;
+                }
+                else
+                {
+                    SetRemoteImageSourceAsync(img, uri);
+                }
+
+                inlines.Add(new InlineUIContainer(box)
+                {
+                    BaselineAlignment = BaselineAlignment.Center
+                });
+                return inlines;
+            }
+
+            if (allowData && uri.Scheme.Equals("data", StringComparison.OrdinalIgnoreCase))
+            {
+                var imageSource = LoadDataUriImage(src!);
+                if (imageSource is null)
+                {
+                    AddFallback();
                     return inlines;
                 }
+
+                img.Source = imageSource;
+                inlines.Add(new InlineUIContainer(box)
+                {
+                    BaselineAlignment = BaselineAlignment.Center
+                });
+                return inlines;
             }
 
             if (uri.Scheme == Uri.UriSchemeFile)
@@ -904,6 +964,63 @@ internal sealed class WpfHtmlRenderer
         Timeout = TimeSpan.FromSeconds(15),
     };
 
+    private const long MaxRemoteImageBytes = 20 * 1024 * 1024;
+
+    private static readonly ConcurrentDictionary<Uri, WeakReference<ImageSource>> s_remoteImageCache = new();
+    private static readonly ConcurrentDictionary<Uri, Task<ImageSource?>> s_pendingRemoteLoads = new();
+
+    private static bool IsValidImageSize(double value)
+    {
+        return !double.IsNaN(value) && !double.IsInfinity(value) && value > 0 && value <= 4096;
+    }
+
+    private static bool TryGetCachedImage(Uri uri, out ImageSource? source)
+    {
+        source = null;
+        if (s_remoteImageCache.TryGetValue(uri, out var reference))
+        {
+            if (reference.TryGetTarget(out var cached))
+            {
+                source = cached;
+                return true;
+            }
+
+            s_remoteImageCache.TryRemove(uri, out _);
+        }
+
+        return false;
+    }
+
+    private static async void SetRemoteImageSourceAsync(Image img, Uri uri)
+    {
+        try
+        {
+            // Coalesce concurrent requests for the same url (e.g. repeated badges).
+            var task = s_pendingRemoteLoads.GetOrAdd(uri, static u => Task.Run(() => LoadImage(u)));
+            ImageSource? source;
+            try
+            {
+                source = await task.ConfigureAwait(false);
+            }
+            finally
+            {
+                s_pendingRemoteLoads.TryRemove(uri, out _);
+            }
+
+            if (source is null)
+            {
+                return;
+            }
+
+            s_remoteImageCache[uri] = new WeakReference<ImageSource>(source);
+            await img.Dispatcher.InvokeAsync(() => img.Source = source);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine("[IMG] async image load failed: " + ex);
+        }
+    }
+
     private static ImageSource? LoadImage(Uri uri)
     {
         try
@@ -915,14 +1032,23 @@ internal sealed class WpfHtmlRenderer
             using var resp = _httpClient.Send(req, HttpCompletionOption.ResponseHeadersRead);
             resp.EnsureSuccessStatusCode();
 
+            if (resp.Content.Headers.ContentLength is long contentLength && contentLength > MaxRemoteImageBytes)
+            {
+                Trace.WriteLine("[IMG] image too large: " + uri);
+                return null;
+            }
+
             var ct = resp.Content.Headers.ContentType?.MediaType;
-            Trace.WriteLine("[IMG] Content-Type: " + ct);
 
             using var s = resp.Content.ReadAsStream();
             using var ms = new MemoryStream();
-            s.CopyTo(ms);
-            ms.Position = 0;
+            if (!TryCopyWithLimit(s, ms, MaxRemoteImageBytes))
+            {
+                Trace.WriteLine("[IMG] image too large: " + uri);
+                return null;
+            }
 
+            ms.Position = 0;
             if (LooksLikeSvg(ct, uri, ms))
             {
                 ms.Position = 0;
@@ -941,6 +1067,68 @@ internal sealed class WpfHtmlRenderer
         catch (Exception ex)
         {
             Trace.WriteLine("[IMG] LoadImage failed: " + ex);
+            return null;
+        }
+    }
+
+    private static bool TryCopyWithLimit(Stream source, MemoryStream destination, long limit)
+    {
+        var buffer = new byte[81920];
+        long total = 0;
+        int read;
+        while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            total += read;
+            if (total > limit)
+            {
+                return false;
+            }
+
+            destination.Write(buffer, 0, read);
+        }
+
+        return true;
+    }
+
+    private static ImageSource? LoadDataUriImage(string raw)
+    {
+        try
+        {
+            var comma = raw.IndexOf(',');
+            if (comma < 0)
+            {
+                return null;
+            }
+
+            var meta = raw.Substring(0, comma);
+            if (!meta.Contains("base64", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            var bytes = Convert.FromBase64String(raw.Substring(comma + 1).Trim());
+            if (bytes.Length == 0 || bytes.Length > MaxRemoteImageBytes)
+            {
+                return null;
+            }
+
+            using var ms = new MemoryStream(bytes, false);
+            if (meta.Contains("svg", StringComparison.OrdinalIgnoreCase))
+            {
+                return LoadSvgImageSource(ms);
+            }
+
+            var bmp = new BitmapImage();
+            bmp.BeginInit();
+            bmp.CacheOption = BitmapCacheOption.OnLoad;
+            bmp.StreamSource = ms;
+            bmp.EndInit();
+            bmp.Freeze();
+            return bmp;
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine("[IMG] LoadDataUriImage failed: " + ex);
             return null;
         }
     }
@@ -1030,9 +1218,8 @@ internal sealed class WpfHtmlRenderer
 
     private static string NormalizeText(string s)
     {
-        // Decode entities defensively (AngleSharp usually already decodes text nodes).
-        s = WebUtility.HtmlDecode(s);
-        // Keep whitespace mostly intact; but remove nulls
+        // AngleSharp already decodes entities in text nodes; decoding again
+        // would double-unescape. Keep whitespace mostly intact; remove nulls.
         return s.Replace("\0", "");
     }
 
