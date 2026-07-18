@@ -1,4 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--//TODO-zyc Temp code(ApiReference)--> 
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+
+
   <PropertyGroup>
     <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
   </PropertyGroup>

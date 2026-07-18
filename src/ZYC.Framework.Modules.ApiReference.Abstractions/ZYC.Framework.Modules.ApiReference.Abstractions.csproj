@@ -1,4 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--//TODO-zyc Temp code(ApiReference)-->
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
   </ItemGroup>

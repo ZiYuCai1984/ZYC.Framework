@@ -148,6 +148,11 @@ public class Program
 
         foreach (var file in allCsprojFiles)
         {
+            if (file.EndsWith("_wpftmp.csproj", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             var content = File.ReadAllText(file);
             //!WARNING Temp code(Shit design)
             if (content.Contains("<IgnoreFromPublish>true</IgnoreFromPublish>"))
