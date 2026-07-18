@@ -19,6 +19,11 @@ public class ChromeExtensionManagerConfig : IConfig
     /// </summary>
     public string StoreHomeUri { get; set; } = "https://chromewebstore.google.com/";
 
-
-    public string UpdateServiceUri { get; set; } = "https://clients2.google.com/service/update2/crx?response=updatecheck&prodversion=120.0.0.0&acceptformat=crx2,crx3&x=id%3D{0}%26uc";
+    /// <summary>
+    ///     Gets or sets the Google Chrome extension update service URI template
+    ///     used to retrieve CRX packages by extension ID.
+    ///     The <c>{0}</c> placeholder is replaced with the extension ID.
+    /// </summary>
+    public string UpdateServiceUri { get; set; } =
+        "https://clients2.google.com/service/update2/crx?response=updatecheck&prodversion=120.0.0.0&acceptformat=crx2,crx3&x=id%3D{0}%26uc";
 }

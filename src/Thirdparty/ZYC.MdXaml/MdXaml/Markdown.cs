@@ -1509,6 +1509,7 @@ namespace ZYC.MdXaml
             txtEdit.Text = code;
             txtEdit.HorizontalAlignment = HorizontalAlignment.Stretch;
             txtEdit.IsReadOnly = true;
+            txtEdit.FocusVisualStyle = null;
             txtEdit.PreviewMouseWheel += (s, e) =>
             {
                 if (e.Handled) return;
@@ -2215,6 +2216,7 @@ namespace ZYC.MdXaml
         private readonly Action<InlineUIContainer, Image?, ImageSource?>? _onSuccess;
 
         private readonly Style? _imageStyle;
+        private readonly bool _disabledContextMenu;
 
         public ImageLoading(
             Markdown owner,
@@ -2229,6 +2231,7 @@ namespace ZYC.MdXaml
             _onSuccess = onSuccess;
 
             _imageStyle = owner.ImageStyle;
+            _disabledContextMenu = owner.DisabledContextMenu;
         }
 
         public void Treats(Task<ImageLoaderManager.Result<FrameworkElement>> task)
@@ -2278,6 +2281,11 @@ namespace ZYC.MdXaml
                 else
                 {
                     image.Style = _imageStyle;
+                }
+
+                if (!_disabledContextMenu)
+                {
+                    ImageContextMenu.Attach(image, _urlTxt);
                 }
 
                 if (image.Source is BitmapSource bs)

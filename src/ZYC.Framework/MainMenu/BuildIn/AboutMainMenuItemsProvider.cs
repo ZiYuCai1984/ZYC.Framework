@@ -18,6 +18,7 @@ internal class AboutMainMenuItemsProvider : MainMenuItemsProvider, IAboutMainMen
         };
 
         RegisterSubItem(lifetimeScope.Resolve<SwitchVersionMainMenuItem>());
+        RegisterSubItem(lifetimeScope.Resolve<OnlineDocuemntMainMenuItem>());
     }
 
     public override MenuItemInfo Info { get; }

@@ -27,6 +27,11 @@ public static class ProductInfoExtended
     public static string Repository => "https://github.com/ZiYuCai1984/ZYC.Framework";
 
     /// <summary>
+    ///     Gets the document URL for the project.
+    /// </summary>
+    public static string DocumentUrl => "https://ziyucai1984.github.io/blob/zyc-framework/README.html";
+
+    /// <summary>
     ///     Gets the target .NET version the framework is built for (e.g., .NET 10.0).
     /// </summary>
     public static string TargetFramework => "net10.0";

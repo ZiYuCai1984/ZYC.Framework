@@ -20,6 +20,10 @@
                 <ResourceDictionary>
                     <Style TargetType="{x:Type buttons:IconButton}"
                            BasedOn="{StaticResource {x:Type Button}}" />
+                    <Style TargetType="{x:Type ScrollViewer}"
+                           BasedOn="{StaticResource {x:Type ScrollViewer}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

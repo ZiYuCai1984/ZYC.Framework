@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions;
 using ZYC.Framework.Modules.Accounts.GitHub.Abstractions;
 using ZYC.Framework.WebView2;
 
@@ -74,15 +77,15 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
             return false;
         }
 
-        var query = ParseQuery(uri.Query);
+        var query = QueryHelpers.ParseQuery(uri.Query);
         CallbackBroker.TryComplete(
             new GitHubAuthenticationCallback
             {
-                Code = query.GetValueOrDefault("code") ?? "",
-                State = query.GetValueOrDefault("state") ?? "",
+                Code = query.GetValueOrDefault("code").ToString(),
+                State = query.GetValueOrDefault("state").ToString(),
                 Nonce = GetNonce(query),
-                Error = query.GetValueOrDefault("error") ?? "",
-                ErrorDescription = query.GetValueOrDefault("error_description") ?? ""
+                Error = query.GetValueOrDefault("error").ToString(),
+                ErrorDescription = query.GetValueOrDefault("error_description").ToString()
             });
 
         CoreWebView2.NavigateToString(
@@ -97,7 +100,9 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
         var configured = GetConfiguredDeepLinkUri();
         return string.Equals(uri.Scheme, configured.Scheme, StringComparison.OrdinalIgnoreCase)
                && string.Equals(uri.Host, configured.Host, StringComparison.OrdinalIgnoreCase)
-               && string.Equals(NormalizePath(uri.AbsolutePath), NormalizePath(configured.AbsolutePath),
+               && string.Equals(
+                   UriTools.NormalizeUriPath(uri.AbsolutePath),
+                   UriTools.NormalizeUriPath(configured.AbsolutePath),
                    StringComparison.OrdinalIgnoreCase);
     }
 
@@ -115,48 +120,28 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
         return uri;
     }
 
-    private static string GetNonce(Dictionary<string, string> query)
+    private static string GetNonce(Dictionary<string, StringValues> query)
     {
         if (query.TryGetValue("nonce", out var nonce)
-            && !string.IsNullOrWhiteSpace(nonce))
+            && !string.IsNullOrWhiteSpace(nonce.ToString()))
         {
-            return nonce;
+            return nonce.ToString();
         }
 
         if (!query.TryGetValue("state", out var state)
-            || string.IsNullOrWhiteSpace(state))
+            || string.IsNullOrWhiteSpace(state.ToString()))
         {
             return "";
         }
 
-        var decodedState = DecodeRepeatedly(state);
+        var decodedState = DecodeRepeatedly(state.ToString());
         if (!Uri.TryCreate(decodedState, UriKind.Absolute, out var stateUri))
         {
             return "";
         }
 
-        var stateQuery = ParseQuery(stateUri.Query);
-        return stateQuery.GetValueOrDefault("nonce") ?? "";
-    }
-
-    private static Dictionary<string, string> ParseQuery(string query)
-    {
-        if (query.StartsWith("?", StringComparison.Ordinal))
-        {
-            query = query[1..];
-        }
-
-        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var pair in query.Split('&', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var equalsIndex = pair.IndexOf('=', StringComparison.Ordinal);
-            var key = equalsIndex < 0 ? pair : pair[..equalsIndex];
-            var value = equalsIndex < 0 ? "" : pair[(equalsIndex + 1)..];
-            values[Uri.UnescapeDataString(key.Replace("+", " ", StringComparison.Ordinal))] =
-                Uri.UnescapeDataString(value.Replace("+", " ", StringComparison.Ordinal));
-        }
-
-        return values;
+        var stateQuery = QueryHelpers.ParseQuery(stateUri.Query);
+        return stateQuery.GetValueOrDefault("nonce").ToString();
     }
 
     private static string DecodeRepeatedly(string value)
@@ -174,16 +159,5 @@ internal class GitHubAuthenticationBrowserView : WebViewHostBase
         }
 
         return current;
-    }
-
-    private static string NormalizePath(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            return "/";
-        }
-
-        path = path.StartsWith("/", StringComparison.Ordinal) ? path : "/" + path;
-        return path.Length > 1 ? path.TrimEnd('/') : path;
     }
 }

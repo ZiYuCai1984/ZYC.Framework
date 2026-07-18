@@ -77,6 +77,7 @@ public class Program
             throw new InvalidOperationException("Doc generate failed !!");
         }
 
+        //TODO-zyc GenerateDocAsync
         IOTools.CopyDirectory(
             Path.Combine(BuildEnvironment.RootFolder,"_site"),
             Path.Combine(BuildEnvironment.OutputPath, ApiReferenceModuleConstants.DocFolder));
@@ -148,6 +149,11 @@ public class Program
 
         foreach (var file in allCsprojFiles)
         {
+            if (file.EndsWith("_wpftmp.csproj", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             var content = File.ReadAllText(file);
             //!WARNING Temp code(Shit design)
             if (content.Contains("<IgnoreFromPublish>true</IgnoreFromPublish>"))

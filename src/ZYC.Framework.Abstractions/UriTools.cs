@@ -105,6 +105,27 @@ public static class UriTools
     }
 
     /// <summary>
+    ///     Normalizes a URI path by ensuring a leading slash and removing trailing slashes.
+    /// </summary>
+    /// <param name="path">The URI path to normalize.</param>
+    /// <returns>The normalized URI path.</returns>
+    public static string NormalizeUriPath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "/";
+        }
+
+        path = path.Trim();
+        if (!path.StartsWith('/'))
+        {
+            path = "/" + path;
+        }
+
+        return path.Length > 1 ? path.TrimEnd('/') : path;
+    }
+
+    /// <summary>
     ///     Normalizes a raw URI string with the application scheme.
     ///     If raw looks like a Windows path, it will be converted to a file:// URI.
     /// </summary>

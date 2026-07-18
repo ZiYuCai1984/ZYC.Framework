@@ -50,6 +50,8 @@ public partial class TestMarkdownView
 
         ## 4. Images
 
+        Right-click any image below to copy it or save it as a file.
+
         Markdown remote image (async, must not block the UI): ![badge](https://img.shields.io/badge/markdown-image-blue)
 
         HTML remote image: <img src="https://img.shields.io/badge/html-image-orange" alt="html image" />

@@ -33,8 +33,8 @@ This page lists the most common failure points in a ZYC.Framework host or module
 The recommended creation flow uses the global dotnet tool:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.3.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.3.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.0
 zyc new MyCompany.Tools --template minimal
 ```
 
