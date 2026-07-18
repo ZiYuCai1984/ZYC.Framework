@@ -20,4 +20,7 @@ internal class MarkdownHtmlContext : IMarkdownHtmlContext
 
     public HyperLinkClickCallback? OnHyperLinkClicked
         => Markdown is ZYC.MdXaml.Markdown engine ? engine.OnHyperLinkClicked : null;
+
+    public bool DisabledContextMenu
+        => Markdown is ZYC.MdXaml.Markdown engine && engine.DisabledContextMenu;
 }

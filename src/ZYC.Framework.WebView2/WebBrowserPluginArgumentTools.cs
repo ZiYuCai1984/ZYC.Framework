@@ -12,7 +12,7 @@ public static class WebBrowserPluginArgumentTools
     {
         var configuredPaths = paths
             .Where(path => !string.IsNullOrWhiteSpace(path))
-            .GroupBy(NormalizePath, StringComparer.OrdinalIgnoreCase)
+            .GroupBy(NormalizeFileSystemPath, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.First())
             .ToArray();
 
@@ -47,7 +47,10 @@ public static class WebBrowserPluginArgumentTools
             return false;
         }
 
-        return string.Equals(NormalizePath(left), NormalizePath(right), StringComparison.OrdinalIgnoreCase);
+        return string.Equals(
+            NormalizeFileSystemPath(left),
+            NormalizeFileSystemPath(right),
+            StringComparison.OrdinalIgnoreCase);
     }
 
     private static string BuildLoadExtensionArgument(IEnumerable<string> paths)
@@ -83,7 +86,7 @@ public static class WebBrowserPluginArgumentTools
                || trimmed[LoadExtensionArgumentName.Length] == '=';
     }
 
-    private static string NormalizePath(string path)
+    private static string NormalizeFileSystemPath(string path)
     {
         var normalized = path.Trim().Trim('"', '\'');
         try

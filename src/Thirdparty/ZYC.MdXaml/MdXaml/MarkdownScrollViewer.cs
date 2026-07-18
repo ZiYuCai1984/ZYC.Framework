@@ -393,6 +393,8 @@ namespace ZYC.MdXaml
             _engine = new Markdown();
             _syntax = SyntaxVersion.MdXaml;
 
+            FocusVisualStyle = null;
+
             if (BaseUri != null)
                 _engine.BaseUri = BaseUri;
 

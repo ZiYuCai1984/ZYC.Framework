@@ -46,8 +46,8 @@ public sealed class TabItemRouteAttribute : Attribute
             return true;
         }
 
-        var uriPath = NormalizePath(uri.AbsolutePath);
-        var attrPath = NormalizePath(Path);
+        var uriPath = UriTools.NormalizeUriPath(uri.AbsolutePath);
+        var attrPath = UriTools.NormalizeUriPath(Path);
 
         return PathMatch switch
         {
@@ -55,25 +55,6 @@ public sealed class TabItemRouteAttribute : Attribute
             PathMatchMode.Prefix => uriPath.StartsWith(attrPath, StringComparison.OrdinalIgnoreCase),
             _ => false
         };
-    }
-
-    /// <summary>
-    ///     Standardizes path strings by ensuring leading slashes and removing trailing slashes.
-    /// </summary>
-    private static string NormalizePath(string p)
-    {
-        p = p.Trim();
-        if (!p.StartsWith('/'))
-        {
-            p = "/" + p;
-        }
-
-        if (p.Length > 1 && p.EndsWith('/'))
-        {
-            p = p.TrimEnd('/');
-        }
-
-        return p;
     }
 }
 

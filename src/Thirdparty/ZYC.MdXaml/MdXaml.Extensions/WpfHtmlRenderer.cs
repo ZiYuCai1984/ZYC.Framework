@@ -508,7 +508,8 @@ internal sealed class WpfHtmlRenderer
             IsToolBarVisible = false,
             VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-            Margin = new Thickness(8, 6, 0, 0)
+            Margin = new Thickness(8, 6, 0, 0),
+            FocusVisualStyle = null,
         };
 
         // The nested viewer swallows wheel events even with hidden scrollbars;
@@ -882,6 +883,11 @@ internal sealed class WpfHtmlRenderer
         if (!string.IsNullOrWhiteSpace(title) || !string.IsNullOrWhiteSpace(alt))
         {
             img.ToolTip = string.IsNullOrWhiteSpace(title) ? alt : title;
+        }
+
+        if (_ctx?.DisabledContextMenu != true)
+        {
+            ImageContextMenu.Attach(img, src);
         }
 
         try
