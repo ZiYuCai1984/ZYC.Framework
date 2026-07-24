@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using ZYC.CoreToolkit;
 using ZYC.Framework.Abstractions;
 
@@ -18,7 +17,7 @@ public static class BuildEnvironment
 
     public static string CliToolCsprojPath => Path.Combine(SrcFolder, "ZYC.Framework.CLI", "ZYC.Framework.CLI.csproj");
 
-    public static string CliToolOutputPath => Path.Combine(SrcFolder, "_bin_tool");
+    public static string CliToolOutputPath => Path.Combine(SrcFolder, "_bin_dotnettool");
 
     public static string CliToolPackageOutputPath =>
         Path.Combine(CliToolOutputPath, $"ZYC.Framework.CLI.{ProductInfo.Version}.nupkg");

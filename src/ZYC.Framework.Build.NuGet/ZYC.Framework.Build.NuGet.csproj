@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Build.Utilities\ZYC.Framework.Build.Utilities.csproj" />
-    <ProjectReference Include="..\ZYC.Framework.Modules.ApiReference.Abstractions\ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.NuGet.Abstractions\ZYC.Framework.Modules.NuGet.Abstractions.csproj" />
     <ProjectReference Include="..\ZYC.Framework.Modules.Update.Abstractions\ZYC.Framework.Modules.Update.Abstractions.csproj" />
   </ItemGroup>

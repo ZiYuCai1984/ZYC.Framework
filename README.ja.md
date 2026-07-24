@@ -100,7 +100,7 @@
 👉 **[クイックスタート (quick-start.ja.md)](docs/quick-start.ja.md)**
 
 
-👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.0/ZYC.Framework.Setup.1.4.0.exe)**
+👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.1/ZYC.Framework.Setup.1.4.1.exe)**
 
 ### プロジェクト作成
 
@@ -108,8 +108,8 @@
 推奨される開始方法はグローバル dotnet tool です。CLI をインストールまたは更新し、`zyc new` でホスト プロジェクトを作成します：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.0
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.0
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.1
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.1
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 手動で統合する場合は、コア パッケージを NuGet から直接追加することもできます：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.0
+dotnet add package ZYC.Framework.Alpha --version 1.4.1
 ```
 
 ---

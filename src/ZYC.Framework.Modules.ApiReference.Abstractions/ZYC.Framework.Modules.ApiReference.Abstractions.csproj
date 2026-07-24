@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--//TODO-zyc Temp code(ApiReference)-->
+    <!-- Packed separately by ZYC.Framework.Build.NuGet.GenerateDocAsync. -->
     <IgnoreFromPublish>true</IgnoreFromPublish>
+    <Description>Abstractions for the local API reference module for ZYC.Framework.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj"
+                      PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ZYC.CoreToolkit.Abstractions" />
   </ItemGroup>
 </Project>

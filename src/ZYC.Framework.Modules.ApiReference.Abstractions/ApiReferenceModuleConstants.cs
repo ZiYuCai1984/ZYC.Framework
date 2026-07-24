@@ -9,7 +9,7 @@ public static class ApiReferenceModuleConstants
 {
     public const string Host = "api";
 
-    public const string Title = "Api Reference";
+    public const string Title = "API Reference";
 
     public const string Icon = "CreationOutline";
 

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿// ReSharper disable RedundantUsingDirective
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using ZYC.CoreToolkit;
@@ -6,7 +7,6 @@ using ZYC.CoreToolkit.Abstractions.Nuspec;
 using ZYC.CoreToolkit.Dotnet;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Build.Utilities;
-using ZYC.Framework.Modules.ApiReference.Abstractions;
 
 namespace ZYC.Framework.Build.NuGet;
 
@@ -41,7 +41,9 @@ public class Program
         await DotnetNuGetTools.PushNuGetAsync(
             BuildEnvironment.SrcFolder,
             BuildEnvironment.NuGetPushSource,
-            apiKey);
+            apiKey,
+            null,
+            false);
 #endif
         }
         finally
@@ -77,10 +79,39 @@ public class Program
             throw new InvalidOperationException("Doc generate failed !!");
         }
 
-        //TODO-zyc GenerateDocAsync
-        IOTools.CopyDirectory(
-            Path.Combine(BuildEnvironment.RootFolder,"_site"),
-            Path.Combine(BuildEnvironment.OutputPath, ApiReferenceModuleConstants.DocFolder));
+        var packageOutputPath = Path.Combine(
+            BuildEnvironment.SrcFolder,
+            "_bin_api_reference");
+
+        await IOTools.ClearPathAsync(packageOutputPath);
+
+        var projectPaths = new[]
+        {
+            Path.Combine(
+                BuildEnvironment.SrcFolder,
+                "ZYC.Framework.Modules.ApiReference.Abstractions",
+                "ZYC.Framework.Modules.ApiReference.Abstractions.csproj"),
+            Path.Combine(
+                BuildEnvironment.SrcFolder,
+                "ZYC.Framework.Modules.ApiReference",
+                "ZYC.Framework.Modules.ApiReference.csproj")
+        };
+
+        foreach (var projectPath in projectPaths)
+        {
+            await DotnetNuGetTools.PackProjectAsync(
+                projectPath,
+                packageOutputPath,
+                ProductInfo.Version,
+                false);
+        }
+
+        foreach (var packagePath in Directory.GetFiles(packageOutputPath, "*.nupkg"))
+        {
+            IOTools.CopyFile(
+                packagePath,
+                Path.Combine(BuildEnvironment.SrcFolder, Path.GetFileName(packagePath)));
+        }
     }
 
     private static async Task BuildSolutionAync(string tempSlnFileName)

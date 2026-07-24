@@ -7,13 +7,13 @@ using ZYC.Framework.Core;
 namespace ZYC.Framework.MainMenu.BuildIn;
 
 [RegisterSingleInstance]
-internal class OnlineDocuemntMainMenuItem : MainMenuItem
+internal class OnlineDocumentationMainMenuItem : MainMenuItem
 {
-    public OnlineDocuemntMainMenuItem(ILifetimeScope lifetimeScope)
+    public OnlineDocumentationMainMenuItem(ILifetimeScope lifetimeScope)
     {
         Info = new MenuItemInfo
         {
-            Title = "Online Docuemnt",
+            Title = "Online Documentation",
             Icon = "Github",
             Anchor = AboutMainMenuAnchors.About
         };
