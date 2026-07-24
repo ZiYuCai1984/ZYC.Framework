@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--//TODO-zyc Temp code(ApiReference)--> 
+    <!-- Packed separately by ZYC.Framework.Build.NuGet.GenerateDocAsync. -->
     <IgnoreFromPublish>true</IgnoreFromPublish>
+    <Description>Local API reference module for ZYC.Framework.</Description>
   </PropertyGroup>
 
 
@@ -10,11 +11,19 @@
     <Enable_Target_CopyDebugJsonToSettingsOutput>true</Enable_Target_CopyDebugJsonToSettingsOutput>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.Core\ZYC.Framework.Core.csproj"
+                      PrivateAssets="all" />
     <ProjectReference Include="..\ZYC.Framework.Modules.ApiReference.Abstractions\ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
-    <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj" />
+    <ProjectReference Include="..\ZYC.Framework.WebView2\ZYC.Framework.WebView2.csproj"
+                      PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ZYC.CoreToolkit.Extensions.Autofac" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\_site\**\*">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(TargetFramework)$(TargetPlatformVersion)\_doc\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </Content>
   </ItemGroup>
 </Project>

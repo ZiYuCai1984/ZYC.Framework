@@ -21,8 +21,8 @@ ZYC.Framework는 두 가지 일반적인 스캐폴딩 작업을 위한 `dotnet t
 CLI를 .NET tool로 설치하거나 업데이트합니다.
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.0
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.0
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.1
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.1
 ```
 
 명령을 확인합니다.
@@ -109,7 +109,7 @@ MyCompany.Tools/
 일반적인 옵션을 모두 지정한 예:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.0
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.1
 ```
 
 ## 기존 소스 트리를 위한 `new-module`

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.MainMenu;
+using ZYC.Framework.Core.Localizations;
 using ZYC.Framework.Modules.Accounts.Abstractions;
 using ZYC.Framework.Modules.Accounts.Abstractions.Event;
 using ZYC.Framework.Modules.Accounts.Commands;
@@ -72,7 +73,7 @@ internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropert
             var profile = CurrentSession?.Profile;
             if (profile == null)
             {
-                return "Accounts";
+                return L.T("Accounts");
             }
 
             if (!string.IsNullOrWhiteSpace(profile.DisplayName))
@@ -80,7 +81,7 @@ internal partial class AccountsWindowTitleItemView : IDisposable, INotifyPropert
                 return profile.DisplayName;
             }
 
-            return profile.UserName ?? "Accounts";
+            return profile.UserName ?? L.T("Accounts");
         }
     }
 

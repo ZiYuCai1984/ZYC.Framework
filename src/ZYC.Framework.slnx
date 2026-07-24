@@ -8,6 +8,8 @@
     <Project Path="ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj" />
     <Project Path="ZYC.Framework.Build.ProductVersion/ZYC.Framework.Build.ProductVersion.csproj" />
     <Project Path="ZYC.Framework.Build.Utilities/ZYC.Framework.Build.Utilities.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
+    <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
   </Folder>
   <Folder Name="/Deprecated/" />
   <Folder Name="/Modules/">
@@ -17,8 +19,6 @@
     <Project Path="ZYC.Framework.Modules.Accounts.GitHub.Abstractions/ZYC.Framework.Modules.Accounts.GitHub.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.Accounts.GitHub/ZYC.Framework.Modules.Accounts.GitHub.csproj" />
     <Project Path="ZYC.Framework.Modules.Accounts/ZYC.Framework.Modules.Accounts.csproj" />
-    <Project Path="ZYC.Framework.Modules.ApiReference.Abstractions/ZYC.Framework.Modules.ApiReference.Abstractions.csproj" />
-    <Project Path="ZYC.Framework.Modules.ApiReference/ZYC.Framework.Modules.ApiReference.csproj" />
     <Project Path="ZYC.Framework.Modules.Aspire.Abstractions/ZYC.Framework.Modules.Aspire.Abstractions.csproj" />
     <Project Path="ZYC.Framework.Modules.Aspire/ZYC.Framework.Modules.Aspire.csproj" />
     <Project Path="ZYC.Framework.Modules.BlazorDemo.Abstractions/ZYC.Framework.Modules.BlazorDemo.Abstractions.csproj" />

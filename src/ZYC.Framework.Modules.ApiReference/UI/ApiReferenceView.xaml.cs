@@ -30,7 +30,7 @@ internal partial class ApiReferenceView
     private IAppContext AppContext { get; }
 
     public override string HomePageUri => _homePageUri ??= Path.Combine(
-        AppContext.GetCurrentDirectory(),
+        Path.GetDirectoryName(typeof(ApiReferenceView).Assembly.Location)!,
         ApiReferenceModuleConstants.DocFolder,
         "_api",
         "ZYC.Framework.Abstractions.html");

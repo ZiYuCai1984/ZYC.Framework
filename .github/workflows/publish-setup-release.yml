@@ -19,7 +19,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-# //TODO-zyc Enable_GENERATE_DOC
       - run: |
           dotnet run --project src/ZYC.Framework.Build.InnoSetup/ZYC.Framework.Build.InnoSetup.csproj -c Release -p:Enable_GENERATE_DOC=false -p:Enable_PUBLISH_GITHUB_RELEASE=true
         env:

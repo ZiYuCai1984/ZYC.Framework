@@ -8,8 +8,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-# //TODO-zyc Enable_GENERATE_DOC
       - run: |
-          dotnet run --project src/ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj -c Release -p:Enable_GENERATE_DOC=false -p:Enable_PUBLISH_NUGET_ORG=true
+          dotnet run --project src/ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj -c Release -p:Enable_GENERATE_DOC=true -p:Enable_PUBLISH_NUGET_ORG=true
         env:
           NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
