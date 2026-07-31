@@ -96,7 +96,16 @@ public partial class SettingsManager : ISettingsManager
             throw new InvalidOperationException($"Can not find config <{typeof(T)}> !!");
         }
 
-        SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), targetConfig);
+        SaveConfig(targetConfig);
+    }
+
+    public void SaveConfig(IConfig config)
+    {
+        ArgumentNullException.ThrowIfNull(config);
+
+        SettingsTools.SetToFolderGeneric(
+            AppContext.GetSettingsDirectory(),
+            config);
     }
 
     public Uri GetPageUri()

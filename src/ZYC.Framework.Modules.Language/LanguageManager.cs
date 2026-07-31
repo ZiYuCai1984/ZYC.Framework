@@ -1,12 +1,12 @@
 ﻿using Autofac;
 using ZYC.CoreToolkit.Common;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
-using ZYC.CoreToolkit.Extensions.Settings;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Banner;
 using ZYC.Framework.Core.Localizations;
 using ZYC.Framework.Modules.Language.Abstractions;
 using ZYC.Framework.Modules.Language.Abstractions.Event;
+using ZYC.Framework.Modules.Settings.Abstractions;
 using ZYC.Framework.Modules.Translator.Abstractions;
 
 namespace ZYC.Framework.Modules.Language;
@@ -15,18 +15,18 @@ namespace ZYC.Framework.Modules.Language;
 internal partial class LanguageManager : ILanguageManager, ILocalizationer, ILanguageResourcesManager
 {
     public LanguageManager(
+        ISettingsManager settingsManager,
         IEventAggregator eventAggregator,
         IBannerManager bannerManager,
         OverrideDefaultLanguageResourcesConfig overrideDefaultLanguageResourcesConfig,
         ILifetimeScope lifetimeScope,
-        IAppContext appContext,
         LanguageConfig config)
     {
+        SettingsManager = settingsManager;
         EventAggregator = eventAggregator;
         BannerManager = bannerManager;
         OverrideDefaultLanguageResourcesConfig = overrideDefaultLanguageResourcesConfig;
         LifetimeScope = lifetimeScope;
-        AppContext = appContext;
         Config = config;
         DefaultLanguageResourcesConfig = ResolveDefaultLanguageResourcesConfig();
 
@@ -39,6 +39,7 @@ internal partial class LanguageManager : ILanguageManager, ILocalizationer, ILan
         LanguageResources = MergeLanguages(GetAllLanguageResources());
     }
 
+    private ISettingsManager SettingsManager { get; }
     private IEventAggregator EventAggregator { get; }
 
     private IBannerManager BannerManager { get; }
@@ -52,8 +53,6 @@ internal partial class LanguageManager : ILanguageManager, ILocalizationer, ILan
     private Dictionary<LanguageType, SnapshotDictionary<string, string>> LanguageResources { get; }
 
     private ITranslator? Translator { get; }
-
-    private IAppContext AppContext { get; }
 
     private LanguageConfig Config { get; }
 
@@ -180,7 +179,7 @@ internal partial class LanguageManager : ILanguageManager, ILocalizationer, ILan
                 $"{nameof(DefaultLanguageResourcesConfig)} is read-only. Use {nameof(OverrideDefaultLanguageResourcesConfig)} for changes.");
         }
 
-        SettingsTools.SetToFolderGeneric(AppContext.GetSettingsDirectory(), config);
+        SettingsManager.SaveConfig(config);
     }
 
     private bool TryGetValueFromCache(LanguageType languageType, string text, out string result)
