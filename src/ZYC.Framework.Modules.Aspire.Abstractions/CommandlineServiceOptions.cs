@@ -17,9 +17,20 @@ public class CommandlineServiceOptions
     public string Name { get; set; } = "";
 
     /// <summary>
-    ///     Gets or sets the command line used to launch the service.
+    ///     Gets or sets the shell command used to launch the service.
+    ///     This value is used only when <see cref="ExecutablePath" /> is empty.
     /// </summary>
     public string Command { get; set; } = "";
+
+    /// <summary>
+    ///     Gets or sets the executable path used to launch the service directly.
+    /// </summary>
+    public string ExecutablePath { get; set; } = "";
+
+    /// <summary>
+    ///     Gets or sets the arguments passed to <see cref="ExecutablePath" />.
+    /// </summary>
+    public string[] Arguments { get; set; } = [];
 
     /// <summary>
     ///     Gets or sets the working directory for the command.

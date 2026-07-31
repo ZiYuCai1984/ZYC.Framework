@@ -29,6 +29,21 @@ internal static class CommandlineResourcesProviderEx
         this IDistributedApplicationBuilder builder,
         CommandlineServiceOptions options)
     {
+        if (!string.IsNullOrWhiteSpace(options.ExecutablePath))
+        {
+            return builder.AddExecutable(
+                    options.Name,
+                    options.ExecutablePath,
+                    options.WorkDirectory)
+                .WithArgs(options.Arguments);
+        }
+
+        if (string.IsNullOrWhiteSpace(options.Command))
+        {
+            throw new InvalidOperationException(
+                $"Either {nameof(options.ExecutablePath)} or {nameof(options.Command)} must be provided.");
+        }
+
         var exe = builder.AddExecutable(
                 options.Name,
                 "cmd.exe",
