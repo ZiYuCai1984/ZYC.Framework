@@ -89,4 +89,11 @@ public partial interface ISettingsManager
     /// <returns>The created setting groups.</returns>
     [MCPIgnore]
     SettingGroup[] CreateSettingGroups<T>(T[] configs) where T : IConfig;
+
+    /// <summary>
+    ///     Saves the specified configuration instance.
+    /// </summary>
+    /// <param name="config">The configuration instance.</param>
+    [MCPIgnore]
+    void SaveConfig(IConfig config);
 }
