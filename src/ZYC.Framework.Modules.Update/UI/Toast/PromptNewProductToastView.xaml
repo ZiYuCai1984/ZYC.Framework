@@ -8,8 +8,6 @@
                  xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
                  xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
                  xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
-                 xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
-                 xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands;assembly=ZYC.Framework.Core"
                  mc:Ignorable="d"
                  d:DesignHeight="450" d:DesignWidth="800"
                  DataContext="{Binding RelativeSource={RelativeSource Self}}">

@@ -4,8 +4,6 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:markupEx="clr-namespace:ZYC.Framework.Core.MarkupEx;assembly=ZYC.Framework.Core"
-                 xmlns:commands="clr-namespace:ZYC.Framework.Core.Commands;assembly=ZYC.Framework.Core"
                  xmlns:toast="clr-namespace:ZYC.Framework.Core.Notification.Toast;assembly=ZYC.Framework.Core"
                  xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
                  xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
@@ -42,8 +40,7 @@
         <buttons:IconButton Grid.Row="1"
                             Kind="KeyboardReturn"
                             Text="{localizations:L Go to dashboard}"
-                            Command="{markupEx:LifetimeScopeResolve commands:NavigateCommand}"
-                            CommandParameter="{Binding TargetUri}"
+                            Click="OnNavigateButtonClick"
                             HorizontalAlignment="Right" />
 
     </Grid>

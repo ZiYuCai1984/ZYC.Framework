@@ -1,3 +1,5 @@
 ﻿.vs/
 _bin/
 _bin_build/
+bin/
+obj/
