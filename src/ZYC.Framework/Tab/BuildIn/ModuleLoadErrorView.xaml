@@ -21,6 +21,7 @@
                                 Margin="0 0 8 0" />
         </StackPanel>
     </page:PageBase.HeaderAdditionContent>
-    <StackPanel Margin="0 8"
-                x:Name="StackPanel" />
+    <ScrollViewer Margin="0 8">
+        <StackPanel x:Name="StackPanel" />
+    </ScrollViewer>
 </page:PageBase>
