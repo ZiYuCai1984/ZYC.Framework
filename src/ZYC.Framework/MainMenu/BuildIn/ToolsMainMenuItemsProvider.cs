@@ -18,7 +18,7 @@ internal class ToolsMainMenuItemsProvider : MainMenuItemsProvider, IToolsMainMen
             Priority = MainMenuPriority.Tools
         };
 
-        RegisterSubItem<OverrideMutexIdMainMenuItem>();
+        RegisterSubItem<IToolsOthersMainMenuItemsProvider>();
     }
 
     public override MenuItemInfo Info { get; }
