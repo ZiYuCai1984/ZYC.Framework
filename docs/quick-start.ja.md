@@ -18,9 +18,9 @@
 ZYC.Framework CLI ツールをインストール、または更新します:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.1
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.2
 # すでにインストール済みの場合:
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.1
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.2
 ```
 
 最小構成の Host プロジェクトを作成します:
@@ -44,7 +44,7 @@ zyc new MyCompany.Tools --template modular
 よく使うオプション:
 
 ```bash
-zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.1
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.2
 ```
 
 生成されたソリューションまたはプロジェクトを開き、スタートアップ プロジェクトに設定してデバッグを開始します。生成済みファイルには、パッケージ参照、`Module.cs`、`ModuleConfig.json`、初期ビューが含まれています。
@@ -62,7 +62,7 @@ zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.1
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.1" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.2" />
 </ItemGroup>
 ```
 
