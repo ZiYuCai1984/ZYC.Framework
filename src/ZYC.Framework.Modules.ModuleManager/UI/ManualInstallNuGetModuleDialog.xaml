@@ -1,0 +1,57 @@
+﻿<core:DialogWindowBase x:Class="ZYC.Framework.Modules.ModuleManager.UI.ManualInstallNuGetModuleDialog"
+                       x:ClassModifier="internal"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
+                       xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
+                       mc:Ignorable="d"
+                       d:DesignHeight="240"
+                       d:DesignWidth="460"
+                       Title="Install NuGet Module Manually"
+                       SizeToContent="WidthAndHeight"
+                       ResizeMode="NoResize"
+                       ShowInTaskbar="False"
+                       Loaded="OnDialogLoaded">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Package ID"
+                   Margin="0 0 0 6" />
+        <TextBox x:Name="PackageIdTextBox"
+                 Grid.Row="1"
+                 Width="420"
+                 Margin="0 0 0 12"
+                 Text="{Binding PackageId,UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Grid.Row="2"
+                   Text="Version"
+                   Margin="0 0 0 6" />
+        <TextBox Grid.Row="3"
+                 Width="420"
+                 Margin="0 0 0 16"
+                 Text="{Binding Version,UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel Grid.Row="4"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <buttons:IconButton Margin="0 0 8 0"
+                                Kind="DownloadOutline"
+                                Text="Install"
+                                IsDefault="True"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Click="OnInstallButtonClick" />
+            <buttons:IconButton Kind="Close"
+                                Text="Cancel"
+                                IsCancel="True"
+                                IsEnabled="{Binding IsNotBusy}" />
+        </StackPanel>
+    </Grid>
+</core:DialogWindowBase>

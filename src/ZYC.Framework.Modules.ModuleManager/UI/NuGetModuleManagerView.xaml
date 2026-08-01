@@ -21,6 +21,10 @@
         <StackPanel HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
+            <buttons:IconButton Text="Install manually"
+                                Kind="Plus"
+                                Margin="0 0 8 0"
+                                Command="{markupEx:LifetimeScopeResolve commands:ShowManualInstallNuGetModuleDialogCommand}" />
             <buttons:IconButton Text="{localizations:L Clear nuget http cache}"
                                 Kind="DeleteOutline"
                                 Margin="0 0 8 0"
