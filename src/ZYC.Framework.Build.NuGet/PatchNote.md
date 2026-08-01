@@ -6,25 +6,20 @@
 
 ## 🆕 New Features
 
-* Added an extensible **Tools > Others** menu through `IToolsOthersMainMenuItemsProvider`, with built-in items now grouped under the new section
-* Added direct executable launching for Aspire command-line services through `ExecutablePath` and `Arguments`, while retaining shell-command fallback support
-* Added `ISettingsManager.SaveConfig` so modules can persist configuration through the settings abstraction
+* Added manual NuGet module installation by package ID and version, enabling modules that are not returned by the configured feed's search results to be installed directly
+* Added input validation and in-progress state to the manual installer; installation failures now show an exception toast without closing the dialog, while successful installs prompt for an application restart
 
 ---
 
 ## 🛠 Improvements
 
-* Updated language configuration persistence to use `ISettingsManager` instead of writing directly to the settings directory
-* Disabled Aspire CLI telemetry by default and added a helper for resolving the Dashboard URI from the configured environment
-* Updated generated project templates to ignore framework and .NET build output directories
-* Refreshed multilingual documentation, installer links, and CLI/package examples for version 1.4.2
+* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation with version 1.4.3 installer links and CLI/package examples
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed the Aspire startup notification's Dashboard button to navigate through the injected command and close the notification after activation
-* Made module-load error details scrollable when the content exceeds the available page space
+* Fixed the Aspire binary-source selector so the active source uses a dedicated checkmark icon while option titles continue to use localization
 
 ---
 

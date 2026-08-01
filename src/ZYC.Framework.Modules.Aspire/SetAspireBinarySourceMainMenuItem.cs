@@ -1,9 +1,9 @@
-﻿using Autofac;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Core;
@@ -11,7 +11,6 @@ using ZYC.Framework.Core.Commands;
 using ZYC.Framework.Core.Localizations;
 using ZYC.Framework.Core.Menu;
 using ZYC.Framework.Modules.Aspire.Abstractions;
-
 
 namespace ZYC.Framework.Modules.Aspire;
 
@@ -49,7 +48,6 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
         Info = new MenuItemInfo
         {
             Title = aspireBinarySource.ToString(),
-            Localization = false,
             Icon = null
         };
 
@@ -65,7 +63,7 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
             {
                 OnPropertyChanged(nameof(Title));
             }).DisposeWith(CompositeDisposable);
-        
+
         Command = new RelayCommand(_ => TargetAspireBinarySource != AspireConfig.AspireBinarySource,
             _ =>
             {
@@ -84,18 +82,16 @@ internal class SetAspireBinarySourceOptionMainMenuItem : MainMenuItem, INotifyPr
 
     private AspireConfig AspireConfig { get; }
 
-    public override string Title
+    public override string? Icon
     {
         get
         {
-            var title = Localizationer.Localization(Info.Title);
-
             if (AspireConfig.AspireBinarySource != TargetAspireBinarySource)
             {
-                return title;
+                return null;
             }
 
-            return $"{title} ✔️";
+            return "✅";
         }
     }
 

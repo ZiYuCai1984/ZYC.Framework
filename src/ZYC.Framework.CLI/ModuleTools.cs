@@ -41,7 +41,10 @@ public static class ModuleTools
             dlls.Add(Path.Combine(currentDirectory, assembly));
         }
 
-        return dlls.ToArray();
+        return dlls
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 
     public static ModuleBase[] RegisterModules(
