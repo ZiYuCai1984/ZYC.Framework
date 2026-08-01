@@ -33,8 +33,8 @@
 권장 생성 흐름은 전역 dotnet tool을 사용합니다.
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.1
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.1
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.2
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.2
 zyc new MyCompany.Tools --template minimal
 ```
 

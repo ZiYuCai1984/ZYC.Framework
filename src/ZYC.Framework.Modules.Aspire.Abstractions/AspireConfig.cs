@@ -46,6 +46,16 @@ public class AspireConfig : IConfig
         ["ASPNETCORE_URLS"] = "http://localhost:18888",
         ["ASPIRE_ALLOW_UNSECURED_TRANSPORT"] = "true",
         ["ASPIRE_DASHBOARD_AI_DISABLED"] = "true",
-        ["ASPIRE_VERSION_CHECK_DISABLED"] = "true"
+        ["ASPIRE_VERSION_CHECK_DISABLED"] = "true",
+        ["ASPIRE_CLI_TELEMETRY_OPTOUT"] = "true"
     };
+}
+
+#pragma warning disable CS1591
+public static class AspireConfigEx
+{
+    public static string GetDashboardUriFromEnvironment(this AspireConfig aspireConfig)
+    {
+        return aspireConfig.Environment["ASPNETCORE_URLS"];
+    }
 }
