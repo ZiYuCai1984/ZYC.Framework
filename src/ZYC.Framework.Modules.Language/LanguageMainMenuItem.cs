@@ -74,16 +74,18 @@ internal class SetLanguageOptionMainMenuItem : MainMenuItem, IDisposable, INotif
 
     private LanguageConfig LanguageConfig { get; }
 
-    public override string Title
+    public override string Title => Info.Title;
+
+    public override string? Icon
     {
         get
         {
             if (LanguageConfig.CurrentLanguage != TargetLanguageType)
             {
-                return Info.Title;
+                return null;
             }
 
-            return $"{Info.Title} ✔️";
+            return "✅";
         }
     }
 
@@ -96,7 +98,7 @@ internal class SetLanguageOptionMainMenuItem : MainMenuItem, IDisposable, INotif
 
     private void OnLanguageChanged(LanguageChangedEvent obj)
     {
-        OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(Icon));
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
