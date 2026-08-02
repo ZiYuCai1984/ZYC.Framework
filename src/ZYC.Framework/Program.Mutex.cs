@@ -9,7 +9,8 @@ internal partial class Program
     private static void EnsureSingleInstance(Uri? startupUri)
     {
         //!WARNING Regardless of whether it is a singleton or not, the message should be sent first.
-        NativeMethods.PostMessage(
+        //!WARNING Use SendNotifyMessage replaced the PostMessage fix bug about restore hidden window on relaunch
+        NativeMethods.SendNotifyMessage(
             NativeMethods.HWND_BROADCAST,
             NativeMethods.WM_SHOWME,
             IntPtr.Zero,
