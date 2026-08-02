@@ -14,8 +14,10 @@ public static class NativeMethods
     public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
     [DllImport("user32")]
-    public static extern int RegisterWindowMessage(string message);
+    public static extern bool SendNotifyMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
+    [DllImport("user32")]
+    public static extern int RegisterWindowMessage(string message);
 
     public const int WM_CLOSE = 0x0010;
 
