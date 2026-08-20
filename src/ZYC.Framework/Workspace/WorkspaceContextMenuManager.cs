@@ -2,15 +2,39 @@
 using System.Windows.Input;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.Workspace;
+using ZYC.Framework.Commands;
 
 namespace ZYC.Framework.Workspace;
 
 [RegisterSingleInstanceAs(typeof(IWorkspaceContextMenuManager))]
 internal class WorkspaceContextMenuManager : IWorkspaceContextMenuManager
 {
-    public WorkspaceContextMenuManager(ILifetimeScope lifetimeScope)
+    public WorkspaceContextMenuManager(
+        ILifetimeScope lifetimeScope,
+        IWorkspaceMenuManager workspaceMenuManager,
+        HideNavigationBarCommand hideNavigationBarCommand,
+        ShowNavigationBarCommand showNavigationBarCommand)
     {
         LifetimeScope = lifetimeScope;
+
+        WorkspaceMenuItems.Add(
+            new WorkspaceMenuItem(
+                "Current Workspace",
+                null,
+                null,
+                subItems: workspaceMenuManager.GetItems()));
+
+        WorkspaceMenuItems.Add(
+            new WorkspaceMenuItem(
+                "Hide Navigation Bar",
+                hideNavigationBarCommand,
+                null));
+
+        WorkspaceMenuItems.Add(
+            new WorkspaceMenuItem(
+                "Show Navigation Bar",
+                showNavigationBarCommand,
+                null));
     }
 
     private ILifetimeScope LifetimeScope { get; }
@@ -68,11 +92,11 @@ internal class WorkspaceContextMenuManager : IWorkspaceContextMenuManager
 
         public string Title => _inner.Title;
 
-        public ICommand Command => _inner.Command;
+        public ICommand? Command => _inner.Command;
 
         public IWorkspaceMenuItem[] SubItems { get; }
 
-        public string Icon => _inner.Icon;
+        public string? Icon => _inner.Icon;
 
         public string Anchor => _inner.Anchor;
 

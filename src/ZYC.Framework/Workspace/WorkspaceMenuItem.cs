@@ -7,8 +7,8 @@ internal class WorkspaceMenuItem : IWorkspaceMenuItem
 {
     public WorkspaceMenuItem(
         string title,
-        ICommand command,
-        string icon,
+        ICommand? command,
+        string? icon,
         bool localization = true,
         string anchor = "",
         int priority = 0,
@@ -25,11 +25,11 @@ internal class WorkspaceMenuItem : IWorkspaceMenuItem
 
     public string Title { get; }
 
-    public ICommand Command { get; }
+    public ICommand? Command { get; }
 
     public IWorkspaceMenuItem[] SubItems { get; }
 
-    public string Icon { get; }
+    public string? Icon { get; }
 
     public string Anchor { get; }
 

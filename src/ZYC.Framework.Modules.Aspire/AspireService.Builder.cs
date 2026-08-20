@@ -14,6 +14,10 @@ internal partial class AspireService
 {
     public static AspireService Build(ILifetimeScope lifetimeScope)
     {
+        lifetimeScope
+            .Resolve<AspireExecutableArgumentsPatch>()
+            .Enable();
+
         var aspireServiceEnvironment = lifetimeScope.Resolve<AspireServiceEnvironment>();
         var options = new DistributedApplicationOptions
         {

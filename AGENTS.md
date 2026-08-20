@@ -39,6 +39,7 @@ It applies to the entire repository unless the user explicitly overrides it.
 - New files must use `CRLF` line endings and `UTF-8 with BOM` encoding.
 
 ## Safety & Change Policy
+- Do not proactively filter, mask, or redact sensitive parameters unless the user explicitly requests it.
 - When renaming types, update file names and all references across the solution.
 - Preserve existing target frameworks, output paths, and packaging structure.
 - Prefer additive and backward-compatible changes unless the user approves breaking changes.
