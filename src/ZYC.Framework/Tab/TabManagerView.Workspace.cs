@@ -22,6 +22,8 @@ internal partial class TabManagerView
 
     public WorkspaceNode WorkspaceNode { get; }
 
+    public IWorkspaceMenuItem[] WorkspaceContextMenuItems => WorkspaceContextMenuManager.GetItems();
+
 
     private IParallelWorkspaceManager ParallelWorkspaceManager =>
         _parallelWorkspaceManager ??= LifetimeScope.Resolve<IParallelWorkspaceManager>();

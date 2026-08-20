@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.CoreToolkit.Hook;
+using ZYC.Framework.Abstractions;
 
 namespace ZYC.Framework.Modules.Aspire;
 
@@ -11,62 +13,79 @@ internal class AspireExecutableArgumentsPatch : IDisposable
     private const string MetadataTypeName =
         "Aspire.Hosting.Dashboard.ResourcePropertySnapshotMetadata";
 
-    private delegate (string? DisplayName, bool IsHighlighted, int? SortOrder)
-        MetadataGetter(string resourceType, string name);
-
     // ReSharper disable once InconsistentNaming
     private static MetadataGetter? MetadataGet;
 
+    public AspireExecutableArgumentsPatch(ILogger<AspireExecutableArgumentsPatch> logger)
+    {
+        Logger = logger;
+    }
+
+    private ILogger<AspireExecutableArgumentsPatch> Logger { get; }
+
     private MethodHook? MethodHook { get; set; }
+
+    public void Dispose()
+    {
+        MethodHook?.Dispose();
+        MethodHook = null;
+    }
 
     public void Enable()
     {
-        if (MethodHook is not null)
+        try
         {
-            return;
+            if (MethodHook is not null)
+            {
+                return;
+            }
+
+            const BindingFlags flags =
+                BindingFlags.Static | BindingFlags.NonPublic;
+
+            var metadataType = typeof(ResourcePropertySnapshot).Assembly
+                .GetType(MetadataTypeName, true)!;
+
+            var sourceMethod = metadataType.GetMethod(
+                "Create",
+                flags,
+                null,
+                [
+                    typeof(string),
+                    typeof(string),
+                    typeof(object),
+                    typeof(bool)
+                ],
+                null) ?? throw new MissingMethodException(
+                MetadataTypeName,
+                "Create");
+
+            var getMethod = metadataType.GetMethod(
+                "Get",
+                flags,
+                null,
+                [typeof(string), typeof(string)],
+                null) ?? throw new MissingMethodException(
+                MetadataTypeName,
+                "Get");
+
+            MetadataGet = getMethod.CreateDelegate<MetadataGetter>();
+
+            var replacementMethod = typeof(AspireExecutableArgumentsPatch)
+                .GetMethod(
+                    nameof(CreateSnapshot),
+                    BindingFlags.Static | BindingFlags.NonPublic)!;
+
+            MethodHook = HookTools.HookMethod(
+                sourceMethod,
+                replacementMethod);
+
+            MethodHook.Enable();
         }
-
-        const BindingFlags flags =
-            BindingFlags.Static | BindingFlags.NonPublic;
-
-        var metadataType = typeof(ResourcePropertySnapshot).Assembly
-            .GetType(MetadataTypeName, throwOnError: true)!;
-
-        var sourceMethod = metadataType.GetMethod(
-            "Create",
-            flags,
-            null,
-            [
-                typeof(string),
-                typeof(string),
-                typeof(object),
-                typeof(bool)
-            ],
-            null) ?? throw new MissingMethodException(
-            MetadataTypeName,
-            "Create");
-
-        var getMethod = metadataType.GetMethod(
-            "Get",
-            flags,
-            null,
-            [typeof(string), typeof(string)],
-            null) ?? throw new MissingMethodException(
-            MetadataTypeName,
-            "Get");
-
-        MetadataGet = getMethod.CreateDelegate<MetadataGetter>();
-
-        var replacementMethod = typeof(AspireExecutableArgumentsPatch)
-            .GetMethod(
-                nameof(CreateSnapshot),
-                BindingFlags.Static | BindingFlags.NonPublic)!;
-
-        MethodHook = HookTools.HookMethod(
-            sourceMethod,
-            replacementMethod);
-
-        MethodHook.Enable();
+        catch (Exception e)
+        {
+            Logger.Error(e);
+        }
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -89,9 +108,6 @@ internal class AspireExecutableArgumentsPatch : IDisposable
         };
     }
 
-    public void Dispose()
-    {
-        MethodHook?.Dispose();
-        MethodHook = null;
-    }
+    private delegate (string? DisplayName, bool IsHighlighted, int? SortOrder)
+        MetadataGetter(string resourceType, string name);
 }

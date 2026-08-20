@@ -16,7 +16,7 @@ public interface IWorkspaceMenuItem
     /// <summary>
     ///     Gets the command logic to be executed when the menu item is clicked or invoked.
     /// </summary>
-    ICommand Command { get; }
+    ICommand? Command { get; }
 
     /// <summary>
     ///     Gets a collection of child menu items, allowing for nested workspace menu structures.
@@ -27,7 +27,7 @@ public interface IWorkspaceMenuItem
     ///     Gets the visual icon identifier for the menu item.
     ///     This typically refers to a path, a resource key, or a font icon glyph.
     /// </summary>
-    string Icon { get; }
+    string? Icon { get; }
 
     /// <summary>
     ///     Gets the anchor used to group or position this item within the workspace menu.

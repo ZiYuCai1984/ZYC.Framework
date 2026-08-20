@@ -14,7 +14,6 @@
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              xmlns:tab="clr-namespace:ZYC.Framework.Tab"
              xmlns:shaders="clr-namespace:ZYC.Framework.Core.Shaders;assembly=ZYC.Framework.Core"
-             xmlns:localCommands="clr-namespace:ZYC.Framework.Commands"
              xmlns:localizations="clr-namespace:ZYC.Framework.Core.Localizations;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -227,22 +226,44 @@
 
             <Border>
                 <Border.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{markupEx:LifetimeScopeResolve commands:NeverExecutableCommand}">
-                            <MenuItem.Header>
-                                <TextBlock>
-                                    <Run Text="{localizations:L Current Workspace}" />
-                                    <Run Text=" " />
-                                    <Run Text="{Binding WorkspaceNode.Index,Mode=OneWay}" />
-                                </TextBlock>
-                            </MenuItem.Header>
-                        </MenuItem>
-                        <MenuItem Header="{localizations:L Hide Navigation Bar}"
-                                  Command="{markupEx:LifetimeScopeResolve localCommands:HideNavigationBarCommand}"
-                                  CommandParameter="{Binding WorkspaceNode}" />
-                        <MenuItem Header="{localizations:L Show Navigation Bar}"
-                                  Command="{markupEx:LifetimeScopeResolve localCommands:ShowNavigationBarCommand}"
-                                  CommandParameter="{Binding WorkspaceNode}" />
+                    <ContextMenu ItemsSource="{Binding WorkspaceContextMenuItems}">
+                        <ContextMenu.Resources>
+                            <bindings:BindingProxy x:Key="WorkspaceContextMenuBindingProxy"
+                                                   Data="{Binding}" />
+                        </ContextMenu.Resources>
+                        <ContextMenu.ItemContainerStyle>
+                            <Style TargetType="{x:Type MenuItem}"
+                                   BasedOn="{StaticResource {x:Type MenuItem}}">
+                                <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                                <Setter Property="Icon"
+                                        Value="{Binding Icon,Converter={converters:PackIconMaterialConverter}}" />
+                                <Setter Property="Command" Value="{Binding Command}" />
+                                <Setter Property="CommandParameter"
+                                        Value="{Binding Data.WorkspaceNode,Source={StaticResource WorkspaceContextMenuBindingProxy}}" />
+                                <Setter Property="Header">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{converters:LocalizationMultiConverter}">
+                                            <Binding Path="Title" />
+                                            <Binding Path="Localization" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="False" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Title}" Value="Current Workspace">
+                                        <Setter Property="Header">
+                                            <Setter.Value>
+                                                <TextBlock>
+                                                    <Run Text="{localizations:L Current Workspace}" />
+                                                    <Run Text=" " />
+                                                    <Run Text="{Binding Data.WorkspaceNode.Index,Mode=OneWay,Source={StaticResource WorkspaceContextMenuBindingProxy}}" />
+                                                </TextBlock>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContextMenu.ItemContainerStyle>
                     </ContextMenu>
                 </Border.ContextMenu>
                 <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->

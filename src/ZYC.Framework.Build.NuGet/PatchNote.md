@@ -6,20 +6,22 @@
 
 ## 🆕 New Features
 
-* Added manual NuGet module installation by package ID and version, enabling modules that are not returned by the configured feed's search results to be installed directly
-* Added input validation and in-progress state to the manual installer; installation failures now show an exception toast without closing the dialog, while successful installs prompt for an application restart
+* Added a current-workspace submenu to the workspace context menu, exposing the registered workspace layout, split, merge, swap, focus, and reset actions directly from the workspace area
 
 ---
 
 ## 🛠 Improvements
 
-* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation with version 1.4.3 installer links and CLI/package examples
+* Updated the Aspire Dashboard integration to display executable arguments and environment-variable values without sensitive-value masking, while logging compatibility-patch failures without blocking Aspire startup
+* Changed the active-language indicator from appended title text to a dedicated check icon, preserving localized menu titles
+* Updated ZYC.CoreToolkit to 4.0.0 and Aspire to 13.5.0
+* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation with version 1.4.4 installer links and CLI/package examples
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed the Aspire binary-source selector so the active source uses a dedicated checkmark icon while option titles continue to use localization
+* Fixed hidden single-instance application windows not being restored when the application is launched again
 
 ---
 
