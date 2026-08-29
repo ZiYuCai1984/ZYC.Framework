@@ -192,6 +192,16 @@ public class Program
                 continue;
             }
 
+            if (file.Contains("ZYC.Framework.Build.InnoSetup"))
+            {
+                continue;
+            }
+
+            if (file.Contains("__PROJECT_NAME__"))
+            {
+                continue;
+            }
+
             result.Add(file);
         }
 
