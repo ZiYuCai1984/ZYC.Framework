@@ -1,10 +1,12 @@
-﻿using ZYC.CoreToolkit.Abstractions.Settings;
+﻿using PropertyChanged;
+using ZYC.CoreToolkit.Abstractions.Settings;
 
 namespace ZYC.Framework.Modules.Update.Abstractions;
 
 /// <summary>
 ///     Configuration options for the application update system.
 /// </summary>
+[AddINotifyPropertyChangedInterface]
 public class UpdateConfig : IConfig
 {
     /// <summary>
@@ -13,15 +15,13 @@ public class UpdateConfig : IConfig
     /// </summary>
     public bool CheckAtStartup { get; set; }
 
-#if DEBUG
-        = false;
-#else
-        //= true;
-        = false;
-#endif
-
     /// <summary>
     ///     Whether prerelease versions (e.g., alpha/beta/rc) should be included when checking for updates.
     /// </summary>
     public bool IncludePrerelease { get; set; } = true;
+
+    /// <summary>
+    ///     Whether the update menu is displayed in the user interface.
+    /// </summary>
+    public bool ShowUpdateMenu { get; set; } = true;
 }

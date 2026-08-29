@@ -16,13 +16,13 @@ ZYC.Framework 透過 `dotnet tool` 命令支援兩類常見鷹架任務：建立
 | 命令 | 目的 | 適用場景 |
 | --- | --- | --- |
 | `zyc new <ProjectName>` | 從專案範本建立一個外部 ZYC.Framework Host 專案。 | 在框架儲存庫之外啟動新應用或範例。 |
-| `zyc new-module <ModuleName> --src-root <SourceRoot>` | 在既有原始碼樹中建立模組實作專案與對應的 `*.Abstractions` 專案。 | 擴展既有的 ZYC.Framework 風格儲存庫。 |
+| `zyc new-module <ModuleName> [--src-root <SourceRoot>]` | 在既有原始碼樹中建立模組實作專案與對應的 `*.Abstractions` 專案。 | 擴展既有的 ZYC.Framework 風格儲存庫。 |
 
 以 .NET tool 方式安裝或更新 CLI：
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.4
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.4
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.5
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.5
 ```
 
 然後確認命令可用：
@@ -61,6 +61,59 @@ MyCompany.Tools/
 ```
 
 當你想用最短路徑得到可執行 Host，且功能表面只是一個簡單 WPF View 時，使用這個範本。
+
+## `console` 範本
+
+`console` 會建立一個 `net10.0` 主控台解決方案，其中包含共用建置屬性，以及一個引用 `ZYC.CoreToolkit` 4.0.0 的主控台專案。
+
+```bash
+zyc new MyCompany.Tools --template console
+```
+
+生成結構：
+
+```text
+MyCompany.Tools/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.slnx
+  MyCompany.Tools/
+    MyCompany.Tools.csproj
+    Program.cs
+```
+
+當你需要一個保留來源範本根層級共用建置設定的小型主控台應用時，使用這個範本。
+
+## `wpf` 範本
+
+`wpf` 會建立一個 `net10.0-windows` WPF 解決方案，其中包含以 Autofac 為基礎的應用程式啟動、設定註冊、Fody 屬性織入，以及對 `ZYC.CoreToolkit` 4.0.0 的參考。
+
+```bash
+zyc new MyCompany.Desktop --template wpf
+```
+
+生成結構：
+
+```text
+MyCompany.Desktop/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  FodyWeavers.xml
+  MyCompany.Desktop.slnx
+  MyCompany.Desktop/
+    App.xaml
+    App.xaml.cs
+    MainWindow.xaml
+    MainWindow.xaml.cs
+    Program.cs
+    MyCompany.Desktop.csproj
+```
+
+當你需要一個保留來源範本既有 Autofac 與設定啟動邏輯的小型 WPF 應用時，使用這個範本。
 
 ## `modular` 範本
 
@@ -101,7 +154,7 @@ MyCompany.Tools/
 | 選項 | 說明 |
 | --- | --- |
 | `<ProjectName>` | 必填專案名。必須是有效的點分隔 C# 識別碼，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 專案範本。支援 `minimal` 與 `modular`，預設 `minimal`。 |
+| `--template`, `-t` | 專案範本。支援 `minimal`、`modular`、`console` 與 `wpf`，預設 `minimal`。 |
 | `--output`, `-o` | 輸出目錄。預設 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 套件版本。預設使用 CLI 產品版本。 |
 | `--overwrite`, `-f` | 覆蓋既有檔案。不指定時，如果目標檔案已存在，生成會失敗。 |
@@ -109,7 +162,7 @@ MyCompany.Tools/
 包含常用選項的範例：
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.4
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.5
 ```
 
 ## 面向既有原始碼樹的 `new-module`
@@ -154,7 +207,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | `<ModuleName>` | 位置參數形式的目標模組名。 |
 | `--target`, `-t` | 目標模組名。請使用位置參數或此選項之一，不要提供衝突值。 |
-| `--src-root`, `-s` | 必填原始碼根目錄，模組專案會建立在這裡。 |
+| `--src-root`, `-s` | 可選原始碼根目錄，模組專案會建立在這裡；省略時預設為目前目錄。 |
 | `--slnx` | 可選的 solution XML 檔案路徑。無需更新解決方案時省略。 |
 | `--overwrite`, `-f` | 覆蓋既有檔案或模組目錄。不指定時，如果目標目錄已存在，生成會失敗。 |
 
@@ -176,6 +229,8 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | 情況 | 建議命令 |
 | --- | --- |
 | 你想最快得到一個只有一個 View 的 Host。 | `zyc new MyCompany.Tools` |
+| 你想建立一個引用 `ZYC.CoreToolkit` 的主控台應用。 | `zyc new MyCompany.Tools --template console` |
+| 你想建立一個帶有 Autofac 與設定啟動邏輯的 WPF 應用程式。 | `zyc new MyCompany.Desktop --template wpf` |
 | 你想為新應用建立模組化解決方案。 | `zyc new MyCompany.Tools --template modular` |
 | 你正在向既有儲存庫新增模組。 | `zyc new-module Reports --src-root ./src` |
 | 你需要把模組專案加入既有 `.slnx`。 | `zyc new-module Reports --src-root ./src --slnx ./ZYC.Framework.slnx` |

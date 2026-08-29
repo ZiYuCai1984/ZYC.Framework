@@ -16,13 +16,13 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 | Command | Purpose | Best for |
 | --- | --- | --- |
 | `zyc new <ProjectName>` | Creates a new external ZYC.Framework Host project from a project template. | Starting a new app or sample outside the framework repository. |
-| `zyc new-module <ModuleName> --src-root <SourceRoot>` | Creates a module implementation project and matching `*.Abstractions` project inside an existing source tree. | Extending an existing ZYC.Framework-style repository. |
+| `zyc new-module <ModuleName> [--src-root <SourceRoot>]` | Creates a module implementation project and matching `*.Abstractions` project inside an existing source tree. | Extending an existing ZYC.Framework-style repository. |
 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.4
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.4
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.5
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.5
 ```
 
 Then verify the command:
@@ -61,6 +61,59 @@ MyCompany.Tools/
 ```
 
 Use this template when you want the shortest path to a runnable host and the feature surface is one simple WPF view.
+
+## `console` Template
+
+`console` creates a `net10.0` console solution with shared build properties and a console project that references `ZYC.CoreToolkit` 4.0.0.
+
+```bash
+zyc new MyCompany.Tools --template console
+```
+
+Generated structure:
+
+```text
+MyCompany.Tools/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.slnx
+  MyCompany.Tools/
+    MyCompany.Tools.csproj
+    Program.cs
+```
+
+Use this template when you want a small console application that preserves the source template's root-level shared build configuration.
+
+## `wpf` Template
+
+`wpf` creates a `net10.0-windows` WPF solution with Autofac-based application startup, settings registration, Fody property weaving, and `ZYC.CoreToolkit` 4.0.0 references.
+
+```bash
+zyc new MyCompany.Desktop --template wpf
+```
+
+Generated structure:
+
+```text
+MyCompany.Desktop/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  FodyWeavers.xml
+  MyCompany.Desktop.slnx
+  MyCompany.Desktop/
+    App.xaml
+    App.xaml.cs
+    MainWindow.xaml
+    MainWindow.xaml.cs
+    Program.cs
+    MyCompany.Desktop.csproj
+```
+
+Use this template when you want a small WPF application with the source template's existing Autofac and settings bootstrap.
 
 ## `modular` Template
 
@@ -101,7 +154,7 @@ Use this template when the feature should look like a real framework module: pub
 | Option | Description |
 | --- | --- |
 | `<ProjectName>` | Required project name. It must be a valid dotted C# identifier, for example `Acme.Tools`. |
-| `--template`, `-t` | Project template. Supported values are `minimal` and `modular`. Defaults to `minimal`. |
+| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, and `wpf`. Defaults to `minimal`. |
 | `--output`, `-o` | Output directory. Defaults to `./<ProjectName>`. |
 | `--package-version` | `ZYC.Framework.Alpha` package version. Defaults to the CLI product version. |
 | `--overwrite`, `-f` | Overwrite existing files. Without this flag, existing target files fail the generation. |
@@ -109,7 +162,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.4
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.5
 ```
 
 ## `new-module` for Existing Source Trees
@@ -154,7 +207,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | `<ModuleName>` | Positional target module name. |
 | `--target`, `-t` | Target module name. Use either the positional value or this option, not conflicting values. |
-| `--src-root`, `-s` | Required source root where the module projects will be created. |
+| `--src-root`, `-s` | Optional source root where the module projects will be created. Defaults to the current directory. |
 | `--slnx` | Optional solution XML file to update. Omit it when you do not want solution updates. |
 | `--overwrite`, `-f` | Overwrite existing files or module directories. Without this flag, existing target directories fail the generation. |
 
@@ -176,6 +229,8 @@ Text template files are written as UTF-8 with BOM and normalized to CRLF line en
 | Situation | Recommended command |
 | --- | --- |
 | You want the fastest possible host with one view. | `zyc new MyCompany.Tools` |
+| You want a console application that references `ZYC.CoreToolkit`. | `zyc new MyCompany.Tools --template console` |
+| You want a WPF application with Autofac and settings bootstrap. | `zyc new MyCompany.Desktop --template wpf` |
 | You want a module-style solution for a new app. | `zyc new MyCompany.Tools --template modular` |
 | You are adding a module to an existing repository. | `zyc new-module Reports --src-root ./src` |
 | You need the module projects added to an existing `.slnx`. | `zyc new-module Reports --src-root ./src --slnx ./ZYC.Framework.slnx` |

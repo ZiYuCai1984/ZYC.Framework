@@ -6,22 +6,22 @@
 
 ## 🆕 New Features
 
-* Added a current-workspace submenu to the workspace context menu, exposing the registered workspace layout, split, merge, swap, focus, and reset actions directly from the workspace area
+* Added `console` and `wpf` project templates to `zyc new`, with ready-to-run .NET 10 solutions and shared build configuration
+* Added `UpdateConfig.ShowUpdateMenu` so applications can dynamically show or hide the update menu
 
 ---
 
 ## 🛠 Improvements
 
-* Updated the Aspire Dashboard integration to display executable arguments and environment-variable values without sensitive-value masking, while logging compatibility-patch failures without blocking Aspire startup
-* Changed the active-language indicator from appended title text to a dedicated check icon, preserving localized menu titles
-* Updated ZYC.CoreToolkit to 4.0.0 and Aspire to 13.5.0
-* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation with version 1.4.4 installer links and CLI/package examples
+* Simplified `zyc new-module` by defaulting `--src-root` to the current directory and keeping generation scoped to the module and abstractions templates
+* Improved the version switcher for development-template installations and added distinct `Running` and `Startup` status labels
+* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation for version 1.4.5 and the new CLI templates
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed hidden single-instance application windows not being restored when the application is launched again
+* Fixed spacing for top-positioned toast notifications so gaps are applied on the correct edge
 
 ---
 

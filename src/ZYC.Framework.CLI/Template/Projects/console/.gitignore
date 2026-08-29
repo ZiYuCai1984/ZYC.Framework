@@ -1,0 +1,17 @@
+﻿.vs/
+_bin/
+_bin_build/
+bin/
+obj/
+
+*.user
+*.nupkg
+*.exe
+*.dll
+*.pdb
+*.deps.json
+*.binlog
+*.ps
+*_wpftmp.csproj
+
+zyc.txt

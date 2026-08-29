@@ -16,13 +16,13 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 | コマンド | 目的 | 向いている用途 |
 | --- | --- | --- |
 | `zyc new <ProjectName>` | プロジェクト テンプレートから外部 ZYC.Framework Host プロジェクトを作成する。 | フレームワーク リポジトリ外で新しいアプリやサンプルを始める。 |
-| `zyc new-module <ModuleName> --src-root <SourceRoot>` | 既存ソース ツリー内にモジュール実装プロジェクトと対応する `*.Abstractions` プロジェクトを作成する。 | 既存の ZYC.Framework 形式のリポジトリを拡張する。 |
+| `zyc new-module <ModuleName> [--src-root <SourceRoot>]` | 既存ソース ツリー内にモジュール実装プロジェクトと対応する `*.Abstractions` プロジェクトを作成する。 | 既存の ZYC.Framework 形式のリポジトリを拡張する。 |
 
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.4
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.4
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.5
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.5
 ```
 
 コマンドを確認します。
@@ -61,6 +61,59 @@ MyCompany.Tools/
 ```
 
 最短で実行可能な Host を作り、機能面が 1 つの単純な WPF ビューで足りる場合に使います。
+
+## `console` テンプレート
+
+`console` は、共有ビルド プロパティと `ZYC.CoreToolkit` 4.0.0 を参照するコンソール プロジェクトを含む `net10.0` コンソール ソリューションを作成します。
+
+```bash
+zyc new MyCompany.Tools --template console
+```
+
+生成される構成:
+
+```text
+MyCompany.Tools/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.slnx
+  MyCompany.Tools/
+    MyCompany.Tools.csproj
+    Program.cs
+```
+
+ソース テンプレートのルート レベル共有ビルド構成を保持した小さなコンソール アプリケーションが必要な場合に使います。
+
+## `wpf` テンプレート
+
+`wpf` は、Autofac ベースのアプリケーション起動、設定登録、Fody プロパティ ウィービング、および `ZYC.CoreToolkit` 4.0.0 への参照を備えた `net10.0-windows` WPF ソリューションを作成します。
+
+```bash
+zyc new MyCompany.Desktop --template wpf
+```
+
+生成される構成:
+
+```text
+MyCompany.Desktop/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  FodyWeavers.xml
+  MyCompany.Desktop.slnx
+  MyCompany.Desktop/
+    App.xaml
+    App.xaml.cs
+    MainWindow.xaml
+    MainWindow.xaml.cs
+    Program.cs
+    MyCompany.Desktop.csproj
+```
+
+ソース テンプレート既存の Autofac と設定のブートストラップを備えた小さな WPF アプリケーションが必要な場合に使います。
 
 ## `modular` テンプレート
 
@@ -101,7 +154,7 @@ MyCompany.Tools/
 | オプション | 説明 |
 | --- | --- |
 | `<ProjectName>` | 必須のプロジェクト名。`Acme.Tools` のような有効なドット区切り C# 識別子である必要があります。 |
-| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal` と `modular`。既定は `minimal`。 |
+| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`wpf`。既定は `minimal`。 |
 | `--output`, `-o` | 出力ディレクトリ。既定は `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` のパッケージ バージョン。既定は CLI の製品バージョン。 |
 | `--overwrite`, `-f` | 既存ファイルを上書きする。この指定がない場合、対象ファイルが存在すると生成は失敗します。 |
@@ -109,7 +162,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.4
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.5
 ```
 
 ## 既存ソース ツリー向けの `new-module`
@@ -154,7 +207,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | `<ModuleName>` | 位置引数のターゲット モジュール名。 |
 | `--target`, `-t` | ターゲット モジュール名。位置引数またはこのオプションのどちらかを使い、矛盾する値を指定しないでください。 |
-| `--src-root`, `-s` | モジュール プロジェクトを作成する必須のソース ルート。 |
+| `--src-root`, `-s` | モジュール プロジェクトを作成する任意のソース ルート。省略時は現在のディレクトリを使用します。 |
 | `--slnx` | 更新する任意の solution XML ファイル。ソリューション更新が不要な場合は省略します。 |
 | `--overwrite`, `-f` | 既存ファイルまたはモジュール ディレクトリを上書きする。この指定がない場合、対象ディレクトリが存在すると生成は失敗します。 |
 
@@ -176,6 +229,8 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | 状況 | 推奨コマンド |
 | --- | --- |
 | 1 つのビューを持つ最速の Host が欲しい。 | `zyc new MyCompany.Tools` |
+| `ZYC.CoreToolkit` を参照するコンソール アプリケーションが欲しい。 | `zyc new MyCompany.Tools --template console` |
+| Autofac と設定のブートストラップを備えた WPF アプリケーションが欲しい。 | `zyc new MyCompany.Desktop --template wpf` |
 | 新しいアプリでモジュール形式のソリューションが欲しい。 | `zyc new MyCompany.Tools --template modular` |
 | 既存リポジトリへモジュールを追加したい。 | `zyc new-module Reports --src-root ./src` |
 | 生成したモジュール プロジェクトを既存 `.slnx` に追加したい。 | `zyc new-module Reports --src-root ./src --slnx ./ZYC.Framework.slnx` |

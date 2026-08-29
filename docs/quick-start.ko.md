@@ -18,9 +18,9 @@
 ZYC.Framework CLI 도구를 설치하거나 업데이트합니다:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.4
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.5
 # 이미 설치되어 있다면:
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.4
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.5
 ```
 
 최소 Host 프로젝트를 만듭니다:
@@ -44,7 +44,7 @@ zyc new MyCompany.Tools --template modular
 자주 쓰는 옵션:
 
 ```bash
-zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.4
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.5
 ```
 
 생성된 솔루션 또는 프로젝트를 열고 시작 프로젝트로 설정한 뒤 디버깅을 시작합니다. 생성된 파일에는 패키지 참조, `Module.cs`, `ModuleConfig.json`, 초기 View가 이미 포함되어 있습니다.
@@ -62,7 +62,7 @@ Host 프로젝트를 직접 만들고 싶다면 아래의 동등한 절차를 �
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.4" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.5" />
 </ItemGroup>
 ```
 

@@ -16,13 +16,13 @@ ZYC.Framework는 두 가지 일반적인 스캐폴딩 작업을 위한 `dotnet t
 | 명령 | 목적 | 적합한 경우 |
 | --- | --- | --- |
 | `zyc new <ProjectName>` | 프로젝트 템플릿에서 외부 ZYC.Framework Host 프로젝트를 만듭니다. | 프레임워크 저장소 밖에서 새 앱이나 샘플을 시작할 때. |
-| `zyc new-module <ModuleName> --src-root <SourceRoot>` | 기존 소스 트리 안에 모듈 구현 프로젝트와 대응하는 `*.Abstractions` 프로젝트를 만듭니다. | 기존 ZYC.Framework 스타일 저장소를 확장할 때. |
+| `zyc new-module <ModuleName> [--src-root <SourceRoot>]` | 기존 소스 트리 안에 모듈 구현 프로젝트와 대응하는 `*.Abstractions` 프로젝트를 만듭니다. | 기존 ZYC.Framework 스타일 저장소를 확장할 때. |
 
 CLI를 .NET tool로 설치하거나 업데이트합니다.
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.4
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.4
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.5
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.5
 ```
 
 명령을 확인합니다.
@@ -61,6 +61,59 @@ MyCompany.Tools/
 ```
 
 하나의 단순한 WPF 뷰만 필요한 실행 가능한 Host를 가장 빠르게 만들고 싶을 때 사용합니다.
+
+## `console` 템플릿
+
+`console`은 공유 빌드 속성과 `ZYC.CoreToolkit` 4.0.0을 참조하는 콘솔 프로젝트를 포함한 `net10.0` 콘솔 솔루션을 만듭니다.
+
+```bash
+zyc new MyCompany.Tools --template console
+```
+
+생성 구조:
+
+```text
+MyCompany.Tools/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.slnx
+  MyCompany.Tools/
+    MyCompany.Tools.csproj
+    Program.cs
+```
+
+원본 템플릿의 루트 수준 공유 빌드 구성을 유지하는 작은 콘솔 애플리케이션이 필요할 때 사용합니다.
+
+## `wpf` 템플릿
+
+`wpf`는 Autofac 기반 애플리케이션 시작, 설정 등록, Fody 속성 위빙 및 `ZYC.CoreToolkit` 4.0.0 참조를 포함한 `net10.0-windows` WPF 솔루션을 만듭니다.
+
+```bash
+zyc new MyCompany.Desktop --template wpf
+```
+
+생성 구조:
+
+```text
+MyCompany.Desktop/
+  .editorconfig
+  .gitignore
+  Directory.Build.props
+  Directory.Build.targets
+  FodyWeavers.xml
+  MyCompany.Desktop.slnx
+  MyCompany.Desktop/
+    App.xaml
+    App.xaml.cs
+    MainWindow.xaml
+    MainWindow.xaml.cs
+    Program.cs
+    MyCompany.Desktop.csproj
+```
+
+원본 템플릿의 기존 Autofac 및 설정 부트스트랩을 유지하는 작은 WPF 애플리케이션이 필요할 때 사용합니다.
 
 ## `modular` 템플릿
 
@@ -101,7 +154,7 @@ MyCompany.Tools/
 | 옵션 | 설명 |
 | --- | --- |
 | `<ProjectName>` | 필수 프로젝트 이름. `Acme.Tools`처럼 유효한 점 구분 C# 식별자여야 합니다. |
-| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`입니다. 기본값은 `minimal`입니다. |
+| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `wpf`입니다. 기본값은 `minimal`입니다. |
 | `--output`, `-o` | 출력 디렉터리. 기본값은 `./<ProjectName>`입니다. |
 | `--package-version` | `ZYC.Framework.Alpha` 패키지 버전. 기본값은 CLI 제품 버전입니다. |
 | `--overwrite`, `-f` | 기존 파일을 덮어씁니다. 이 플래그가 없으면 대상 파일이 있을 때 생성이 실패합니다. |
@@ -109,7 +162,7 @@ MyCompany.Tools/
 일반적인 옵션을 모두 지정한 예:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.4
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.5
 ```
 
 ## 기존 소스 트리를 위한 `new-module`
@@ -154,7 +207,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | `<ModuleName>` | 위치 인수 형태의 target 모듈 이름. |
 | `--target`, `-t` | target 모듈 이름. 위치 값 또는 이 옵션 중 하나를 사용하고, 서로 다른 값을 동시에 지정하지 마세요. |
-| `--src-root`, `-s` | 필수 소스 루트. 모듈 프로젝트가 여기에 생성됩니다. |
+| `--src-root`, `-s` | 선택적 소스 루트. 모듈 프로젝트가 여기에 생성되며, 생략하면 현재 디렉터리를 사용합니다. |
 | `--slnx` | 업데이트할 선택적 solution XML 파일. 솔루션 업데이트가 필요 없으면 생략합니다. |
 | `--overwrite`, `-f` | 기존 파일 또는 모듈 디렉터리를 덮어씁니다. 이 플래그가 없으면 대상 디렉터리가 있을 때 생성이 실패합니다. |
 
@@ -176,6 +229,8 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | 상황 | 권장 명령 |
 | --- | --- |
 | 하나의 뷰가 있는 가장 빠른 Host가 필요합니다. | `zyc new MyCompany.Tools` |
+| `ZYC.CoreToolkit`을 참조하는 콘솔 애플리케이션이 필요합니다. | `zyc new MyCompany.Tools --template console` |
+| Autofac 및 설정 부트스트랩이 포함된 WPF 애플리케이션이 필요합니다. | `zyc new MyCompany.Desktop --template wpf` |
 | 새 앱에 모듈 스타일 솔루션이 필요합니다. | `zyc new MyCompany.Tools --template modular` |
 | 기존 저장소에 모듈을 추가합니다. | `zyc new-module Reports --src-root ./src` |
 | 모듈 프로젝트를 기존 `.slnx`에 추가해야 합니다. | `zyc new-module Reports --src-root ./src --slnx ./ZYC.Framework.slnx` |

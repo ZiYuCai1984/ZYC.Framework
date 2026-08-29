@@ -1,2 +1,4 @@
 ﻿_*/
+!src/ZYC.Framework.CLI/Template/Projects/*/__PROJECT_NAME__/
+!src/ZYC.Framework.CLI/Template/Projects/*/__PROJECT_NAME__/**
 .claude/
