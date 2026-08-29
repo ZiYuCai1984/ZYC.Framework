@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Linq;
 
 namespace ZYC.Framework.CLI;
@@ -38,12 +37,14 @@ public static class NewModuleGenerator
         var target = NormalizeTarget(options.Target);
         var sourceRoot = ResolveSourceRoot(options.SourceRoot);
         var templateRoot = ResolveTemplateRoot();
+        var moduleTemplateRoots = ResolveModuleTemplateRoots(templateRoot);
         var shortName = GetShortName(target);
         var slnxPath = ResolveSlnxPath(sourceRoot, options.SlnxPath);
 
         EnsureTargetDoesNotExist(sourceRoot, target, options.Overwrite);
 
-        var generatedFiles = Directory.GetFiles(templateRoot, "*.*", SearchOption.AllDirectories)
+        var generatedFiles = moduleTemplateRoots
+            .SelectMany(root => Directory.GetFiles(root, "*.*", SearchOption.AllDirectories))
             .OrderBy(static path => path, StringComparer.OrdinalIgnoreCase)
             .Select(file => GenerateFile(templateRoot, sourceRoot, file, target, shortName, options.Overwrite))
             .ToList();
@@ -95,8 +96,7 @@ public static class NewModuleGenerator
     {
         if (string.IsNullOrWhiteSpace(sourceRoot))
         {
-            throw new ArgumentException("Source root is required. Pass --src-root <SourceRoot>.",
-                nameof(sourceRoot));
+            sourceRoot = Directory.GetCurrentDirectory();
         }
 
         return Path.GetFullPath(sourceRoot);
@@ -111,6 +111,25 @@ public static class NewModuleGenerator
         }
 
         return templateRoot;
+    }
+
+    private static IReadOnlyList<string> ResolveModuleTemplateRoots(string templateRoot)
+    {
+        var templateRoots = new[]
+        {
+            Path.Combine(templateRoot, $"ZYC.Framework.Modules.{TemplateName}"),
+            Path.Combine(templateRoot, $"ZYC.Framework.Modules.{TemplateName}.Abstractions")
+        };
+
+        foreach (var root in templateRoots)
+        {
+            if (!Directory.Exists(root))
+            {
+                throw new DirectoryNotFoundException($"Module template root not found: '{root}'.");
+            }
+        }
+
+        return templateRoots;
     }
 
     private static string? ResolveSlnxPath(string sourceRoot, string? slnxPath)

@@ -79,9 +79,11 @@ internal class Program
 
     private static void RegisterNewProjectCommand(RootCommand rootCommand)
     {
-        var newProjectCommand = new Command("new", "Create a new project from template.");
+        var newProjectCommand = new Command("new",
+            $"Create a new project from template. [-t|--template <{string.Join("|", NewProjectGenerator.TemplateNames)}>] " +
+            "[-o|--output <directory>] [--package-version <version>] [-f|--overwrite]");
 
-        var nameArgument = new Argument<string?>("name", () => null, "Project name.");
+        var nameArgument = new Argument<string?>("name", "Project name.");
 
         var templateOption = new Option<string>("--template", () => NewProjectGenerator.DefaultTemplateName,
             $"Project template. Supported values: {string.Join(", ", NewProjectGenerator.TemplateNames)}.");
@@ -142,7 +144,8 @@ internal class Program
 
         var targetArgument = new Argument<string?>("target", () => null, "Target module name.");
 
-        var sourceRootOption = new Option<string?>("--src-root", "Source root directory.");
+        var sourceRootOption = new Option<string?>("--src-root",
+            "Source root directory. Defaults to the current directory.");
         sourceRootOption.AddAlias("-s");
 
         var slnxOption = new Option<string?>("--slnx", "Optional slnx path. Omit to skip updating any slnx.");
@@ -180,14 +183,6 @@ internal class Program
             {
                 context.Console.Error.Write(
                     $"Target is required. Pass --target <ModuleName> or provide <ModuleName> as positional argument.{Environment.NewLine}");
-                context.ExitCode = 1;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(sourceRoot))
-            {
-                context.Console.Error.Write(
-                    $"Source root is required. Pass --src-root <SourceRoot>.{Environment.NewLine}");
                 context.ExitCode = 1;
                 return;
             }

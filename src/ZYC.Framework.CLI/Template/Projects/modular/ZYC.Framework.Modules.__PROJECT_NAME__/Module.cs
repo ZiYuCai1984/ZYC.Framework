@@ -13,7 +13,7 @@ internal class Module : ModuleBase
 
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
-        DebuggerTools.Attach();
+        //DebuggerTools.Attach();
 
         lifetimeScope.RegisterTabItemFactory<__PROJECT_SHORT_NAME__TabItemFactory>();
         lifetimeScope.Resolve<IExtensionsMainMenuItemsProvider>()

@@ -38,7 +38,9 @@ public static class NewProjectGenerator
     private static readonly string[] SupportedTemplateNames =
     [
         DefaultTemplateName,
-        "modular"
+        "modular",
+        "console",
+        "wpf"
     ];
 
     private static readonly Regex ProjectNameRegex = new(

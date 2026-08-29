@@ -1,0 +1,55 @@
+﻿<Project>
+
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>_</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EnableFody Condition="'$(EnableFody)' == ''">false</EnableFody>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EnableFody)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)FodyWeavers.xml"
+          Link="FodyWeavers.xml" />
+    <PackageReference Include="PropertyChanged.Fody" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <V_ZYC_CoreToolkit>4.0.0</V_ZYC_CoreToolkit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="ZYC.CoreToolkit" Version="$(V_ZYC_CoreToolkit)" />
+    <PackageReference Update="ZYC.CoreToolkit.Pro" Version="$(V_ZYC_CoreToolkit)" />
+    <PackageReference Update="ZYC.CoreToolkit.Abstractions" Version="$(V_ZYC_CoreToolkit)" />
+    <PackageReference Update="ZYC.CoreToolkit.Extensions.Autofac" Version="$(V_ZYC_CoreToolkit)" />
+    <PackageReference Update="ZYC.CoreToolkit.Extensions.Settings" Version="$(V_ZYC_CoreToolkit)" />
+    <PackageReference Update="ZYC.CoreToolkit.Extensions.WebView2" Version="$(V_ZYC_CoreToolkit)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="ZYC.CoreToolkit.Extensions.Fxc" Version="$(V_ZYC_CoreToolkit_Extensions_Fxc)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="ZYC.CoreToolkit.CodeGenerator" Version="$(V_ZYC_CoreToolkit)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime;build;native;contentfiles;analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="System.Reactive" Version="7.0.0-preview.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="PropertyChanged.Fody" Version="4.1.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

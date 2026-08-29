@@ -17,6 +17,7 @@ internal sealed class ToastStackPopupHost : IDisposable
 {
     private const double EdgeMarginHorizontal = 8;
 
+    //!WARNING Keep this at 0 because the vertical edge spacing is provided by each toast's directional margin in Add; a non-zero value would apply the spacing twice.
     private const double EdgeMarginVertical = 0;
 
     private const double ToastMinWidth = 240;
@@ -292,7 +293,15 @@ internal sealed class ToastStackPopupHost : IDisposable
         element.HorizontalAlignment = IsLeftPlacement()
             ? HorizontalAlignment.Left
             : HorizontalAlignment.Right;
-        element.Margin = new Thickness(0, 0, 0, ToastGap);
+
+        if (IsTopPlacement())
+        {
+            element.Margin = new Thickness(0, ToastGap, 0, 0);
+        }
+        else
+        {
+            element.Margin = new Thickness(0, 0, 0, ToastGap);
+        }
 
         _stack.Children.Insert(0, element);
 

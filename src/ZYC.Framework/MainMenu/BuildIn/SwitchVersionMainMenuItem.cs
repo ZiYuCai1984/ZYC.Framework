@@ -18,6 +18,8 @@ internal class SwitchVersionMainMenuItem : MainMenuItemsProvider
 {
     private static RelayCommand DisabledCommand { get; } = new(_ => false, _ => { });
 
+    private static string DevelopSpecialFolder => "app";
+
     public SwitchVersionMainMenuItem(
         ILifetimeScope lifetimeScope,
         IAppContext appContext,
@@ -39,20 +41,37 @@ internal class SwitchVersionMainMenuItem : MainMenuItemsProvider
             var versions = EnumerateInstalledVersions(appContext).ToArray();
             if (versions.Length == 0)
             {
-                RegisterSubItem(CreateDisabledItem("No installed versions found"));
+                //RegisterSubItem(CreateDisabledItem("No installed versions found"));
                 return;
             }
 
             for (var i = 0; i < versions.Length; i++)
             {
-                var item = new SwitchVersionOptionMainMenuItem(
-                    versions[i],
-                    i,
-                    appContext,
-                    product,
-                    appState,
-                    bannerManager,
-                    NotifyVersionStateChanged);
+                SwitchVersionOptionMainMenuItem item;
+
+                //!WARNING Upgrading from within the app should be disabled when using a development template.
+                if (versions[i] == DevelopSpecialFolder)
+                {
+                    item = new SwitchVersionOptionMainMenuItem(
+                        product.Version,
+                        i,
+                        appContext,
+                        product,
+                        appState,
+                        bannerManager,
+                        NotifyVersionStateChanged);
+                }
+                else
+                {
+                    item = new SwitchVersionOptionMainMenuItem(
+                        versions[i],
+                        i,
+                        appContext,
+                        product,
+                        appState,
+                        bannerManager,
+                        NotifyVersionStateChanged);
+                }
 
                 VersionItems.Add(item);
                 RegisterSubItem(item);
@@ -161,7 +180,12 @@ internal class SwitchVersionOptionMainMenuItem : MainMenuItem, INotifyPropertyCh
         {
             if (IsRunningVersion)
             {
-                return $"{TargetVersion} (Current)";
+                return $"{TargetVersion} (Running)";
+            }
+
+            if (IsStartupVersion)
+            {
+                return $"{TargetVersion} (Startup)";
             }
 
             return TargetVersion;
