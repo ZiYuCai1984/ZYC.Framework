@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Autofac;
+using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.Event;
 using ZYC.Framework.Abstractions.Workspace;
 
@@ -24,6 +25,13 @@ internal partial class TabManagerView
 
     public IWorkspaceMenuItem[] WorkspaceContextMenuItems => WorkspaceContextMenuManager.GetItems();
 
+    private WorkspaceConfig WorkspaceConfig { get; }
+
+    public bool IsWorkspaceEmptyIndexVisible
+    {
+        get => WorkspaceConfig.IsWorkspaceEmptyIndexVisible;
+        set => WorkspaceConfig.IsWorkspaceEmptyIndexVisible = value;
+    }
 
     private IParallelWorkspaceManager ParallelWorkspaceManager =>
         _parallelWorkspaceManager ??= LifetimeScope.Resolve<IParallelWorkspaceManager>();

@@ -6,22 +6,26 @@
 
 ## 🆕 New Features
 
-* Added `console` and `wpf` project templates to `zyc new`, with ready-to-run .NET 10 solutions and shared build configuration
-* Added `UpdateConfig.ShowUpdateMenu` so applications can dynamically show or hide the update menu
+* Added `WorkspaceConfig.IsWorkspaceEmptyIndexVisible` so applications can show or hide the large workspace index displayed when a workspace has no tabs
+
+---
+
+## ⚠️ Breaking Changes
+
+* Renamed `WorkspaceMenuConfig` to `WorkspaceConfig` and renamed `IsVisible` to `IsMenuVisible`; applications using the previous workspace-menu configuration API must update their references
 
 ---
 
 ## 🛠 Improvements
 
-* Simplified `zyc new-module` by defaulting `--src-root` to the current directory and keeping generation scoped to the module and abstractions templates
-* Improved the version switcher for development-template installations and added distinct `Running` and `Startup` status labels
-* Refreshed the multilingual README, quick-start, project-template, and troubleshooting documentation for version 1.4.5 and the new CLI templates
+* Updated the framework dependency baseline to ZYC.CoreToolkit 4.0.1 and completed the FxC dependency version settings in generated console and WPF projects
+* Refreshed multilingual download, installation, quick-start, project-template, and troubleshooting documentation for version 1.4.6
 
 ---
 
 ## 🐛 Bug Fixes
 
-* Fixed spacing for top-positioned toast notifications so gaps are applied on the correct edge
+* Fixed the update main-menu item's configuration subscription lifetime so it is disposed together with the menu item
 
 ---
 

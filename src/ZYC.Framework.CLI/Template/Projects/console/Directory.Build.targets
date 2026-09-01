@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <V_ZYC_CoreToolkit>4.0.0</V_ZYC_CoreToolkit>
+    <V_ZYC_CoreToolkit_Extensions_Fxc>3.8.4</V_ZYC_CoreToolkit_Extensions_Fxc>
   </PropertyGroup>
 
   <ItemGroup>

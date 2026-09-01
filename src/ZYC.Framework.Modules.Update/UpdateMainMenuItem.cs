@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Runtime.CompilerServices;
 using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -9,7 +11,7 @@ using ZYC.Framework.Modules.Update.Abstractions;
 namespace ZYC.Framework.Modules.Update;
 
 [RegisterSingleInstance]
-internal class UpdateMainMenuItem : MainMenuItem, INotifyPropertyChanged
+internal class UpdateMainMenuItem : MainMenuItem, INotifyPropertyChanged, IDisposable
 {
     public UpdateMainMenuItem(ILifetimeScope lifetimeScope, UpdateConfig updateConfig)
     {
@@ -26,12 +28,19 @@ internal class UpdateMainMenuItem : MainMenuItem, INotifyPropertyChanged
         updateConfig.ObserveProperty(nameof(UpdateConfig.ShowUpdateMenu)).Subscribe(_ =>
         {
             OnPropertyChanged(nameof(IsHidden));
-        });
+        }).DisposeWith(CompositeDisposable);
     }
+
+    private CompositeDisposable CompositeDisposable { get; } = new();
 
     private UpdateConfig UpdateConfig { get; }
 
     public override bool IsHidden => !UpdateConfig.ShowUpdateMenu;
+
+    public void Dispose()
+    {
+        CompositeDisposable.Dispose();
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
