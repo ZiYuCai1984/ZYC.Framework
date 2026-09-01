@@ -224,7 +224,9 @@
                 </TabControl.ItemContainerStyle>
             </TabControl>
 
-            <Border>
+            <Border Background="Transparent"
+                    MouseDown="OnWorkspaceNodeIndexMouseDown"
+                    Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}">
                 <Border.ContextMenu>
                     <ContextMenu ItemsSource="{Binding WorkspaceContextMenuItems}">
                         <ContextMenu.Resources>
@@ -256,7 +258,8 @@
                                                 <TextBlock>
                                                     <Run Text="{localizations:L Current Workspace}" />
                                                     <Run Text=" " />
-                                                    <Run Text="{Binding Data.WorkspaceNode.Index,Mode=OneWay,Source={StaticResource WorkspaceContextMenuBindingProxy}}" />
+                                                    <Run
+                                                        Text="{Binding Data.WorkspaceNode.Index,Mode=OneWay,Source={StaticResource WorkspaceContextMenuBindingProxy}}" />
                                                 </TextBlock>
                                             </Setter.Value>
                                         </Setter>
@@ -266,21 +269,21 @@
                         </ContextMenu.ItemContainerStyle>
                     </ContextMenu>
                 </Border.ContextMenu>
-                <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
-                <Border
-                    Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
-                    Background="Transparent"
-                    MouseDown="OnWorkspaceNodeIndexMouseDown">
-                    <!--!WARNING Hides when index is 0-->
-                    <TextBlock Text="{Binding WorkspaceNode.Index}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="108"
-                               Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=0.5,FalseValue=0.2}}"
-                               Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}" />
+                <Border Visibility="{Binding IsWorkspaceEmptyIndexVisible,Converter={converters:BoolToVisibilityConverter}}">
+                    <!--!WARNING Can only move the focus by clicking here if the TabItemSource.Count is 0-->
+                    <Border
+                        Visibility="{Binding TabItemSource.Count,ElementName=Root,Converter={converters:IntToVisibilityConverter Reverse=True}}"
+                        Background="Transparent">
+                        <!--!WARNING Hides when index is 0-->
+                        <TextBlock Text="{Binding WorkspaceNode.Index}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="108"
+                                   Opacity="{Binding IsFocusedWorkspace,Converter={converters:BoolToDoubleConverter TrueValue=0.5,FalseValue=0.2}}"
+                                   Visibility="{Binding WorkspaceNode.Index,Converter={converters:IntToVisibilityConverter}}" />
+                    </Border>
                 </Border>
             </Border>
-
         </Grid>
     </Grid>
 </UserControl>

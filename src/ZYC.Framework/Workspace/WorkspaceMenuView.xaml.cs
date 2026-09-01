@@ -20,18 +20,18 @@ internal sealed partial class WorkspaceMenuView : IDisposable, INotifyPropertyCh
 
     public WorkspaceMenuView(
         ILifetimeScope lifetimeScope,
-        WorkspaceMenuConfig workspaceMenuConfig,
+        WorkspaceConfig workspaceConfig,
         WorkspaceNode workspaceNode,
         IWorkspaceMenuManager workspaceMenuManager)
     {
         LifetimeScope = lifetimeScope;
-        WorkspaceMenuConfig = workspaceMenuConfig;
+        WorkspaceConfig = workspaceConfig;
         WorkspaceNode = workspaceNode;
         WorkspaceMenuManager = workspaceMenuManager;
 
         InitializeComponent();
 
-        WorkspaceMenuConfig.ObserveProperty(nameof(WorkspaceMenuConfig.IsVisible))
+        WorkspaceConfig.ObserveProperty(nameof(WorkspaceConfig.IsMenuVisible))
             .Throttle(TimeSpan.FromMilliseconds(200))
             .Subscribe(_ =>
             {
@@ -44,9 +44,9 @@ internal sealed partial class WorkspaceMenuView : IDisposable, INotifyPropertyCh
 
     private ILifetimeScope LifetimeScope { get; }
 
-    private WorkspaceMenuConfig WorkspaceMenuConfig { get; }
+    private WorkspaceConfig WorkspaceConfig { get; }
 
-    public bool IsWorkspaceMenuVisible => WorkspaceMenuConfig.IsVisible;
+    public bool IsWorkspaceMenuVisible => WorkspaceConfig.IsMenuVisible;
 
     public WorkspaceNode WorkspaceNode { get; }
 

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reactive.Disposables.Fluent;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,11 +12,13 @@ using Autofac;
 using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.Event;
 using ZYC.Framework.Abstractions.State;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Abstractions.Workspace;
 using ZYC.Framework.Commands;
+using ZYC.Framework.Core;
 using ZYC.Framework.Core.Commands;
 using ZYC.Framework.Workspace;
 
@@ -27,6 +30,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
     private StarCommand? _starCommand;
 
     public TabManagerView(
+        WorkspaceConfig workspaceConfig,
         ILogger<TabManagerView> logger,
         IEventAggregator eventAggregator,
         WorkspaceNode workspaceNode,
@@ -36,6 +40,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
         ITabManager tabManager,
         CloseTabItemCommand closeTabItemCommand)
     {
+        WorkspaceConfig = workspaceConfig;
         Logger = logger;
         EventAggregator = eventAggregator;
         WorkspaceNode = workspaceNode;
@@ -74,6 +79,14 @@ internal partial class TabManagerView : INotifyPropertyChanged
         {
             PreloadAllTabs(TabControl);
         }).DisposeWith(CompositeDisposable);
+
+
+        WorkspaceConfig.ObserveProperty(nameof(WorkspaceConfig.IsWorkspaceEmptyIndexVisible))
+            .Throttle(TimeSpan.FromMilliseconds(200))
+            .Subscribe(_ =>
+            {
+                OnPropertyChanged(nameof(IsWorkspaceEmptyIndexVisible));
+            }).DisposeWith(CompositeDisposable);
     }
 
 
