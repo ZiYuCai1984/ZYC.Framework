@@ -18,9 +18,9 @@
 安装或更新 ZYC.Framework CLI 工具：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.6
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.7
 # 如果已经安装过：
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.6
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.7
 ```
 
 创建一个最小 Host 项目：
@@ -44,7 +44,7 @@ zyc new MyCompany.Tools --template modular
 常用选项：
 
 ```bash
-zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.6
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.7
 ```
 
 打开生成的解决方案或项目，将其设置为启动项目，然后开始调试。生成结果已经包含包引用、`Module.cs`、`ModuleConfig.json` 和初始视图。
@@ -62,7 +62,7 @@ zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.6
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.6" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.7" />
 </ItemGroup>
 ```
 
