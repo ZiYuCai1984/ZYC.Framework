@@ -31,6 +31,16 @@
 	<s:Boolean x:Key="/Default/Environment/UpdatesManger/IsDownloadUpdateDataAllowed/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/GrammarAndSpelling/GrammarChecking/Exceptions/=mah/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/GrammarAndSpelling/GrammarChecking/Exceptions/=TODO_0020TODO/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/Name/@EntryValue">TODO-zyc</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;TODO-zyc)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/TodoIconStyle/@EntryValue">Warning</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=C8D12266B80C1B41AE86FC26F7894676/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=C8D12266B80C1B41AE86FC26F7894676/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=C8D12266B80C1B41AE86FC26F7894676/Name/@EntryValue">!WARNING</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=C8D12266B80C1B41AE86FC26F7894676/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;!WARNING)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=C8D12266B80C1B41AE86FC26F7894676/TodoIconStyle/@EntryValue">Info</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Adorner/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=advapi/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Alnum/@EntryIndexedValue">True</s:Boolean>
