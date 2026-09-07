@@ -18,9 +18,9 @@ This guide will walk you through creating a **ZYC.Framework Host** project from 
 Install or update the ZYC.Framework CLI tool:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.6
+dotnet tool install --global ZYC.Framework.CLI --version 1.4.7
 # If the tool is already installed:
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.6
+dotnet tool update --global ZYC.Framework.CLI --version 1.4.7
 ```
 
 Create a minimal host project:
@@ -44,7 +44,7 @@ zyc new MyCompany.Tools --template modular
 Useful options:
 
 ```bash
-zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.6
+zyc new MyCompany.Tools --output ./MyCompany.Tools --package-version 1.4.7
 ```
 
 Open the generated solution or project, set it as the startup project, and start debugging. The generated files already include the package reference, `Module.cs`, `ModuleConfig.json`, and an initial view.
@@ -62,7 +62,7 @@ The following steps show the equivalent setup if you want to create the host pro
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.6" />
+  <PackageReference Include="ZYC.Framework.Alpha" Version="1.4.7" />
 </ItemGroup>
 ```
 

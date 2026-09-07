@@ -6,26 +6,16 @@
 
 ## 🆕 New Features
 
-* Added `WorkspaceConfig.IsWorkspaceEmptyIndexVisible` so applications can show or hide the large workspace index displayed when a workspace has no tabs
-
----
-
-## ⚠️ Breaking Changes
-
-* Renamed `WorkspaceMenuConfig` to `WorkspaceConfig` and renamed `IsVisible` to `IsMenuVisible`; applications using the previous workspace-menu configuration API must update their references
+* Added a responsive main menu that automatically moves items into a `More` (`⋯`) menu when space is limited and restores them as the window expands
 
 ---
 
 ## 🛠 Improvements
 
-* Updated the framework dependency baseline to ZYC.CoreToolkit 4.0.1 and completed the FxC dependency version settings in generated console and WPF projects
-* Refreshed multilingual download, installation, quick-start, project-template, and troubleshooting documentation for version 1.4.6
-
----
-
-## 🐛 Bug Fixes
-
-* Fixed the update main-menu item's configuration subscription lifetime so it is disposed together with the menu item
+* Improved menu behavior during resizing by preserving open submenus for unchanged items and restoring keyboard focus when items move into or out of the overflow menu
+* Adjusted the title-bar layout to reserve space for quick-access items, title extensions, and window actions while allowing the main menu to adapt to the remaining width
+* Changed the default value of `WorkspaceConfig.IsWorkspaceEmptyIndexVisible` to `false`, hiding the large workspace index when a workspace has no tabs; set it to `true` to show the index
+* Updated multilingual download links, installation commands, quick-start guides, project-template examples, and troubleshooting documentation for version 1.4.7
 
 ---
 

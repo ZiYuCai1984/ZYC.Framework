@@ -18,5 +18,5 @@ public class WorkspaceConfig : IConfig
     /// <summary>
     ///     Gets or sets a value indicating whether the workspace empty index is visible.
     /// </summary>
-    public bool IsWorkspaceEmptyIndexVisible { get; set; } = true;
+    public bool IsWorkspaceEmptyIndexVisible { get; set; } = false;
 }
