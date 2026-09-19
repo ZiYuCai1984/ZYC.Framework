@@ -26,7 +26,7 @@ public class Program
 
         try
         {
-            await BuildSolutionAync(tempSlnFileName);
+            await BuildSolutionAsync(tempSlnFileName);
 
 #if GENERATE_DOC
             await GenerateDocAsync();
@@ -114,7 +114,7 @@ public class Program
         }
     }
 
-    private static async Task BuildSolutionAync(string tempSlnFileName)
+    private static async Task BuildSolutionAsync(string tempSlnFileName)
     {
         IOTools.SetCurrentDirectory(BuildEnvironment.SrcFolder);
 

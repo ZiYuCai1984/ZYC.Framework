@@ -86,6 +86,20 @@ MyCompany.Tools/
 
 Use this template when you want a small console application that preserves the source template's root-level shared build configuration.
 
+## `build` Template
+
+`build` creates an independent `<ProjectName>.Build` project for versioning, compilation, and NuGet packaging, together with a small application project.
+
+On Windows with the .NET 10 SDK:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+Set the package version in `MyCompany.Tools.Build/BuildEnvironment.cs`. The build project writes `version.props`, builds and packs publishable projects into `_bin/`, and keeps its own output in `_bin_build/`. The generated README explains the manual publishing workflow and the `NUGET_USER` repository variable.
+
 ## `wpf` Template
 
 `wpf` creates a `net10.0-windows` WPF solution with Autofac-based application startup, settings registration, Fody property weaving, and `ZYC.CoreToolkit` 4.0.0 references.
@@ -154,7 +168,7 @@ Use this template when the feature should look like a real framework module: pub
 | Option | Description |
 | --- | --- |
 | `<ProjectName>` | Required project name. It must be a valid dotted C# identifier, for example `Acme.Tools`. |
-| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, and `wpf`. Defaults to `minimal`. |
+| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, and `wpf`. Defaults to `minimal`. |
 | `--output`, `-o` | Output directory. Defaults to `./<ProjectName>`. |
 | `--package-version` | `ZYC.Framework.Alpha` package version. Defaults to the CLI product version. |
 | `--overwrite`, `-f` | Overwrite existing files. Without this flag, existing target files fail the generation. |
@@ -220,7 +234,7 @@ Project templates replace these tokens in paths and text files:
 | `__PROJECT_NAME__` | Full project name, for example `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | Last dotted segment, for example `Tools`. |
 | `__PROJECT_HOST__` | Lowercase short name used as the URI host, for example `tools`. |
-| `__PACKAGE_VERSION__` | Package version selected by `--package-version` or the CLI product version. |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | Package version selected by `--package-version` or the CLI product version. |
 
 Text template files are written as UTF-8 with BOM and normalized to CRLF line endings.
 
@@ -230,6 +244,7 @@ Text template files are written as UTF-8 with BOM and normalized to CRLF line en
 | --- | --- |
 | You want the fastest possible host with one view. | `zyc new MyCompany.Tools` |
 | You want a console application that references `ZYC.CoreToolkit`. | `zyc new MyCompany.Tools --template console` |
+| You want an independent build project for versioning, compilation, and packaging. | `zyc new MyCompany.Tools --template build` |
 | You want a WPF application with Autofac and settings bootstrap. | `zyc new MyCompany.Desktop --template wpf` |
 | You want a module-style solution for a new app. | `zyc new MyCompany.Tools --template modular` |
 | You are adding a module to an existing repository. | `zyc new-module Reports --src-root ./src` |
@@ -315,6 +330,20 @@ MyCompany.Tools/
 
 ソース テンプレートのルート レベル共有ビルド構成を保持した小さなコンソール アプリケーションが必要な場合に使います。
 
+## `build` テンプレート
+
+`build` は、バージョン管理、コンパイル、NuGet パッケージ作成を行う独立した `<ProjectName>.Build` プロジェクトと、小さなアプリケーション プロジェクトを作成します。
+
+Windows と .NET 10 SDK で実行します:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+パッケージ バージョンは `MyCompany.Tools.Build/BuildEnvironment.cs` で設定します。ビルド プロジェクトは `version.props` を生成し、公開対象プロジェクトをビルドして `_bin/` にパッケージを作成します。ビルド プロジェクト自身の出力先は `_bin_build/` です。手動公開ワークフローとリポジトリ変数 `NUGET_USER` の設定は、生成された README を参照してください。
+
 ## `wpf` テンプレート
 
 `wpf` は、Autofac ベースのアプリケーション起動、設定登録、Fody プロパティ ウィービング、および `ZYC.CoreToolkit` 4.0.0 への参照を備えた `net10.0-windows` WPF ソリューションを作成します。
@@ -383,7 +412,7 @@ MyCompany.Tools/
 | オプション | 説明 |
 | --- | --- |
 | `<ProjectName>` | 必須のプロジェクト名。`Acme.Tools` のような有効なドット区切り C# 識別子である必要があります。 |
-| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`wpf`。既定は `minimal`。 |
+| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`。既定は `minimal`。 |
 | `--output`, `-o` | 出力ディレクトリ。既定は `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` のパッケージ バージョン。既定は CLI の製品バージョン。 |
 | `--overwrite`, `-f` | 既存ファイルを上書きする。この指定がない場合、対象ファイルが存在すると生成は失敗します。 |
@@ -449,7 +478,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完全なプロジェクト名。例: `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後のドット区切りセグメント。例: `Tools`。 |
 | `__PROJECT_HOST__` | URI host として使う小文字の短い名前。例: `tools`。 |
-| `__PACKAGE_VERSION__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
 
 テキスト テンプレート ファイルは UTF-8 with BOM で書き込まれ、CRLF 改行に正規化されます。
 
@@ -459,6 +488,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 1 つのビューを持つ最速の Host が欲しい。 | `zyc new MyCompany.Tools` |
 | `ZYC.CoreToolkit` を参照するコンソール アプリケーションが欲しい。 | `zyc new MyCompany.Tools --template console` |
+| バージョン管理、コンパイル、パッケージ作成用の独立したビルド プロジェクトが欲しい。 | `zyc new MyCompany.Tools --template build` |
 | Autofac と設定のブートストラップを備えた WPF アプリケーションが欲しい。 | `zyc new MyCompany.Desktop --template wpf` |
 | 新しいアプリでモジュール形式のソリューションが欲しい。 | `zyc new MyCompany.Tools --template modular` |
 | 既存リポジトリへモジュールを追加したい。 | `zyc new-module Reports --src-root ./src` |
@@ -544,6 +574,20 @@ MyCompany.Tools/
 
 当你需要一个保留源模板根级共享构建配置的小型控制台应用时，使用这个模板。
 
+## `build` 模板
+
+`build` 会创建独立的 `<ProjectName>.Build` 项目，负责版本生成、编译和 NuGet 打包，并附带一个简单的主项目。
+
+在 Windows 上使用 .NET 10 SDK 运行：
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+在 `MyCompany.Tools.Build/BuildEnvironment.cs` 中设置包版本。Build 项目会生成 `version.props`，编译参与发布的项目并将 NuGet 包输出到 `_bin/`，自身输出放在 `_bin_build/`。生成的 README 说明了手动发布工作流和仓库变量 `NUGET_USER` 的配置方法。
+
 ## `wpf` 模板
 
 `wpf` 会创建一个 `net10.0-windows` WPF 解决方案，其中包含基于 Autofac 的应用启动、配置注册、Fody 属性织入，以及对 `ZYC.CoreToolkit` 4.0.0 的引用。
@@ -612,7 +656,7 @@ MyCompany.Tools/
 | 选项 | 说明 |
 | --- | --- |
 | `<ProjectName>` | 必填项目名。必须是有效的点分隔 C# 标识符，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console` 和 `wpf`，默认 `minimal`。 |
+| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console`、`build` 和 `wpf`，默认 `minimal`。 |
 | `--output`, `-o` | 输出目录。默认 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 包版本。默认使用 CLI 产品版本。 |
 | `--overwrite`, `-f` | 覆盖已有文件。不指定时，如果目标文件已存在，生成会失败。 |
@@ -678,7 +722,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完整项目名，例如 `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最后一个点分隔片段，例如 `Tools`。 |
 | `__PROJECT_HOST__` | 用作 URI Host 的小写短名称，例如 `tools`。 |
-| `__PACKAGE_VERSION__` | 由 `--package-version` 或 CLI 产品版本决定的包版本。 |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | 由 `--package-version` 或 CLI 产品版本决定的包版本。 |
 
 文本模板文件会以 UTF-8 with BOM 写入，并统一为 CRLF 换行。
 
@@ -688,6 +732,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 你想最快得到一个只有一个 View 的 Host。 | `zyc new MyCompany.Tools` |
 | 你想创建一个引用 `ZYC.CoreToolkit` 的控制台应用。 | `zyc new MyCompany.Tools --template console` |
+| 你需要独立的编译项目来管理版本、编译和打包。 | `zyc new MyCompany.Tools --template build` |
 | 你想创建一个带 Autofac 和配置启动逻辑的 WPF 应用。 | `zyc new MyCompany.Desktop --template wpf` |
 | 你想为新应用创建模块化解决方案。 | `zyc new MyCompany.Tools --template modular` |
 | 你正在向已有仓库添加模块。 | `zyc new-module Reports --src-root ./src` |
@@ -773,6 +818,20 @@ MyCompany.Tools/
 
 當你需要一個保留來源範本根層級共用建置設定的小型主控台應用時，使用這個範本。
 
+## `build` 範本
+
+`build` 會建立獨立的 `<ProjectName>.Build` 專案，負責版本產生、編譯和 NuGet 封裝，並附帶一個簡單的主專案。
+
+在 Windows 上使用 .NET 10 SDK 執行：
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+在 `MyCompany.Tools.Build/BuildEnvironment.cs` 中設定套件版本。Build 專案會產生 `version.props`，編譯參與發佈的專案並將 NuGet 套件輸出至 `_bin/`，自身輸出放在 `_bin_build/`。產生的 README 說明了手動發佈工作流程和儲存庫變數 `NUGET_USER` 的設定方式。
+
 ## `wpf` 範本
 
 `wpf` 會建立一個 `net10.0-windows` WPF 解決方案，其中包含以 Autofac 為基礎的應用程式啟動、設定註冊、Fody 屬性織入，以及對 `ZYC.CoreToolkit` 4.0.0 的參考。
@@ -841,7 +900,7 @@ MyCompany.Tools/
 | 選項 | 說明 |
 | --- | --- |
 | `<ProjectName>` | 必填專案名。必須是有效的點分隔 C# 識別碼，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 專案範本。支援 `minimal`、`modular`、`console` 與 `wpf`，預設 `minimal`。 |
+| `--template`, `-t` | 專案範本。支援 `minimal`、`modular`、`console`、`build` 與 `wpf`，預設 `minimal`。 |
 | `--output`, `-o` | 輸出目錄。預設 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 套件版本。預設使用 CLI 產品版本。 |
 | `--overwrite`, `-f` | 覆蓋既有檔案。不指定時，如果目標檔案已存在，生成會失敗。 |
@@ -907,7 +966,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完整專案名，例如 `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後一個點分隔片段，例如 `Tools`。 |
 | `__PROJECT_HOST__` | 用作 URI Host 的小寫短名稱，例如 `tools`。 |
-| `__PACKAGE_VERSION__` | 由 `--package-version` 或 CLI 產品版本決定的套件版本。 |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | 由 `--package-version` 或 CLI 產品版本決定的套件版本。 |
 
 文字範本檔案會以 UTF-8 with BOM 寫入，並統一為 CRLF 換行。
 
@@ -917,6 +976,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 你想最快得到一個只有一個 View 的 Host。 | `zyc new MyCompany.Tools` |
 | 你想建立一個引用 `ZYC.CoreToolkit` 的主控台應用。 | `zyc new MyCompany.Tools --template console` |
+| 你需要獨立的編譯專案來管理版本、編譯和封裝。 | `zyc new MyCompany.Tools --template build` |
 | 你想建立一個帶有 Autofac 與設定啟動邏輯的 WPF 應用程式。 | `zyc new MyCompany.Desktop --template wpf` |
 | 你想為新應用建立模組化解決方案。 | `zyc new MyCompany.Tools --template modular` |
 | 你正在向既有儲存庫新增模組。 | `zyc new-module Reports --src-root ./src` |
@@ -1002,6 +1062,20 @@ MyCompany.Tools/
 
 원본 템플릿의 루트 수준 공유 빌드 구성을 유지하는 작은 콘솔 애플리케이션이 필요할 때 사용합니다.
 
+## `build` 템플릿
+
+`build`는 버전 생성, 컴파일 및 NuGet 패키징을 담당하는 독립적인 `<ProjectName>.Build` 프로젝트와 간단한 애플리케이션 프로젝트를 만듭니다.
+
+Windows에서 .NET 10 SDK로 실행합니다:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+패키지 버전은 `MyCompany.Tools.Build/BuildEnvironment.cs`에서 설정합니다. 빌드 프로젝트는 `version.props`를 생성하고 배포 대상 프로젝트를 빌드하여 `_bin/`에 패키지를 만듭니다. 빌드 프로젝트 자체의 출력은 `_bin_build/`에 저장됩니다. 수동 게시 워크플로와 저장소 변수 `NUGET_USER`의 설정 방법은 생성된 README에 설명되어 있습니다.
+
 ## `wpf` 템플릿
 
 `wpf`는 Autofac 기반 애플리케이션 시작, 설정 등록, Fody 속성 위빙 및 `ZYC.CoreToolkit` 4.0.0 참조를 포함한 `net10.0-windows` WPF 솔루션을 만듭니다.
@@ -1070,7 +1144,7 @@ MyCompany.Tools/
 | 옵션 | 설명 |
 | --- | --- |
 | `<ProjectName>` | 필수 프로젝트 이름. `Acme.Tools`처럼 유효한 점 구분 C# 식별자여야 합니다. |
-| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `wpf`입니다. 기본값은 `minimal`입니다. |
+| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `build`, `wpf`입니다. 기본값은 `minimal`입니다. |
 | `--output`, `-o` | 출력 디렉터리. 기본값은 `./<ProjectName>`입니다. |
 | `--package-version` | `ZYC.Framework.Alpha` 패키지 버전. 기본값은 CLI 제품 버전입니다. |
 | `--overwrite`, `-f` | 기존 파일을 덮어씁니다. 이 플래그가 없으면 대상 파일이 있을 때 생성이 실패합니다. |
@@ -1136,7 +1210,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 전체 프로젝트 이름. 예: `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | 마지막 점 구분 세그먼트. 예: `Tools`. |
 | `__PROJECT_HOST__` | URI host로 사용하는 소문자 짧은 이름. 예: `tools`. |
-| `__PACKAGE_VERSION__` | `--package-version` 또는 CLI 제품 버전으로 선택된 패키지 버전. |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` 또는 CLI 제품 버전으로 선택된 패키지 버전. |
 
 텍스트 템플릿 파일은 UTF-8 with BOM으로 작성되고 CRLF 줄 끝으로 정규화됩니다.
 
@@ -1146,6 +1220,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 하나의 뷰가 있는 가장 빠른 Host가 필요합니다. | `zyc new MyCompany.Tools` |
 | `ZYC.CoreToolkit`을 참조하는 콘솔 애플리케이션이 필요합니다. | `zyc new MyCompany.Tools --template console` |
+| 버전 관리, 컴파일 및 패키징을 위한 독립적인 빌드 프로젝트가 필요합니다. | `zyc new MyCompany.Tools --template build` |
 | Autofac 및 설정 부트스트랩이 포함된 WPF 애플리케이션이 필요합니다. | `zyc new MyCompany.Desktop --template wpf` |
 | 새 앱에 모듈 스타일 솔루션이 필요합니다. | `zyc new MyCompany.Tools --template modular` |
 | 기존 저장소에 모듈을 추가합니다. | `zyc new-module Reports --src-root ./src` |

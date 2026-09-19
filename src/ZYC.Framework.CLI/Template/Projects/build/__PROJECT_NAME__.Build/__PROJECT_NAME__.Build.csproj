@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-  </PropertyGroup>
-  <PropertyGroup>
+    <OutputPath>../_bin_build/</OutputPath>
     <IgnoreFromPublish>true</IgnoreFromPublish>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="ZYC.Framework.Alpha" Version="__V_ZYC_FRAMEWORK_ALPHA__" />
+    <PackageReference Include="ZYC.CoreToolkit" />
   </ItemGroup>
+
 </Project>

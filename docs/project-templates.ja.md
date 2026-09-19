@@ -21,8 +21,8 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.7
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.7
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
 ```
 
 コマンドを確認します。
@@ -162,7 +162,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.7
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
 ```
 
 ## 既存ソース ツリー向けの `new-module`
@@ -220,7 +220,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完全なプロジェクト名。例: `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後のドット区切りセグメント。例: `Tools`。 |
 | `__PROJECT_HOST__` | URI host として使う小文字の短い名前。例: `tools`。 |
-| `__PACKAGE_VERSION__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
 
 テキスト テンプレート ファイルは UTF-8 with BOM で書き込まれ、CRLF 改行に正規化されます。
 

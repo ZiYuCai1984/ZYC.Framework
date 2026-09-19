@@ -1,33 +1,9 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
+using ZYC.CoreToolkit;
 using ProductInfo = ZYC.Framework.Abstractions.ProductInfo;
 
 namespace ZYC.Framework.CLI;
-
-public sealed class NewProjectGenerationOptions
-{
-    public string Name { get; init; } = string.Empty;
-
-    public string Template { get; init; } = NewProjectGenerator.DefaultTemplateName;
-
-    public string? OutputRoot { get; init; }
-
-    public string? PackageVersion { get; init; }
-
-    public bool Overwrite { get; init; }
-}
-
-public sealed class NewProjectGenerationResult
-{
-    public required string Name { get; init; }
-
-    public required string Template { get; init; }
-
-    public required string OutputRoot { get; init; }
-
-    public required IReadOnlyList<string> GeneratedFiles { get; init; }
-}
 
 public static class NewProjectGenerator
 {
@@ -40,6 +16,7 @@ public static class NewProjectGenerator
         DefaultTemplateName,
         "modular",
         "console",
+        "build",
         "wpf"
     ];
 
@@ -63,7 +40,9 @@ public static class NewProjectGenerator
         ".slnx",
         ".targets",
         ".xaml",
-        ".xml"
+        ".xml",
+        ".yaml",
+        ".yml"
     };
 
     public static IReadOnlyList<string> TemplateNames => SupportedTemplateNames;
@@ -116,7 +95,7 @@ public static class NewProjectGenerator
         }
 
         var shortName = name.Split('.', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                            .Last();
+            .Last();
 
         return new ProjectNameInfo(
             name,
@@ -130,8 +109,8 @@ public static class NewProjectGenerator
             ? DefaultTemplateName
             : template.Trim();
 
-        var supportedTemplate = SupportedTemplateNames.FirstOrDefault(
-            candidate => string.Equals(candidate, template, StringComparison.OrdinalIgnoreCase));
+        var supportedTemplate = SupportedTemplateNames.FirstOrDefault(candidate =>
+            string.Equals(candidate, template, StringComparison.OrdinalIgnoreCase));
 
         if (supportedTemplate == null)
         {
@@ -180,7 +159,9 @@ public static class NewProjectGenerator
             ["__PROJECT_NAME__"] = nameInfo.FullName,
             ["__PROJECT_SHORT_NAME__"] = nameInfo.ShortName,
             ["__PROJECT_HOST__"] = nameInfo.Host,
-            ["__PACKAGE_VERSION__"] = packageVersion
+            ["__V_ZYC_FRAMEWORK_ALPHA__"] = packageVersion,
+            ["__V_ZYC_CORETOOLKIT__"] =
+                NuGetTools.GetDependencyNuGetVersion(typeof(NewProjectGenerator).Assembly, "ZYC.CoreToolkit")!
         };
     }
 
@@ -244,8 +225,8 @@ public static class NewProjectGenerator
     private static string NormalizeLineEndings(string content)
     {
         return content.Replace("\r\n", "\n", StringComparison.Ordinal)
-                      .Replace('\r', '\n')
-                      .Replace("\n", "\r\n", StringComparison.Ordinal);
+            .Replace('\r', '\n')
+            .Replace("\n", "\r\n", StringComparison.Ordinal);
     }
 
     private sealed record ProjectNameInfo(

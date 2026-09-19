@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <V_ZYC_Framework_Alpha>__PACKAGE_VERSION__</V_ZYC_Framework_Alpha>
+    <V_ZYC_Framework_Alpha>__V_ZYC_FRAMEWORK_ALPHA__</V_ZYC_Framework_Alpha>
   </PropertyGroup>
 
   <Import Project="$(USERPROFILE)\.nuget\packages\ZYC.Framework.Alpha\$(V_ZYC_Framework_Alpha)\build\nuget.props"
