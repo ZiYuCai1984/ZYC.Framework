@@ -14,14 +14,6 @@ public class Program
 {
     public static async Task Main()
     {
-#if PUBLISH_NUGET_ORG
-        var apiKey = Environment.GetEnvironmentVariable("NUGET_APIKEY");
-        if (string.IsNullOrWhiteSpace(apiKey))
-        {
-            throw new InvalidOperationException("Ensure api key not be none !!");
-        }
-#endif
-
         var tempSlnFileName = "_temp.sln";
 
         try
