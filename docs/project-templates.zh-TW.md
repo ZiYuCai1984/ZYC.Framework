@@ -21,8 +21,8 @@ ZYC.Framework 透過 `dotnet tool` 命令支援兩類常見鷹架任務：建立
 以 .NET tool 方式安裝或更新 CLI：
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.7
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.7
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
 ```
 
 然後確認命令可用：
@@ -162,7 +162,7 @@ MyCompany.Tools/
 包含常用選項的範例：
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.7
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
 ```
 
 ## 面向既有原始碼樹的 `new-module`
@@ -220,7 +220,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完整專案名，例如 `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後一個點分隔片段，例如 `Tools`。 |
 | `__PROJECT_HOST__` | 用作 URI Host 的小寫短名稱，例如 `tools`。 |
-| `__PACKAGE_VERSION__` | 由 `--package-version` 或 CLI 產品版本決定的套件版本。 |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | 由 `--package-version` 或 CLI 產品版本決定的套件版本。 |
 
 文字範本檔案會以 UTF-8 with BOM 寫入，並統一為 CRLF 換行。
 

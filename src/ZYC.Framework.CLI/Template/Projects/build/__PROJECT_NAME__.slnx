@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Folder Name="/Build/">
+    <Project Path="__PROJECT_NAME__.Build/__PROJECT_NAME__.Build.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".github/workflows/publish-nuget-manual.yml" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+  </Folder>
+  <Project Path="__PROJECT_NAME__/__PROJECT_NAME__.csproj" />
+</Solution>

@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Diagnostics;
 using System.Globalization;
 using Autofac;
 using ZYC.CoreToolkit;
@@ -70,11 +71,38 @@ internal class Program
 
         RegisterNewProjectCommand(rootCommand);
         RegisterNewModuleCommand(rootCommand);
+        RegisterClearNuGetHttpCacheCommand(rootCommand);
 
         optionRegister.FinalizeHandlers();
 
         var finalArgs = args.Length == 0 ? ["--help"] : args;
         return await rootCommand.InvokeAsync(finalArgs);
+    }
+
+    private static void RegisterClearNuGetHttpCacheCommand(RootCommand rootCommand)
+    {
+        var clearNuGetHttpCacheCommand = new Command("clear-nuget-http-cache", "Clear the NuGet HTTP cache using dotnet.");
+
+        clearNuGetHttpCacheCommand.SetHandler(async context =>
+        {
+            try
+            {
+                using var process = Process.Start(new ProcessStartInfo("dotnet", "nuget locals http-cache --clear")
+                {
+                    UseShellExecute = false
+                })!;
+
+                await process.WaitForExitAsync();
+                context.ExitCode = process.ExitCode;
+            }
+            catch (Exception exception)
+            {
+                context.Console.Error.Write($"{exception.Message}{Environment.NewLine}");
+                context.ExitCode = 1;
+            }
+        });
+
+        rootCommand.AddCommand(clearNuGetHttpCacheCommand);
     }
 
     private static void RegisterNewProjectCommand(RootCommand rootCommand)

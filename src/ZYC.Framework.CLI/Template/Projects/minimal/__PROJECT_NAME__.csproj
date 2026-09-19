@@ -10,7 +10,7 @@
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ZYC.Framework.Alpha" Version="__PACKAGE_VERSION__" />
+    <PackageReference Include="ZYC.Framework.Alpha" Version="__V_ZYC_FRAMEWORK_ALPHA__" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ZYC.Framework.Abstractions">

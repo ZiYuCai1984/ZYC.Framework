@@ -21,8 +21,8 @@ ZYC.Framework는 두 가지 일반적인 스캐폴딩 작업을 위한 `dotnet t
 CLI를 .NET tool로 설치하거나 업데이트합니다.
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.7
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.7
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
 ```
 
 명령을 확인합니다.
@@ -162,7 +162,7 @@ MyCompany.Tools/
 일반적인 옵션을 모두 지정한 예:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.7
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
 ```
 
 ## 기존 소스 트리를 위한 `new-module`
@@ -220,7 +220,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 전체 프로젝트 이름. 예: `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | 마지막 점 구분 세그먼트. 예: `Tools`. |
 | `__PROJECT_HOST__` | URI host로 사용하는 소문자 짧은 이름. 예: `tools`. |
-| `__PACKAGE_VERSION__` | `--package-version` 또는 CLI 제품 버전으로 선택된 패키지 버전. |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` 또는 CLI 제품 버전으로 선택된 패키지 버전. |
 
 텍스트 템플릿 파일은 UTF-8 with BOM으로 작성되고 CRLF 줄 끝으로 정규화됩니다.
 

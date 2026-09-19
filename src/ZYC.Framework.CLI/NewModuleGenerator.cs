@@ -3,28 +3,6 @@ using System.Xml.Linq;
 
 namespace ZYC.Framework.CLI;
 
-public sealed class NewModuleGenerationOptions
-{
-    public string Target { get; init; } = string.Empty;
-
-    public string? SourceRoot { get; init; }
-
-    public string? SlnxPath { get; init; }
-
-    public bool Overwrite { get; init; }
-}
-
-public sealed class NewModuleGenerationResult
-{
-    public required string Target { get; init; }
-
-    public required string SourceRoot { get; init; }
-
-    public string? SlnxPath { get; init; }
-
-    public required IReadOnlyList<string> GeneratedFiles { get; init; }
-}
-
 public static class NewModuleGenerator
 {
     public const string TemplateName = "Chronosynchronicity";

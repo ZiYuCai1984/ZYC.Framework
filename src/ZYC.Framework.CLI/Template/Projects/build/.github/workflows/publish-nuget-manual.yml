@@ -1,0 +1,17 @@
+﻿name: publish-nuget-manual
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-nuget-manual:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      NUGET_USER: ${{ vars.NUGET_USER }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: |
+        dotnet run --project __PROJECT_NAME__.Build/__PROJECT_NAME__.Build.csproj -c release --property:DefineConstants="PUSH_NUGET"

@@ -21,8 +21,8 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.7
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.7
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
 ```
 
 Then verify the command:
@@ -162,7 +162,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.7
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
 ```
 
 ## `new-module` for Existing Source Trees
@@ -220,7 +220,7 @@ Project templates replace these tokens in paths and text files:
 | `__PROJECT_NAME__` | Full project name, for example `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | Last dotted segment, for example `Tools`. |
 | `__PROJECT_HOST__` | Lowercase short name used as the URI host, for example `tools`. |
-| `__PACKAGE_VERSION__` | Package version selected by `--package-version` or the CLI product version. |
+| `__V_ZYC_FRAMEWORK_ALPHA__` | Package version selected by `--package-version` or the CLI product version. |
 
 Text template files are written as UTF-8 with BOM and normalized to CRLF line endings.
 
