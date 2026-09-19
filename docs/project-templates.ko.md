@@ -21,8 +21,8 @@ ZYC.Framework는 두 가지 일반적인 스캐폴딩 작업을 위한 `dotnet t
 CLI를 .NET tool로 설치하거나 업데이트합니다.
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.9
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.9
 ```
 
 명령을 확인합니다.
@@ -85,6 +85,20 @@ MyCompany.Tools/
 ```
 
 원본 템플릿의 루트 수준 공유 빌드 구성을 유지하는 작은 콘솔 애플리케이션이 필요할 때 사용합니다.
+
+## `build` 템플릿
+
+`build`는 버전 생성, 컴파일 및 NuGet 패키징을 담당하는 독립적인 `<ProjectName>.Build` 프로젝트와 간단한 애플리케이션 프로젝트를 만듭니다.
+
+Windows에서 .NET 10 SDK로 실행합니다:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+패키지 버전은 `MyCompany.Tools.Build/BuildEnvironment.cs`에서 설정합니다. 빌드 프로젝트는 `version.props`를 생성하고 배포 대상 프로젝트를 빌드하여 `_bin/`에 패키지를 만듭니다. 빌드 프로젝트 자체의 출력은 `_bin_build/`에 저장됩니다. 수동 게시 워크플로와 저장소 변수 `NUGET_USER`의 설정 방법은 생성된 README에 설명되어 있습니다.
 
 ## `wpf` 템플릿
 
@@ -154,7 +168,7 @@ MyCompany.Tools/
 | 옵션 | 설명 |
 | --- | --- |
 | `<ProjectName>` | 필수 프로젝트 이름. `Acme.Tools`처럼 유효한 점 구분 C# 식별자여야 합니다. |
-| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `wpf`입니다. 기본값은 `minimal`입니다. |
+| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `build`, `wpf`입니다. 기본값은 `minimal`입니다. |
 | `--output`, `-o` | 출력 디렉터리. 기본값은 `./<ProjectName>`입니다. |
 | `--package-version` | `ZYC.Framework.Alpha` 패키지 버전. 기본값은 CLI 제품 버전입니다. |
 | `--overwrite`, `-f` | 기존 파일을 덮어씁니다. 이 플래그가 없으면 대상 파일이 있을 때 생성이 실패합니다. |
@@ -162,7 +176,7 @@ MyCompany.Tools/
 일반적인 옵션을 모두 지정한 예:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.9
 ```
 
 ## 기존 소스 트리를 위한 `new-module`
@@ -230,6 +244,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 하나의 뷰가 있는 가장 빠른 Host가 필요합니다. | `zyc new MyCompany.Tools` |
 | `ZYC.CoreToolkit`을 참조하는 콘솔 애플리케이션이 필요합니다. | `zyc new MyCompany.Tools --template console` |
+| 버전 관리, 컴파일 및 패키징을 위한 독립적인 빌드 프로젝트가 필요합니다. | `zyc new MyCompany.Tools --template build` |
 | Autofac 및 설정 부트스트랩이 포함된 WPF 애플리케이션이 필요합니다. | `zyc new MyCompany.Desktop --template wpf` |
 | 새 앱에 모듈 스타일 솔루션이 필요합니다. | `zyc new MyCompany.Tools --template modular` |
 | 기존 저장소에 모듈을 추가합니다. | `zyc new-module Reports --src-root ./src` |

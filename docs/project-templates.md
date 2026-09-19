@@ -21,8 +21,8 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.9
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.9
 ```
 
 Then verify the command:
@@ -85,6 +85,20 @@ MyCompany.Tools/
 ```
 
 Use this template when you want a small console application that preserves the source template's root-level shared build configuration.
+
+## `build` Template
+
+`build` creates an independent `<ProjectName>.Build` project for versioning, compilation, and NuGet packaging, together with a small application project.
+
+On Windows with the .NET 10 SDK:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+Set the package version in `MyCompany.Tools.Build/BuildEnvironment.cs`. The build project writes `version.props`, builds and packs publishable projects into `_bin/`, and keeps its own output in `_bin_build/`. The generated README explains the manual publishing workflow and the `NUGET_USER` repository variable.
 
 ## `wpf` Template
 
@@ -154,7 +168,7 @@ Use this template when the feature should look like a real framework module: pub
 | Option | Description |
 | --- | --- |
 | `<ProjectName>` | Required project name. It must be a valid dotted C# identifier, for example `Acme.Tools`. |
-| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, and `wpf`. Defaults to `minimal`. |
+| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, and `wpf`. Defaults to `minimal`. |
 | `--output`, `-o` | Output directory. Defaults to `./<ProjectName>`. |
 | `--package-version` | `ZYC.Framework.Alpha` package version. Defaults to the CLI product version. |
 | `--overwrite`, `-f` | Overwrite existing files. Without this flag, existing target files fail the generation. |
@@ -162,7 +176,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.9
 ```
 
 ## `new-module` for Existing Source Trees
@@ -230,6 +244,7 @@ Text template files are written as UTF-8 with BOM and normalized to CRLF line en
 | --- | --- |
 | You want the fastest possible host with one view. | `zyc new MyCompany.Tools` |
 | You want a console application that references `ZYC.CoreToolkit`. | `zyc new MyCompany.Tools --template console` |
+| You want an independent build project for versioning, compilation, and packaging. | `zyc new MyCompany.Tools --template build` |
 | You want a WPF application with Autofac and settings bootstrap. | `zyc new MyCompany.Desktop --template wpf` |
 | You want a module-style solution for a new app. | `zyc new MyCompany.Tools --template modular` |
 | You are adding a module to an existing repository. | `zyc new-module Reports --src-root ./src` |

@@ -21,8 +21,8 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.9
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.9
 ```
 
 コマンドを確認します。
@@ -85,6 +85,20 @@ MyCompany.Tools/
 ```
 
 ソース テンプレートのルート レベル共有ビルド構成を保持した小さなコンソール アプリケーションが必要な場合に使います。
+
+## `build` テンプレート
+
+`build` は、バージョン管理、コンパイル、NuGet パッケージ作成を行う独立した `<ProjectName>.Build` プロジェクトと、小さなアプリケーション プロジェクトを作成します。
+
+Windows と .NET 10 SDK で実行します:
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+パッケージ バージョンは `MyCompany.Tools.Build/BuildEnvironment.cs` で設定します。ビルド プロジェクトは `version.props` を生成し、公開対象プロジェクトをビルドして `_bin/` にパッケージを作成します。ビルド プロジェクト自身の出力先は `_bin_build/` です。手動公開ワークフローとリポジトリ変数 `NUGET_USER` の設定は、生成された README を参照してください。
 
 ## `wpf` テンプレート
 
@@ -154,7 +168,7 @@ MyCompany.Tools/
 | オプション | 説明 |
 | --- | --- |
 | `<ProjectName>` | 必須のプロジェクト名。`Acme.Tools` のような有効なドット区切り C# 識別子である必要があります。 |
-| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`wpf`。既定は `minimal`。 |
+| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`。既定は `minimal`。 |
 | `--output`, `-o` | 出力ディレクトリ。既定は `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` のパッケージ バージョン。既定は CLI の製品バージョン。 |
 | `--overwrite`, `-f` | 既存ファイルを上書きする。この指定がない場合、対象ファイルが存在すると生成は失敗します。 |
@@ -162,7 +176,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.9
 ```
 
 ## 既存ソース ツリー向けの `new-module`
@@ -230,6 +244,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 1 つのビューを持つ最速の Host が欲しい。 | `zyc new MyCompany.Tools` |
 | `ZYC.CoreToolkit` を参照するコンソール アプリケーションが欲しい。 | `zyc new MyCompany.Tools --template console` |
+| バージョン管理、コンパイル、パッケージ作成用の独立したビルド プロジェクトが欲しい。 | `zyc new MyCompany.Tools --template build` |
 | Autofac と設定のブートストラップを備えた WPF アプリケーションが欲しい。 | `zyc new MyCompany.Desktop --template wpf` |
 | 新しいアプリでモジュール形式のソリューションが欲しい。 | `zyc new MyCompany.Tools --template modular` |
 | 既存リポジトリへモジュールを追加したい。 | `zyc new-module Reports --src-root ./src` |
