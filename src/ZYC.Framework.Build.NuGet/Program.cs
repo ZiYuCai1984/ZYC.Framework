@@ -34,7 +34,8 @@ public class Program
             await DotnetNuGetTools.PushNuGetAsync(
                 BuildEnvironment.SrcFolder,
                 BuildEnvironment.NuGetPushSource,
-                apiKey);
+                apiKey,
+                null,
 #endif
         }
         finally

@@ -21,8 +21,8 @@ ZYC.Framework 通过 `dotnet tool` 命令支持两类常见脚手架任务：创
 以 .NET tool 方式安装或更新 CLI：
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.8
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.8
+dotnet tool install -g ZYC.Framework.CLI --version 1.4.9
+dotnet tool update -g ZYC.Framework.CLI --version 1.4.9
 ```
 
 然后确认命令可用：
@@ -85,6 +85,20 @@ MyCompany.Tools/
 ```
 
 当你需要一个保留源模板根级共享构建配置的小型控制台应用时，使用这个模板。
+
+## `build` 模板
+
+`build` 会创建独立的 `<ProjectName>.Build` 项目，负责版本生成、编译和 NuGet 打包，并附带一个简单的主项目。
+
+在 Windows 上使用 .NET 10 SDK 运行：
+
+```powershell
+zyc new MyCompany.Tools --template build
+cd MyCompany.Tools
+dotnet run --project MyCompany.Tools.Build/MyCompany.Tools.Build.csproj -c Release
+```
+
+在 `MyCompany.Tools.Build/BuildEnvironment.cs` 中设置包版本。Build 项目会生成 `version.props`，编译参与发布的项目并将 NuGet 包输出到 `_bin/`，自身输出放在 `_bin_build/`。生成的 README 说明了手动发布工作流和仓库变量 `NUGET_USER` 的配置方法。
 
 ## `wpf` 模板
 
@@ -154,7 +168,7 @@ MyCompany.Tools/
 | 选项 | 说明 |
 | --- | --- |
 | `<ProjectName>` | 必填项目名。必须是有效的点分隔 C# 标识符，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console` 和 `wpf`，默认 `minimal`。 |
+| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console`、`build` 和 `wpf`，默认 `minimal`。 |
 | `--output`, `-o` | 输出目录。默认 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 包版本。默认使用 CLI 产品版本。 |
 | `--overwrite`, `-f` | 覆盖已有文件。不指定时，如果目标文件已存在，生成会失败。 |
@@ -162,7 +176,7 @@ MyCompany.Tools/
 包含常用选项的示例：
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.8
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.9
 ```
 
 ## 面向已有源码树的 `new-module`
@@ -230,6 +244,7 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | --- | --- |
 | 你想最快得到一个只有一个 View 的 Host。 | `zyc new MyCompany.Tools` |
 | 你想创建一个引用 `ZYC.CoreToolkit` 的控制台应用。 | `zyc new MyCompany.Tools --template console` |
+| 你需要独立的编译项目来管理版本、编译和打包。 | `zyc new MyCompany.Tools --template build` |
 | 你想创建一个带 Autofac 和配置启动逻辑的 WPF 应用。 | `zyc new MyCompany.Desktop --template wpf` |
 | 你想为新应用创建模块化解决方案。 | `zyc new MyCompany.Tools --template modular` |
 | 你正在向已有仓库添加模块。 | `zyc new-module Reports --src-root ./src` |
