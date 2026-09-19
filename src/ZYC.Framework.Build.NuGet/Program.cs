@@ -35,7 +35,8 @@ public class Program
                 BuildEnvironment.SrcFolder,
                 BuildEnvironment.NuGetPushSource,
                 apiKey,
-                null,
+                null, 
+                false);
 #endif
         }
         finally
