@@ -38,12 +38,11 @@ public class Program
 
             //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 #if PUBLISH_NUGET_ORG
-        await DotnetNuGetTools.PushNuGetAsync(
-            BuildEnvironment.SrcFolder,
-            BuildEnvironment.NuGetPushSource,
-            apiKey,
-            null,
-            false);
+            var apiKey = await NuGetTrustedPublishingTools.GetApiKeyAsync("ZhuJianYun");
+            await DotnetNuGetTools.PushNuGetAsync(
+                BuildEnvironment.SrcFolder,
+                BuildEnvironment.NuGetPushSource,
+                apiKey);
 #endif
         }
         finally

@@ -6,9 +6,10 @@ jobs:
   publish:
     name: Push to NuGet.org
     runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - run: |
           dotnet run --project src/ZYC.Framework.Build.NuGet/ZYC.Framework.Build.NuGet.csproj -c Release -p:Enable_GENERATE_DOC=true -p:Enable_PUBLISH_NUGET_ORG=true
-        env:
-          NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
