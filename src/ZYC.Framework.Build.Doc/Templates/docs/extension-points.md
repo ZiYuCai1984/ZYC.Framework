@@ -164,6 +164,12 @@ Guidelines:
 - Keep the type small and version-tolerant.
 - Do not use config/state as a large business data store.
 
+### Observing Property Changes
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` returns `IObservable<T>` and emits the `PropertyChanged` event sender when the property name matches exactly. `ObserveAnyChange<T>()` emits the sender for every property change on `IPersistedData`. Both require `INotifyPropertyChanged`; use `ObserveOnUI()` before updating WPF controls and dispose subscriptions with the owning view.
+
+Starting with 1.5.0, `ObserveProperty<T>` returns `IObservable<T>` instead of `IObservable<System.Reactive.Unit>`. Rebuild dependent modules and update explicitly typed observers or pipelines. Append `.Select(_ => System.Reactive.Unit.Default)` if a downstream API still requires a `Unit` stream.
+
 ## Events and Toasts
 
 Use `IEventAggregator` for decoupled runtime notifications:
@@ -386,6 +392,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 実行時の永続化は `IState` に置く。
 - 型は小さく、バージョン変更に強くする。
 - config/state を大きな業務データ ストアとして使わない。
+
+### プロパティ変更の監視
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` は `IObservable<T>` を返し、プロパティ名が完全一致したときに `PropertyChanged` イベントの送信元を通知します。`ObserveAnyChange<T>()` は `IPersistedData` のすべてのプロパティ変更で送信元を通知します。どちらも `INotifyPropertyChanged` が必要です。WPF コントロールの更新前に `ObserveOnUI()` を使い、View の破棄時に購読も破棄してください。
+
+1.5.0 から `ObserveProperty<T>` の戻り値は `IObservable<System.Reactive.Unit>` から `IObservable<T>` に変わりました。依存モジュールを再ビルドし、型を明示したオブザーバーや処理を更新してください。後続の API が `Unit` を必要とする場合は、`.Select(_ => System.Reactive.Unit.Default)` を追加します。
 
 ## イベントと Toast
 
@@ -610,6 +622,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 类型保持小型，并能承受版本演进。
 - 不要把 config/state 当成大型业务数据存储。
 
+### 观察属性变更
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` 返回 `IObservable<T>`，在属性名完全匹配时发出 `PropertyChanged` 事件的发送者。`ObserveAnyChange<T>()` 则在 `IPersistedData` 的任意属性变更时发出发送者。两者均要求对象实现 `INotifyPropertyChanged`；更新 WPF 控件前使用 `ObserveOnUI()`，并随所属 View 释放订阅。
+
+从 1.5.0 开始，`ObserveProperty<T>` 的返回类型由 `IObservable<System.Reactive.Unit>` 改为 `IObservable<T>`。请重新编译依赖模块，并更新显式指定类型的观察者或处理链。如果下游 API 仍要求 `Unit` 流，可追加 `.Select(_ => System.Reactive.Unit.Default)`。
+
 ## 事件与 Toast
 
 解耦的运行时通知使用 `IEventAggregator`：
@@ -833,6 +851,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 型別保持小型，並能承受版本演進。
 - 不要把 config/state 當成大型業務資料儲存。
 
+### 觀察屬性變更
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` 回傳 `IObservable<T>`，在屬性名稱完全相符時發出 `PropertyChanged` 事件的傳送者。`ObserveAnyChange<T>()` 則在 `IPersistedData` 的任意屬性變更時發出傳送者。兩者皆要求物件實作 `INotifyPropertyChanged`；更新 WPF 控制項前使用 `ObserveOnUI()`，並隨所屬 View 釋放訂閱。
+
+從 1.5.0 開始，`ObserveProperty<T>` 的回傳型別由 `IObservable<System.Reactive.Unit>` 改為 `IObservable<T>`。請重新編譯相依模組，並更新明確指定型別的觀察者或處理鏈。如果下游 API 仍要求 `Unit` 串流，可附加 `.Select(_ => System.Reactive.Unit.Default)`。
+
 ## 事件與 Toast
 
 解耦的執行階段通知使用 `IEventAggregator`：
@@ -1055,6 +1079,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 런타임 지속성은 `IState`에 둡니다.
 - 타입은 작고 버전 변화에 견딜 수 있게 유지합니다.
 - config/state를 큰 비즈니스 데이터 저장소로 사용하지 마세요.
+
+### 속성 변경 관찰
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)`는 `IObservable<T>`를 반환하며 속성 이름이 정확히 일치할 때 `PropertyChanged` 이벤트의 발신자를 전달합니다. `ObserveAnyChange<T>()`는 `IPersistedData`의 모든 속성 변경에 대해 발신자를 전달합니다. 두 메서드 모두 `INotifyPropertyChanged` 구현이 필요합니다. WPF 컨트롤을 업데이트하기 전에 `ObserveOnUI()`를 사용하고, View를 해제할 때 구독도 해제하세요.
+
+1.5.0부터 `ObserveProperty<T>`의 반환 형식은 `IObservable<System.Reactive.Unit>`에서 `IObservable<T>`로 변경되었습니다. 종속 모듈을 다시 빌드하고 형식을 명시한 관찰자나 처리 체인을 수정하세요. 후속 API에 `Unit` 스트림이 필요하면 `.Select(_ => System.Reactive.Unit.Default)`를 추가합니다.
 
 ## 이벤트와 Toast
 

@@ -166,7 +166,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.5.0
 
 ### 內建模組
 
-README 只保留高層功能概覽。目前模組清單、載入說明和模組職責請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
+內建模組提供文字預覽與編輯、`HexEditor` 二進位編輯、檔案瀏覽、Web 內容及終端工具。透過 **File → Open → Binary File** 開啟二進位檔案。完整模組清單、用法與限制請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
 
 ### 開發與交付
 

@@ -164,6 +164,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 型は小さく、バージョン変更に強くする。
 - config/state を大きな業務データ ストアとして使わない。
 
+### プロパティ変更の監視
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` は `IObservable<T>` を返し、プロパティ名が完全一致したときに `PropertyChanged` イベントの送信元を通知します。`ObserveAnyChange<T>()` は `IPersistedData` のすべてのプロパティ変更で送信元を通知します。どちらも `INotifyPropertyChanged` が必要です。WPF コントロールの更新前に `ObserveOnUI()` を使い、View の破棄時に購読も破棄してください。
+
+1.5.0 から `ObserveProperty<T>` の戻り値は `IObservable<System.Reactive.Unit>` から `IObservable<T>` に変わりました。依存モジュールを再ビルドし、型を明示したオブザーバーや処理を更新してください。後続の API が `Unit` を必要とする場合は、`.Select(_ => System.Reactive.Unit.Default)` を追加します。
+
 ## イベントと Toast
 
 疎結合な実行時通知には `IEventAggregator` を使います。

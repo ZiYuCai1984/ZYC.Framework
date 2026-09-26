@@ -164,7 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.5.0
 
 ### 組み込みモジュール
 
-README には概要だけを残します。現在のモジュール一覧、ロード時の注意点、各モジュールの責務は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
+テキストのプレビュー/編集、`HexEditor` によるバイナリ編集、ファイル参照、Web コンテンツ、ターミナルなどのモジュールを内蔵しています。バイナリ ファイルは **File → Open → Binary File** から開きます。モジュール一覧、使い方、制限事項は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
 
 ### 開発・配布
 

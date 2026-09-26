@@ -6,17 +6,37 @@
 
 ## 🆕 New Features
 
-* Added the `build` project template: `zyc new MyProject --template build` creates an independent `MyProject.Build` project for version generation, compilation, and NuGet packaging, with a manual publishing workflow and setup instructions
-* Added `zyc clear-nuget-http-cache`, which directly runs `dotnet nuget locals http-cache --clear` and returns its exit code
+* Added `HexEditor`: open binary files through **File → Open → Binary File** in dedicated tabs, with hexadecimal/ASCII views, byte editing, undo/redo, and search/replace
+* Added Save, Save As, Reload, `Ctrl+S` / `Ctrl+Shift+S`, unsaved-change prompts, read-only file handling, and external file-change detection for binary documents
+* Added `HexEditorModuleConstants.CreateEditorUri(Uri)` so other modules can navigate directly to a binary editor
 
 ---
 
 ## 🛠 Improvements
 
-* Updated `ZYC.CoreToolkit` to 4.0.4 and made project templates use the CLI's CoreToolkit dependency version through `__V_ZYC_CORETOOLKIT__`
-* Renamed the framework package-version token from `__PACKAGE_VERSION__` to `__V_ZYC_FRAMEWORK_ALPHA__` across the generator, project templates, and documentation
-* Added token replacement for `.yaml` and `.yml` files so generated workflows reference the selected project name
-* Updated multilingual installation guides, project-template documentation, and examples for this release
+* Updated Aspire to 13.5.4, WebView2 to 1.0.4191.47, System.Reactive to 7.0.0, and WPFHexaEditor to 3.4.5
+* Included the framework version in the CLI root-command description
+* Updated the multilingual README, built-in module, and extension-point templates for this release
+
+---
+
+## 🐛 Fixes
+
+* Added host-theme resources for HexEditor search dialogs to correct unreadable backgrounds, text, and title-bar buttons; used the framework's keyed-resource extension to avoid the `StaticResourceHolder` XAML loading exception
+* Fixed a compilation error in the NuGet publishing project
+
+---
+
+## 🔄 Compatibility
+
+* `ReactiveExtensions.ObserveProperty<T>(...)` now returns `IObservable<T>` instead of `IObservable<System.Reactive.Unit>`, emitting the `PropertyChanged` event sender. Rebuild dependent modules and update explicitly typed observers or pipelines. Use `.Select(_ => System.Reactive.Unit.Default)` when a downstream API still requires a `Unit` stream
+* `ObserveAnyChange<T>()` also emits the `PropertyChanged` event sender
+
+---
+
+## 📝 HexEditor Limitations
+
+* Files are loaded entirely into memory; saving or reloading resets undo/redo history
 
 ---
 

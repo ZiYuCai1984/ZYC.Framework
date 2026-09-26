@@ -164,6 +164,12 @@ Guidelines:
 - Keep the type small and version-tolerant.
 - Do not use config/state as a large business data store.
 
+### Observing Property Changes
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)` returns `IObservable<T>` and emits the `PropertyChanged` event sender when the property name matches exactly. `ObserveAnyChange<T>()` emits the sender for every property change on `IPersistedData`. Both require `INotifyPropertyChanged`; use `ObserveOnUI()` before updating WPF controls and dispose subscriptions with the owning view.
+
+Starting with 1.5.0, `ObserveProperty<T>` returns `IObservable<T>` instead of `IObservable<System.Reactive.Unit>`. Rebuild dependent modules and update explicitly typed observers or pipelines. Append `.Select(_ => System.Reactive.Unit.Default)` if a downstream API still requires a `Unit` stream.
+
 ## Events and Toasts
 
 Use `IEventAggregator` for decoupled runtime notifications:

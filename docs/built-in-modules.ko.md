@@ -39,6 +39,7 @@
 | `CLI` | Tools 메뉴와 터미널 탭 | 내장 터미널을 호스트하고 terminal native dependencies를 로드합니다. |
 | `FileExplorer` | File 메뉴와 라우팅 탭 | 파일 시스템 탐색 표면을 엽니다. |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts 위에 recent-path 계열 File 메뉴 기능을 추가합니다. |
+| `HexEditor` | File/Open 메뉴와 라우팅 탭 | 바이너리 파일의 hex/ASCII 보기, 편집, 검색, 저장, 다시 로드 및 외부 변경 감지를 제공합니다. |
 | `Language` | Settings 메뉴와 라우팅 탭 | 언어 선택과 로컬라이제이션 리소스 관리를 제공합니다. |
 | `Log` | File 메뉴와 logging provider | log4net 기반 logger provider를 등록하고 로그 보기를 제공합니다. |
 | `MCP.Server` | Tools menu provider | MCP server 작업을 노출합니다. |
@@ -69,11 +70,30 @@
 
 ## Navigation 및 Content 모듈
 
-`WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
+`WebBrowser`, `FileExplorer`, `TextEditor`, `HexEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
 
 `Accounts.GitHub`와 `ChromeExtensions`도 provider sign-in과 Chrome Web Store package discovery를 위해 WebView2 기반 탭을 사용합니다. 둘 다 일반 모듈로 로드되며 browser-specific behavior는 WebView2 infrastructure와 module contracts를 통해 처리합니다.
 
 이 모듈들이 잘못된 탭이나 Not Found 탭을 열면 등록된 `ITabItemFactory`, route attributes, factory priority, `ITabManager.NavigateAsync(...)`에 전달되는 URI를 확인하세요.
+
+### Hex Editor
+
+**File → Open → Binary File**에서 모든 형식의 파일을 열 수 있습니다. `HexEditor`는 WPFHexaEditor를 사용하여 16진수 및 ASCII 보기, 바이트 편집, 실행 취소/다시 실행, 검색/바꾸기를 제공합니다. 각 파일은 별도의 라우팅 탭에서 열립니다.
+
+페이지 상단의 **Save** (`Ctrl+S`), **Save As** (`Ctrl+Shift+S`), **Reload**를 사용합니다. 읽기 전용 파일은 Save As로 편집 가능한 복사본을 저장할 수 있습니다. 저장하지 않은 변경 사항은 탭 제목에 `*`로 표시되며, 수정한 탭을 닫거나 다시 로드할 때 확인합니다. 편집하지 않은 파일은 외부 변경 시 자동으로 다시 로드합니다. 저장하지 않은 변경이 있으면 편집 내용을 유지하고 디스크의 파일을 덮어쓰기 전에 확인합니다.
+
+다른 모듈에서는 `ZYC.Framework.Modules.HexEditor.Abstractions`의 도우미로 바이너리 편집기를 열 수 있습니다.
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+이 도우미는 전용 `hexeditor/edit?file=...` 경로를 생성합니다. 일반 `file://` URI는 기존 파일 미리 보기 라우팅을 따릅니다. 모듈은 검색 대화상자의 색상과 제목 표시줄 스타일을 호스트 테마에 맞게 제공합니다.
+
+현재 구현은 파일 전체를 메모리에 로드합니다. 저장하거나 다시 로드하면 실행 취소/다시 실행 기록이 초기화됩니다.
 
 ## Aspire 및 Sidecar 모듈
 

@@ -164,6 +164,12 @@ lifetimeScope.Resolve<ITaskbarMenuManager>()
 - 타입은 작고 버전 변화에 견딜 수 있게 유지합니다.
 - config/state를 큰 비즈니스 데이터 저장소로 사용하지 마세요.
 
+### 속성 변경 관찰
+
+`ZYC.Framework.Core.ReactiveExtensions.ObserveProperty<T>(propertyName)`는 `IObservable<T>`를 반환하며 속성 이름이 정확히 일치할 때 `PropertyChanged` 이벤트의 발신자를 전달합니다. `ObserveAnyChange<T>()`는 `IPersistedData`의 모든 속성 변경에 대해 발신자를 전달합니다. 두 메서드 모두 `INotifyPropertyChanged` 구현이 필요합니다. WPF 컨트롤을 업데이트하기 전에 `ObserveOnUI()`를 사용하고, View를 해제할 때 구독도 해제하세요.
+
+1.5.0부터 `ObserveProperty<T>`의 반환 형식은 `IObservable<System.Reactive.Unit>`에서 `IObservable<T>`로 변경되었습니다. 종속 모듈을 다시 빌드하고 형식을 명시한 관찰자나 처리 체인을 수정하세요. 후속 API에 `Unit` 스트림이 필요하면 `.Select(_ => System.Reactive.Unit.Default)`를 추가합니다.
+
 ## 이벤트와 Toast
 
 분리된 런타임 알림에는 `IEventAggregator`를 사용합니다.

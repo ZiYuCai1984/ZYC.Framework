@@ -252,7 +252,7 @@ dotnet add package $(PackageId) --version $(Version)
 
 ### Built-in Modules
 
-The README keeps only the high-level feature summary. See [Built-in Modules](docs/built-in-modules.md) for the current module list, loading notes, and module responsibilities.
+Built-in modules include text preview/editing and binary editing with `HexEditor`, alongside file browsing, web content, and terminal tools. Open binary files through **File → Open → Binary File**. See [Built-in Modules](docs/built-in-modules.md) for the complete module list, usage, and limitations.
 
 ### Development & Delivery
 
@@ -285,7 +285,7 @@ The README keeps only the high-level feature summary. See [Built-in Modules](doc
 
 ### 組み込みモジュール
 
-README には概要だけを残します。現在のモジュール一覧、ロード時の注意点、各モジュールの責務は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
+テキストのプレビュー/編集、`HexEditor` によるバイナリ編集、ファイル参照、Web コンテンツ、ターミナルなどのモジュールを内蔵しています。バイナリ ファイルは **File → Open → Binary File** から開きます。モジュール一覧、使い方、制限事項は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
 
 ### 開発・配布
 
@@ -320,7 +320,7 @@ README には概要だけを残します。現在のモジュール一覧、ロ�
 
 ### 内置模块
 
-README 只保留高层功能概览。当前模块清单、加载说明和模块职责请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
+内置模块提供文本预览与编辑、`HexEditor` 二进制编辑、文件浏览、Web 内容和终端工具。通过 **File → Open → Binary File** 打开二进制文件。完整模块清单、用法和限制请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
 
 ### 开发与交付
 
@@ -356,7 +356,7 @@ README 只保留高层功能概览。当前模块清单、加载说明和模块�
 
 ### 內建模組
 
-README 只保留高層功能概覽。目前模組清單、載入說明和模組職責請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
+內建模組提供文字預覽與編輯、`HexEditor` 二進位編輯、檔案瀏覽、Web 內容及終端工具。透過 **File → Open → Binary File** 開啟二進位檔案。完整模組清單、用法與限制請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
 
 ### 開發與交付
 
@@ -391,7 +391,7 @@ README 只保留高層功能概覽。目前模組清單、載入說明和模組�
 
 ### 내장 모듈
 
-README에는 높은 수준의 기능 요약만 유지합니다. 현재 모듈 목록, 로딩 참고 사항, 모듈 책임은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
+내장 모듈은 텍스트 미리 보기 및 편집, `HexEditor` 바이너리 편집, 파일 탐색, Web 콘텐츠 및 터미널 도구를 제공합니다. **File → Open → Binary File**에서 바이너리 파일을 열 수 있습니다. 전체 모듈 목록, 사용법 및 제한 사항은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
 
 ### 개발 및 배포
 

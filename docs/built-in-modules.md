@@ -39,6 +39,7 @@ At startup, the module loader scans the application directory for assemblies nam
 | `CLI` | Tools menu and terminal tab | Hosts the embedded terminal and loads terminal native dependencies. |
 | `FileExplorer` | File menu and routed tab | Opens file-system browsing surfaces. |
 | `FileExplorer.Features` | File menu sub-provider | Adds recent-path style File menu features on top of FileExplorer contracts. |
+| `HexEditor` | File/Open menu and routed tabs | Edits binary files with hex/ASCII views, search, save/reload, and external-change detection. |
 | `Language` | Settings menu and routed tabs | Provides language selection and localization resource management. |
 | `Log` | File menu and logging provider | Registers the log4net-backed logger provider and exposes log viewing. |
 | `MCP.Server` | Tools menu provider | Exposes MCP server operations. |
@@ -69,11 +70,30 @@ These modules usually register menu items and routed tabs from `LoadAsync`. Some
 
 ## Navigation and Content Modules
 
-`WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
+`WebBrowser`, `FileExplorer`, `TextEditor`, `HexEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
 
 `Accounts.GitHub` and `ChromeExtensions` also use WebView2-backed tabs for provider sign-in and Chrome Web Store package discovery. They are still loaded as regular modules; their browser-specific behavior is handled through WebView2 infrastructure and module contracts.
 
 If one of these modules opens the wrong tab or a Not Found tab, check the registered `ITabItemFactory`, route attributes, factory priority, and the URI being passed to `ITabManager.NavigateAsync(...)`.
+
+### Hex Editor
+
+Open any file through **File → Open → Binary File**. `HexEditor` uses WPFHexaEditor to provide hex and ASCII views, byte editing, undo/redo, and search/replace. Each file opens in a routed editor tab.
+
+Use **Save** (`Ctrl+S`), **Save As** (`Ctrl+Shift+S`), or **Reload** in the page header. Read-only files can be saved to an editable copy with Save As. Unsaved changes mark the tab title with `*`; closing or reloading a modified tab requires confirmation. External file changes reload automatically when the editor is clean; otherwise, the editor retains your changes and prompts before overwriting the disk version.
+
+To open a binary editor from another module, navigate with the helper in `ZYC.Framework.Modules.HexEditor.Abstractions`:
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+The helper creates the dedicated `hexeditor/edit?file=...` route. A plain `file://` URI still follows the existing file-preview routing. Search dialog colors and title-bar styles are supplied by the module to match the host theme.
+
+The current implementation loads the entire file into memory. Saving or reloading resets undo/redo history.
 
 ## Aspire and Sidecar Modules
 

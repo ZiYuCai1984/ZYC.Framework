@@ -164,7 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.5.0
 
 ### Built-in Modules
 
-The README keeps only the high-level feature summary. See [Built-in Modules](docs/built-in-modules.md) for the current module list, loading notes, and module responsibilities.
+Built-in modules include text preview/editing and binary editing with `HexEditor`, alongside file browsing, web content, and terminal tools. Open binary files through **File → Open → Binary File**. See [Built-in Modules](docs/built-in-modules.md) for the complete module list, usage, and limitations.
 
 ### Development & Delivery
 

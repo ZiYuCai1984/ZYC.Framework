@@ -165,7 +165,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.5.0
 
 ### 内置模块
 
-README 只保留高层功能概览。当前模块清单、加载说明和模块职责请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
+内置模块提供文本预览与编辑、`HexEditor` 二进制编辑、文件浏览、Web 内容和终端工具。通过 **File → Open → Binary File** 打开二进制文件。完整模块清单、用法和限制请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
 
 ### 开发与交付
 
