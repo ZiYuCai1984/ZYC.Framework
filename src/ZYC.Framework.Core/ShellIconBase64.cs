@@ -9,6 +9,8 @@ namespace ZYC.Framework.Core;
 public static class ShellIconBase64
 {
     // ReSharper disable InconsistentNaming
+    // ReSharper disable IdentifierTypo
+
     private const uint SHGFI_PIDL = 0x000000008;
     private const uint SHGFI_ICON = 0x000000100;
     private const uint SHGFI_LARGEICON = 0x000000000; // large (typically 32x32)

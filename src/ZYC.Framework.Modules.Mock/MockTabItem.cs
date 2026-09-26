@@ -10,6 +10,8 @@ namespace ZYC.Framework.Modules.Mock;
 [Register]
 internal class MockTabItem : ITabItemInstance
 {
+    private object? _view;
+
     public MockTabItem(ILifetimeScope lifetimeScope, MockTabItemInfo mockTabItemInfo)
     {
         LifetimeScope = lifetimeScope;
@@ -23,19 +25,19 @@ internal class MockTabItem : ITabItemInstance
 
     public string Scheme => ProductInfo.Scheme;
 
-    public TabReference TabReference { get; }
-
     public Guid Id => TabReference.Id;
 
     public Uri Uri => MockTabItemInfo.Uri;
 
     public string Host => Uri.Host;
 
+    public TabReference TabReference { get; }
+
     public string Icon => MockTabItemInfo.Icon;
 
     public string Title => MockTabItemInfo.Title;
 
-    public object View => LifetimeScope.Resolve(MockTabItemInfo.ViewType);
+    public object View => _view ??= LifetimeScope.Resolve(MockTabItemInfo.ViewType);
 
     public bool Localization => false;
 

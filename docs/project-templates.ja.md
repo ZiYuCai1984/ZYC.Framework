@@ -21,8 +21,8 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.4.9
-dotnet tool update -g ZYC.Framework.CLI --version 1.4.9
+dotnet tool install -g ZYC.Framework.CLI --version 1.5.0
+dotnet tool update -g ZYC.Framework.CLI --version 1.5.0
 ```
 
 コマンドを確認します。
@@ -176,7 +176,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.4.9
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.5.0
 ```
 
 ## 既存ソース ツリー向けの `new-module`

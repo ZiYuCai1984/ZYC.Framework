@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Reactive;
 using System.Reactive.Linq;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Abstractions.Settings;
@@ -23,10 +22,11 @@ public static class ReactiveExtensions
             .FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                 h => t.PropertyChanged += h,
                 h => t.PropertyChanged -= h)
-            .Select(_ => persistedData);
+            //!WARNING // Retrieve directly from the Sender provided by EventPattern to avoid closure capturing of external variables.
+            .Select(e => (T)e.Sender!);
     }
 
-    public static IObservable<Unit> ObserveProperty<T>(this T persistedData, string propertyName)
+    public static IObservable<T> ObserveProperty<T>(this T persistedData, string propertyName)
     {
         if (persistedData is not INotifyPropertyChanged t)
         {
@@ -38,7 +38,7 @@ public static class ReactiveExtensions
                 h => t.PropertyChanged += h,
                 h => t.PropertyChanged -= h)
             .Where(e => string.Equals(e.EventArgs.PropertyName, propertyName, StringComparison.Ordinal))
-            .Select(_ => Unit.Default);
+            .Select(e => (T)e.Sender!);
     }
 
     public static IObservable<TSource> ObserveOnUI<TSource>(this IObservable<TSource> source)
@@ -54,6 +54,7 @@ public static class ReactiveExtensions
 
     internal static void SetSynchronizationContext(SynchronizationContext context)
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (context == null)
         {
             DebuggerTools.Break();

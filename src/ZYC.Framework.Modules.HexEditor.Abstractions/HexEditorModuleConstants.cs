@@ -20,7 +20,7 @@ public static class HexEditorModuleConstants
     public const string MenuTitle = "Binary File";
 
     /// <summary>The module and tab icon.</summary>
-    public const string Icon = "AlphaH";
+    public const string Icon = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHk9IjIwIj4weDwvdGV4dD48L3N2Zz4=";
 
     /// <summary>The file dialog filter; any file can be opened as binary data.</summary>
     public const string FileDialogFilter = "All Files (*.*)|*.*";
