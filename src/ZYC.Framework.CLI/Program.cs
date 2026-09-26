@@ -15,7 +15,7 @@ internal class Program
     {
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-        var rootCommand = new RootCommand($"Command line tool for {ProductInfo.ProductName}");
+        var rootCommand = new RootCommand($"Command line tool for {ProductInfo.ProductName} {ProductInfo.Version}");
         var optionRegister = new CommandLineOptionRegister(rootCommand);
 
         var builder = new ContainerBuilder();
