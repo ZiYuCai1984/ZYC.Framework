@@ -39,6 +39,7 @@ At startup, the module loader scans the application directory for assemblies nam
 | `CLI` | Tools menu and terminal tab | Hosts the embedded terminal and loads terminal native dependencies. |
 | `FileExplorer` | File menu and routed tab | Opens file-system browsing surfaces. |
 | `FileExplorer.Features` | File menu sub-provider | Adds recent-path style File menu features on top of FileExplorer contracts. |
+| `HexEditor` | File/Open menu and routed tabs | Edits binary files with hex/ASCII views, search, save/reload, and external-change detection. |
 | `Language` | Settings menu and routed tabs | Provides language selection and localization resource management. |
 | `Log` | File menu and logging provider | Registers the log4net-backed logger provider and exposes log viewing. |
 | `MCP.Server` | Tools menu provider | Exposes MCP server operations. |
@@ -69,11 +70,30 @@ These modules usually register menu items and routed tabs from `LoadAsync`. Some
 
 ## Navigation and Content Modules
 
-`WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
+`WebBrowser`, `FileExplorer`, `TextEditor`, `HexEditor`, `CLI`, and `BlazorDemo` expose user-facing content surfaces. They all rely on tab routing rather than direct view construction from the shell.
 
 `Accounts.GitHub` and `ChromeExtensions` also use WebView2-backed tabs for provider sign-in and Chrome Web Store package discovery. They are still loaded as regular modules; their browser-specific behavior is handled through WebView2 infrastructure and module contracts.
 
 If one of these modules opens the wrong tab or a Not Found tab, check the registered `ITabItemFactory`, route attributes, factory priority, and the URI being passed to `ITabManager.NavigateAsync(...)`.
+
+### Hex Editor
+
+Open any file through **File → Open → Binary File**. `HexEditor` uses WPFHexaEditor to provide hex and ASCII views, byte editing, undo/redo, and search/replace. Each file opens in a routed editor tab.
+
+Use **Save** (`Ctrl+S`), **Save As** (`Ctrl+Shift+S`), or **Reload** in the page header. Read-only files can be saved to an editable copy with Save As. Unsaved changes mark the tab title with `*`; closing or reloading a modified tab requires confirmation. External file changes reload automatically when the editor is clean; otherwise, the editor retains your changes and prompts before overwriting the disk version.
+
+To open a binary editor from another module, navigate with the helper in `ZYC.Framework.Modules.HexEditor.Abstractions`:
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+The helper creates the dedicated `hexeditor/edit?file=...` route. A plain `file://` URI still follows the existing file-preview routing. Search dialog colors and title-bar styles are supplied by the module to match the host theme.
+
+The current implementation loads the entire file into memory. Saving or reloading resets undo/redo history.
 
 ## Aspire and Sidecar Modules
 
@@ -124,6 +144,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | `CLI` | Tools メニューと terminal タブ | 組み込み terminal をホストし、terminal native dependencies をロードする。 |
 | `FileExplorer` | File メニューとルーティング タブ | ファイル システム閲覧面を開く。 |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts の上に recent-path 系機能を追加する。 |
+| `HexEditor` | File/Open メニューとルーティング タブ | バイナリ ファイルの hex/ASCII 表示、編集、検索、保存、再読み込み、外部変更の検出を提供する。 |
 | `Language` | Settings メニューとルーティング タブ | 言語選択と localization resource 管理を提供する。 |
 | `Log` | File メニューと logging provider | log4net ベースの logger provider を登録し、ログ表示を提供する。 |
 | `MCP.Server` | Tools menu provider | MCP server 操作を公開する。 |
@@ -154,11 +175,30 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Navigation と Content モジュール
 
-`WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
+`WebBrowser`、`FileExplorer`、`TextEditor`、`HexEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
 
 `Accounts.GitHub` と `ChromeExtensions` も provider sign-in と Chrome Web Store package discovery のために WebView2 ベースのタブを使います。どちらも通常のモジュールとしてロードされ、browser-specific behavior は WebView2 infrastructure と module contracts を通じて扱います。
 
 これらのモジュールが誤ったタブや Not Found タブを開く場合は、登録済み `ITabItemFactory`、route attributes、factory priority、`ITabManager.NavigateAsync(...)` に渡している URI を確認してください。
+
+### Hex Editor
+
+**File → Open → Binary File** から任意のファイルを開けます。`HexEditor` は WPFHexaEditor を使用し、16 進数と ASCII の表示、バイト編集、元に戻す/やり直し、検索/置換を提供します。各ファイルは専用のルーティング タブで開きます。
+
+ページ ヘッダーの **Save** (`Ctrl+S`)、**Save As** (`Ctrl+Shift+S`)、**Reload** を使用します。読み取り専用ファイルは Save As で編集可能なコピーとして保存できます。未保存の変更があるタブには `*` が付き、閉じる際や再読み込み時に確認します。未編集なら外部のファイル変更を自動的に読み込み、編集中なら変更を保持してディスク上の内容を上書きする前に確認します。
+
+別のモジュールから開く場合は、`ZYC.Framework.Modules.HexEditor.Abstractions` のヘルパーでナビゲーションします。
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+このヘルパーは専用の `hexeditor/edit?file=...` ルートを生成します。通常の `file://` URI は既存のファイル プレビューのルーティングに従います。検索ダイアログの配色とタイトル バーのスタイルは、モジュールがホストのテーマに合わせて提供します。
+
+現在の実装はファイル全体をメモリに読み込みます。保存または再読み込みで、元に戻す/やり直しの履歴はリセットされます。
 
 ## Aspire と Sidecar モジュール
 
@@ -209,6 +249,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | `CLI` | Tools 菜单和终端 Tab | 承载嵌入式终端，并加载终端 native dependencies。 |
 | `FileExplorer` | File 菜单和路由 Tab | 打开文件系统浏览表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契约之上添加 recent-path 类 File 菜单能力。 |
+| `HexEditor` | File/Open 菜单和路由 Tab | 提供二进制文件的十六进制/ASCII 查看与编辑、搜索、保存、重新加载和外部变更检测。 |
 | `Language` | Settings 菜单和路由 Tab | 提供语言选择与本地化资源管理。 |
 | `Log` | File 菜单和 logging provider | 注册 log4net-backed logger provider，并暴露日志查看。 |
 | `MCP.Server` | Tools menu provider | 暴露 MCP server 操作。 |
@@ -239,11 +280,30 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## 导航与内容模块
 
-`WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
+`WebBrowser`、`FileExplorer`、`TextEditor`、`HexEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
 
 `Accounts.GitHub` 和 `ChromeExtensions` 也使用 WebView2-backed tabs，分别用于 provider 登录和 Chrome Web Store package discovery。它们仍然作为普通模块加载；浏览器相关行为由 WebView2 infrastructure 与 module contracts 承载。
 
 如果这些模块打开了错误 Tab 或 Not Found Tab，请检查已注册的 `ITabItemFactory`、route attributes、factory priority，以及传给 `ITabManager.NavigateAsync(...)` 的 URI。
+
+### 十六进制编辑器
+
+通过 **File → Open → Binary File** 可以打开任意文件。`HexEditor` 使用 WPFHexaEditor 提供十六进制和 ASCII 视图、字节编辑、撤销/重做及搜索/替换，每个文件使用独立的路由标签页。
+
+页面顶部提供 **Save** (`Ctrl+S`)、**Save As** (`Ctrl+Shift+S`) 和 **Reload**。只读文件可通过 Save As 保存为可编辑的副本。未保存的修改会在标签标题中显示 `*`；关闭或重新加载已修改的文件时需要确认。磁盘文件发生外部变更时，未修改的文档会自动重新加载；存在未保存修改时保留编辑内容，并在覆盖磁盘版本前提示确认。
+
+其他模块可以使用 `ZYC.Framework.Modules.HexEditor.Abstractions` 中的辅助方法打开二进制编辑器：
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+该方法生成专用的 `hexeditor/edit?file=...` 路由。普通 `file://` URI 仍遵循现有文件预览路由。模块为搜索弹窗提供与宿主主题一致的配色和标题栏样式。
+
+当前实现将整个文件载入内存；保存或重新加载会清空撤销/重做历史。
 
 ## Aspire 与 Sidecar 模块
 
@@ -294,6 +354,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | `CLI` | Tools 選單與終端 Tab | 承載嵌入式終端，並載入終端 native dependencies。 |
 | `FileExplorer` | File 選單與路由 Tab | 開啟檔案系統瀏覽表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契約之上新增 recent-path 類 File 選單能力。 |
+| `HexEditor` | File/Open 選單與路由 Tab | 提供二進位檔案的十六進位/ASCII 檢視與編輯、搜尋、儲存、重新載入及外部變更偵測。 |
 | `Language` | Settings 選單與路由 Tab | 提供語言選擇與在地化資源管理。 |
 | `Log` | File 選單與 logging provider | 註冊 log4net-backed logger provider，並暴露日誌檢視。 |
 | `MCP.Server` | Tools menu provider | 暴露 MCP server 操作。 |
@@ -324,11 +385,30 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## 導覽與內容模組
 
-`WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向使用者的內容表面。它們都依賴 Tab routing，而不是由 Shell 直接建構 View。
+`WebBrowser`、`FileExplorer`、`TextEditor`、`HexEditor`、`CLI`、`BlazorDemo` 暴露面向使用者的內容表面。它們都依賴 Tab routing，而不是由 Shell 直接建構 View。
 
 `Accounts.GitHub` 與 `ChromeExtensions` 也使用 WebView2-backed tabs，分別用於 provider 登入與 Chrome Web Store package discovery。它們仍然作為一般模組載入；瀏覽器相關行為由 WebView2 infrastructure 與 module contracts 承載。
 
 如果這些模組開啟了錯誤 Tab 或 Not Found Tab，請檢查已註冊的 `ITabItemFactory`、route attributes、factory priority，以及傳給 `ITabManager.NavigateAsync(...)` 的 URI。
+
+### 十六進位編輯器
+
+透過 **File → Open → Binary File** 可以開啟任意檔案。`HexEditor` 使用 WPFHexaEditor 提供十六進位與 ASCII 檢視、位元組編輯、復原/重做及搜尋/取代，每個檔案使用獨立的路由分頁。
+
+頁面頂部提供 **Save** (`Ctrl+S`)、**Save As** (`Ctrl+Shift+S`) 與 **Reload**。唯讀檔案可透過 Save As 儲存為可編輯的副本。未儲存的變更會在分頁標題顯示 `*`；關閉或重新載入已修改的檔案時需要確認。磁碟檔案發生外部變更時，未修改的文件會自動重新載入；存在未儲存變更時保留編輯內容，並在覆寫磁碟版本前提示確認。
+
+其他模組可以使用 `ZYC.Framework.Modules.HexEditor.Abstractions` 中的輔助方法開啟二進位編輯器：
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+此方法產生專用的 `hexeditor/edit?file=...` 路由。一般 `file://` URI 仍遵循現有的檔案預覽路由。模組為搜尋對話框提供與主機佈景主題一致的配色及標題列樣式。
+
+目前實作會將整個檔案載入記憶體；儲存或重新載入會清除復原/重做歷程。
 
 ## Aspire 與 Sidecar 模組
 
@@ -379,6 +459,7 @@ When documenting or troubleshooting module loading, start from the compiled outp
 | `CLI` | Tools 메뉴와 터미널 탭 | 내장 터미널을 호스트하고 terminal native dependencies를 로드합니다. |
 | `FileExplorer` | File 메뉴와 라우팅 탭 | 파일 시스템 탐색 표면을 엽니다. |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts 위에 recent-path 계열 File 메뉴 기능을 추가합니다. |
+| `HexEditor` | File/Open 메뉴와 라우팅 탭 | 바이너리 파일의 hex/ASCII 보기, 편집, 검색, 저장, 다시 로드 및 외부 변경 감지를 제공합니다. |
 | `Language` | Settings 메뉴와 라우팅 탭 | 언어 선택과 로컬라이제이션 리소스 관리를 제공합니다. |
 | `Log` | File 메뉴와 logging provider | log4net 기반 logger provider를 등록하고 로그 보기를 제공합니다. |
 | `MCP.Server` | Tools menu provider | MCP server 작업을 노출합니다. |
@@ -409,11 +490,30 @@ When documenting or troubleshooting module loading, start from the compiled outp
 
 ## Navigation 및 Content 모듈
 
-`WebBrowser`, `FileExplorer`, `TextEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
+`WebBrowser`, `FileExplorer`, `TextEditor`, `HexEditor`, `CLI`, `BlazorDemo`는 사용자 대상 content surface를 노출합니다. 이들은 Shell에서 View를 직접 만들지 않고 모두 tab routing에 의존합니다.
 
 `Accounts.GitHub`와 `ChromeExtensions`도 provider sign-in과 Chrome Web Store package discovery를 위해 WebView2 기반 탭을 사용합니다. 둘 다 일반 모듈로 로드되며 browser-specific behavior는 WebView2 infrastructure와 module contracts를 통해 처리합니다.
 
 이 모듈들이 잘못된 탭이나 Not Found 탭을 열면 등록된 `ITabItemFactory`, route attributes, factory priority, `ITabManager.NavigateAsync(...)`에 전달되는 URI를 확인하세요.
+
+### Hex Editor
+
+**File → Open → Binary File**에서 모든 형식의 파일을 열 수 있습니다. `HexEditor`는 WPFHexaEditor를 사용하여 16진수 및 ASCII 보기, 바이트 편집, 실행 취소/다시 실행, 검색/바꾸기를 제공합니다. 각 파일은 별도의 라우팅 탭에서 열립니다.
+
+페이지 상단의 **Save** (`Ctrl+S`), **Save As** (`Ctrl+Shift+S`), **Reload**를 사용합니다. 읽기 전용 파일은 Save As로 편집 가능한 복사본을 저장할 수 있습니다. 저장하지 않은 변경 사항은 탭 제목에 `*`로 표시되며, 수정한 탭을 닫거나 다시 로드할 때 확인합니다. 편집하지 않은 파일은 외부 변경 시 자동으로 다시 로드합니다. 저장하지 않은 변경이 있으면 편집 내용을 유지하고 디스크의 파일을 덮어쓰기 전에 확인합니다.
+
+다른 모듈에서는 `ZYC.Framework.Modules.HexEditor.Abstractions`의 도우미로 바이너리 편집기를 열 수 있습니다.
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+이 도우미는 전용 `hexeditor/edit?file=...` 경로를 생성합니다. 일반 `file://` URI는 기존 파일 미리 보기 라우팅을 따릅니다. 모듈은 검색 대화상자의 색상과 제목 표시줄 스타일을 호스트 테마에 맞게 제공합니다.
+
+현재 구현은 파일 전체를 메모리에 로드합니다. 저장하거나 다시 로드하면 실행 취소/다시 실행 기록이 초기화됩니다.
 
 ## Aspire 및 Sidecar 모듈
 

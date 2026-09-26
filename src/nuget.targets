@@ -28,7 +28,7 @@
   <!--<Import Project="$(USERPROFILE)\.nuget\packages\ZYC.CoreToolkit\$(V_ZYC_CoreToolkit)\nuget.targets"></Import>-->
 
   <PropertyGroup>
-    <V_Microsoft_Web_WebView2>1.0.4078.44</V_Microsoft_Web_WebView2>
+    <V_Microsoft_Web_WebView2>1.0.4191.47</V_Microsoft_Web_WebView2>
   </PropertyGroup>
 
   <ItemGroup>
@@ -117,11 +117,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="WPFHexaEditor" Version="3.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="System.Reactive" Version="7.0.0-preview.1" />
+    <PackageReference Update="System.Reactive" Version="7.0.0" />
     <PackageReference Update="System.Text.Encoding.CodePages" Version="10.0.2" />
   </ItemGroup>
 
@@ -165,6 +161,11 @@
 
   <ItemGroup>
     <PackageReference Update="Namotion.Reflection" Version="3.5.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Update="WPFHexaEditor" Version="3.4.5" />
   </ItemGroup>
 
 </Project>

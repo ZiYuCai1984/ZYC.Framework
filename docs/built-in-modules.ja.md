@@ -39,6 +39,7 @@
 | `CLI` | Tools メニューと terminal タブ | 組み込み terminal をホストし、terminal native dependencies をロードする。 |
 | `FileExplorer` | File メニューとルーティング タブ | ファイル システム閲覧面を開く。 |
 | `FileExplorer.Features` | File menu sub-provider | FileExplorer contracts の上に recent-path 系機能を追加する。 |
+| `HexEditor` | File/Open メニューとルーティング タブ | バイナリ ファイルの hex/ASCII 表示、編集、検索、保存、再読み込み、外部変更の検出を提供する。 |
 | `Language` | Settings メニューとルーティング タブ | 言語選択と localization resource 管理を提供する。 |
 | `Log` | File メニューと logging provider | log4net ベースの logger provider を登録し、ログ表示を提供する。 |
 | `MCP.Server` | Tools menu provider | MCP server 操作を公開する。 |
@@ -69,11 +70,30 @@
 
 ## Navigation と Content モジュール
 
-`WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
+`WebBrowser`、`FileExplorer`、`TextEditor`、`HexEditor`、`CLI`、`BlazorDemo` はユーザー向け content surface を公開します。Shell から View を直接作るのではなく、いずれも tab routing に依存します。
 
 `Accounts.GitHub` と `ChromeExtensions` も provider sign-in と Chrome Web Store package discovery のために WebView2 ベースのタブを使います。どちらも通常のモジュールとしてロードされ、browser-specific behavior は WebView2 infrastructure と module contracts を通じて扱います。
 
 これらのモジュールが誤ったタブや Not Found タブを開く場合は、登録済み `ITabItemFactory`、route attributes、factory priority、`ITabManager.NavigateAsync(...)` に渡している URI を確認してください。
+
+### Hex Editor
+
+**File → Open → Binary File** から任意のファイルを開けます。`HexEditor` は WPFHexaEditor を使用し、16 進数と ASCII の表示、バイト編集、元に戻す/やり直し、検索/置換を提供します。各ファイルは専用のルーティング タブで開きます。
+
+ページ ヘッダーの **Save** (`Ctrl+S`)、**Save As** (`Ctrl+Shift+S`)、**Reload** を使用します。読み取り専用ファイルは Save As で編集可能なコピーとして保存できます。未保存の変更があるタブには `*` が付き、閉じる際や再読み込み時に確認します。未編集なら外部のファイル変更を自動的に読み込み、編集中なら変更を保持してディスク上の内容を上書きする前に確認します。
+
+別のモジュールから開く場合は、`ZYC.Framework.Modules.HexEditor.Abstractions` のヘルパーでナビゲーションします。
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+このヘルパーは専用の `hexeditor/edit?file=...` ルートを生成します。通常の `file://` URI は既存のファイル プレビューのルーティングに従います。検索ダイアログの配色とタイトル バーのスタイルは、モジュールがホストのテーマに合わせて提供します。
+
+現在の実装はファイル全体をメモリに読み込みます。保存または再読み込みで、元に戻す/やり直しの履歴はリセットされます。
 
 ## Aspire と Sidecar モジュール
 

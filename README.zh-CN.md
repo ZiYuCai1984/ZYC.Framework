@@ -100,7 +100,7 @@
 👉 **[快速开始指南 (quick-start.zh-CN.md)](docs/quick-start.zh-CN.md)**
 
 
-👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.9/ZYC.Framework.Setup.1.4.9.exe)**
+👉 **[下载 Demo 安装包](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.5.0/ZYC.Framework.Setup.1.5.0.exe)**
 
 ### 创建项目
 
@@ -108,8 +108,8 @@
 推荐的开始方式是全局 dotnet tool。先安装或更新 CLI，然后通过 `zyc new` 创建 Host 项目：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.0
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 如果需要手动集成，仍然可以通过 NuGet 直接添加核心包：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.9
+dotnet add package ZYC.Framework.Alpha --version 1.5.0
 ```
 
 ---
@@ -165,7 +165,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.4.9
 
 ### 内置模块
 
-README 只保留高层功能概览。当前模块清单、加载说明和模块职责请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
+内置模块提供文本预览与编辑、`HexEditor` 二进制编辑、文件浏览、Web 内容和终端工具。通过 **File → Open → Binary File** 打开二进制文件。完整模块清单、用法和限制请查看 [内置模块](docs/built-in-modules.zh-CN.md)。
 
 ### 开发与交付
 

@@ -100,7 +100,7 @@
 👉 **[クイックスタート (quick-start.ja.md)](docs/quick-start.ja.md)**
 
 
-👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.9/ZYC.Framework.Setup.1.4.9.exe)**
+👉 **[デモ インストーラーをダウンロード](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.5.0/ZYC.Framework.Setup.1.5.0.exe)**
 
 ### プロジェクト作成
 
@@ -108,8 +108,8 @@
 推奨される開始方法はグローバル dotnet tool です。CLI をインストールまたは更新し、`zyc new` でホスト プロジェクトを作成します：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.0
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 手動で統合する場合は、コア パッケージを NuGet から直接追加することもできます：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.9
+dotnet add package ZYC.Framework.Alpha --version 1.5.0
 ```
 
 ---
@@ -164,7 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.4.9
 
 ### 組み込みモジュール
 
-README には概要だけを残します。現在のモジュール一覧、ロード時の注意点、各モジュールの責務は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
+テキストのプレビュー/編集、`HexEditor` によるバイナリ編集、ファイル参照、Web コンテンツ、ターミナルなどのモジュールを内蔵しています。バイナリ ファイルは **File → Open → Binary File** から開きます。モジュール一覧、使い方、制限事項は [組み込みモジュール](docs/built-in-modules.ja.md) を参照してください。
 
 ### 開発・配布
 

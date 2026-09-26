@@ -100,7 +100,7 @@ Please refer to the detailed guide:
 👉 **[Quick Start (quick-start.md)](docs/quick-start.md)**
 
 
-👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.9/ZYC.Framework.Setup.1.4.9.exe)**
+👉 **[Download Demo Installer](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.5.0/ZYC.Framework.Setup.1.5.0.exe)**
 
 ### Create a Project
 
@@ -108,8 +108,8 @@ Please refer to the detailed guide:
 The recommended way to start is the global dotnet tool. Install or update the CLI, then create a host project with `zyc new`:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.0
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 For manual integration, the core package can still be added directly with NuGet:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.9
+dotnet add package ZYC.Framework.Alpha --version 1.5.0
 ```
 
 ---
@@ -164,7 +164,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.4.9
 
 ### Built-in Modules
 
-The README keeps only the high-level feature summary. See [Built-in Modules](docs/built-in-modules.md) for the current module list, loading notes, and module responsibilities.
+Built-in modules include text preview/editing and binary editing with `HexEditor`, alongside file browsing, web content, and terminal tools. Open binary files through **File → Open → Binary File**. See [Built-in Modules](docs/built-in-modules.md) for the complete module list, usage, and limitations.
 
 ### Development & Delivery
 

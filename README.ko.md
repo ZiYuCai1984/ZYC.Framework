@@ -100,7 +100,7 @@
 👉 **[빠른 시작 가이드 (quick-start.ko.md)](docs/quick-start.ko.md)**
 
 
-👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.9/ZYC.Framework.Setup.1.4.9.exe)**
+👉 **[데모 설치 프로그램 다운로드](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.5.0/ZYC.Framework.Setup.1.5.0.exe)**
 
 ### 프로젝트 생성
 
@@ -108,8 +108,8 @@
 권장 시작 방식은 전역 dotnet tool입니다. CLI를 설치하거나 업데이트한 뒤 `zyc new`로 호스트 프로젝트를 만듭니다:
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.0
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 수동으로 통합해야 하는 경우 코어 패키지를 NuGet으로 직접 추가할 수 있습니다:
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.9
+dotnet add package ZYC.Framework.Alpha --version 1.5.0
 ```
 
 ---
@@ -165,7 +165,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.4.9
 
 ### 내장 모듈
 
-README에는 높은 수준의 기능 요약만 유지합니다. 현재 모듈 목록, 로딩 참고 사항, 모듈 책임은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
+내장 모듈은 텍스트 미리 보기 및 편집, `HexEditor` 바이너리 편집, 파일 탐색, Web 콘텐츠 및 터미널 도구를 제공합니다. **File → Open → Binary File**에서 바이너리 파일을 열 수 있습니다. 전체 모듈 목록, 사용법 및 제한 사항은 [내장 모듈](docs/built-in-modules.ko.md)을 참고하세요.
 
 ### 개발 및 배포
 

@@ -14,6 +14,7 @@ namespace ZYC.Framework.Modules.Aspire.UI;
 internal partial class AspireView
 {
     //!WARNING Environment variables are masked by Aspire Dashboard's frontend model and do not pass through ResourcePropertySnapshot; this DOM-based workaround must be reviewed after Aspire Dashboard upgrades.
+    //TODO-zyc Not work now !!
     private const string DisableDashboardMaskingScript = """
                                                          (() => {
                                                              const revealedButtons = new WeakSet();

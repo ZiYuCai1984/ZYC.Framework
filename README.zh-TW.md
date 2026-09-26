@@ -100,7 +100,7 @@
 👉 **[快速開始指南 (quick-start.zh-TW.md)](docs/quick-start.zh-TW.md)**
 
 
-👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.4.9/ZYC.Framework.Setup.1.4.9.exe)**
+👉 **[下載 Demo 安裝程式](https://github.com/ZiYuCai1984/ZYC.Framework/releases/download/v1.5.0/ZYC.Framework.Setup.1.5.0.exe)**
 
 ### 建立專案
 
@@ -108,8 +108,8 @@
 推薦的開始方式是全域 dotnet tool。先安裝或更新 CLI，然後透過 `zyc new` 建立 Host 專案：
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.4.9
-dotnet tool update --global ZYC.Framework.CLI --version 1.4.9
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.0
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.0
 zyc new MyCompany.Tools --template minimal
 ```
 
@@ -117,7 +117,7 @@ zyc new MyCompany.Tools --template minimal
 如果需要手動整合，仍然可以透過 NuGet 直接加入核心套件：
 
 ```bash
-dotnet add package ZYC.Framework.Alpha --version 1.4.9
+dotnet add package ZYC.Framework.Alpha --version 1.5.0
 ```
 
 ---
@@ -166,7 +166,7 @@ dotnet add package ZYC.Framework.Alpha --version 1.4.9
 
 ### 內建模組
 
-README 只保留高層功能概覽。目前模組清單、載入說明和模組職責請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
+內建模組提供文字預覽與編輯、`HexEditor` 二進位編輯、檔案瀏覽、Web 內容及終端工具。透過 **File → Open → Binary File** 開啟二進位檔案。完整模組清單、用法與限制請查看 [內建模組](docs/built-in-modules.zh-TW.md)。
 
 ### 開發與交付
 

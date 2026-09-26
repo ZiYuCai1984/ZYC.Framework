@@ -39,6 +39,7 @@
 | `CLI` | Tools 菜单和终端 Tab | 承载嵌入式终端，并加载终端 native dependencies。 |
 | `FileExplorer` | File 菜单和路由 Tab | 打开文件系统浏览表面。 |
 | `FileExplorer.Features` | File menu sub-provider | 在 FileExplorer 契约之上添加 recent-path 类 File 菜单能力。 |
+| `HexEditor` | File/Open 菜单和路由 Tab | 提供二进制文件的十六进制/ASCII 查看与编辑、搜索、保存、重新加载和外部变更检测。 |
 | `Language` | Settings 菜单和路由 Tab | 提供语言选择与本地化资源管理。 |
 | `Log` | File 菜单和 logging provider | 注册 log4net-backed logger provider，并暴露日志查看。 |
 | `MCP.Server` | Tools menu provider | 暴露 MCP server 操作。 |
@@ -69,11 +70,30 @@
 
 ## 导航与内容模块
 
-`WebBrowser`、`FileExplorer`、`TextEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
+`WebBrowser`、`FileExplorer`、`TextEditor`、`HexEditor`、`CLI`、`BlazorDemo` 暴露面向用户的内容表面。它们都依赖 Tab routing，而不是由 Shell 直接构造 View。
 
 `Accounts.GitHub` 和 `ChromeExtensions` 也使用 WebView2-backed tabs，分别用于 provider 登录和 Chrome Web Store package discovery。它们仍然作为普通模块加载；浏览器相关行为由 WebView2 infrastructure 与 module contracts 承载。
 
 如果这些模块打开了错误 Tab 或 Not Found Tab，请检查已注册的 `ITabItemFactory`、route attributes、factory priority，以及传给 `ITabManager.NavigateAsync(...)` 的 URI。
+
+### 十六进制编辑器
+
+通过 **File → Open → Binary File** 可以打开任意文件。`HexEditor` 使用 WPFHexaEditor 提供十六进制和 ASCII 视图、字节编辑、撤销/重做及搜索/替换，每个文件使用独立的路由标签页。
+
+页面顶部提供 **Save** (`Ctrl+S`)、**Save As** (`Ctrl+Shift+S`) 和 **Reload**。只读文件可通过 Save As 保存为可编辑的副本。未保存的修改会在标签标题中显示 `*`；关闭或重新加载已修改的文件时需要确认。磁盘文件发生外部变更时，未修改的文档会自动重新加载；存在未保存修改时保留编辑内容，并在覆盖磁盘版本前提示确认。
+
+其他模块可以使用 `ZYC.Framework.Modules.HexEditor.Abstractions` 中的辅助方法打开二进制编辑器：
+
+```csharp
+using ZYC.Framework.Modules.HexEditor.Abstractions;
+
+var fileUri = new Uri(@"C:\data\sample.bin");
+await tabManager.NavigateAsync(HexEditorModuleConstants.CreateEditorUri(fileUri));
+```
+
+该方法生成专用的 `hexeditor/edit?file=...` 路由。普通 `file://` URI 仍遵循现有文件预览路由。模块为搜索弹窗提供与宿主主题一致的配色和标题栏样式。
+
+当前实现将整个文件载入内存；保存或重新加载会清空撤销/重做历史。
 
 ## Aspire 与 Sidecar 模块
 
