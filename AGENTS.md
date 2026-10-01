@@ -35,6 +35,7 @@ It applies to the entire repository unless the user explicitly overrides it.
 - Events and DTOs: PascalCase; avoid typos. For TaskManager events, use the pattern `ManagedTask*Event` (e.g., `ManagedTaskCompletedEvent`, `ManagedTaskFaultedEvent`, `ManagedTaskCreationFaultedEvent`).
 - Namespaces: file-scoped; match folder structure where practical.
 - Avoid adding `sealed` unless it is required for correctness, API contract, or an explicit user request.
+- Do NOT write calls to `ArgumentNullException.ThrowIfNull`.
 - XML docs: required for public APIs in `*.Abstractions` projects; optional elsewhere.
 - New files must use `CRLF` line endings and `UTF-8 with BOM` encoding.
 

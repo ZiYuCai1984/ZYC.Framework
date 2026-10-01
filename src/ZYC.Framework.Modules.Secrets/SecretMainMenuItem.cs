@@ -16,7 +16,7 @@ internal class SecretMainMenuItem : MainMenuItem
         {
             Title = SecretsModuleConstants.Title,
             Icon = SecretsModuleConstants.Icon,
-            Anchor = SettingMainMenuAnchors.Settings
+            Anchor = SettingsMainMenuAnchors.Settings
         };
 
         Command = lifetimeScope.CreateNavigateCommand(SecretsModuleConstants.Uri);

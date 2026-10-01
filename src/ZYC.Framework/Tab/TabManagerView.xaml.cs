@@ -55,6 +55,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
         NavigationState = tabManager.GetNavigationState(workspaceNode.Id);
 
         InitializeComponent();
+        InitializeUriNavigation();
 
         WorkspaceMenuViewHost.Content = lifetimeScope.Resolve<WorkspaceMenuView>(
             new TypedParameter(typeof(WorkspaceNode), workspaceNode));
@@ -104,15 +105,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
     private ITabManager TabManager { get; }
 
-    public string? Uri
-    {
-        get
-        {
-            var value = FocusedTabItemInstance?.Uri != null ? FocusedTabItemInstance.Uri.ToString() : string.Empty;
-            return value;
-        }
-        set => _ = StartNavigateAsync(value);
-    }
+    public string Uri => FocusedTabItemInstance?.Uri.ToString() ?? string.Empty;
 
     public string[] NavigateHistory => NavigationState.History.Select(t => t.Uri).ToArray();
 
@@ -285,26 +278,6 @@ internal partial class TabManagerView : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-
-    private async Task StartNavigateAsync(string? uri)
-    {
-        if (string.IsNullOrWhiteSpace(uri))
-        {
-            return;
-        }
-
-        if (uri == Uri)
-        {
-            return;
-        }
-
-        if (!System.Uri.TryCreate(uri, UriKind.Absolute, out var result))
-        {
-            return;
-        }
-
-        await TabManager.NavigateAsync(result);
-    }
 
     private void OnTabControlSelectionChanged(object sender, SelectionChangedEventArgs e)
     {

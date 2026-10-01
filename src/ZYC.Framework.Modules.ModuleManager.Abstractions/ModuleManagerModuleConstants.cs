@@ -9,6 +9,7 @@ public static class ModuleManagerModuleConstants
 {
     public const string Host = "modules";
 
+
     public static class NuGet
     {
         public const string Icon = Base64IconResources.NuGet;

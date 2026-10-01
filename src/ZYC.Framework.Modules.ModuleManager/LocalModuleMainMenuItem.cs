@@ -14,7 +14,8 @@ internal class LocalModuleMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = ModuleManagerModuleConstants.Local.Title,
-            Icon = ModuleManagerModuleConstants.Local.Icon
+            Icon = ModuleManagerModuleConstants.Local.Icon,
+            Anchor = ModuleManagerMainMenuAnchors.ModuleManager
         };
 
         Command = lifetimeScope.CreateNavigateCommand(ModuleManagerModuleConstants.Local.Uri);

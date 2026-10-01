@@ -12,7 +12,7 @@ public static class LanguageModuleConstants
 
     public const string Title = "Language";
 
-    public const string Anchor = "Language";
+    public const string Anchor = "050Language";
 
     public static Uri Uri => UriTools.CreateAppUri(Host);
 
