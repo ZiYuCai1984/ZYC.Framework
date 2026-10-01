@@ -49,11 +49,8 @@
                           Grid.Column="1"
                           mah:TextBoxHelper.ClearTextButton="False"
                           IsEditable="True"
-                          KeyDown="OnUriComboBoxKeyDown"
-                          LostKeyboardFocus="OnUriComboBoxLostKeyboardFocus"
-                          Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=Explicit, ElementName=Root}"
+                          Text="{Binding Uri, Mode=OneWay, ElementName=Root}"
                           ItemsSource="{Binding NavigateHistory,ElementName=Root}"
-                          SelectionChanged="OnUriComboBoxSelectionChanged"
                           GotFocus="OnUriComboBoxGotFocus">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -73,8 +70,8 @@
                                             Width="16"
                                             Height="16" />
             </Button>
-            <Button Grid.Column="2"
-                    Click="OnGoButtonClick">
+            <Button x:Name="UriGoButton"
+                    Grid.Column="2">
                 <iconPacks:PackIconMaterial Kind="ArrowRight"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"

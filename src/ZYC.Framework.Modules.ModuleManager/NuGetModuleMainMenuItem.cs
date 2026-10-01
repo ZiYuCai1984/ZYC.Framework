@@ -14,7 +14,8 @@ internal class NuGetModuleMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = ModuleManagerModuleConstants.NuGet.Title,
-            Icon = ModuleManagerModuleConstants.NuGet.Icon
+            Icon = ModuleManagerModuleConstants.NuGet.Icon,
+            Anchor = ModuleManagerMainMenuAnchors.ModuleManager
         };
 
         Command = lifetimeScope.CreateNavigateCommand(ModuleManagerModuleConstants.NuGet.Uri);

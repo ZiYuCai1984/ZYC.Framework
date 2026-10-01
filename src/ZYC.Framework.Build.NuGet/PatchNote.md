@@ -6,37 +6,34 @@
 
 ## 🆕 New Features
 
-* Added `HexEditor`: open binary files through **File → Open → Binary File** in dedicated tabs, with hexadecimal/ASCII views, byte editing, undo/redo, and search/replace
-* Added Save, Save As, Reload, `Ctrl+S` / `Ctrl+Shift+S`, unsaved-change prompts, read-only file handling, and external file-change detection for binary documents
-* Added `HexEditorModuleConstants.CreateEditorUri(Uri)` so other modules can navigate directly to a binary editor
+* Added **Settings → Others**, with **Reset All** moved into this submenu, and exposed `ISettingsOthersMainMenuItemsProvider` so modules can register additional items there
+* Added `ModuleManagerMainMenuAnchors.ModuleManager` and `SettingsMainMenuPriority.Others` for menu customization
 
 ---
 
 ## 🛠 Improvements
 
-* Updated Aspire to 13.5.4, WebView2 to 1.0.4191.47, System.Reactive to 7.0.0, and WPFHexaEditor to 3.4.5
-* Included the framework version in the CLI root-command description
-* Updated the multilingual README, built-in module, and extension-point templates for this release
+* Moved **Local Modules** and **NuGet Modules** directly under **Extensions**, grouped with the shared module-manager anchor
+* Reordered Settings menu groups so language and localization resources appear after settings and secrets, followed by **Others**
+* Updated multilingual installation commands, project examples, and demo download links for this release
 
 ---
 
 ## 🐛 Fixes
 
-* Added host-theme resources for HexEditor search dialogs to correct unreadable backgrounds, text, and title-bar buttons; used the framework's keyed-resource extension to avoid the `StaticResourceHolder` XAML loading exception
-* Fixed a compilation error in the NuGet publishing project
+* Fixed unintended address-bar navigation caused by text matching, arrow-key selection, or binding updates; navigation now starts when pressing Enter, clicking Go, or clicking a history item
+* Fixed Enter handling while the history drop-down is open so the committed history entry is submitted; holding Enter no longer repeatedly submits navigation
+* Queued address-bar submissions to prevent overlapping navigation requests, while allowing later submissions to continue after a failed request
+* Fixed address-bar navigation targeting the wrong workspace after focus changes by routing each request to the workspace that owns the address bar
+* Preserved the address bar's binding to the focused tab when normalizing and submitting an address, keeping the displayed address synchronized when switching tabs
 
 ---
 
 ## 🔄 Compatibility
 
-* `ReactiveExtensions.ObserveProperty<T>(...)` now returns `IObservable<T>` instead of `IObservable<System.Reactive.Unit>`, emitting the `PropertyChanged` event sender. Rebuild dependent modules and update explicitly typed observers or pipelines. Use `.Select(_ => System.Reactive.Unit.Default)` when a downstream API still requires a `Unit` stream
-* `ObserveAnyChange<T>()` also emits the `PropertyChanged` event sender
-
----
-
-## 📝 HexEditor Limitations
-
-* Files are loaded entirely into memory; saving or reloading resets undo/redo history
+* Renamed `SettingMainMenuAnchors` to `SettingsMainMenuAnchors`, and renamed its `Other` member to `Others` with anchor value `090Others`. Update references and rebuild dependent modules
+* Changed `LanguageModuleConstants.Anchor` from `Language` to `050Language`. Rebuild modules that reference this constant and update any hard-coded anchor values to preserve menu grouping
+* Removed the built-in implementation and registration of `IModuleManagerMainMenuItemsProvider`; the interface remains available. Extensions that resolved this provider should register items through `RegisterExtensionsMainMenuItem<T>()` or `IExtensionsMainMenuItemsProvider`, using `ModuleManagerMainMenuAnchors.ModuleManager` to join the module-manager group
 
 ---
 

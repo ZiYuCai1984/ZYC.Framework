@@ -15,7 +15,8 @@ internal class Module : ModuleBase
         lifetimeScope.RegisterTabItemFactory<LocalModuleManagerTabItemFactory>();
         lifetimeScope.RegisterTabItemFactory<NuGetModuleManagerTabItemFactory>();
 
-        lifetimeScope.RegisterExtensionsMainMenuItem<IModuleManagerMainMenuItemsProvider>();
+        lifetimeScope.RegisterExtensionsMainMenuItem<LocalModuleMainMenuItem>();
+        lifetimeScope.RegisterExtensionsMainMenuItem<NuGetModuleMainMenuItem>();
 
         return Task.CompletedTask;
     }

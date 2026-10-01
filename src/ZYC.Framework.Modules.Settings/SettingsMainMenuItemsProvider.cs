@@ -18,7 +18,7 @@ internal class SettingsMainMenuItemsProvider : MainMenuItemsProvider, ISettingsM
         };
 
         RegisterSubItem<UserSettingsMainMenuItem>();
-        RegisterSubItem<ResetAllMainMenuItem>();
+        RegisterSubItem<ISettingsOthersMainMenuItemsProvider>();
     }
 
     public override MenuItemInfo Info { get; }

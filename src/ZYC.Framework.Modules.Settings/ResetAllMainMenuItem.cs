@@ -1,6 +1,5 @@
 ﻿using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions.MainMenu;
-using ZYC.Framework.Modules.Settings.Abstractions;
 using ZYC.Framework.Modules.Settings.Commands;
 
 namespace ZYC.Framework.Modules.Settings;
@@ -14,9 +13,7 @@ internal class ResetAllMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Icon = "RestoreAlert",
-            Title = "Reset All",
-            Anchor = SettingMainMenuAnchors.Other,
-            Priority = 10
+            Title = "Reset All"
         };
     }
 }
