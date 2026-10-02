@@ -69,7 +69,19 @@ internal partial class TabManager : ITabManager
 
     public void MoveTabItemInstance(ITabItemInstance instance, Guid from, Guid to)
     {
-        var fromWorkspace = WorkspaceDictionary[from];
+        var workspaces = WorkspaceDictionary;
+
+        // Validate the move before detaching the tab or changing its navigation state.
+        if (!workspaces.TryGetValue(from, out var fromWorkspace)
+            || !workspaces.TryGetValue(to, out var toWorkspace)
+            || toWorkspace.Left != null
+            || toWorkspace.Right != null
+            || !WorkspaceTabItemInstanceListDictionary.TryGetValue(fromWorkspace, out var fromItems)
+            || !fromItems.Contains(instance))
+        {
+            return;
+        }
+
         var fromNavigationState = GetNavigationState(from);
 
         if (fromNavigationState.Focus == instance.Uri)
@@ -77,22 +89,14 @@ internal partial class TabManager : ITabManager
             fromNavigationState.Focus = null;
         }
 
-        if (!WorkspaceTabItemInstanceListDictionary.ContainsKey(fromWorkspace))
-        {
-            //ignore
-            Debugger.Break();
-        }
-        else
-        {
-            DetachTabItemInstance(from, instance);
-            AttachTabItemInstance(to, instance);
+        DetachTabItemInstance(from, instance);
+        AttachTabItemInstance(to, instance);
 
-            //TODO SetFocusedTabItemInstance not set for from !!
-            //TODO There may be a bug here, which needs to be tested 
-            SetFocusedTabItemInstance(to, instance);
+        //TODO SetFocusedTabItemInstance not set for from !!
+        //TODO There may be a bug here, which needs to be tested
+        SetFocusedTabItemInstance(to, instance);
 
-            InvokeTabItemsMovedEvent(from, to, [instance]);
-        }
+        InvokeTabItemsMovedEvent(from, to, [instance]);
     }
 
     public void MoveAllTabItemInstances(Guid from, Guid to)
@@ -653,7 +657,6 @@ internal partial class TabManager : ITabManager
     {
         if (!WorkspaceDictionary.TryGetValue(workspaceId, out var workspace))
         {
-            Debugger.Break();
             return;
         }
 
