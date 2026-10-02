@@ -27,6 +27,13 @@ internal partial class WorkspaceView
         {
             e.Handled = true;
 
+            //!WARNING Split containers receive drops on the gaps, but only leaf workspaces can accept them.
+            if (Node.Left != null || Node.Right != null)
+            {
+                e.Effects = DragDropEffects.None;
+                return;
+            }
+
             var payload = DropPayloadParser.Parse(e.Data);
             var pos = PointToScreen(e.GetPosition(this));
             var context = new DropContext(

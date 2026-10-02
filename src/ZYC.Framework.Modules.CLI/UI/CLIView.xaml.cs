@@ -35,6 +35,7 @@ internal partial class CLIView : IDisposable
         }
 
         Debug.Assert(ConPTYTerm != null);
+        ConPTYTerm.Logger = Logger;
         ConPTYTerm.TermReady += OnConPTYTermTermReady;
     }
 

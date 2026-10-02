@@ -108,9 +108,9 @@ internal partial class TabManagerView
             h => element.Drop += h,
             h => element.Drop -= h);
 
+        // Handle routed drag events synchronously so Handled and Effects apply before they bubble.
         dragEnter
             .Merge(dragOver)
-            .ObserveOnUI()
             .Subscribe(ep =>
             {
                 UpdateTabHeaderDropAdorner(element, ep.EventArgs);
@@ -119,7 +119,6 @@ internal partial class TabManagerView
 
 
         dragLeave
-            .ObserveOnUI()
             .Subscribe(_ =>
             {
                 ClearTabHeaderDropAdorner(element);
@@ -128,7 +127,6 @@ internal partial class TabManagerView
 
 
         drop
-            .ObserveOnUI()
             .Subscribe(ep =>
             {
                 var args = ep.EventArgs;

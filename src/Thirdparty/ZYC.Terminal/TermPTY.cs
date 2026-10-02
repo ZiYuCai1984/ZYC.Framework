@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using Windows.Win32;
 using EasyWindowsTerminalControl.Internals;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Terminal.Wpf;
 using Microsoft.Win32.SafeHandles;
 
@@ -54,6 +56,8 @@ public class TermPTY : ITerminalConnection
     }
 
     public StringBuilder ConsoleOutputLog { get; private set; }
+
+    public ILogger Logger { get; set; } = NullLogger.Instance;
 
     /// <summary>
     ///     A stream of VT-100-enabled output from the console.
@@ -306,36 +310,47 @@ public class TermPTY : ITerminalConnection
 
     protected virtual void ReadOutputLoop()
     {
-        if (ReadLoopStarted)
+        try
         {
-            return;
-        }
-
-        ReadLoopStarted = true;
-        // We have a few ways to handle the buffer with a delimiter but given the size of the buffer and the fairly cheap cost of copying, the ability to let the span be modified before passing it on, we will just copy any parts before the next delimiter to the start of the buffer when reaching the end.
-        using (var reader = new StreamReader(ConsoleOutStream, Encoding.UTF8, false))
-        {
-            ReadState state = new() { entireBuffer = new char[READ_BUFFER_SIZE] };
-
-            state.curBuffer = state.entireBuffer.Slice(0);
-
-            while ((state.readChars = reader.Read(state.curBuffer)) != 0)
+            if (ReadLoopStarted)
             {
-                //					Debug.WriteLine($"Read: {read}");
+                return;
+            }
 
-                var sendSpan = HandleRead(ref state);
+            ReadLoopStarted = true;
+            // We have a few ways to handle the buffer with a delimiter but given the size of the buffer and the fairly cheap cost of copying, the ability to let the span be modified before passing it on, we will just copy any parts before the next delimiter to the start of the buffer when reaching the end.
+            using (var reader = new StreamReader(ConsoleOutStream, Encoding.UTF8, false))
+            {
+                ReadState state = new() { entireBuffer = new char[READ_BUFFER_SIZE] };
 
-                if (!sendSpan.IsEmpty)
+                state.curBuffer = state.entireBuffer.Slice(0);
+
+                while ((state.readChars = reader.Read(state.curBuffer)) != 0)
                 {
-                    InterceptOutputToUITerminal?.Invoke(ref sendSpan);
-                    if (sendSpan.Length > 0)
+                    //					Debug.WriteLine($"Read: {read}");
+
+                    var sendSpan = HandleRead(ref state);
+
+                    if (!sendSpan.IsEmpty)
                     {
-                        var str = sendSpan.ToString();
-                        WriteToUITerminal(str);
-                        ConsoleOutputLog?.Append(str);
+                        InterceptOutputToUITerminal?.Invoke(ref sendSpan);
+                        if (sendSpan.Length > 0)
+                        {
+                            var str = sendSpan.ToString();
+                            WriteToUITerminal(str);
+                            ConsoleOutputLog?.Append(str);
+                        }
                     }
                 }
             }
+        }
+        catch (ObjectDisposedException)
+        {
+            //ignore
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to read terminal output.");
         }
     }
 
