@@ -17,7 +17,17 @@ internal class OverlayManager : IOverlayManager
 
     public IOverlay Show(object target, object? passThrough = null)
     {
-        var targetElement = (UIElement)target;
+        return Show([target], passThrough);
+    }
+
+    public IOverlay Show(object[] targets, object? passThrough = null)
+    {
+        if (targets == null)
+        {
+            throw new ArgumentNullException(nameof(targets));
+        }
+
+        var targetElements = targets.Cast<UIElement>().ToArray();
         UIElement? passThroughElement = null;
         if (passThrough != null)
         {
@@ -25,7 +35,7 @@ internal class OverlayManager : IOverlayManager
         }
 
         var guideOverlay = new GuideOverlay((Window)MainWindow.GetMainWindow());
-        guideOverlay.Show(targetElement, passThroughElement);
+        guideOverlay.Show(targetElements, passThroughElement);
 
         return guideOverlay;
     }

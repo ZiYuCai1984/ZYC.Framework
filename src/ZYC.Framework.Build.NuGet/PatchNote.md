@@ -6,25 +6,29 @@
 
 ## 🆕 New Features
 
-* None
+* Added `IOverlayManager.Show(object[] targets, object? passThrough = null)` to highlight multiple target areas in a single guide overlay while keeping them interactive; overlapping target areas remain transparent
+* Added a `Text` dependency property to `NoItemView` for customizable, localized empty-state messages
 
 ---
 
 ## 🛠 Improvements
 
-* None
+* Replaced translucent backgrounds in the window title, main menu button, tab area, status bar, and update/restart banners with a consistent theme background
+* Guide overlays now detach target layout and visibility handlers and clear target and pass-through references when disposed
+* Added a guide overlay demo to the Mock module showing multiple targets in a single overlay
 
 ---
 
 ## 🐛 Fixes
 
-* Fixed an exception when dropping a tab header into the gap between split workspaces; gaps now reject tab drops
+* Fixed automatic revealing of masked values in the embedded Aspire Dashboard when values change or previously revealed controls are reused
 
 ---
 
 ## 🔄 Compatibility
 
-* None
+* Existing single-target overlay calls remain supported
+* Custom implementations of `IOverlayManager` must implement the new `Show(object[] targets, object? passThrough = null)` overload and be rebuilt
 
 ---
 

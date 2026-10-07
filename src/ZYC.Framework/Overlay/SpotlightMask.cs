@@ -10,9 +10,10 @@ internal sealed class SpotlightMask : FrameworkElement
         DependencyProperty.Register(nameof(IsOpen), typeof(bool), typeof(SpotlightMask),
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 
-    public static readonly DependencyProperty TargetElementProperty =
-        DependencyProperty.Register(nameof(TargetElement), typeof(UIElement), typeof(SpotlightMask),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, OnTargetChanged));
+    public static readonly DependencyProperty TargetElementsProperty =
+        DependencyProperty.Register(nameof(TargetElements), typeof(UIElement[]), typeof(SpotlightMask),
+            new FrameworkPropertyMetadata(Array.Empty<UIElement>(), FrameworkPropertyMetadataOptions.AffectsRender,
+                OnTargetsChanged));
 
     public static readonly DependencyProperty MaskBrushProperty =
         DependencyProperty.Register(nameof(MaskBrush), typeof(Brush), typeof(SpotlightMask),
@@ -27,8 +28,6 @@ internal sealed class SpotlightMask : FrameworkElement
         DependencyProperty.Register(nameof(CornerRadius), typeof(double), typeof(SpotlightMask),
             new FrameworkPropertyMetadata(0d, FrameworkPropertyMetadataOptions.AffectsRender));
 
-    private Rect _lastHoleRect = Rect.Empty;
-
     public SpotlightMask()
     {
         Focusable = false;
@@ -42,8 +41,6 @@ internal sealed class SpotlightMask : FrameworkElement
 
     public UIElement? PassThroughElement { get; set; }
 
-    public Rect TargetRect => GetElementRectInThis(TargetElement);
-
     public Rect PassThroughRect => GetElementRectInThis(PassThroughElement);
 
     public bool IsOpen
@@ -52,12 +49,10 @@ internal sealed class SpotlightMask : FrameworkElement
         set => SetValue(IsOpenProperty, value);
     }
 
-    public Rect HoleRect => _lastHoleRect;
-
-    public UIElement? TargetElement
+    public UIElement[] TargetElements
     {
-        get => (UIElement?)GetValue(TargetElementProperty);
-        set => SetValue(TargetElementProperty, value);
+        get => (UIElement[])GetValue(TargetElementsProperty);
+        set => SetValue(TargetElementsProperty, value);
     }
 
     public Brush MaskBrush
@@ -80,10 +75,13 @@ internal sealed class SpotlightMask : FrameworkElement
 
     public bool IsPassThrough(Point pDip)
     {
-        var t = TargetRect;
-        if (!t.IsEmpty && t.Contains(pDip))
+        foreach (var target in TargetElements)
         {
-            return true;
+            var rect = GetElementRectInThis(target);
+            if (!rect.IsEmpty && rect.Contains(pDip))
+            {
+                return true;
+            }
         }
 
         var s = PassThroughRect;
@@ -131,19 +129,25 @@ internal sealed class SpotlightMask : FrameworkElement
         }
     }
 
-    private static void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnTargetsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var mask = (SpotlightMask)d;
-        if (e.OldValue is FrameworkElement oldFe)
+        if (e.OldValue is UIElement[] oldTargets)
         {
-            oldFe.LayoutUpdated -= mask.Target_LayoutUpdated;
-            oldFe.IsVisibleChanged -= mask.Target_IsVisibleChanged;
+            foreach (var oldFe in oldTargets.OfType<FrameworkElement>())
+            {
+                oldFe.LayoutUpdated -= mask.Target_LayoutUpdated;
+                oldFe.IsVisibleChanged -= mask.Target_IsVisibleChanged;
+            }
         }
 
-        if (e.NewValue is FrameworkElement newFe)
+        if (e.NewValue is UIElement[] newTargets)
         {
-            newFe.LayoutUpdated += mask.Target_LayoutUpdated;
-            newFe.IsVisibleChanged += mask.Target_IsVisibleChanged;
+            foreach (var newFe in newTargets.OfType<FrameworkElement>())
+            {
+                newFe.LayoutUpdated += mask.Target_LayoutUpdated;
+                newFe.IsVisibleChanged += mask.Target_IsVisibleChanged;
+            }
         }
     }
 
@@ -163,26 +167,27 @@ internal sealed class SpotlightMask : FrameworkElement
 
         if (!IsOpen)
         {
-            _lastHoleRect = Rect.Empty;
             return;
         }
 
         var fullRect = new Rect(0, 0, ActualWidth, ActualHeight);
-        _lastHoleRect = GetHoleRect();
+        var holes = new GeometryGroup { FillRule = FillRule.Nonzero };
 
-        // Fullscreen minus hole: use EvenOdd fill rule to punch the hole.
-        var group = new GeometryGroup { FillRule = FillRule.EvenOdd };
-        group.Children.Add(new RectangleGeometry(fullRect));
-
-        if (!_lastHoleRect.IsEmpty && _lastHoleRect.Width > 0 && _lastHoleRect.Height > 0)
+        foreach (var target in TargetElements)
         {
-            group.Children.Add(new RectangleGeometry(_lastHoleRect, CornerRadius, CornerRadius));
+            var rect = GetElementRectInThis(target);
+            if (!rect.IsEmpty && rect.Width > 0 && rect.Height > 0)
+            {
+                holes.Children.Add(new RectangleGeometry(rect, CornerRadius, CornerRadius));
+            }
         }
 
-        dc.DrawGeometry(MaskBrush, null, group);
+        // Exclude the union of target areas so overlapping targets remain transparent.
+        var geometry = new CombinedGeometry(GeometryCombineMode.Exclude, new RectangleGeometry(fullRect), holes);
+        dc.DrawGeometry(MaskBrush, null, geometry);
     }
 
-    // Key: no hit-test inside the hole -> events pass through to the underlying ButtonB.
+    // Let events pass through to target elements and the optional pass-through element.
     protected override HitTestResult? HitTestCore(PointHitTestParameters hitTestParameters)
     {
         if (!IsOpen)
@@ -192,8 +197,7 @@ internal sealed class SpotlightMask : FrameworkElement
 
         var p = hitTestParameters.HitPoint;
 
-        // Inside hole: yield hit test.
-        if (!_lastHoleRect.IsEmpty && _lastHoleRect.Contains(p))
+        if (IsPassThrough(p))
         {
             return null;
         }
@@ -221,44 +225,5 @@ internal sealed class SpotlightMask : FrameworkElement
         }
 
         base.OnMouseWheel(e);
-    }
-
-    private Rect GetHoleRect()
-    {
-        if (TargetElement is not FrameworkElement fe || !fe.IsVisible || !fe.IsLoaded)
-        {
-            return Rect.Empty;
-        }
-
-        // When the target is not laid out yet, ActualWidth/Height may be 0.
-        if (fe.ActualWidth <= 0 || fe.ActualHeight <= 0)
-        {
-            return Rect.Empty;
-        }
-
-        try
-        {
-            // 1) Target element screen coordinates (note: PointToScreen/PointFromScreen use screen pixels)
-            var tlScreen = fe.PointToScreen(new Point(0, 0));
-            var brScreen = fe.PointToScreen(new Point(fe.ActualWidth, fe.ActualHeight));
-
-            // 2) Screen coordinates -> overlay internal coordinates (DIP)
-            var tl = PointFromScreen(tlScreen);
-            var br = PointFromScreen(brScreen);
-
-            // 3) Build the hole Rect (normalize defensively)
-            var left = Math.Min(tl.X, br.X);
-            var top = Math.Min(tl.Y, br.Y);
-            var right = Math.Max(tl.X, br.X);
-            var bottom = Math.Max(tl.Y, br.Y);
-
-            var rect = new Rect(new Point(left, top), new Point(right, bottom));
-            rect.Inflate(HolePadding, HolePadding);
-            return rect;
-        }
-        catch
-        {
-            return Rect.Empty;
-        }
     }
 }
