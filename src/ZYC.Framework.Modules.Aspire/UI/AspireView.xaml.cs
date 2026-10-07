@@ -14,10 +14,9 @@ namespace ZYC.Framework.Modules.Aspire.UI;
 internal partial class AspireView
 {
     //!WARNING Environment variables are masked by Aspire Dashboard's frontend model and do not pass through ResourcePropertySnapshot; this DOM-based workaround must be reviewed after Aspire Dashboard upgrades.
-    //TODO-zyc Not work now !!
+
     private const string DisableDashboardMaskingScript = """
                                                          (() => {
-                                                             const revealedButtons = new WeakSet();
                                                              let revealScheduled = false;
 
                                                              const revealMaskedValues = () => {
@@ -27,9 +26,13 @@ internal partial class AspireView
                                                                      const container = maskedValue.closest('.container');
                                                                      const button = container?.querySelector('.grid-value-mask-button');
 
-                                                                     if (button && !revealedButtons.has(button)) {
-                                                                         revealedButtons.add(button);
+                                                                     if (button && button.dataset.autoRevealing !== 'true') {
+                                                                         button.dataset.autoRevealing = 'true';
                                                                          button.click();
+
+                                                                         setTimeout(() => {
+                                                                             if (button) delete button.dataset.autoRevealing;
+                                                                         }, 500);
                                                                      }
                                                                  });
                                                              };
@@ -48,7 +51,8 @@ internal partial class AspireView
                                                                          childList: true,
                                                                          subtree: true,
                                                                          attributes: true,
-                                                                         attributeFilter: ['class']
+                                                                         attributeFilter: ['class'],
+                                                                         characterData: true
                                                                      });
 
                                                                  scheduleReveal();

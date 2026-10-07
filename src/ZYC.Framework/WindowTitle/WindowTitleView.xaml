@@ -14,7 +14,7 @@
              Loaded="OnWindowTitleViewLoaded"
              MouseDown="OnWindowTitleViewMouseDown"
              Visibility="{Binding WindowTitleConfig.IsVisible,Converter={converters:BoolToVisibilityConverter}}"
-             Background="{DynamicResource MahApps.Brushes.Validation2}"
+             Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.ColumnDefinitions>
