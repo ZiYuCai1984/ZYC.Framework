@@ -15,7 +15,7 @@ internal partial class OverlayWindow
 
     public void SetTarget(UIElement target)
     {
-        Mask.TargetElement = target;
+        Mask.TargetElements = [target];
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -54,7 +54,7 @@ internal partial class OverlayWindow
             // 3) Current overlay DPI (px per DIP)
             var scale = GetDpiScaleForHwnd(hwnd); // e.g. 150% => 1.5
 
-            // 4) px -> DIP (same coordinate space as HoleRect)
+            // 4) px -> DIP (same coordinate space as the target areas)
             var pDip = new Point(pt.X / scale, pt.Y / scale);
 
             handled = true;

@@ -25,12 +25,14 @@ internal sealed class GuideOverlay : IOverlay
 
     public void Dispose()
     {
+        _overlay.Mask.TargetElements = [];
+        _overlay.Mask.PassThroughElement = null;
         _overlay.Close();
     }
 
-    public void Show(UIElement target, UIElement? passThrough = null)
+    public void Show(UIElement[] targets, UIElement? passThrough = null)
     {
-        _overlay.Mask.TargetElement = target;
+        _overlay.Mask.TargetElements = targets;
         _overlay.Mask.PassThroughElement = passThrough;
 
         SyncBounds();
