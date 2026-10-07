@@ -19,7 +19,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="Root"
              DataContext="{bindings:SelfBinding}"
-             Background="{DynamicResource MahApps.Brushes.Validation2}">
+             Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

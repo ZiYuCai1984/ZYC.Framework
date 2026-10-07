@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Height="32"
              Visibility="{Binding IsStatusBarVisible,Converter={converters:BoolToVisibilityConverter}}"
-             Background="{DynamicResource MahApps.Brushes.Validation2}"
+             Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}"
              SnapsToDevicePixels="True"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
