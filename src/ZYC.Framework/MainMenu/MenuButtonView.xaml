@@ -10,7 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Visibility="{Binding MainMenuConfig.IsVisible,Converter={converters:BoolToVisibilityConverter}}"
              Loaded="OnMenuButtonViewLoaded"
-             Background="{DynamicResource MahApps.Brushes.Validation2}"
+             Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <UserControl.Resources>
         <ResourceDictionary Source="/Styles/MainMenu.xaml" />
