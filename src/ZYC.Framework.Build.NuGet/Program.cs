@@ -28,6 +28,8 @@ public class Program
 
             await PackCliToolAsync();
 
+            await PackCoreProjectAsync();
+
             //await DotnetNuGetTools.PushLocalAsync(BuildEnvironment.SrcFolder);
 #if PUBLISH_NUGET_ORG
             var apiKey = await NuGetTrustedPublishingTools.GetApiKeyAsync("ZhuJianYun");
@@ -42,6 +44,38 @@ public class Program
         finally
         {
             IOTools.DeleteFileIfExists(tempSlnFileName);
+        }
+    }
+
+    private static async Task PackCoreProjectAsync()
+    {
+        IOTools.SetCurrentDirectory(BuildEnvironment.RootFolder);
+        var projectPaths = new[]
+        {
+            Path.Combine(
+                BuildEnvironment.SrcFolder,
+                "ZYC.Framework.Core",
+                "ZYC.Framework.Core.csproj"),
+        };
+
+        var packageOutputPath = Path.Combine(
+            BuildEnvironment.SrcFolder,
+            "_bin_core");
+
+        foreach (var projectPath in projectPaths)
+        {
+            await DotnetNuGetTools.PackProjectAsync(
+                projectPath,
+                packageOutputPath,
+                ProductInfo.Version,
+                false);
+        }
+
+        foreach (var packagePath in Directory.GetFiles(packageOutputPath, "*.nupkg"))
+        {
+            IOTools.CopyFile(
+                packagePath,
+                Path.Combine(BuildEnvironment.SrcFolder, Path.GetFileName(packagePath)));
         }
     }
 
