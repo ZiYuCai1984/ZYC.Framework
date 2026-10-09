@@ -17,4 +17,10 @@ public class ToastConfig : IConfig
     ///     Gets or sets the corner where toast notifications are displayed.
     /// </summary>
     public ToastPlacement Placement { get; set; } = ToastPlacement.BottomRight;
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether to suppress all toast notifications.
+    ///     If set to true, no toasts will be displayed on the screen.
+    /// </summary>
+    public bool IsMuted { get; set; }
 }
