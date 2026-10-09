@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Notification.Toast.BuildIn;
 
@@ -14,10 +15,12 @@ internal class ToastManager : IToastManager
     private ToastStackPopupHost? _toastStackPopupHost;
 
     public ToastManager(
+        ToastConfig toastConfig,
         IAppContext appContext,
         ILifetimeScope lifetimeScope,
         IAppLogger<ToastManager> logger)
     {
+        ToastConfig = toastConfig;
         AppContext = appContext;
         LifetimeScope = lifetimeScope;
         Logger = logger;
@@ -25,6 +28,8 @@ internal class ToastManager : IToastManager
 
     private ToastStackPopupHost ToastStackPopupHost =>
         _toastStackPopupHost ??= LifetimeScope.Resolve<ToastStackPopupHost>();
+
+    private ToastConfig ToastConfig { get; }
 
     private IAppContext AppContext { get; }
 
@@ -102,6 +107,11 @@ internal class ToastManager : IToastManager
 
     private void ImplPrompt<T>(T view) where T : IToast
     {
+        if (ToastConfig.IsMuted)
+        {
+            return;
+        }
+
         ToastStackPopupHost.Add(view);
     }
 }

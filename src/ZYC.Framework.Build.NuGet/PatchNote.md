@@ -6,29 +6,29 @@
 
 ## 🆕 New Features
 
-* Added `IOverlayManager.Show(object[] targets, object? passThrough = null)` to highlight multiple target areas in a single guide overlay while keeping them interactive; overlapping target areas remain transparent
-* Added a `Text` dependency property to `NoItemView` for customizable, localized empty-state messages
+* Added a standalone `ZYC.Framework.Core` NuGet package for referencing the Core library directly
+* Added `ToastConfig.IsMuted` to suppress new toast notifications when enabled
+* Added `DoubleToGridLengthConverter` for converting between `double` values and WPF `GridLength` values
 
 ---
 
 ## 🛠 Improvements
 
-* Replaced translucent backgrounds in the window title, main menu button, tab area, status bar, and update/restart banners with a consistent theme background
-* Guide overlays now detach target layout and visibility handlers and clear target and pass-through references when disposed
-* Added a guide overlay demo to the Mock module showing multiple targets in a single overlay
+* Added a Mock module demo comparing standard and emoji text boxes with short text and wrapped long text
+* Updated installation commands, project template examples, and demo download links for this release across all supported documentation languages
 
 ---
 
 ## 🐛 Fixes
 
-* Fixed automatic revealing of masked values in the embedded Aspire Dashboard when values change or previously revealed controls are reused
+* Fixed `Emoji.Wpf.TextBox` styling by applying the application theme to its internal editor, forwarding border, padding, font, alignment, and focus/hover settings, and removing default paragraph margins
 
 ---
 
 ## 🔄 Compatibility
 
-* Existing single-target overlay calls remain supported
-* Custom implementations of `IOverlayManager` must implement the new `Show(object[] targets, object? passThrough = null)` overload and be rebuilt
+* `ToastConfig.IsMuted` defaults to `false`, preserving existing toast behavior unless explicitly enabled
+* Enabling toast muting suppresses new notifications; it does not dismiss notifications already displayed
 
 ---
 

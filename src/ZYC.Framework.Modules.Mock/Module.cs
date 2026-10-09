@@ -38,6 +38,8 @@ internal class Module : ModuleBase
             new MockTabItemInfo(typeof(TestHybridIconView)));
         mockTabItemFactory.RegisterMockTabItem(
             new MockTabItemInfo(typeof(TestGuideOverlayView)));
+        mockTabItemFactory.RegisterMockTabItem(
+            new MockTabItemInfo(typeof(TestTextBoxView)));
 
         //mockTabItemFactory.RegisterMockTabItem(
         //    new MockTabItemInfo(typeof(TestShaderView)));

@@ -6,13 +6,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              ThemeMode="Light">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.Light.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary
@@ -24,6 +27,57 @@
                            BasedOn="{StaticResource {x:Type ScrollViewer}}">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     </Style>
+
+                    <!-- Emoji.Wpf.TextBox assigns its emoji template locally; style its internal editor instead. -->
+                    <Style TargetType="{x:Type wpf:TextBox}"
+                           BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Resources>
+                            <Style TargetType="{x:Type wpf:RichTextBox}"
+                                   BasedOn="{StaticResource {x:Type RichTextBox}}">
+                                <Style.Resources>
+                                    <Style TargetType="{x:Type Paragraph}">
+                                        <Setter Property="Margin" Value="0" />
+                                    </Style>
+                                </Style.Resources>
+                                <Setter Property="Background"
+                                        Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="BorderBrush"
+                                        Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="BorderThickness"
+                                        Value="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="Padding"
+                                        Value="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="FontFamily"
+                                        Value="{Binding FontFamily, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="FontSize"
+                                        Value="{Binding FontSize, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="FontStretch"
+                                        Value="{Binding FontStretch, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="FontStyle"
+                                        Value="{Binding FontStyle, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="FontWeight"
+                                        Value="{Binding FontWeight, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="VerticalContentAlignment"
+                                        Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="MinHeight"
+                                        Value="{Binding MinHeight, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="MinWidth"
+                                        Value="{Binding MinWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="SnapsToDevicePixels"
+                                        Value="{Binding SnapsToDevicePixels, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="mah:ControlsHelper.CornerRadius"
+                                        Value="{Binding Path=(mah:ControlsHelper.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="mah:ControlsHelper.FocusBorderBrush"
+                                        Value="{Binding Path=(mah:ControlsHelper.FocusBorderBrush), RelativeSource={RelativeSource TemplatedParent}}" />
+                                <Setter Property="mah:ControlsHelper.MouseOverBorderBrush"
+                                        Value="{Binding Path=(mah:ControlsHelper.MouseOverBorderBrush), RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+
+
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
