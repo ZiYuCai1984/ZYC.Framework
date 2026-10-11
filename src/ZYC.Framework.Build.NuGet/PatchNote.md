@@ -6,29 +6,30 @@
 
 ## 🆕 New Features
 
-* Added a standalone `ZYC.Framework.Core` NuGet package for referencing the Core library directly
-* Added `ToastConfig.IsMuted` to suppress new toast notifications when enabled
-* Added `DoubleToGridLengthConverter` for converting between `double` values and WPF `GridLength` values
+* Added `EmojiWpfTools.FocusZ()` and `FocusAndSelectAll()` extension methods for `Emoji.Wpf.TextBox` to focus its internal editor and optionally select all text
 
 ---
 
 ## 🛠 Improvements
 
-* Added a Mock module demo comparing standard and emoji text boxes with short text and wrapped long text
+* Updated sign-in, sign-out, WebView2 plugin dialog, and navigation bar commands to use the shared parameter validation in their command base classes
 * Updated installation commands, project template examples, and demo download links for this release across all supported documentation languages
 
 ---
 
 ## 🐛 Fixes
 
-* Fixed `Emoji.Wpf.TextBox` styling by applying the application theme to its internal editor, forwarding border, padding, font, alignment, and focus/hover settings, and removing default paragraph margins
+* Fixed invalid parameter casts in generic command base classes when WPF passes a disconnected item while removing a bound container; null and mismatched parameters are now rejected
+* Fixed `CommandBase<T>`, `AsyncCommandBase`, and both `ParameterPairCommandBase` variants executing when `CanExecute` returns `false`
+* Added parameter type validation to `CanExecute` in the three-command `ParameterPairCommandBase` variant
 
 ---
 
 ## 🔄 Compatibility
 
-* `ToastConfig.IsMuted` defaults to `false`, preserving existing toast behavior unless explicitly enabled
-* Enabling toast muting suppresses new notifications; it does not dismiss notifications already displayed
+* Generic command base classes now return `false` from `CanExecute` for null or mismatched parameters, including null values for reference and nullable value types; callers must supply a value matching the command's parameter type
+* Direct calls to the affected `Execute` and `ExecuteAsync` methods now respect `CanExecute`; rejected calls do not run the command body or raise `Executed`
+* When customizing `CommandBase<T>` or `AsyncCommandBase<T>`, override `InternalCanExecute` to retain the base class's parameter type validation
 
 ---
 

@@ -37,10 +37,15 @@ public abstract class ParameterPairCommandBase<T1, T2, TParameter> : CommandBase
 
     public override void Execute(object? parameter)
     {
+        if (parameter is not TParameter value || !CanExecute(parameter))
+        {
+            return;
+        }
+
         try
         {
             IsExecuting = true;
-            InternalExecute((TParameter)parameter!);
+            InternalExecute(value);
         }
         finally
         {
@@ -91,12 +96,22 @@ public abstract class ParameterPairCommandBase<T1, T2, T3, TParameter> : Command
         Command3.RaiseCanExecuteChanged();
     }
 
+    public override bool CanExecute(object? parameter)
+    {
+        return parameter is TParameter && base.CanExecute(parameter);
+    }
+
     public override void Execute(object? parameter)
     {
+        if (parameter is not TParameter value || !CanExecute(parameter))
+        {
+            return;
+        }
+
         try
         {
             IsExecuting = true;
-            InternalExecute((TParameter)parameter!);
+            InternalExecute(value);
         }
         finally
         {

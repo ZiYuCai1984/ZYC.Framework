@@ -14,21 +14,9 @@ internal class
     {
     }
 
-    public override bool CanExecute(object? parameter)
+    protected override bool InternalCanExecute(WorkspaceNode parameter)
     {
-        return CanShowNavigationBarCommandExecute(parameter);
-    }
-
-
-    public static bool CanShowNavigationBarCommandExecute(object? parameter)
-    {
-        if (parameter == null)
-        {
-            return false;
-        }
-
-        var node = (WorkspaceNode)parameter;
-        return !node.IsNavigationBarVisible;
+        return !parameter.IsNavigationBarVisible;
     }
 
     protected override void InternalExecute(WorkspaceNode parameter)

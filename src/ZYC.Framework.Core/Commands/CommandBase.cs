@@ -8,15 +8,21 @@ public abstract class CommandBase<T> : CommandBase
 {
     public override bool CanExecute(object? parameter)
     {
-        return InternalCanExecute((T)parameter!);
+        //!WARNING WPF can pass a disconnected item while removing a bound container.
+        return parameter is T value && InternalCanExecute(value);
     }
 
     public override void Execute(object? parameter)
     {
+        if (parameter is not T value || !CanExecute(parameter))
+        {
+            return;
+        }
+
         try
         {
             IsExecuting = true;
-            InternalExecute((T)parameter!);
+            InternalExecute(value);
         }
         finally
         {
