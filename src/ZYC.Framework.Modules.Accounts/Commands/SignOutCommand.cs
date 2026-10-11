@@ -38,9 +38,4 @@ internal class SignOutCommand : AsyncCommandBase<string>
             Logger.Error(ex);
         }
     }
-
-    public override bool CanExecute(object? parameter)
-    {
-        return parameter != null;
-    }
 }

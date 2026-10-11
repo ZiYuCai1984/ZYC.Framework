@@ -6,7 +6,9 @@ public class AsyncCommandBase<T> : AsyncCommandBase
 {
     protected override Task InternalExecuteAsync(object? parameter)
     {
-        return InternalExecuteAsync((T)parameter!);
+        return parameter is T value
+            ? InternalExecuteAsync(value)
+            : Task.CompletedTask;
     }
 
     protected virtual Task InternalExecuteAsync(T parameter)
@@ -22,7 +24,8 @@ public class AsyncCommandBase<T> : AsyncCommandBase
 
     public override bool CanExecute(object? parameter)
     {
-        return InternalCanExecute((T?)parameter);
+        //!WARNING WPF can pass a disconnected item while removing a bound container.
+        return parameter is T value && InternalCanExecute(value);
     }
 
     protected virtual bool InternalCanExecute(T? parameter)
@@ -46,9 +49,14 @@ public class AsyncCommandBase : CommandBase
 
     public async Task ExecuteAsync(object? parameter)
     {
-        IsExecuting = true;
+        if (!CanExecute(parameter))
+        {
+            return;
+        }
+
         try
         {
+            IsExecuting = true;
             await InternalExecuteAsync(parameter);
         }
         finally

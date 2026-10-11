@@ -27,9 +27,4 @@ public class ShowPluginsDialogViewCommand : CommandBase<CoreWebView2BrowserExten
         DialogManager.Show<PluginsDialogView>(
             new TypedParameter(typeof(CoreWebView2BrowserExtension[]), coreWebView2BrowserExtensions));
     }
-
-    public override bool CanExecute(object? parameter)
-    {
-        return true;
-    }
 }

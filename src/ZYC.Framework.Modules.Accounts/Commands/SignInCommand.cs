@@ -39,7 +39,7 @@ internal class SignInCommand : AsyncCommandBase<string>
         }
     }
 
-    public override bool CanExecute(object? parameter)
+    protected override bool InternalCanExecute(string? parameter)
     {
         return AccountManager.GetCurrentSession() == null;
     }
