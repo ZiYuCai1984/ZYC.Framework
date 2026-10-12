@@ -456,32 +456,6 @@ internal partial class TabManager : ITabManager
         InvokeFocusedTabItemChangedEvent(workspaceId, instance);
     }
 
-    public static void PreloadAllTabs(TabControl tab)
-    {
-        if (tab.Items.Count == 0)
-        {
-            return;
-        }
-
-        var old = tab.SelectedIndex;
-        tab.UpdateLayout();
-
-        for (var i = 0; i < tab.Items.Count; i++)
-        {
-            tab.SelectedIndex = i;
-            tab.UpdateLayout();
-            Dispatcher.CurrentDispatcher.Invoke(
-                DispatcherPriority.Background,
-                new Action(() =>
-                {
-                }));
-        }
-
-        tab.SelectedIndex = old;
-        tab.UpdateLayout();
-    }
-
-
     private ITabItemInstance[] GetAllTabItemInstances()
     {
         return TabItemInstances.ToArray();
