@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Threading;
 using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
@@ -66,6 +67,12 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
             await TabManager.RestoreStateAsync();
 
             EventAggregator.Publish(new TabManagerRestoreCompleted());
+
+            await Dispatcher.InvokeAsync(
+                () => { },
+                DispatcherPriority.Background);
+
+            EventAggregator.Publish(new TabItemsPreloadCompletedEvent());
         }
         catch
         {

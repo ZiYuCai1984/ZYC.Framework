@@ -5,6 +5,9 @@
                     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     mc:Ignorable="options">
+
+    <!-- ReSharper disable InconsistentNaming -->
+
     <!--  Metadata  -->
     <system:String x:Key="Theme.Name">ZYC.Indigo.Light</system:String>
     <system:String x:Key="Theme.Origin">MahApps.Metro</system:String>
@@ -14,6 +17,10 @@
     <Color x:Key="Theme.PrimaryAccentColor">#FF8E7CC3</Color>
     <SolidColorBrush x:Key="Theme.ShowcaseBrush" Color="#FF8E7CC3" options:Freeze="True" />
 
+
+    <Color x:Key="ZYC.Colors.BannerBackground">#FFFFE1</Color>
+    <SolidColorBrush x:Key="ZYC.Brushes.BannerBackground" Color="{StaticResource ZYC.Colors.BannerBackground}" 
+                     options:Freeze="True" />
 
     <!-- Ori ACCENT COLORS -->
     <Color x:Key="MahApps.Colors.Highlight.Ori">#FF4E00BC</Color>

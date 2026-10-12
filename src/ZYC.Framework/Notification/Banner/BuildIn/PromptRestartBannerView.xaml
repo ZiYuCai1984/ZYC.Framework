@@ -12,7 +12,7 @@
                    xmlns:banner="clr-namespace:ZYC.Framework.Core.Notification.Banner;assembly=ZYC.Framework.Core"
                    mc:Ignorable="d"
                    d:DesignHeight="450" d:DesignWidth="800"
-                   Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMediumLow}">
+                   Background="{DynamicResource ZYC.Brushes.BannerBackground}">
     <Grid VerticalAlignment="Center"
           Margin="16 0 8 0">
         <Grid.ColumnDefinitions>
