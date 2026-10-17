@@ -6,25 +6,25 @@
 
 ## 🆕 New Features
 
-* Added `TabItemsPreloadCompletedEvent` in `ZYC.Framework.Abstractions.Event` to notify subscribers when the initial tab preloading stage completes during workspace startup
+None
 
 ---
 
 ## 🛠 Improvements
 
-* Updated the restart prompt banner to use a dedicated light yellow background (`#FFFFE1`), with `ZYC.Colors.BannerBackground` and `ZYC.Brushes.BannerBackground` resources in the default theme
+* Removed explicit UI Automation names from the Coming soon placeholder icon and the main menu overflow button
 * Updated installation commands, project template examples, and demo download links for this release across all supported documentation languages
 
 ---
 
 ## 🐛 Fixes
 
-None
+* Fixed MCP initialization and tool requests failing with HTTP 500 (`MissingMethodException`) when the MCP Server and Aspire modules loaded incompatible ModelContextProtocol assemblies
 
 ## 🔄 Compatibility
 
-* `TabManagerRestoreCompleted` remains available and is published first; the new `TabItemsPreloadCompletedEvent` follows after a `DispatcherPriority.Background` callback during initial workspace loading
-* The restart prompt banner now uses `ZYC.Brushes.BannerBackground` instead of `MahApps.Brushes.SystemControlBackgroundChromeMediumLow`; override the new brush resource when customizing its background
+* Updated `ModelContextProtocol.AspNetCore` to `1.3.0` to match the ModelContextProtocol dependency used by Aspire `13.5.4`
+* The MCP SDK version is now configured through `V_ModelContextProtocol` alongside `V_Aspire` in `nuget.props`; keep these versions compatible when updating dependencies
 
 ---
 

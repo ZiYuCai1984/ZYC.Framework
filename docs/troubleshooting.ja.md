@@ -33,8 +33,8 @@
 推奨される作成フローは、グローバル dotnet ツールを使います。
 
 ```bash
-dotnet tool install --global ZYC.Framework.CLI --version 1.5.6
-dotnet tool update --global ZYC.Framework.CLI --version 1.5.6
+dotnet tool install --global ZYC.Framework.CLI --version 1.5.7
+dotnet tool update --global ZYC.Framework.CLI --version 1.5.7
 zyc new MyCompany.Tools --template minimal
 ```
 

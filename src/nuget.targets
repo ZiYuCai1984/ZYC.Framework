@@ -156,7 +156,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="ModelContextProtocol.AspNetCore" Version="0.8.0-preview.1" />
+    <PackageReference Update="ModelContextProtocol.AspNetCore" Version="$(V_ModelContextProtocol)" />
   </ItemGroup>
 
   <ItemGroup>
