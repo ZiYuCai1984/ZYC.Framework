@@ -18,8 +18,7 @@
                                         Width="96"
                                         Height="96"
                                         HorizontalAlignment="Center"
-                                        Foreground="{DynamicResource MahApps.Brushes.Gray3}"
-                                        AutomationProperties.Name="Under development" />
+                                        Foreground="{DynamicResource MahApps.Brushes.Gray3}" />
 
             <TextBlock Text="{localizations:L Coming soon}"
                        Margin="0,16,0,6"

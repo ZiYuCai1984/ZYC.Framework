@@ -4,10 +4,13 @@
     <V_ZYC_CoreToolkit>4.0.5</V_ZYC_CoreToolkit>
   </PropertyGroup>
 
-  <!--!WARNING Referenced by <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />, so it cannot be placed in nuget.targets-->
   <PropertyGroup>
+    <!--!WARNING Referenced by <Sdk Name="Aspire.AppHost.Sdk" Version="$(V_Aspire)" />, so it cannot be placed in nuget.targets-->
     <V_Aspire>13.5.4</V_Aspire>
+    <!-- !WARNING Keep compatible with Aspire's ModelContextProtocol dependency. -->
+    <V_ModelContextProtocol>1.3.0</V_ModelContextProtocol>
   </PropertyGroup>
+
 
   <PropertyGroup>
     <V_ZYC_CoreToolkit_Extensions_Fxc>3.8.4</V_ZYC_CoreToolkit_Extensions_Fxc>
