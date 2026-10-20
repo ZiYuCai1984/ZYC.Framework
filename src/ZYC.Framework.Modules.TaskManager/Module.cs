@@ -13,6 +13,10 @@ internal class Module : ModuleBase
     public override async Task LoadAsync(ILifetimeScope lifetimeScope)
     {
         var taskManager = lifetimeScope.Resolve<ITaskManager>();
+
+        //TODO-zyc If the TaskManager module is disabled, InitializeAsync will not be called here; consequently, tasks will never start (even though they can still be resolved)...
+        //This seems quite reasonable—if the TaskManager is disabled, tasks shouldn't start.
+
         await taskManager.InitializeAsync(CancellationToken.None);
 
         lifetimeScope.RegisterToolsMainMenuItem<TaskManagerMainMenuItem>();

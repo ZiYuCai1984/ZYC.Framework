@@ -83,6 +83,8 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
 
     public async Task InitializeAsync(CancellationToken ct = default)
     {
+        Initialized = true;
+
         DebuggerTools.CheckCalledOnce();
 
         var loaded = await _store.LoadAllAsync(ct);
@@ -337,6 +339,8 @@ internal sealed class TaskManager : ITaskManager, IAsyncDisposable
         EventAggregator.Publish(new ManagedTaskClearUpCompletedEvent(reuslt));
         return reuslt.ToArray();
     }
+
+    public bool Initialized { get; private set; }
 
     private void Schedule(Guid taskId)
     {

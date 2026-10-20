@@ -9,6 +9,11 @@ namespace ZYC.Framework.Modules.TaskManager.Abstractions;
 public partial interface ITaskManager
 {
     /// <summary>
+    ///     Get initialized state
+    /// </summary>
+    bool Initialized { get; }
+
+    /// <summary>
     ///     Starts a task.
     /// </summary>
     /// <param name="taskId">The task identifier.</param>
@@ -61,6 +66,7 @@ public partial interface ITaskManager
     bool TryGetTask(Guid id, out IManagedTask task)
     {
         task = GetAllTasks().FirstOrDefault(t => t.Id == id)!;
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         return task != null;
     }
 

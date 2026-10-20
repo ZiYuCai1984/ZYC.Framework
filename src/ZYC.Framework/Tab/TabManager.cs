@@ -1,7 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -394,6 +392,7 @@ internal partial class TabManager : ITabManager
             var backgroundItems = navigation.TabItems.ToArray();
             foreach (var item in backgroundItems)
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (item != null)
                 {
                     await NavigateBackgroundAsync(workspaceId, item);
