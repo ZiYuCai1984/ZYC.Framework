@@ -2,6 +2,7 @@
 
 /// <summary>
 ///     Represents the persisted or current state of navigation within a specific workspace.
+///     !WARNING It is not IState now !!
 /// </summary>
 public class NavigationState
 {

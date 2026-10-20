@@ -70,6 +70,9 @@ internal partial class TabManagerView : INotifyPropertyChanged
         EventAggregator.Subscribe<TabItemReloadedEvent>(OnTabItemReloaded)
             .DisposeWith(CompositeDisposable);
 
+        EventAggregator.Subscribe<TabItemViewFaultedEvent>(OnTabItemViewFaulted)
+            .DisposeWith(CompositeDisposable);
+
         EventAggregator.Subscribe<TabItemsMovedEvent>(OnTabItemsMoved)
             .DisposeWith(CompositeDisposable);
 
@@ -130,21 +133,26 @@ internal partial class TabManagerView : INotifyPropertyChanged
         }
 
         var old = tab.SelectedIndex;
-        tab.UpdateLayout();
-
-        for (var i = 0; i < tab.Items.Count; i++)
+        try
         {
-            tab.SelectedIndex = i;
             tab.UpdateLayout();
-            Dispatcher.CurrentDispatcher.Invoke(
-                DispatcherPriority.Background,
-                new Action(() =>
-                {
-                }));
-        }
 
-        tab.SelectedIndex = old;
-        tab.UpdateLayout();
+            for (var i = 0; i < tab.Items.Count; i++)
+            {
+                tab.SelectedIndex = i;
+                tab.UpdateLayout();
+                Dispatcher.CurrentDispatcher.Invoke(
+                    DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                    }));
+            }
+        }
+        finally
+        {
+            tab.SelectedIndex = old;
+            tab.UpdateLayout();
+        }
     }
 
     private void OnTabItemsMoved(TabItemsMovedEvent e)
@@ -233,20 +241,34 @@ internal partial class TabManagerView : INotifyPropertyChanged
 
     private void OnTabItemReloaded(TabItemReloadedEvent e)
     {
-        if (e.WorkspaceId != WorkspaceNode.Id)
+        ReplaceTabItem(e.WorkspaceId, e.OldTabItemInstance, e.NewTabItemInstance, e.InsertIndex);
+    }
+
+    private void OnTabItemViewFaulted(TabItemViewFaultedEvent e)
+    {
+        ReplaceTabItem(e.WorkspaceId, e.OldTabItemInstance, e.NewTabItemInstance, e.InsertIndex);
+    }
+
+    private void ReplaceTabItem(
+        Guid workspaceId,
+        ITabItemInstance oldInstance,
+        ITabItemInstance newInstance,
+        int insertIndex)
+    {
+        if (workspaceId != WorkspaceNode.Id)
         {
             return;
         }
 
-        var index = TabItemSource.IndexOf(e.OldTabItemInstance);
+        var index = TabItemSource.IndexOf(oldInstance);
         if (index == -1)
         {
-            index = Math.Min(e.InsertIndex, TabItemSource.Count);
-            TabItemSource.Insert(index, e.NewTabItemInstance);
+            index = Math.Min(insertIndex, TabItemSource.Count);
+            TabItemSource.Insert(index, newInstance);
         }
         else
         {
-            TabItemSource[index] = e.NewTabItemInstance;
+            TabItemSource[index] = newInstance;
         }
 
         OnPropertyChanged(nameof(Uri));

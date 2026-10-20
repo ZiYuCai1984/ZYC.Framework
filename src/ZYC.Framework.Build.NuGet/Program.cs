@@ -56,6 +56,10 @@ public class Program
                 BuildEnvironment.SrcFolder,
                 "ZYC.Framework.Core",
                 "ZYC.Framework.Core.csproj"),
+            Path.Combine(
+                BuildEnvironment.SrcFolder,
+                "ZYC.Framework.Abstractions",
+                "ZYC.Framework.Abstractions.csproj")
         };
 
         var packageOutputPath = Path.Combine(

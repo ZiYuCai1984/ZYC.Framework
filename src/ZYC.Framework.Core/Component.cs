@@ -12,6 +12,12 @@ namespace ZYC.Framework.Core;
 
 public class Component : UserControl, IDisposable
 {
+    public static readonly RoutedEvent ResolveFailedEvent = EventManager.RegisterRoutedEvent(
+        nameof(ResolveFailed),
+        RoutingStrategy.Bubble,
+        typeof(EventHandler<ComponentResolveFailedEventArgs>),
+        typeof(Component));
+
     public static readonly DependencyProperty LifetimeScopeProperty =
         DependencyProperty.Register(
             nameof(LifetimeScope),
@@ -94,6 +100,15 @@ public class Component : UserControl, IDisposable
 
     public bool ResolveOnlyOnce { get; set; } = true;
 
+    /// <summary>
+    ///     Reports a content resolution failure to the containing view. Mark the event handled to consume the exception.
+    /// </summary>
+    public event EventHandler<ComponentResolveFailedEventArgs> ResolveFailed
+    {
+        add => AddHandler(ResolveFailedEvent, value);
+        remove => RemoveHandler(ResolveFailedEvent, value);
+    }
+
     public void Dispose()
     {
         Loaded -= OnLoaded;
@@ -135,11 +150,23 @@ public class Component : UserControl, IDisposable
             return;
         }
 
-        var ps = BuildAutofacParameters();
+        try
+        {
+            var ps = BuildAutofacParameters();
 
-        Content = ps.Length == 0
-            ? scope.Resolve(type)
-            : scope.Resolve(type, ps);
+            Content = ps.Length == 0
+                ? scope.Resolve(type)
+                : scope.Resolve(type, ps);
+        }
+        catch (Exception exception)
+        {
+            var args = new ComponentResolveFailedEventArgs(exception);
+            RaiseEvent(args);
+            if (!args.Handled)
+            {
+                throw;
+            }
+        }
 
         _hasResolved = true;
     }

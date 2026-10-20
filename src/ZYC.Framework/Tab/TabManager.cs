@@ -1,7 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using Autofac;
 using ZYC.CoreToolkit;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -259,6 +257,7 @@ internal partial class TabManager : ITabManager
         var wasFocused = GetFocusedTabItemInstance(workspaceId) == instance;
 
         DetachTabItemInstance(workspaceId, instance);
+        StopObservingViewFailures(instance);
 
         try
         {
@@ -337,6 +336,7 @@ internal partial class TabManager : ITabManager
         }
 
         DetachTabItemInstance(workspaceId, instance);
+        StopObservingViewFailures(instance);
 
         try
         {
@@ -392,6 +392,7 @@ internal partial class TabManager : ITabManager
             var backgroundItems = navigation.TabItems.ToArray();
             foreach (var item in backgroundItems)
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (item != null)
                 {
                     await NavigateBackgroundAsync(workspaceId, item);
@@ -523,8 +524,8 @@ internal partial class TabManager : ITabManager
                     instance = await item.CreateTabItemInstanceAsync(tabItemCreationContext);
 
                     await instance.LoadAsync();
-                    //!WARNING Resolve View in advance, if there are errors, they can be displayed on the page
-                    _ = instance.View;
+                    // Catch construction failures here and observe deferred Component resolution failures.
+                    ObserveViewFailures(instance, instance.View);
 
                     AttachTabItemInstance(workspaceId, instance, insertIndex);
                 }
@@ -542,6 +543,11 @@ internal partial class TabManager : ITabManager
         catch (Exception e)
         {
             Logger.Error(e);
+
+            if (instance != null)
+            {
+                StopObservingViewFailures(instance);
+            }
 
             instance = LifetimeScope.Resolve<ErrorTabItem>(
                 new TypedParameter(typeof(Exception), e),

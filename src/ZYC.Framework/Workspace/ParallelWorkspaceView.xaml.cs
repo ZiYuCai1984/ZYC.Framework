@@ -21,12 +21,14 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
         IEventAggregator eventAggregator,
         ParallelWorkspaceState parallelWorkspaceState,
         ILifetimeScope lifetimeScope,
-        RootWorkspaceNodeState rootWorkspaceNodeState)
+        RootWorkspaceNodeState rootWorkspaceNodeState,
+        IAppLogger<ParallelWorkspaceView> logger)
     {
         EventAggregator = eventAggregator;
         ParallelWorkspaceState = parallelWorkspaceState;
         LifetimeScope = lifetimeScope;
         RootWorkspaceNodeState = rootWorkspaceNodeState;
+        Logger = logger;
 
         InitializeComponent();
     }
@@ -38,6 +40,8 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
     private ILifetimeScope LifetimeScope { get; }
 
     private RootWorkspaceNodeState RootWorkspaceNodeState { get; }
+
+    private IAppLogger<ParallelWorkspaceView> Logger { get; }
 
     private bool FirstRending { get; set; } = true;
 
@@ -74,9 +78,9 @@ internal partial class ParallelWorkspaceView : IParallelWorkspaceManager
 
             EventAggregator.Publish(new TabItemsPreloadCompletedEvent());
         }
-        catch
+        catch (Exception exception)
         {
-            //ignore
+            Logger.Error(exception);
         }
     }
 
