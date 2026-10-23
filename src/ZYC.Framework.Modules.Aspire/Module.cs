@@ -20,7 +20,7 @@ internal class Module : ModuleBase
         lifetimeScope.RegisterTabItemFactory<AspireTabItemFactory>();
         lifetimeScope.RegisterToolsMainMenuItem<IAspireMainMenuItemsProvider>();
 
-        lifetimeScope.RegisterDefaultStatucBarItem<AspireStatusBarItem>();
+        lifetimeScope.RegisterDefaultStatusBarItem<AspireStatusBarItem>();
 
         var aspireBinarySourceConfig = lifetimeScope.Resolve<AspireConfig>();
         if (aspireBinarySourceConfig.AutoStart)

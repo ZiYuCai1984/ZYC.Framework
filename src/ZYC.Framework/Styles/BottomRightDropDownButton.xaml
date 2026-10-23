@@ -35,7 +35,6 @@
                                         <DockPanel x:Name="PART_Content"
                                                            Focusable="False"
                                                            LastChildFill="True">
-                                            <!--  Material - ChevronDown  -->
                                             <mah:PathIcon x:Name="PART_Arrow"
                                                                   Width="9"
                                                                   Height="9"

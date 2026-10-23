@@ -26,7 +26,7 @@ public static class LifetimeScopeTools
             return eventAggregator.Subscribe(handler, onUiThread);
         }
 
-        public void RegisterDefaultStatucBarItem<T>() where T : IStatusBarItem
+        public void RegisterDefaultStatusBarItem<T>() where T : IStatusBarItem
         {
             var provider = lifetimeScope.Resolve<IDefaultStatusBarItemsProvider>();
             provider.RegisterItem<T>();

@@ -25,6 +25,6 @@ internal class Module : ModuleBase
         tabItemFactoryManager.RegisterFactory<TaskManagerTabItemFactory>();
 
 
-        lifetimeScope.RegisterDefaultStatucBarItem<TaskManagerStatusBarItem>();
+        lifetimeScope.RegisterDefaultStatusBarItem<TaskManagerStatusBarItem>();
     }
 }
