@@ -52,10 +52,10 @@ internal partial class MCPServerStatusBarItemView : INotifyPropertyChanged
             MainMenuItems = LifetimeScope.Resolve<IMCPServerMainMenuItemsProvider>().SubItems;
             OnPropertyChanged(nameof(MainMenuItems));
 
-            if (MCPServerConfig.AutoStart)
-            {
-                await StartServerAsync();
-            }
+            //if (MCPServerConfig.AutoStart)
+            //{
+            //    await StartServerAsync();
+            //}
         }
         catch
         {
