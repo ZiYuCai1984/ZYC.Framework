@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using Autofac;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -12,7 +13,7 @@ namespace ZYC.Framework.Modules.FileExplorer;
 
 [Register]
 [ConstantsSource(typeof(FileExplorerModuleConstants))]
-public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInstance, INotifyPropertyChanged
+public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInstance, INavigableTabItemInstance, INotifyPropertyChanged
 {
     public FileExplorerTabItem(
         ILifetimeScope lifetimeScope,
@@ -51,7 +52,23 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
         new TypedParameter(typeof(Uri), Uri),
         new TypedParameter(typeof(IFileExplorerTabItemInstance), this));
 
-    public async Task TabInternalNavigatingAsync(Uri newUri)
+    public async Task<bool> TryNavigateAsync(Uri uri)
+    {
+        if (!uri.IsAbsoluteUri || !uri.IsFile || File.Exists(uri.LocalPath))
+        {
+            return false;
+        }
+
+        if (!Directory.Exists(uri.LocalPath))
+        {
+            throw new DirectoryNotFoundException($"The directory is unavailable: {uri.LocalPath}");
+        }
+
+        await ((FileExplorerView)View).NavigateAsync(uri);
+        return true;
+    }
+
+    public async Task NotifyUriChangedAsync(Uri newUri)
     {
         var oldUri = Uri;
         Uri = newUri;
@@ -63,7 +80,7 @@ public class FileExplorerTabItem : TabItemInstanceBase, IFileExplorerTabItemInst
 
         OnPropertyChanged(nameof(Title));
         RecentPathMainMenuItemsProvider?.AddRecentPath(newUri.LocalPath);
-        await TabManager.TabInternalNavigatingAsync(this, oldUri, newUri);
+        await TabManager.NotifyUriChangedAsync(this);
     }
 
     public void UpdateIcon(string base64Icon)

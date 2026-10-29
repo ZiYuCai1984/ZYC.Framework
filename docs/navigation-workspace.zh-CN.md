@@ -26,7 +26,7 @@ ZYC.Framework 将 **打开什么** 和 **显示在哪里** 分开处理。URI �
 
 ```mermaid
 graph TD
-    A["菜单命令、URI 栏、启动 URI 或模块代码"] --> B["ITabManager.NavigateAsync(...)"]
+    A["菜单命令、启动 URI 或模块代码"] --> B["ITabManager.NavigateAsync(...)"]
     B --> C["选择聚焦工作区或显式 workspaceId"]
     C --> D["TabManager.InternalNavigateAsync(...)"]
     D --> E["查找匹配的 ITabItemFactory"]
@@ -39,6 +39,10 @@ graph TD
 ```
 
 `NavigateAsync(Uri)` 会导航到当前聚焦工作区。`NavigateAsync(Guid workspaceId, Uri uri)` 会导航到指定工作区。
+
+URI 栏在提交时捕获当前 Tab，调用 `NavigateAsync(ITabItemInstance, Uri)`。实现 `INavigableTabItemInstance.TryNavigateAsync` 的 Tab 会在内部处理支持的 URI；只有不支持时才交给 Factory 打开，失败或取消不会另开 Tab。浏览器和文件夹已支持此能力。
+
+内容实际改变地址后，先更新 `MutableTabReference.Uri`，再调用 `NotifyUriChangedAsync(instance)`。通知按实例同步状态和历史，不创建 Tab、不改变焦点。旧接口 `TabInternalNavigatingAsync` 已删除。
 
 ## URI 路由与工厂
 
@@ -76,7 +80,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 - 工厂按 Manager 返回顺序检查。
 - `TabItemRouteAttribute` 可以匹配 `Scheme`、`Host`、`Path` 和 `PathMatch`。
 - `TabItemFactoryBase.IsSingle` 默认是 `true`。
-- 如果单例工厂匹配到一个已经打开的 URI，会复用已有 Tab。
+- `IsSingle = true` 表示每个已注册的 Factory 在所有工作区中只能有一个 Tab。再次打开时聚焦它所在的工作区和原 Tab，保留当前 URI，查询参数不影响单例判断。例如已有 `zyc://settings?foo=aa`，再打开 `zyc://settings`，仍然只有一个 Tab。
+- `IsSingle = false` 表示每次外部打开都新建 Tab，即使 URI 相同。浏览器、文件夹、终端、文本／十六进制编辑器及文本预览允许多个实例。此属性不决定 Tab 内部导航。
 - 如果没有工厂匹配，Host 会打开内置 Not Found Tab。
 - 如果创建或加载时抛出异常，Host 会打开内置 Error Tab。
 

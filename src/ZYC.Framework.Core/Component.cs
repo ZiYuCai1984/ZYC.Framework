@@ -57,6 +57,8 @@ public class Component : UserControl, IDisposable
 
     public Component()
     {
+        FocusVisualStyle = null;
+
         SetBinding(LifetimeScopeProperty, new Binding(nameof(LifetimeScope))
         {
             RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(IMainWindow), 1)

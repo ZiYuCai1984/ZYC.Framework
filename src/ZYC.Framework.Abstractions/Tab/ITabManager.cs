@@ -49,7 +49,8 @@ public partial interface ITabManager
     }
 
     /// <summary>
-    ///     Asynchronously navigates to a URI within a specific workspace.
+    ///     Opens a URI in the specified workspace, or focuses the matching factory's singleton
+    ///     in its existing workspace without changing its URI.
     /// </summary>
     /// <param name="workspaceId">The target workspace identifier.</param>
     /// <param name="uri">The target URI.</param>
@@ -95,13 +96,21 @@ public partial interface ITabManager
     Task ReloadAsync(ITabItemInstance instance);
 
     /// <summary>
-    ///     Handles internal navigation within a tab, transitioning from an old URI to a new one.
+    ///     Navigates within the specified tab when it supports the URI; otherwise opens the URI
+    ///     through a factory in that tab's workspace. Internal navigation failures do not open another tab.
     /// </summary>
-    /// <param name="instance">The tab item instance to move.</param>
-    /// <param name="oriUri">The original URI.</param>
-    /// <param name="newUri">The new target URI.</param>
+    /// <param name="instance">The target tab instance. Closed or replaced instances are ignored.</param>
+    /// <param name="uri">The requested URI.</param>
     [MCPIgnore]
-    Task TabInternalNavigatingAsync(ITabItemInstance instance, Uri oriUri, Uri newUri);
+    Task NavigateAsync(ITabItemInstance instance, Uri uri);
+
+    /// <summary>
+    ///     Synchronizes history and persisted state after the instance's tab reference URI changes.
+    ///     Does not request navigation, create a tab, or change focus. Closed instances are ignored.
+    /// </summary>
+    /// <param name="instance">The tab instance whose reference already contains the new URI.</param>
+    [MCPIgnore]
+    Task NotifyUriChangedAsync(ITabItemInstance instance);
 
     /// <summary>
     ///     Moves a tab item instance from one workspace to another.

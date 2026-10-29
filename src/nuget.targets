@@ -28,7 +28,7 @@
   <!--<Import Project="$(USERPROFILE)\.nuget\packages\ZYC.CoreToolkit\$(V_ZYC_CoreToolkit)\nuget.targets"></Import>-->
 
   <PropertyGroup>
-    <V_Microsoft_Web_WebView2>1.0.4191.47</V_Microsoft_Web_WebView2>
+    <V_Microsoft_Web_WebView2>1.0.4314.35</V_Microsoft_Web_WebView2>
   </PropertyGroup>
 
   <ItemGroup>
@@ -98,7 +98,7 @@
 
 
   <PropertyGroup>
-    <V_NuGet>7.3.1</V_NuGet>
+    <V_NuGet>7.9.0</V_NuGet>
   </PropertyGroup>
 
 

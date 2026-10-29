@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Autofac;
 using ZYC.Framework.Abstractions;
+using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Abstractions.Workspace;
 
 namespace ZYC.Framework.Tab;
@@ -45,16 +46,16 @@ internal partial class TabManagerView
 
         var context = new DispatcherSynchronizationContext(Dispatcher);
         Observable.Merge(enter, go, historyClick)
-            // Capture each submitted string now, but start navigation only when it reaches
-            // the front of the queue. Every queued operation must start on the UI thread.
-            .Select(raw => Observable.FromAsync(() => CommitAndNavigateAsync(raw))
+            // Keep the submitted address bound to its tab even if selection changes while queued.
+            .Select(raw => (Raw: raw, Instance: FocusedTabItemInstance))
+            .Select(request => Observable.FromAsync(() => CommitAndNavigateAsync(request.Raw, request.Instance))
                 .SubscribeOn(context))
             .Concat()
             .Subscribe(_ => { }, ex => Logger.Error(ex))
             .DisposeWith(CompositeDisposable);
     }
 
-    private async Task CommitAndNavigateAsync(string raw)
+    private async Task CommitAndNavigateAsync(string raw, ITabItemInstance? instance)
     {
         try
         {
@@ -70,17 +71,32 @@ internal partial class TabManagerView
             }
 
             // Preserve the binding that displays the focused tab's address.
-            UriComboBox.SetCurrentValue(ComboBox.TextProperty, uri);
+            if (FocusedTabItemInstance == instance)
+            {
+                UriComboBox.SetCurrentValue(ComboBox.TextProperty, uri);
+            }
 
-            if (uri == Uri || !System.Uri.TryCreate(uri, UriKind.Absolute, out var result))
+            if (!System.Uri.TryCreate(uri, UriKind.Absolute, out var result))
             {
                 return;
             }
 
-            await TabManager.NavigateAsync(WorkspaceNode.Id, result);
+            if (instance != null)
+            {
+                await TabManager.NavigateAsync(instance, result);
+            }
+            else
+            {
+                await TabManager.NavigateAsync(WorkspaceNode.Id, result);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Cancellation never falls back to opening another tab.
         }
         catch (Exception ex)
         {
+            ToastManager.PromptException(ex);
             // A failed request must not terminate the stream of future submissions.
             Logger.Error(ex);
         }

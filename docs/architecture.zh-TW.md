@@ -175,7 +175,7 @@ graph TD
   Match --> Fallback
 ```
 
-Factory 依 Priority 遞減排序。Singleton Factory 在目標 URI 已開啟時可以重用既有分頁。沒有 Factory 符合時，Shell 會建立 not-found 分頁；建立失敗時，Shell 會建立 error 分頁。
+Factory 依 Priority 遞減排序。`IsSingle = true` 表示每個已註冊的 Factory 在所有工作區中只允許一個 Tab，與 URI 參數無關；再次開啟時聚焦原 Tab，保留其 URI。`IsSingle = false` 表示每次外部開啟都建立新 Tab。內部導覽獨立於此屬性，直接面向既有實例。沒有 Factory 符合時，Shell 會建立 not-found 分頁；建立失敗時，Shell 會建立 error 分頁。
 
 ## 設定與狀態
 

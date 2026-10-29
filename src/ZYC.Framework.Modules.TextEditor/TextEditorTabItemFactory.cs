@@ -12,7 +12,7 @@ internal class TextEditorTabItemFactory : TabItemFactoryBase
 {
     public override int Priority => 40;
 
-    public override bool IsSingle => true;
+    public override bool IsSingle => false;
 
     public override async Task<bool> CheckUriMatchedAsync(Uri uri)
     {

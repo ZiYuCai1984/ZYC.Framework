@@ -175,7 +175,7 @@ graph TD
   Match --> Fallback
 ```
 
-Factories are sorted by descending priority. Singleton factories can reuse an existing tab when the target URI is already open. When no factory matches, the shell creates a not-found tab; when creation fails, it creates an error tab.
+Factories are sorted by descending priority. `IsSingle = true` allows one tab per registered factory across all workspaces, regardless of URI parameters; opening it again focuses the existing tab and preserves its URI. `IsSingle = false` creates a new tab for each external open. Internal navigation targets an existing instance independently of this flag. When no factory matches, the shell creates a not-found tab; when creation fails, it creates an error tab.
 
 ## Configuration and State
 

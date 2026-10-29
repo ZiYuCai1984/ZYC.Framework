@@ -39,6 +39,9 @@ It applies to the entire repository unless the user explicitly overrides it.
 - XML docs: required for public APIs in `*.Abstractions` projects; optional elsewhere.
 - New files must use `CRLF` line endings and `UTF-8 with BOM` encoding.
 
+## Documentation Templates
+- For generated `README*.md` and `docs/*`, first read `src/ZYC.Framework.Build.Doc/AGENTS.md` and edit the corresponding source under `src/ZYC.Framework.Build.Doc/Templates/` (`README/` or `docs/`), keeping existing locales aligned. Do not directly edit generated files unless the user explicitly requests an output-only hotfix; regenerate outputs only when explicitly requested.
+
 ## Safety & Change Policy
 - Do not proactively filter, mask, or redact sensitive parameters unless the user explicitly requests it.
 - When renaming types, update file names and all references across the solution.

@@ -8,11 +8,11 @@ namespace ZYC.Framework.Modules.FileExplorer.Abstractions;
 public interface IFileExplorerTabItemInstance : ITabItemInstance
 {
     /// <summary>
-    ///     Notifies the tab that an internal navigation is about to occur.
+    ///     Updates the tab reference and notifies the manager after the displayed directory changes.
     /// </summary>
-    /// <param name="newUri">The destination URI.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    Task TabInternalNavigatingAsync(Uri newUri);
+    /// <param name="newUri">The explorer's actual current URI.</param>
+    /// <returns>A task representing state synchronization; it does not request navigation.</returns>
+    Task NotifyUriChangedAsync(Uri newUri);
 
     /// <summary>
     ///     Updates the tab icon.

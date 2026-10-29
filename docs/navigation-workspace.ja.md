@@ -26,7 +26,7 @@ ZYC.Framework は **何を開くか** と **どこに表示するか** を分離
 
 ```mermaid
 graph TD
-    A["Menu command, URI bar, startup URI, or module code"] --> B["ITabManager.NavigateAsync(...)"]
+    A["Menu command, startup URI, or module code"] --> B["ITabManager.NavigateAsync(...)"]
     B --> C["Choose focused workspace or explicit workspaceId"]
     C --> D["TabManager.InternalNavigateAsync(...)"]
     D --> E["Find matching ITabItemFactory"]
@@ -39,6 +39,10 @@ graph TD
 ```
 
 `NavigateAsync(Uri)` は現在フォーカスされているワークスペースへ移動します。`NavigateAsync(Guid workspaceId, Uri uri)` は特定のワークスペースを対象にします。
+
+URI バーは送信時のタブを保持し、`NavigateAsync(ITabItemInstance, Uri)` を呼びます。`INavigableTabItemInstance.TryNavigateAsync` を実装するタブは対応する URI を内部で開きます。非対応の URI のみファクトリ経由で開き直し、失敗やキャンセルでは別のタブを開きません。ブラウザーとファイル エクスプローラーがこの機能に対応しています。
+
+コンテンツのアドレスが実際に変わった後、`MutableTabReference.Uri` を更新して `NotifyUriChangedAsync(instance)` を呼びます。インスタンスに基づいて状態と履歴を同期し、タブの作成やフォーカス変更は行いません。旧 API `TabInternalNavigatingAsync` は削除されています。
 
 ## URI ルーティングとファクトリ
 
@@ -76,7 +80,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 - ファクトリはマネージャーの順序で確認されます。
 - `TabItemRouteAttribute` は `Scheme`、`Host`、`Path`、`PathMatch` を判定できます。
 - `TabItemFactoryBase.IsSingle` の既定値は `true` です。
-- シングルトン ファクトリが既に開いている URI に一致すると、既存タブを再利用します。
+- `IsSingle = true` では、登録されたファクトリごとに全ワークスペースでタブは 1 つです。再度開くと、そのタブのワークスペースでフォーカスし、クエリ パラメーターに関係なく現在の URI を維持します。`zyc://settings?foo=aa` が開いている状態で `zyc://settings` を開いても、タブは 1 つです。
+- `IsSingle = false` では、同じ URI でも外部から開くたびに新しいタブを作成します。ブラウザー、ファイル エクスプローラー、ターミナル、テキスト／16 進エディター、テキスト プレビューは複数インスタンスを許可します。このフラグは内部ナビゲーションを制御しません。
 - 一致するファクトリがない場合、組み込みの Not Found タブを開きます。
 - 作成またはロードで例外が発生した場合、組み込みの Error タブを開きます。
 

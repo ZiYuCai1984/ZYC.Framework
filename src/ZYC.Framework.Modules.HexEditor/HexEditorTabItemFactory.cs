@@ -10,6 +10,8 @@ namespace ZYC.Framework.Modules.HexEditor;
 [TabItemRoute(Host = HexEditorModuleConstants.Host, Path = HexEditorModuleConstants.EditorPath)]
 internal class HexEditorTabItemFactory : TabItemFactoryBase
 {
+    public override bool IsSingle => false;
+
     public override int Priority => 40;
 
     public override async Task<bool> CheckUriMatchedAsync(Uri uri)

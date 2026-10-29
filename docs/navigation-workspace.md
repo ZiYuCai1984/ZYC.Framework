@@ -26,7 +26,7 @@ ZYC.Framework separates **what to open** from **where to show it**. A URI descri
 
 ```mermaid
 graph TD
-    A["Menu command, URI bar, startup URI, or module code"] --> B["ITabManager.NavigateAsync(...)"]
+    A["Menu command, startup URI, or module code"] --> B["ITabManager.NavigateAsync(...)"]
     B --> C["Choose focused workspace or explicit workspaceId"]
     C --> D["TabManager.InternalNavigateAsync(...)"]
     D --> E["Find matching ITabItemFactory"]
@@ -39,6 +39,10 @@ graph TD
 ```
 
 `NavigateAsync(Uri)` navigates in the currently focused workspace. `NavigateAsync(Guid workspaceId, Uri uri)` targets a specific workspace.
+
+The URI bar captures the current tab when submitted and calls `NavigateAsync(ITabItemInstance, Uri)`. Tabs implementing `INavigableTabItemInstance.TryNavigateAsync` handle supported URIs internally. Only an unsupported URI falls back to opening through a factory; failures and cancellation do not open another tab. Browsers and file explorers support this capability.
+
+After the content actually changes address, update `MutableTabReference.Uri` and call `NotifyUriChangedAsync(instance)`. This synchronizes state by instance and updates history without creating a tab or changing focus. The old `TabInternalNavigatingAsync` API has been removed.
 
 ## URI Routing and Factories
 
@@ -76,7 +80,8 @@ Important behavior:
 - Factories are checked in manager order.
 - `TabItemRouteAttribute` can match `Scheme`, `Host`, `Path`, and `PathMatch`.
 - `TabItemFactoryBase.IsSingle` defaults to `true`.
-- If a singleton factory matches a URI that is already open, the existing tab is reused.
+- With `IsSingle = true`, a registered factory has one tab across all workspaces. Opening it again focuses that tab in its owning workspace and preserves its current URI, regardless of query parameters: opening `zyc://settings` while `zyc://settings?foo=aa` is open leaves one tab.
+- With `IsSingle = false`, each external open creates a new tab, even for the same URI. Browsers, file explorers, terminals, text/hex editors, and text previews allow multiple instances. This flag does not control internal navigation.
 - If no factory matches, the host opens the built-in Not Found tab.
 - If creation or loading throws, the host opens the built-in Error tab.
 

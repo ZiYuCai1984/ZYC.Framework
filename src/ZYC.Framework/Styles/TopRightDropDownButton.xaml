@@ -6,7 +6,7 @@
         <ResourceDictionary Source="pack://application:,,,/ZYC.Framework;component/Styles/MainMenu.xaml" />
         <ResourceDictionary>
             <Style TargetType="{x:Type mah:DropDownButton}"
-                           BasedOn="{StaticResource {x:Type mah:DropDownButton}}">
+                   BasedOn="{StaticResource {x:Type mah:DropDownButton}}">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type mah:DropDownButton}">

@@ -10,7 +10,7 @@ internal class TextPreviewTabItemFactory : ITabItemFactory
 {
     public int Priority => 30;
 
-    public bool IsSingle => true;
+    public bool IsSingle => false;
 
     public async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)
     {

@@ -175,7 +175,7 @@ graph TD
   Match --> Fallback
 ```
 
-Factories are sorted by descending priority. Singleton factories can reuse an existing tab when the target URI is already open. When no factory matches, the shell creates a not-found tab; when creation fails, it creates an error tab.
+Factories are sorted by descending priority. `IsSingle = true` allows one tab per registered factory across all workspaces, regardless of URI parameters; opening it again focuses the existing tab and preserves its URI. `IsSingle = false` creates a new tab for each external open. Internal navigation targets an existing instance independently of this flag. When no factory matches, the shell creates a not-found tab; when creation fails, it creates an error tab.
 
 ## Configuration and State
 
@@ -425,7 +425,7 @@ graph TD
   Match --> Fallback
 ```
 
-ファクトリは Priority の降順で並べられます。シングルトン ファクトリは、対象 URI がすでに開かれている場合に既存タブを再利用できます。一致するファクトリがない場合は not-found タブが作成され、作成中に失敗した場合は error タブが作成されます。
+ファクトリは Priority の降順で並べられます。`IsSingle = true` では、URI パラメーターに関係なく、登録されたファクトリごとに全ワークスペースでタブは 1 つです。再度開くと既存タブにフォーカスし、URI を維持します。`IsSingle = false` では外部から開くたびに新しいタブを作成します。内部ナビゲーションはこのフラグとは独立して既存インスタンスを対象にします。一致するファクトリがない場合は not-found タブが作成され、作成中に失敗した場合は error タブが作成されます。
 
 ## 設定と状態
 
@@ -675,7 +675,7 @@ graph TD
   Match --> Fallback
 ```
 
-Factory 按 Priority 降序排列。Singleton Factory 在目标 URI 已经打开时可以复用已有 Tab。没有 Factory 匹配时，Shell 创建 not-found Tab；创建失败时，Shell 创建 error Tab。
+Factory 按 Priority 降序排列。`IsSingle = true` 表示每个已注册的 Factory 在所有工作区中只允许一个 Tab，与 URI 参数无关；再次打开时聚焦原 Tab，保留其 URI。`IsSingle = false` 表示每次外部打开都新建 Tab。内部导航独立于此属性，直接面向已有实例。没有 Factory 匹配时，Shell 创建 not-found Tab；创建失败时，Shell 创建 error Tab。
 
 ## 配置和状态
 
@@ -925,7 +925,7 @@ graph TD
   Match --> Fallback
 ```
 
-Factory 依 Priority 遞減排序。Singleton Factory 在目標 URI 已開啟時可以重用既有分頁。沒有 Factory 符合時，Shell 會建立 not-found 分頁；建立失敗時，Shell 會建立 error 分頁。
+Factory 依 Priority 遞減排序。`IsSingle = true` 表示每個已註冊的 Factory 在所有工作區中只允許一個 Tab，與 URI 參數無關；再次開啟時聚焦原 Tab，保留其 URI。`IsSingle = false` 表示每次外部開啟都建立新 Tab。內部導覽獨立於此屬性，直接面向既有實例。沒有 Factory 符合時，Shell 會建立 not-found 分頁；建立失敗時，Shell 會建立 error 分頁。
 
 ## 設定與狀態
 
@@ -1175,7 +1175,7 @@ graph TD
   Match --> Fallback
 ```
 
-팩토리는 Priority 내림차순으로 정렬됩니다. Singleton 팩토리는 대상 URI가 이미 열려 있을 때 기존 탭을 재사용할 수 있습니다. 일치하는 팩토리가 없으면 셸은 not-found 탭을 만들고, 생성 중 실패하면 error 탭을 만듭니다.
+팩토리는 Priority 내림차순으로 정렬됩니다. `IsSingle = true`이면 URI 매개변수와 관계없이 등록된 팩토리마다 모든 워크스페이스에 걸쳐 탭이 하나만 존재합니다. 다시 열면 기존 탭에 포커스를 주고 URI를 유지합니다. `IsSingle = false`이면 외부에서 열 때마다 새 탭을 만듭니다. 내부 탐색은 이 속성과 독립적으로 기존 인스턴스를 대상으로 합니다. 일치하는 팩토리가 없으면 셸은 not-found 탭을 만들고, 생성 중 실패하면 error 탭을 만듭니다.
 
 ## 설정과 상태
 

@@ -8,6 +8,7 @@
              xmlns:buttons="clr-namespace:ZYC.Framework.Core.Buttons;assembly=ZYC.Framework.Core"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              ThemeMode="Light">
@@ -21,12 +22,62 @@
                 <ResourceDictionary
                     Source="Styles/ZYC.Indigo.Light.xaml" />
                 <ResourceDictionary>
+
                     <Style TargetType="{x:Type buttons:IconButton}"
-                           BasedOn="{StaticResource {x:Type Button}}" />
+                           BasedOn="{StaticResource {x:Type Button}}" >
+                    </Style>
                     <Style TargetType="{x:Type ScrollViewer}"
                            BasedOn="{StaticResource {x:Type ScrollViewer}}">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     </Style>
+
+                    <Style TargetType="{x:Type ItemsControl}"
+                           BasedOn="{StaticResource {x:Type ItemsControl}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type ListBox}"
+                           BasedOn="{StaticResource {x:Type ListBox}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type ListView}"
+                           BasedOn="{StaticResource {x:Type ListView}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type iconPacks:PackIconMaterial}"
+                           BasedOn="{StaticResource {x:Type iconPacks:PackIconMaterial}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <!--<Style TargetType="{x:Type core:HybridIcon}"
+                           BasedOn="{StaticResource {x:Type core:HybridIcon}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>-->
+
+                    <Style TargetType="{x:Type GridSplitter}"
+                           BasedOn="{StaticResource {x:Type GridSplitter}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type Separator}"
+                           BasedOn="{StaticResource {x:Type Separator}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type ContentControl}"
+                           BasedOn="{StaticResource {x:Type ContentControl}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+                    <Style TargetType="{x:Type UserControl}"
+                           BasedOn="{StaticResource {x:Type UserControl}}">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    </Style>
+
+
+
 
                     <!-- Emoji.Wpf.TextBox assigns its emoji template locally; style its internal editor instead. -->
                     <Style TargetType="{x:Type wpf:TextBox}"

@@ -7,11 +7,12 @@
              mc:Ignorable="d"
              d:DesignHeight="450" 
              d:DesignWidth="800"
-             x:Name="Root">
+             x:Name="Root"
+             FontSize="32">
     <Grid VerticalAlignment="Center"
           HorizontalAlignment="Center">
         <TextBlock Text="{bindings:LBinding Text,ElementName=Root}"
-                   FontSize="32"
+                   FontSize="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=FontSize}"
                    FontWeight="Bold"
                    HorizontalAlignment="Center"
                    Foreground="{DynamicResource MahApps.Brushes.Validation4}" />

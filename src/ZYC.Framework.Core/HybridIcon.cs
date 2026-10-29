@@ -11,6 +11,11 @@ public partial class HybridIcon : ContentControl
             typeof(string), typeof(HybridIcon),
             new PropertyMetadata(DefaultIcon, OnIconChanged));
 
+    public HybridIcon()
+    {
+        FocusVisualStyle = null;
+    }
+
     public static PackIconMaterialKind DefaultIconKind { get; set; } = PackIconMaterialKind.Bug;
     public static string DefaultIcon => DefaultIconKind.ToString();
 

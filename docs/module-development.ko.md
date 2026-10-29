@@ -98,6 +98,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute`는 `Scheme`, `Host`, `Path`, `PathMatch`로 URI를 매칭할 수 있습니다. 같은 URI에 여러 팩터리가 매칭되면 `Priority`가 높은 팩터리가 선택됩니다. `TabItemFactoryBase`의 기본값은 `IsSingle = true`입니다. 여러 인스턴스를 허용하려면 이를 재정의하세요.
 
+`IsSingle`은 URI 매개변수와 관계없이 등록된 팩터리를 기준으로 모든 워크스페이스에 적용됩니다. 싱글턴을 다시 열면 기존 탭에 포커스를 주고 URI를 유지합니다. 여러 인스턴스를 허용하는 탭은 `false`로 설정합니다. 기존 탭 내부 탐색에는 `IsSingle`과 독립적인 `INavigableTabItemInstance.TryNavigateAsync`를 구현합니다. 주소 변경 알림은 [탐색과 워크스페이스](navigation-workspace.md)를 참조하세요.
+
 ## 탭 항목과 뷰
 
 라우팅 탭은 보통 `TabItemInstanceBase<TView>`로 WPF 뷰를 감쌉니다.

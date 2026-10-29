@@ -98,6 +98,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute` can match by `Scheme`, `Host`, `Path`, and `PathMatch`. When several factories match the same URI, the factory with the higher `Priority` wins. `TabItemFactoryBase` defaults to `IsSingle = true`; override it when the module should allow multiple tab instances.
 
+`IsSingle` applies to the registered factory across all workspaces, regardless of URI parameters. Reopening a singleton focuses its existing tab and preserves its URI. Set it to `false` for tabs that allow multiple instances. For navigation within an existing tab, implement `INavigableTabItemInstance.TryNavigateAsync`; this capability is independent of `IsSingle`. See [Navigation and Workspaces](navigation-workspace.md) for address change notifications.
+
 ## Tab Item and View
 
 A routed tab normally wraps a WPF view with `TabItemInstanceBase<TView>`:

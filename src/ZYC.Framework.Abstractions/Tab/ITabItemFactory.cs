@@ -6,8 +6,10 @@
 public interface ITabItemFactory
 {
     /// <summary>
-    ///     Gets a value indicating whether this tab type is a singleton.
-    ///     If true, the system should ensure only one instance of this tab exists at a time.
+    ///     Gets whether this registered factory may have only one open tab across all workspaces.
+    ///     If true, external navigation focuses its existing tab regardless of URI or query parameters,
+    ///     preserving that tab's current URI. If false, external navigation creates a new tab.
+    ///     This value does not control navigation within an existing tab.
     /// </summary>
     bool IsSingle { get; }
 

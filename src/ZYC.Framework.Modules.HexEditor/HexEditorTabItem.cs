@@ -71,7 +71,7 @@ internal class HexEditorTabItem : TabItemInstanceBase, INotifyPropertyChanged
 
         if (!UriTools.Equals(oldRouteUri, newRouteUri))
         {
-            await TabManager.TabInternalNavigatingAsync(this, oldRouteUri, newRouteUri);
+            await TabManager.NotifyUriChangedAsync(this);
         }
     }
 
