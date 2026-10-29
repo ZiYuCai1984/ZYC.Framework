@@ -3,7 +3,8 @@
 namespace ZYC.Framework.Abstractions.Event;
 
 /// <summary>
-///     Event raised when a navigation request within a workspace has successfully completed.
+///     Event raised when a tab is opened, focused, or reports a URI change in its owning workspace.
+///     It does not imply that the tab gained focus or that its content finished loading.
 /// </summary>
 public sealed class NavigateCompletedEvent
 {
@@ -26,7 +27,7 @@ public sealed class NavigateCompletedEvent
     public Guid WorkspaceId { get; }
 
     /// <summary>
-    ///     Gets the target tab item instance that is now active after navigation.
+    ///     Gets the tab item instance associated with the navigation or URI change.
     /// </summary>
     public ITabItemInstance TabItemInstance { get; }
 }

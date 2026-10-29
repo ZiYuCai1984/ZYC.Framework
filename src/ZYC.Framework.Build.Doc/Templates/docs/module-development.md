@@ -98,6 +98,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute` can match by `Scheme`, `Host`, `Path`, and `PathMatch`. When several factories match the same URI, the factory with the higher `Priority` wins. `TabItemFactoryBase` defaults to `IsSingle = true`; override it when the module should allow multiple tab instances.
 
+`IsSingle` applies to the registered factory across all workspaces, regardless of URI parameters. Reopening a singleton focuses its existing tab and preserves its URI. Set it to `false` for tabs that allow multiple instances. For navigation within an existing tab, implement `INavigableTabItemInstance.TryNavigateAsync`; this capability is independent of `IsSingle`. See [Navigation and Workspaces](navigation-workspace.md) for address change notifications.
+
 ## Tab Item and View
 
 A routed tab normally wraps a WPF view with `TabItemInstanceBase<TView>`:
@@ -282,6 +284,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 ```
 
 `TabItemRouteAttribute` は `Scheme`、`Host`、`Path`、`PathMatch` で URI を判定できます。同じ URI に複数のファクトリが一致した場合は、`Priority` が高いファクトリが選ばれます。`TabItemFactoryBase` の既定は `IsSingle = true` です。複数インスタンスを許可したい場合はオーバーライドしてください。
+
+`IsSingle` は URI パラメーターに関係なく、登録されたファクトリに対して全ワークスペースで適用されます。再度開くと既存タブにフォーカスし、URI を維持します。複数インスタンスを許可するタブでは `false` にします。既存タブ内のナビゲーションには、`IsSingle` とは独立した `INavigableTabItemInstance.TryNavigateAsync` を実装します。アドレス変更の通知は [ナビゲーションとワークスペース](navigation-workspace.md) を参照してください。
 
 ## タブ項目とビュー
 
@@ -468,6 +472,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute` 可以按 `Scheme`、`Host`、`Path` 和 `PathMatch` 匹配 URI。如果多个工厂匹配同一个 URI，`Priority` 更高的工厂会优先。`TabItemFactoryBase` 默认 `IsSingle = true`；如果模块允许打开多个实例，请覆盖它。
 
+`IsSingle` 以已注册的 Factory 为单位，跨所有工作区生效，与 URI 参数无关。再次打开单例只聚焦原 Tab，保留其 URI；允许多个实例的 Tab 设为 `false`。如需在已有 Tab 内部导航，实现 `INavigableTabItemInstance.TryNavigateAsync`，此能力与 `IsSingle` 独立。地址变化通知见[导航与工作区](navigation-workspace.md)。
+
 ## TabItem 与 View
 
 带路由的 Tab 通常用 `TabItemInstanceBase<TView>` 包装 WPF 视图：
@@ -653,6 +659,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute` 可以依 `Scheme`、`Host`、`Path` 與 `PathMatch` 匹配 URI。如果多個 factory 匹配同一個 URI，`Priority` 較高的 factory 會優先。`TabItemFactoryBase` 預設 `IsSingle = true`；如果模組允許開啟多個實例，請覆寫它。
 
+`IsSingle` 以已註冊的 Factory 為單位，跨所有工作區生效，與 URI 參數無關。再次開啟單例只聚焦原 Tab，保留其 URI；允許多個實例的 Tab 設為 `false`。如需在既有 Tab 內部導覽，實作 `INavigableTabItemInstance.TryNavigateAsync`，此能力與 `IsSingle` 獨立。位址變更通知見[導覽與工作區](navigation-workspace.md)。
+
 ## TabItem 與 View
 
 帶路由的 Tab 通常用 `TabItemInstanceBase<TView>` 包裝 WPF View：
@@ -837,6 +845,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 ```
 
 `TabItemRouteAttribute`는 `Scheme`, `Host`, `Path`, `PathMatch`로 URI를 매칭할 수 있습니다. 같은 URI에 여러 팩터리가 매칭되면 `Priority`가 높은 팩터리가 선택됩니다. `TabItemFactoryBase`의 기본값은 `IsSingle = true`입니다. 여러 인스턴스를 허용하려면 이를 재정의하세요.
+
+`IsSingle`은 URI 매개변수와 관계없이 등록된 팩터리를 기준으로 모든 워크스페이스에 적용됩니다. 싱글턴을 다시 열면 기존 탭에 포커스를 주고 URI를 유지합니다. 여러 인스턴스를 허용하는 탭은 `false`로 설정합니다. 기존 탭 내부 탐색에는 `IsSingle`과 독립적인 `INavigableTabItemInstance.TryNavigateAsync`를 구현합니다. 주소 변경 알림은 [탐색과 워크스페이스](navigation-workspace.md)를 참조하세요.
 
 ## 탭 항목과 뷰
 

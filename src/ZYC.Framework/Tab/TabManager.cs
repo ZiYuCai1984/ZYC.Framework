@@ -57,6 +57,16 @@ internal partial class TabManager : ITabManager
 
     private HashSet<ITabItemInstance> TabItemInstances { get; } = new();
 
+    private Dictionary<ITabItemInstance, ITabItemFactory> TabItemOwners { get; } =
+        new(ReferenceEqualityComparer.Instance);
+
+    // Serialize asynchronous opens/reloads to prevent duplicate singleton tabs.
+    //!WARNING This non-reentrant gate is held across factory callbacks and LoadAsync.
+    // Awaiting external NavigateAsync or ReloadAsync on this manager from those callbacks
+    // deadlocks: the nested request waits for the gate, while the outer request waits for
+    // the callback. Subsequent opens/reloads are also blocked.
+    private SemaphoreSlim NavigationSemaphore { get; } = new(1, 1);
+
     private ITabItemFactory[] TabItemFactories => TabItemFactoryManager.GetTabItemFactories();
 
     /// <summary>
@@ -201,7 +211,9 @@ internal partial class TabManager : ITabManager
     public ITabItemInstance[] GetTabItemInstances(Guid workspaceId)
     {
         var workspace = WorkspaceDictionary[workspaceId];
-        return WorkspaceTabItemInstanceListDictionary[workspace].ToArray();
+        return WorkspaceTabItemInstanceListDictionary.TryGetValue(workspace, out var instances)
+            ? instances.ToArray()
+            : [];
     }
 
     public WorkspaceNode GetTabItemInstanceWorkspace(ITabItemInstance instance)
@@ -229,11 +241,25 @@ internal partial class TabManager : ITabManager
     public async Task NavigateAsync(Guid workspaceId, Uri uri)
     {
         var instance = await InternalNavigateAsync(workspaceId, uri);
+        ParallelWorkspaceManager.SetFocusedWorkspace(GetTabItemInstanceWorkspace(instance));
         await FocusAsync(instance);
     }
 
 
     public async Task ReloadAsync(ITabItemInstance instance)
+    {
+        await NavigationSemaphore.WaitAsync();
+        try
+        {
+            await ReloadTabItemAsync(instance);
+        }
+        finally
+        {
+            NavigationSemaphore.Release();
+        }
+    }
+
+    private async Task ReloadTabItemAsync(ITabItemInstance instance)
     {
         if (!TabItemInstances.Contains(instance))
         {
@@ -254,7 +280,10 @@ internal partial class TabManager : ITabManager
         var workspace = WorkspaceDictionary[workspaceId];
         var insertIndex = WorkspaceTabItemInstanceListDictionary[workspace].IndexOf(instance);
         var uri = instance.Uri;
-        var wasFocused = GetFocusedTabItemInstance(workspaceId) == instance;
+        var focusedInstance = GetFocusedTabItemInstance(workspaceId);
+        var wasFocused = focusedInstance == instance;
+
+        TabItemOwners.Remove(instance, out var factory);
 
         DetachTabItemInstance(workspaceId, instance);
         StopObservingViewFailures(instance);
@@ -268,13 +297,27 @@ internal partial class TabManager : ITabManager
             Logger.Error(e);
         }
 
-        var newInstance = await InternalNavigateAsync(
+        var existingInstances = TabItemInstances.ToHashSet();
+        var newInstance = await CreateOrReuseTabItemAsync(
             workspaceId,
             uri,
             insertIndex,
-            false);
+            factory);
 
-        InvokeTabItemReloadedEvent(workspaceId, instance, newInstance, insertIndex);
+        if (existingInstances.Contains(newInstance))
+        {
+            // An ownerless error/not-found tab may now route to an existing singleton.
+            InvokeCloseTabItemEvent(workspaceId, instance);
+            SetFocusedTabItemInstance(workspaceId, null);
+            if (!wasFocused && focusedInstance != null)
+            {
+                await FocusAsync(focusedInstance);
+            }
+        }
+        else
+        {
+            InvokeTabItemReloadedEvent(workspaceId, instance, newInstance, insertIndex);
+        }
 
         if (wasFocused)
         {
@@ -282,31 +325,58 @@ internal partial class TabManager : ITabManager
         }
     }
 
-    public async Task TabInternalNavigatingAsync(ITabItemInstance instance, Uri oriUri, Uri newUri)
+    public async Task NavigateAsync(ITabItemInstance instance, Uri uri)
     {
         if (!TabItemInstances.Contains(instance))
         {
-            Debugger.Break();
             return;
         }
 
-        var navigationState = GetNavigationStateFromTabItemInstance(instance);
-
-        var list = new List<Uri>(navigationState.TabItems);
-        var index = list.IndexOf(oriUri);
-        if (index == -1)
+        if (instance is INavigableTabItemInstance navigable && await navigable.TryNavigateAsync(uri))
         {
             return;
         }
 
-        list.Remove(oriUri);
-        list.Insert(index, newUri);
-        navigationState.TabItems = list.ToArray();
+        if (TabItemInstances.Contains(instance) && !UriTools.Equals(instance.Uri, uri))
+        {
+            await NavigationSemaphore.WaitAsync();
+            try
+            {
+                // The source tab may have closed while another tab was being created.
+                if (!TabItemInstances.Contains(instance))
+                {
+                    return;
+                }
+
+                var target = await CreateOrReuseTabItemAsync(GetWorkspaceIdFromTabItemInstance(instance), uri);
+                ParallelWorkspaceManager.SetFocusedWorkspace(GetTabItemInstanceWorkspace(target));
+                await FocusAsync(target);
+            }
+            finally
+            {
+                NavigationSemaphore.Release();
+            }
+        }
+    }
+
+    public Task NotifyUriChangedAsync(ITabItemInstance instance)
+    {
+        if (!TabItemInstances.Contains(instance))
+        {
+            return Task.CompletedTask;
+        }
 
         var workspaceId = GetWorkspaceIdFromTabItemInstance(instance);
-        AppendToHistory(workspaceId, newUri);
+        var navigationState = GetNavigationState(workspaceId);
+        navigationState.TabItems = GetTabItemUris(workspaceId);
+        if (GetFocusedTabItemInstance(workspaceId) == instance)
+        {
+            navigationState.Focus = instance.Uri;
+        }
 
-        await FocusAsync(instance);
+        AppendToHistory(workspaceId, instance.Uri);
+        InvokeNavigateCompletedEvent(workspaceId, instance);
+        return Task.CompletedTask;
     }
 
 
@@ -323,6 +393,11 @@ internal partial class TabManager : ITabManager
 
     public async Task CloseAsync(ITabItemInstance instance)
     {
+        if (!TabItemInstances.Contains(instance))
+        {
+            return;
+        }
+
         var workspaceId = GetWorkspaceIdFromTabItemInstance(instance);
 
         if (TabItemLockState.TabItems.Contains(instance.TabReference))
@@ -336,6 +411,7 @@ internal partial class TabManager : ITabManager
         }
 
         DetachTabItemInstance(workspaceId, instance);
+        TabItemOwners.Remove(instance);
         StopObservingViewFailures(instance);
 
         try
@@ -390,23 +466,31 @@ internal partial class TabManager : ITabManager
             var navigation = GetNavigationState(kv.Key);
 
             var backgroundItems = navigation.TabItems.ToArray();
+            var focusUri = navigation.Focus;
+            ITabItemInstance? focusedInstance = null;
             foreach (var item in backgroundItems)
             {
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (item != null)
                 {
-                    await NavigateBackgroundAsync(workspaceId, item);
+                    var instance = await InternalNavigateAsync(workspaceId, item);
+                    var ownerWorkspaceId = GetWorkspaceIdFromTabItemInstance(instance);
+                    InvokeNavigateCompletedEvent(ownerWorkspaceId, instance);
+                    if (item == focusUri && ownerWorkspaceId == workspaceId)
+                    {
+                        focusedInstance = instance;
+                    }
                 }
             }
 
 
-            var focusUri = navigation.Focus;
-            if (focusUri == null)
+            navigation.TabItems = GetTabItemUris(workspaceId);
+            if (focusedInstance != null)
             {
-                continue;
+                await FocusAsync(focusedInstance);
             }
 
-            await FocusAsync(focusUri);
+            navigation.Focus = GetFocusedTabItemInstance(workspaceId)?.Uri;
         }
 
 
@@ -465,7 +549,7 @@ internal partial class TabManager : ITabManager
     public async Task NavigateBackgroundAsync(Guid workspaceId, Uri uri)
     {
         var instance = await InternalNavigateAsync(workspaceId, uri);
-        InvokeNavigateCompletedEvent(workspaceId, instance);
+        InvokeNavigateCompletedEvent(GetWorkspaceIdFromTabItemInstance(instance), instance);
     }
 
 
@@ -488,11 +572,24 @@ internal partial class TabManager : ITabManager
     }
 
 
-    private async Task<ITabItemInstance> InternalNavigateAsync(
+    private async Task<ITabItemInstance> InternalNavigateAsync(Guid workspaceId, Uri uri)
+    {
+        await NavigationSemaphore.WaitAsync();
+        try
+        {
+            return await CreateOrReuseTabItemAsync(workspaceId, uri);
+        }
+        finally
+        {
+            NavigationSemaphore.Release();
+        }
+    }
+
+    private async Task<ITabItemInstance> CreateOrReuseTabItemAsync(
         Guid workspaceId,
         Uri uri,
         int? insertIndex = null,
-        bool allowSingleReuse = true)
+        ITabItemFactory? factory = null)
     {
         AppendToHistory(workspaceId, uri);
 
@@ -500,22 +597,21 @@ internal partial class TabManager : ITabManager
 
         try
         {
-            var items = TabItemFactories.ToArray();
+            var items = factory == null ? TabItemFactories : new[] { factory };
             foreach (var item in items)
             {
-                if (!await item.CheckUriMatchedAsync(uri))
+                if (factory == null && !await item.CheckUriMatchedAsync(uri))
                 {
                     continue;
                 }
 
-                var instances = TabItemInstances.ToArray();
-
-                //!WARNING Design defeat !!
-                if (allowSingleReuse
-                    && item.IsSingle
-                    && instances.Count(t => UriTools.Equals(t.Uri, uri)) != 0)
+                factory = item;
+                var existing = item.IsSingle
+                    ? TabItemOwners.FirstOrDefault(t => ReferenceEquals(t.Value, item)).Key
+                    : null;
+                if (existing != null)
                 {
-                    instance = instances.First(t => UriTools.Equals(t.Uri, uri));
+                    instance = existing;
                 }
                 else
                 {
@@ -528,6 +624,7 @@ internal partial class TabManager : ITabManager
                     ObserveViewFailures(instance, instance.View);
 
                     AttachTabItemInstance(workspaceId, instance, insertIndex);
+                    TabItemOwners.Add(instance, item);
                 }
 
                 break;
@@ -547,12 +644,29 @@ internal partial class TabManager : ITabManager
             if (instance != null)
             {
                 StopObservingViewFailures(instance);
+                if (TabItemInstances.Contains(instance))
+                {
+                    DetachTabItemInstance(workspaceId, instance);
+                    TabItemOwners.Remove(instance);
+                }
+                try
+                {
+                    instance.Dispose();
+                }
+                catch (Exception disposeException)
+                {
+                    Logger.Error(disposeException);
+                }
             }
 
             instance = LifetimeScope.Resolve<ErrorTabItem>(
                 new TypedParameter(typeof(Exception), e),
                 new TypedParameter(typeof(TabReference), new TabReference(uri)));
             AttachTabItemInstance(workspaceId, instance, insertIndex);
+            if (factory != null)
+            {
+                TabItemOwners.Add(instance, factory);
+            }
         }
         finally
         {
@@ -588,11 +702,7 @@ internal partial class TabManager : ITabManager
 
     private Uri[] GetTabItemUris(Guid workspaceId)
     {
-        var workspace = WorkspaceDictionary[workspaceId];
-
-        var tabItems = WorkspaceTabItemInstanceListDictionary[workspace]
-            .Select(t => t.Uri).ToArray();
-        return tabItems;
+        return GetTabItemInstances(workspaceId).Select(t => t.Uri).ToArray();
     }
 
     private void AppendToHistory(Guid workspaceId, Uri uri)
@@ -645,12 +755,6 @@ internal partial class TabManager : ITabManager
 
         var navigationState = GetNavigationState(workspaceId);
         navigationState.TabItems = GetTabItemUris(workspaceId);
-    }
-
-    private NavigationState GetNavigationStateFromTabItemInstance(ITabItemInstance instance)
-    {
-        var workspaceId = GetWorkspaceIdFromTabItemInstance(instance);
-        return GetNavigationState(workspaceId);
     }
 
     private Guid GetWorkspaceIdFromTabItemInstance(ITabItemInstance instance)

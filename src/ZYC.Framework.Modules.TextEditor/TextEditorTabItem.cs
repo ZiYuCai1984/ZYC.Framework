@@ -73,7 +73,7 @@ internal class TextEditorTabItem : TabItemInstanceBase, INotifyPropertyChanged
             return;
         }
 
-        await TabManager.TabInternalNavigatingAsync(this, oldRouteUri, newRouteUri);
+        await TabManager.NotifyUriChangedAsync(this);
     }
 
     public override bool OnClosing()

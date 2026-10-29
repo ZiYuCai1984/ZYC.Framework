@@ -41,7 +41,9 @@ internal partial class WebBrowserView
 
     private ITabManager TabManager { get; }
 
-    private Uri Uri { get; }
+    private Uri Uri { get; set; }
+
+    private bool IsNavigationReady { get; set; }
 
     private IWebTabItemInstance Instance { get; }
 
@@ -51,9 +53,27 @@ internal partial class WebBrowserView
 
     public override string HomePageUri => WebBrowserConfig.StartupUri;
 
-    protected override async Task InternalWebViewHostLoadedAsync()
+    protected override Task InternalWebViewHostLoadedAsync()
     {
-        await NavigateAsync(Uri);
+        IsNavigationReady = true;
+        return NavigateInTabAsync(Uri);
+    }
+
+    public Task NavigateInTabAsync(Uri uri)
+    {
+        if (Disposing)
+        {
+            throw new OperationCanceledException("The browser tab has been disposed.");
+        }
+
+        // Keep the latest request while WebView2 initializes. SourceChanged confirms the actual URI.
+        Uri = uri;
+        if (IsNavigationReady)
+        {
+            CoreWebView2.Navigate(uri.ToString());
+        }
+
+        return Task.CompletedTask;
     }
 
     protected override void OnDocumentTitleChanged(object? sender, object e)
@@ -77,7 +97,7 @@ internal partial class WebBrowserView
             base.OnSourceChanged(sender, e);
 
             var target = CoreWebView2.Source;
-            await Instance.TabInternalNavigatingAsync(new Uri(target));
+            await Instance.NotifyUriChangedAsync(new Uri(target));
         }
         catch (Exception ex)
         {

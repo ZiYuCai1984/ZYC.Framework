@@ -69,6 +69,10 @@ internal partial class TabManager
         items[index] = errorInstance;
         TabItemInstances.Remove(instance);
         TabItemInstances.Add(errorInstance);
+        if (TabItemOwners.Remove(instance, out var factory))
+        {
+            TabItemOwners.Add(errorInstance, factory);
+        }
 
         EventAggregator.Publish(new TabItemViewFaultedEvent(workspace.Id, instance, errorInstance, index));
 

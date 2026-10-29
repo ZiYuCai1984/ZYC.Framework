@@ -12,19 +12,23 @@ namespace ZYC.Framework.Modules.WebBrowser;
 
 [Register]
 [ConstantsSource(typeof(WebBrowserModuleConstants))]
-internal class WebBrowserTabItem : TabItemInstanceBase, IWebTabItemInstance, INotifyPropertyChanged
+internal class WebBrowserTabItem : TabItemInstanceBase, IWebTabItemInstance, INavigableTabItemInstance, INotifyPropertyChanged
 {
     public WebBrowserTabItem(
         ILifetimeScope lifetimeScope,
+        IWebBrowserUriPolicy webBrowserUriPolicy,
         ITabManager tabManager, MutableTabReference tabReference) : base(lifetimeScope, tabReference)
     {
         TabManager = tabManager;
+        WebBrowserUriPolicy = webBrowserUriPolicy;
         Title = tabReference.Uri.Host;
     }
 
     private MutableTabReference MutableTabReference => (MutableTabReference)TabReference;
 
     private ITabManager TabManager { get; }
+
+    private IWebBrowserUriPolicy WebBrowserUriPolicy { get; }
 
     public Uri Uri
     {
@@ -56,7 +60,18 @@ internal class WebBrowserTabItem : TabItemInstanceBase, IWebTabItemInstance, INo
         OnPropertyChanged(nameof(Icon));
     }
 
-    public async Task TabInternalNavigatingAsync(Uri newUri)
+    public async Task<bool> TryNavigateAsync(Uri uri)
+    {
+        if (!uri.IsAbsoluteUri || !WebBrowserUriPolicy.IsAllowed(uri))
+        {
+            return false;
+        }
+
+        await ((WebBrowserView)View).NavigateInTabAsync(uri);
+        return true;
+    }
+
+    public async Task NotifyUriChangedAsync(Uri newUri)
     {
         var oldUri = Uri;
         Uri = newUri;
@@ -66,7 +81,7 @@ internal class WebBrowserTabItem : TabItemInstanceBase, IWebTabItemInstance, INo
             return;
         }
 
-        await TabManager.TabInternalNavigatingAsync(this, oldUri, newUri);
+        await TabManager.NotifyUriChangedAsync(this);
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

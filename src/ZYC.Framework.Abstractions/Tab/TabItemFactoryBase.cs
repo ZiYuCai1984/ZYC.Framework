@@ -19,7 +19,7 @@ public abstract class TabItemFactoryBase : ITabItemFactory
 
     /// <summary>
     ///     Gets a value indicating whether this factory produces a singleton tab instance.
-    ///     Default is true.
+    ///     Default is true: one tab per registered factory across all workspaces, regardless of URI.
     /// </summary>
     public virtual bool IsSingle => true;
 

@@ -43,6 +43,17 @@ internal partial class FileExplorerView : IDisposable
 
     private bool Disposing { get; set; }
 
+    public Task NavigateAsync(Uri uri)
+    {
+        if (Disposing)
+        {
+            throw new OperationCanceledException("The file explorer tab has been disposed.");
+        }
+
+        ExplorerBrowser.Navigate(ShellObject.FromParsingName(uri.LocalPath));
+        return Task.CompletedTask;
+    }
+
     public void Dispose()
     {
         if (Disposing)
@@ -79,7 +90,7 @@ internal partial class FileExplorerView : IDisposable
         {
             var path = e.NewLocation.ParsingName;
 
-            await FileExplorerTabItemInstance.TabInternalNavigatingAsync(
+            await FileExplorerTabItemInstance.NotifyUriChangedAsync(
                 new Uri($"file:///{path}"));
 
             try

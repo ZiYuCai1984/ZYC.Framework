@@ -14,6 +14,7 @@ using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.Event;
+using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Abstractions.State;
 using ZYC.Framework.Abstractions.Tab;
 using ZYC.Framework.Abstractions.Workspace;
@@ -30,6 +31,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
     private StarCommand? _starCommand;
 
     public TabManagerView(
+        IToastManager toastManager,
         WorkspaceConfig workspaceConfig,
         ILogger<TabManagerView> logger,
         IEventAggregator eventAggregator,
@@ -41,6 +43,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
         CloseTabItemCommand closeTabItemCommand)
     {
         WorkspaceConfig = workspaceConfig;
+        ToastManager = toastManager;
         Logger = logger;
         EventAggregator = eventAggregator;
         WorkspaceNode = workspaceNode;
@@ -79,21 +82,18 @@ internal partial class TabManagerView : INotifyPropertyChanged
         EventAggregator.Subscribe<WorkspaceFocusChangedEvent>(OnWorkspaceFocusChangedEvent)
             .DisposeWith(CompositeDisposable);
 
-        EventAggregator.Subscribe<TabManagerRestoreCompleted>(_ =>
-        {
-            PreloadAllTabs(TabControl);
-        }).DisposeWith(CompositeDisposable);
+        EventAggregator.Subscribe<TabManagerRestoreCompleted>(_ => { PreloadAllTabs(TabControl); })
+            .DisposeWith(CompositeDisposable);
 
 
         WorkspaceConfig.ObserveProperty(nameof(WorkspaceConfig.IsWorkspaceEmptyIndexVisible))
             .Throttle(TimeSpan.FromMilliseconds(200))
-            .Subscribe(_ =>
-            {
-                OnPropertyChanged(nameof(IsWorkspaceEmptyIndexVisible));
-            }).DisposeWith(CompositeDisposable);
+            .Subscribe(_ => { OnPropertyChanged(nameof(IsWorkspaceEmptyIndexVisible)); })
+            .DisposeWith(CompositeDisposable);
     }
 
 
+    private IToastManager ToastManager { get; }
     private ILogger<TabManagerView> Logger { get; }
 
     private IEventAggregator EventAggregator { get; }
@@ -143,9 +143,7 @@ internal partial class TabManagerView : INotifyPropertyChanged
                 tab.UpdateLayout();
                 Dispatcher.CurrentDispatcher.Invoke(
                     DispatcherPriority.Background,
-                    new Action(() =>
-                    {
-                    }));
+                    new Action(() => { }));
             }
         }
         finally
@@ -289,8 +287,12 @@ internal partial class TabManagerView : INotifyPropertyChanged
             TabItemSource.Add(instance);
         }
 
-        OnPropertyChanged(nameof(Uri));
-        OnPropertyChanged(nameof(FocusedTabItemInstance));
+        if (instance == FocusedTabItemInstance)
+        {
+            OnPropertyChanged(nameof(Uri));
+            OnPropertyChanged(nameof(FocusedTabItemInstance));
+        }
+
         OnPropertyChanged(nameof(NavigateHistory));
     }
 

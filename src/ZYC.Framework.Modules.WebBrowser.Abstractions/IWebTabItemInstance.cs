@@ -20,9 +20,9 @@ public interface IWebTabItemInstance : ITabItemInstance
     void SetIcon(string icon);
 
     /// <summary>
-    ///     Called internally when the tab is about to navigate to a new URI.
+    ///     Updates the tab reference and notifies the manager after the browser's URI changes.
     /// </summary>
-    /// <param name="newUri">The URI that will be navigated to.</param>
-    /// <returns>A task representing the asynchronous navigation operation.</returns>
-    Task TabInternalNavigatingAsync(Uri newUri);
+    /// <param name="newUri">The browser's actual current URI.</param>
+    /// <returns>A task representing state synchronization; it does not request navigation.</returns>
+    Task NotifyUriChangedAsync(Uri newUri);
 }
