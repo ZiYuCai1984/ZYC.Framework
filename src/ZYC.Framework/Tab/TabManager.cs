@@ -410,6 +410,8 @@ internal partial class TabManager : ITabManager
             return;
         }
 
+        var wasFocused = GetFocusedTabItemInstance(workspaceId) == instance;
+
         DetachTabItemInstance(workspaceId, instance);
         TabItemOwners.Remove(instance);
         StopObservingViewFailures(instance);
@@ -424,6 +426,11 @@ internal partial class TabManager : ITabManager
         }
 
         InvokeCloseTabItemEvent(workspaceId, instance);
+
+        if (!wasFocused)
+        {
+            return;
+        }
 
         if (WorkspaceDictionary.TryGetValue(workspaceId, out var sourceWorkspaceNode))
         {

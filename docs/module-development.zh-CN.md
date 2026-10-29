@@ -98,6 +98,8 @@ internal class ReportsTabItemFactory : TabItemFactoryBase
 
 `TabItemRouteAttribute` 可以按 `Scheme`、`Host`、`Path` 和 `PathMatch` 匹配 URI。如果多个工厂匹配同一个 URI，`Priority` 更高的工厂会优先。`TabItemFactoryBase` 默认 `IsSingle = true`；如果模块允许打开多个实例，请覆盖它。
 
+`IsSingle` 以已注册的 Factory 为单位，跨所有工作区生效，与 URI 参数无关。再次打开单例只聚焦原 Tab，保留其 URI；允许多个实例的 Tab 设为 `false`。如需在已有 Tab 内部导航，实现 `INavigableTabItemInstance.TryNavigateAsync`，此能力与 `IsSingle` 独立。地址变化通知见[导航与工作区](navigation-workspace.md)。
+
 ## TabItem 与 View
 
 带路由的 Tab 通常用 `TabItemInstanceBase<TView>` 包装 WPF 视图：

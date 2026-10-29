@@ -231,7 +231,10 @@ internal partial class TabManagerView : INotifyPropertyChanged
         var instance = e.TabItemInstance;
         TabItemSource.Remove(instance);
 
-        FocusedTabItemInstance = null;
+        if (FocusedTabItemInstance == instance)
+        {
+            FocusedTabItemInstance = null;
+        }
 
         OnPropertyChanged(nameof(Uri));
         OnPropertyChanged(nameof(FocusedTabItemInstance));
