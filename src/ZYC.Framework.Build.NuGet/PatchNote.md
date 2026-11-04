@@ -45,7 +45,7 @@ dotnet tool install --global ZYC.Framework.CLI --version $(Version)
 ## 📚 Resources
 
 * 📖 [Documentation]($(DocumentUrl))
-* 🐞 [Report an Issue](https://github.com/ZiYuCai1984/ZYC.Framework/issues)
+* 🐞 [Report an Issue]($(IssuesUrl))
 
 ---
 
