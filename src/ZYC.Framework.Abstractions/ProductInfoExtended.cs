@@ -7,6 +7,11 @@
 public static class ProductInfoExtended
 {
     /// <summary>
+    ///     Gets the name of the Command Line Interface (CLI) package id.
+    /// </summary>
+    public const string CLIPackageId = "ZYC.Framework.CLI";
+
+    /// <summary>
     ///     Gets the file name of the primary GUI application executable.
     /// </summary>
     public static string MainExeName => "ZYC.Framework.exe";

@@ -16,4 +16,12 @@ public class MCPServerConfig : IConfig
     ///     Gets or sets a value indicating whether the MCP service should start automatically.
     /// </summary>
     public bool AutoStart { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a regular expression matched against MCP tool names (case-insensitive).
+    ///     Matching tools are not exposed. Empty means all tools are exposed.
+    ///     Applied when the MCP server starts.
+    /// </summary>
+    /// <example>^SecretsManager_|^SettingsManager_Reset</example>
+    public string ExcludedToolsPattern { get; set; } = string.Empty;
 }

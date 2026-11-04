@@ -13,6 +13,7 @@ internal class Module : ModuleBase
 
     public override Task LoadAsync(ILifetimeScope lifetimeScope)
     {
+        lifetimeScope.RegisterTabItemFactory<MCPInspectorTabItemFactory>();
         lifetimeScope.RegisterToolsMainMenuItem<IMCPServerMainMenuItemsProvider>();
 
 
