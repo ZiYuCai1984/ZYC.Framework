@@ -4,6 +4,7 @@ using System.Windows;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
+using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.MainMenu;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Modules.MCP.Server.Abstractions;
@@ -17,17 +18,21 @@ internal partial class MCPServerStatusBarItemView : INotifyPropertyChanged
         ILogger<MCPServerStatusBarItemView> logger,
         IToastManager toastManager,
         ILifetimeScope lifetimeScope,
+        IEventAggregator eventAggregator,
         MCPServerConfig mcpServerConfig)
     {
         Logger = logger;
         ToastManager = toastManager;
         LifetimeScope = lifetimeScope;
+        EventAggregator = eventAggregator;
         MCPServerConfig = mcpServerConfig;
 
         InitializeComponent();
     }
 
     private IToastManager ToastManager { get; }
+
+    private IEventAggregator EventAggregator { get; }
 
     private ILifetimeScope LifetimeScope { get; }
 

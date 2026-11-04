@@ -11,6 +11,7 @@ public static class PatchNoteTools
         patchNote = patchNote.Replace("$(Version)", ProductInfo.Version);
         patchNote = patchNote.Replace("$(ReleaseDate)", DateTime.Now.ToString("yyyy-MM-dd"));
         patchNote = patchNote.Replace("$(DocumentUrl)", ProductInfoExtended.DocumentUrl);
+        patchNote = patchNote.Replace("$(IssuesUrl)", ProductInfoExtended.IssuesUrl);
 
         return patchNote;
     }

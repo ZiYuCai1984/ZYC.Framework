@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.RegularExpressions;
 using Autofac;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -14,11 +15,16 @@ public static class MCPAutoToolDiscoveryExtensions
     public static IMcpServerBuilder AddAutoDiscoveredTools(
         this IMcpServerBuilder builder,
         ILifetimeScope lifetimeScope,
-        IEnumerable<Assembly>? assemblies = null)
+        IEnumerable<Assembly>? assemblies = null,
+        string? excludedToolsPattern = null)
     {
         assemblies ??= AppDomain.CurrentDomain
             .GetAssemblies()
             .Where(a => !a.IsDynamic);
+
+        var excludedToolsRegex = string.IsNullOrWhiteSpace(excludedToolsPattern)
+            ? null
+            : new Regex(excludedToolsPattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         var tools = new List<McpServerTool>();
         var usedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -62,6 +68,12 @@ public static class MCPAutoToolDiscoveryExtensions
                         : $"{interfacePrefix}_{method.Name}";
 
                     var toolName = MakeUnique(baseName, usedNames);
+
+                    if (excludedToolsRegex?.IsMatch(toolName) == true)
+                    {
+                        continue;
+                    }
+
                     var requiresUIThread = methodAttr?.IsExplicitlySet == true
                         ? methodAttr.RequiresUIThread
                         : interfaceAttr.InvokeOnUIThread;
@@ -136,25 +148,6 @@ public static class MCPAutoToolDiscoveryExtensions
     }
 
 
-    private static string ResolveToolName(
-        Type iface,
-        MethodInfo method,
-        ExposeToMCPAttribute? ifaceAttr,
-        ExposeToMCPAttribute? methodAttr)
-    {
-        if (!string.IsNullOrWhiteSpace(methodAttr?.Name))
-        {
-            return SanitizeToolName(methodAttr.Name!);
-        }
-
-        var prefix =
-            !string.IsNullOrWhiteSpace(ifaceAttr?.Name)
-                ? ifaceAttr.Name!
-                : TrimLeadingI(iface.Name);
-
-        return SanitizeToolName($"{prefix}_{method.Name}");
-    }
-
     private static string TrimLeadingI(string interfaceName)
     {
         return interfaceName.Length >= 2 && interfaceName[0] == 'I' && char.IsUpper(interfaceName[1])
@@ -175,34 +168,6 @@ public static class MCPAutoToolDiscoveryExtensions
 
         var s = new string(buf[..j]).Trim('_');
         return string.IsNullOrWhiteSpace(s) ? "tool" : s;
-    }
-
-    private static string MakeUniqueName(string baseName, HashSet<string> usedNames)
-    {
-        var name = baseName;
-        var i = 2;
-        while (!usedNames.Add(name))
-        {
-            name = $"{baseName}_{i++}";
-        }
-
-        return name;
-    }
-
-    private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
-    {
-        try
-        {
-            return assembly.GetTypes();
-        }
-        catch (ReflectionTypeLoadException ex)
-        {
-            return ex.Types.Where(t => t is not null)!;
-        }
-        catch
-        {
-            return Array.Empty<Type>();
-        }
     }
 
     private sealed class UIThreadDelegatingMCPTool : DelegatingMcpServerTool

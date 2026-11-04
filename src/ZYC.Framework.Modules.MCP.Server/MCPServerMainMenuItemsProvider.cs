@@ -11,6 +11,7 @@ internal class MCPServerMainMenuItemsProvider : MainMenuItemsProvider, IMCPServe
 {
     public MCPServerMainMenuItemsProvider(ILifetimeScope lifetimeScope) : base(lifetimeScope)
     {
+        RegisterSubItem<InspectorMainMenuItem>();
         RegisterSubItem<StartServerMainMenuItem>();
         RegisterSubItem<StopServerMainMenuItem>();
     }

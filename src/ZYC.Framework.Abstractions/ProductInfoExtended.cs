@@ -7,6 +7,11 @@
 public static class ProductInfoExtended
 {
     /// <summary>
+    ///     Gets the name of the Command Line Interface (CLI) package id.
+    /// </summary>
+    public const string CLIPackageId = "ZYC.Framework.CLI";
+
+    /// <summary>
     ///     Gets the file name of the primary GUI application executable.
     /// </summary>
     public static string MainExeName => "ZYC.Framework.exe";
@@ -30,6 +35,11 @@ public static class ProductInfoExtended
     ///     Gets the document URL for the project.
     /// </summary>
     public static string DocumentUrl => "https://ziyucai1984.github.io/blob/zyc-framework/README.html";
+
+    /// <summary>
+    ///     Gets the issues URL for the project.
+    /// </summary>
+    public static string IssuesUrl => "https://github.com/ZiYuCai1984/ZYC.Framework/issues";
 
     /// <summary>
     ///     Gets the target .NET version the framework is built for (e.g., .NET 10.0).

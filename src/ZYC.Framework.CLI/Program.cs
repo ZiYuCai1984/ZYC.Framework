@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Autofac;
 using ZYC.CoreToolkit;
+using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Config;
 using ZYC.Framework.Abstractions.State;
 using ProductInfo = ZYC.Framework.Abstractions.ProductInfo;
@@ -72,6 +73,7 @@ internal class Program
         RegisterNewProjectCommand(rootCommand);
         RegisterNewModuleCommand(rootCommand);
         RegisterClearNuGetHttpCacheCommand(rootCommand);
+        RegisterUpdateCommand(rootCommand);
 
         optionRegister.FinalizeHandlers();
 
@@ -103,6 +105,43 @@ internal class Program
         });
 
         rootCommand.AddCommand(clearNuGetHttpCacheCommand);
+    }
+
+    private static void RegisterUpdateCommand(RootCommand rootCommand)
+    {
+        var updateCommand = new Command("update",
+            $"Update the {ProductInfoExtended.CLIPackageId} global dotnet tool to the latest version.");
+
+        updateCommand.SetHandler(async context =>
+        {
+            try
+            {
+                using var process = Process.Start(
+                    new ProcessStartInfo("dotnet", $"tool update --global {ProductInfoExtended.CLIPackageId}")
+                    {
+                        UseShellExecute = false
+                    })!;
+
+                // On Windows this running process locks its own files under the tool store,
+                // so 'dotnet tool update' can only replace them after we exit. Let it finish on its own.
+                if (OperatingSystem.IsWindows())
+                {
+                    context.Console.Out.Write(
+                        $"Updating {ProductInfoExtended.CLIPackageId} in the background. Its output will follow below.{Environment.NewLine}");
+                    return;
+                }
+
+                await process.WaitForExitAsync();
+                context.ExitCode = process.ExitCode;
+            }
+            catch (Exception exception)
+            {
+                context.Console.Error.Write($"{exception.Message}{Environment.NewLine}");
+                context.ExitCode = 1;
+            }
+        });
+
+        rootCommand.AddCommand(updateCommand);
     }
 
     private static void RegisterNewProjectCommand(RootCommand rootCommand)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ZYC.Framework.Abstractions;
 using ZYC.Framework.Abstractions.Notification.Toast;
 using ZYC.Framework.Modules.MCP.Server.Abstractions;
+using ZYC.Framework.Modules.MCP.Server.Abstractions.Event;
 
 namespace ZYC.Framework.Modules.MCP.Server.UI;
 
@@ -10,11 +11,21 @@ internal partial class MCPServerStatusBarItemView : IMCPServerManager
 {
     private readonly SemaphoreSlim _gate = new(1, 1);
 
+    private MCPServiceStatus _mcpServiceStatus = MCPServiceStatus.Stopped();
+
     private ILogger<MCPServerStatusBarItemView> Logger { get; }
 
     private MCPServer? MCPServer { get; set; }
 
-    private MCPServiceStatus MCPServiceStatus { get; set; } = MCPServiceStatus.Stopped();
+    private MCPServiceStatus MCPServiceStatus
+    {
+        get => _mcpServiceStatus;
+        set
+        {
+            _mcpServiceStatus = value;
+            EventAggregator.Publish(new MCPServiceStatusChangedEvent(value));
+        }
+    }
 
     public async Task StartServerAsync()
     {
@@ -35,7 +46,7 @@ internal partial class MCPServerStatusBarItemView : IMCPServerManager
 
                 server = LifetimeScope.Resolve<MCPServer>();
 
-                await server.StartAsync(MCPServerConfig.Port);
+                await server.StartAsync(MCPServerConfig.Port, MCPServerConfig.ExcludedToolsPattern);
 
                 MCPServer = server;
                 MCPServiceStatus = MCPServiceStatus.Running();

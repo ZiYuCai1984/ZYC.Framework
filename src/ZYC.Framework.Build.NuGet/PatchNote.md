@@ -6,28 +6,30 @@
 
 ## 🆕 New Features
 
-* Added in-tab navigation through `INavigableTabItemInstance` and `ITabManager.NavigateAsync(ITabItemInstance, Uri)`.
+* Added a built-in MCP Inspector under the MCP Server menu to browse and search grouped tools, inspect input schemas, execute tools with JSON arguments, and view formatted or raw results with execution timing.
+* Added `MCPServerConfig.ExcludedToolsPattern` to exclude auto-discovered MCP tools by a case-insensitive regular expression matched against tool names.
+* Added `zyc update` to update the globally installed `ZYC.Framework.CLI` tool to the latest version.
+* Added `MCPServiceStatusChangedEvent` for subscribing to MCP service status changes.
 
 ---
 
 ## 🛠 Improvements
 
-* The address bar now navigates within the current browser or file explorer tab when supported. Unsupported URIs are opened through the registered tab factories.
+* MCP Inspector includes server start/stop controls, endpoint copying, tool refresh, and JSON argument templates generated from input schemas.
+* On Windows, `zyc update` starts the update in the background and exits to release its own tool files.
 
 ---
 
 ## 🐛 Fixes
 
-* Fixed singleton tabs opening multiple instances when URI parameters differ. Opening an existing singleton now focuses its tab and workspace while preserving its current URI.
-* Fixed background URI changes and closing inactive tabs unexpectedly switching the selected tab.
-* Fixed persisted tab URI updates targeting the wrong tab when multiple tabs share the same URI.
+* Fixed actions in `Expander` headers also toggling the details. Expansion is now controlled by a dedicated chevron button.
 
 ---
 
 ## 🔄 Compatibility
 
-* **Breaking:** Replaced `TabInternalNavigatingAsync` with `NotifyUriChangedAsync` for URI change notifications. Update implementations and callers of the affected tab interfaces.
-* **Behavior change:** `IsSingle = true` now allows only one tab per registered factory across all workspaces, regardless of URI. Set it to `false` for multi-instance tabs; external opens then create new tabs even for the same URI. Text editors, hex editors, and text previews now explicitly allow multiple instances.
+* Tool exclusion is disabled by default. Changes to `ExcludedToolsPattern` take effect when the MCP server starts; restart a running server to apply them.
+* **Binary compatibility:** `MCPServer.StartAsync` and `MCPAutoToolDiscoveryExtensions.AddAutoDiscoveredTools` now include an optional `excludedToolsPattern` parameter. Existing source calls remain valid, but assemblies compiled against the previous signatures must be recompiled.
 
 ---
 
@@ -43,7 +45,7 @@ dotnet tool install --global ZYC.Framework.CLI --version $(Version)
 ## 📚 Resources
 
 * 📖 [Documentation]($(DocumentUrl))
-* 🐞 [Report an Issue](https://github.com/ZiYuCai1984/ZYC.Framework/issues)
+* 🐞 [Report an Issue]($(IssuesUrl))
 
 ---
 

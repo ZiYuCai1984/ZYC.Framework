@@ -39,7 +39,7 @@ public sealed class MCPServer : IAsyncDisposable
         await DisposeAsync();
     }
 
-    public async Task StartAsync(int port)
+    public async Task StartAsync(int port, string? excludedToolsPattern = null)
     {
         if (_app is not null)
         {
@@ -72,7 +72,7 @@ public sealed class MCPServer : IAsyncDisposable
                 };
             })
             .WithHttpTransport()
-            .AddAutoDiscoveredTools(LifetimeScope);
+            .AddAutoDiscoveredTools(LifetimeScope, excludedToolsPattern: excludedToolsPattern);
 
         var app = builder.Build();
 
