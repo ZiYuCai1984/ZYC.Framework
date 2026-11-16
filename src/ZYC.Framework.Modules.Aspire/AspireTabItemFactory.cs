@@ -7,7 +7,7 @@ using ZYC.Framework.Modules.Aspire.Abstractions;
 namespace ZYC.Framework.Modules.Aspire;
 
 [RegisterSingleInstance]
-[TabItemRoute(Host = AspireModuleContansts.Host)]
+[TabItemRoute(Host = AspireModuleConstants.Host)]
 internal class AspireTabItemFactory : TabItemFactoryBase
 {
     public override async Task<ITabItemInstance> CreateTabItemInstanceAsync(TabItemCreationContext context)

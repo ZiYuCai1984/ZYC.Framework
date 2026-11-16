@@ -31,7 +31,7 @@ internal partial class AspireStatusBarItemView : IDisposable, INotifyPropertyCha
 
     private IAspireServiceManager AspireServiceManager { get; }
 
-    public static string Icon => AspireModuleContansts.Icon;
+    public static string Icon => AspireModuleConstants.Icon;
 
     public IMainMenuItem[] MainMenuItems { get; }
 

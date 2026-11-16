@@ -49,6 +49,6 @@ public class NavigateToDashboardCommand : CommandBase, IDisposable
 
     protected override void InternalExecute(object? parameter)
     {
-        TabManager.NavigateAsync(AspireModuleContansts.Uri);
+        TabManager.NavigateAsync(AspireModuleConstants.Uri);
     }
 }
