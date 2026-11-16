@@ -8,7 +8,7 @@ using ZYC.Framework.Modules.Aspire.UI;
 namespace ZYC.Framework.Modules.Aspire;
 
 [Register]
-[ConstantsSource(typeof(AspireModuleContansts))]
+[ConstantsSource(typeof(AspireModuleConstants))]
 internal class AspireTabItem : TabItemInstanceBase<AspireView>
 {
     public AspireTabItem(ILifetimeScope lifetimeScope, TabReference tabReference) : base(lifetimeScope, tabReference)

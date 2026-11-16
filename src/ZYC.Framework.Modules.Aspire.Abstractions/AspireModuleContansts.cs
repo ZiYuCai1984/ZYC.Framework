@@ -4,7 +4,7 @@ namespace ZYC.Framework.Modules.Aspire.Abstractions;
 
 #pragma warning disable CS1591
 
-public static class AspireModuleContansts
+public static class AspireModuleConstants
 {
     public const string Host = "aspire";
 

@@ -1,0 +1,7 @@
+﻿.vs/
+_bin/
+_bin_build/
+bin/
+obj/
+node_modules/
+ClientApp/dist/

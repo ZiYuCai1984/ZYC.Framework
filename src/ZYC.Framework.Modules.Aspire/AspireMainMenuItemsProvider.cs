@@ -20,8 +20,8 @@ internal class AspireMainMenuItemsProvider : MainMenuItemsProvider, IAspireMainM
 
     public override MenuItemInfo Info => new()
     {
-        Title = AspireModuleContansts.Title,
-        Icon = AspireModuleContansts.Icon,
+        Title = AspireModuleConstants.Title,
+        Icon = AspireModuleConstants.Icon,
         Localization = false
     };
 }

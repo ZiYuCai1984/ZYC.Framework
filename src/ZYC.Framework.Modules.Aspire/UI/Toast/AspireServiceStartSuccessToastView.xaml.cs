@@ -14,7 +14,7 @@ internal partial class AspireServiceStartSuccessToastView
         InitializeComponent();
     }
 
-    public Uri TargetUri => AspireModuleContansts.Uri;
+    public Uri TargetUri => AspireModuleConstants.Uri;
 
     private NavigateCommand NavigateCommand { get; }
 

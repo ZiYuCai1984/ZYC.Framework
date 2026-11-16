@@ -13,7 +13,7 @@ internal class DashboardMainMenuItem : MainMenuItem
         Info = new MenuItemInfo
         {
             Title = "Dashboard",
-            Icon = AspireModuleContansts.Icon
+            Icon = AspireModuleConstants.Icon
         };
 
         Command = navigateToDashboardCommand;

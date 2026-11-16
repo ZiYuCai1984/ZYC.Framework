@@ -9,6 +9,7 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:wpf="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:core="clr-namespace:ZYC.Framework.Core;assembly=ZYC.Framework.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              ThemeMode="Light">
@@ -76,7 +77,24 @@
                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     </Style>
 
+                    <Style x:Key="HybridIcon16Style"
+                           TargetType="{x:Type core:HybridIcon}">
+                        <Setter Property="Width" Value="16" />
+                        <Setter Property="Height" Value="16" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
 
+                    <Style x:Key="PackIconMaterial16Style"
+                           TargetType="{x:Type iconPacks:PackIconMaterial}">
+                        <Setter Property="Width" Value="16" />
+                        <Setter Property="Height" Value="16" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
 
 
                     <!-- Emoji.Wpf.TextBox assigns its emoji template locally; style its internal editor instead. -->
