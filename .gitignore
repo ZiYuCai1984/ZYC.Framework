@@ -4,3 +4,8 @@
 !src/ZYC.Framework.CLI/Template/Projects/build/__PROJECT_NAME__.Build/
 !src/ZYC.Framework.CLI/Template/Projects/build/__PROJECT_NAME__.Build/**
 .claude/
+
+# npm artifacts from editing front-end project templates (run `npm install` there for IntelliSense)
+src/ZYC.Framework.CLI/Template/**/node_modules/
+src/ZYC.Framework.CLI/Template/**/dist/
+src/ZYC.Framework.CLI/Template/**/package-lock.json

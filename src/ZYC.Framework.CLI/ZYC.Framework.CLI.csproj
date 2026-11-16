@@ -10,11 +10,21 @@
     <NoDefaultExcludes>true</NoDefaultExcludes>
   </PropertyGroup>
 
+  <!--
+    Front-end templates (for example Template\Projects\react\ClientApp) may have `npm install` run in them so
+    Visual Studio can resolve their TypeScript types. Keep those npm artifacts out of the build output, which is
+    what the tool package, the ZYC.Framework.Alpha package and every generated project are copied from.
+  -->
+  <PropertyGroup>
+    <TemplateNpmArtifacts>Template\**\node_modules\**;Template\**\dist\**;Template\**\package-lock.json</TemplateNpmArtifacts>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Template\**\node_modules\**</DefaultItemExcludes>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Template\**\*.cs" />
     <Page Remove="Template\**\*.xaml" />
     <None Remove="Template\**\*" />
-    <None Include="Template\**\*">
+    <None Include="Template\**\*" Exclude="$(TemplateNpmArtifacts)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <!--<Pack>true</Pack>
       <PackagePath>tools\net10.0\any\Template\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>-->
