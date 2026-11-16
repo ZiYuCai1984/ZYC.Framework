@@ -1,0 +1,36 @@
+﻿:root {
+  color-scheme: light dark;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.card {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 8px;
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+button {
+  font: inherit;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}

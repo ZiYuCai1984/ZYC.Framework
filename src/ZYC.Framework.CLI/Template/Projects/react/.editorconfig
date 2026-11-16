@@ -1,0 +1,18 @@
+﻿[*]
+charset = utf-8-bom
+
+[*.{csproj,vbproj,fsproj,targets,props,xml}]
+indent_style = space
+indent_size = 2
+
+[*.DotSettings]
+indent_style = tab
+
+[*.fx]
+charset = utf-8
+
+# Front-end files are read by Node.js tooling (npm, Vite, TypeScript); keep them free of a BOM.
+[ClientApp/**]
+charset = utf-8
+indent_style = space
+indent_size = 2

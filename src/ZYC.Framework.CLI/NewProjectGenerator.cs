@@ -11,13 +11,16 @@ public static class NewProjectGenerator
 
     private static readonly UTF8Encoding Utf8BomEncoding = new(true);
 
+    private static readonly UTF8Encoding Utf8NoBomEncoding = new(false);
+
     private static readonly string[] SupportedTemplateNames =
     [
         DefaultTemplateName,
         "modular",
         "console",
         "build",
-        "wpf"
+        "wpf",
+        "react"
     ];
 
     private static readonly Regex ProjectNameRegex = new(
@@ -34,15 +37,34 @@ public static class NewProjectGenerator
     {
         ".cs",
         ".csproj",
+        ".css",
+        ".html",
         ".json",
         ".md",
         ".props",
         ".slnx",
         ".targets",
+        ".ts",
+        ".tsx",
         ".xaml",
         ".xml",
         ".yaml",
         ".yml"
+    };
+
+    // Front-end files are read by Node.js tooling (npm, Vite, TypeScript), so they are written without a BOM.
+    private static readonly HashSet<string> NoBomTextTemplateFileNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "package.json",
+        "tsconfig.json"
+    };
+
+    private static readonly HashSet<string> NoBomTextTemplateFileExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".css",
+        ".html",
+        ".ts",
+        ".tsx"
     };
 
     public static IReadOnlyList<string> TemplateNames => SupportedTemplateNames;
@@ -100,7 +122,39 @@ public static class NewProjectGenerator
         return new ProjectNameInfo(
             name,
             shortName,
-            shortName.ToLowerInvariant());
+            shortName.ToLowerInvariant(),
+            ToWebName(name));
+    }
+
+    /// <summary>
+    ///     Converts a project name to a lowercase, hyphen-separated name that is valid both as an npm package
+    ///     name and as a DNS label, for example 'Acme.BookStore' to 'acme-bookstore'.
+    /// </summary>
+    private static string ToWebName(string name)
+    {
+        const int maxDnsLabelLength = 63;
+
+        var builder = new StringBuilder(name.Length);
+        foreach (var c in name.ToLowerInvariant())
+        {
+            if (char.IsAsciiLetterOrDigit(c))
+            {
+                builder.Append(c);
+            }
+            else if (builder.Length > 0 && builder[^1] != '-')
+            {
+                builder.Append('-');
+            }
+        }
+
+        var webName = builder.ToString();
+        if (webName.Length > maxDnsLabelLength)
+        {
+            webName = webName[..maxDnsLabelLength];
+        }
+
+        webName = webName.TrimEnd('-');
+        return webName.Length == 0 ? "app" : webName;
     }
 
     private static string ResolveTemplateName(string? template)
@@ -159,6 +213,7 @@ public static class NewProjectGenerator
             ["__PROJECT_NAME__"] = nameInfo.FullName,
             ["__PROJECT_SHORT_NAME__"] = nameInfo.ShortName,
             ["__PROJECT_HOST__"] = nameInfo.Host,
+            ["__PROJECT_WEB_NAME__"] = nameInfo.WebName,
             ["__V_ZYC_FRAMEWORK_ALPHA__"] = packageVersion,
             ["__V_ZYC_CORETOOLKIT__"] =
                 NuGetTools.GetDependencyNuGetVersion(typeof(NewProjectGenerator).Assembly, "ZYC.CoreToolkit")!
@@ -191,7 +246,10 @@ public static class NewProjectGenerator
             var content = File.ReadAllText(templateFilePath);
             content = ReplaceTokens(content, replacements);
             content = NormalizeLineEndings(content);
-            File.WriteAllText(targetFilePath, content, Utf8BomEncoding);
+            File.WriteAllText(
+                targetFilePath,
+                content,
+                IsNoBomTextTemplateFile(templateFilePath) ? Utf8NoBomEncoding : Utf8BomEncoding);
         }
         else
         {
@@ -222,6 +280,12 @@ public static class NewProjectGenerator
         return TextTemplateFileExtensions.Contains(Path.GetExtension(filePath));
     }
 
+    private static bool IsNoBomTextTemplateFile(string filePath)
+    {
+        return NoBomTextTemplateFileNames.Contains(Path.GetFileName(filePath))
+               || NoBomTextTemplateFileExtensions.Contains(Path.GetExtension(filePath));
+    }
+
     private static string NormalizeLineEndings(string content)
     {
         return content.Replace("\r\n", "\n", StringComparison.Ordinal)
@@ -232,5 +296,6 @@ public static class NewProjectGenerator
     private sealed record ProjectNameInfo(
         string FullName,
         string ShortName,
-        string Host);
+        string Host,
+        string WebName);
 }

@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IgnoreFromPublish>true</IgnoreFromPublish>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- React front end (Vite + TypeScript). -->
+    <ClientAppRoot>ClientApp\</ClientAppRoot>
+    <!-- Output subfolder that UI/__PROJECT_SHORT_NAME__View.cs maps to its virtual host. -->
+    <ClientAppOutputFolder>ClientApp\</ClientAppOutputFolder>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(ClientAppRoot)node_modules\**;$(ClientAppRoot)dist\**</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ZYC.Framework.Alpha" Version="__V_ZYC_FRAMEWORK_ALPHA__" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ZYC.Framework.Abstractions">
+      <HintPath>$(OutputPath)ZYC.Framework.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="ZYC.Framework.WebView2">
+      <HintPath>$(OutputPath)ZYC.Framework.WebView2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>$(OutputPath)Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf">
+      <HintPath>$(OutputPath)Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ModuleConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>../settings/ModuleConfig.json</Link>
+    </None>
+  </ItemGroup>
+
+  <!--
+    Front-end build: npm install (when package.json changes) and npm run build (when the
+    sources change), then copy ClientApp/dist into the output folder.
+    Pass -p:SkipClientAppBuild=true to skip it.
+  -->
+  <ItemGroup>
+    <ClientAppSource Include="$(ClientAppRoot)src\**\*;$(ClientAppRoot)public\**\*" />
+    <ClientAppSource Include="$(ClientAppRoot)index.html;$(ClientAppRoot)*.json;$(ClientAppRoot)*.ts" />
+    <UpToDateCheckInput Include="@(ClientAppSource)" />
+  </ItemGroup>
+
+  <Target Name="ClientAppEnsureNode">
+    <Exec Command="node --version" ContinueOnError="true" StandardOutputImportance="low">
+      <Output TaskParameter="ExitCode" PropertyName="ClientAppNodeExitCode" />
+    </Exec>
+    <Error Condition="'$(ClientAppNodeExitCode)' != '0'"
+           Text="Node.js is required to build the React front end in $(ClientAppRoot). Install it from https://nodejs.org/ and restart your shell or IDE." />
+  </Target>
+
+  <Target Name="ClientAppNpmInstall"
+          DependsOnTargets="ClientAppEnsureNode"
+          Inputs="$(ClientAppRoot)package.json"
+          Outputs="$(ClientAppRoot)node_modules\.install-stamp">
+    <Exec Command="npm install" WorkingDirectory="$(ClientAppRoot)" />
+    <Touch Files="$(ClientAppRoot)node_modules\.install-stamp" AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="ClientAppBuild"
+          DependsOnTargets="ClientAppNpmInstall"
+          Inputs="@(ClientAppSource)"
+          Outputs="$(ClientAppRoot)dist\index.html">
+    <Exec Command="npm run build" WorkingDirectory="$(ClientAppRoot)" />
+  </Target>
+
+  <Target Name="ClientAppCopyToOutput"
+          AfterTargets="Build"
+          DependsOnTargets="ClientAppBuild"
+          Condition="'$(SkipClientAppBuild)' != 'true'">
+    <ItemGroup>
+      <ClientAppDistFile Include="$(ClientAppRoot)dist\**\*" />
+    </ItemGroup>
+    <!-- Vite emits hashed file names; start clean so stale bundles do not pile up. -->
+    <RemoveDir Directories="$(OutDir)$(ClientAppOutputFolder)" />
+    <Copy SourceFiles="@(ClientAppDistFile)"
+          DestinationFiles="@(ClientAppDistFile->'$(OutDir)$(ClientAppOutputFolder)%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>

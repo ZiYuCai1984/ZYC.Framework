@@ -62,6 +62,44 @@ MyCompany.Tools/
 
 Use this template when you want the shortest path to a runnable host and the feature surface is one simple WPF view.
 
+## `react` Template
+
+`react` creates the same single-project host as `minimal`, but its tab is a WebView2 view that shows a React front end built with Vite and TypeScript. Building the project requires Node.js 20.19+ or 22.12+.
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+Generated structure:
+
+```text
+MyCompany.Tools/
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` derives from `WebViewHostBase` and serves the built front end from the virtual host `https://<web-name>.example/`, where `<web-name>` is the `__PROJECT_WEB_NAME__` value, for example `mycompany-tools`.
+- Building the project runs `npm install` when `ClientApp/package.json` changes and `npm run build` when front-end sources change, then copies `ClientApp/dist` to `ClientApp/` in the output directory. Pass `-p:SkipClientAppBuild=true` to skip this step.
+- In Debug builds, the view loads the Vite dev server at `http://localhost:5173` while `npm run dev` is running, so front-end changes appear without rebuilding.
+- `ClientApp/src/webview.ts` wraps the `window.chrome.webview` bridge. The generated page sends a `ping` message, and `OnWebMessageReceived` in the view replies with `pong`.
+
+Use this template when you want to build the tab UI with React instead of XAML.
+
 ## `console` Template
 
 `console` creates a `net10.0` console solution with shared build properties and a console project that references `ZYC.CoreToolkit` 4.0.0.
@@ -168,7 +206,7 @@ Use this template when the feature should look like a real framework module: pub
 | Option | Description |
 | --- | --- |
 | `<ProjectName>` | Required project name. It must be a valid dotted C# identifier, for example `Acme.Tools`. |
-| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, and `wpf`. Defaults to `minimal`. |
+| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, `wpf`, and `react`. Defaults to `minimal`. |
 | `--output`, `-o` | Output directory. Defaults to `./<ProjectName>`. |
 | `--package-version` | `ZYC.Framework.Alpha` package version. Defaults to the CLI product version. |
 | `--overwrite`, `-f` | Overwrite existing files. Without this flag, existing target files fail the generation. |
@@ -234,15 +272,17 @@ Project templates replace these tokens in paths and text files:
 | `__PROJECT_NAME__` | Full project name, for example `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | Last dotted segment, for example `Tools`. |
 | `__PROJECT_HOST__` | Lowercase short name used as the URI host, for example `tools`. |
+| `__PROJECT_WEB_NAME__` | Lowercase, hyphen-separated full name used as the npm package name and the WebView2 virtual host, for example `mycompany-tools`. |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | Package version selected by `--package-version` or the CLI product version. |
 
-Text template files are written as UTF-8 with BOM and normalized to CRLF line endings.
+Text template files are normalized to CRLF line endings and written as UTF-8 with BOM. Front-end files (`package.json`, `tsconfig.json`, `.ts`, `.tsx`, `.html`, `.css`) are written without a BOM because Node.js tooling reads them.
 
 ## Choosing a Template
 
 | Situation | Recommended command |
 | --- | --- |
 | You want the fastest possible host with one view. | `zyc new MyCompany.Tools` |
+| You want the tab UI written in React. | `zyc new MyCompany.Tools --template react` |
 | You want a console application that references `ZYC.CoreToolkit`. | `zyc new MyCompany.Tools --template console` |
 | You want an independent build project for versioning, compilation, and packaging. | `zyc new MyCompany.Tools --template build` |
 | You want a WPF application with Autofac and settings bootstrap. | `zyc new MyCompany.Desktop --template wpf` |
@@ -305,6 +345,44 @@ MyCompany.Tools/
 ```
 
 最短で実行可能な Host を作り、機能面が 1 つの単純な WPF ビューで足りる場合に使います。
+
+## `react` テンプレート
+
+`react` は `minimal` と同じ単一プロジェクトの Host を作成しますが、タブは Vite と TypeScript でビルドした React フロントエンドを表示する WebView2 ビューになります。プロジェクトのビルドには Node.js 20.19 以上または 22.12 以上が必要です。
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+生成される構成:
+
+```text
+MyCompany.Tools/
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` は `WebViewHostBase` を継承し、ビルド済みのフロントエンドを仮想ホスト `https://<web-name>.example/` から提供します。`<web-name>` は `__PROJECT_WEB_NAME__` の値です。例: `mycompany-tools`。
+- プロジェクトをビルドすると、`ClientApp/package.json` が変わったときは `npm install`、フロントエンドのソースが変わったときは `npm run build` を実行し、`ClientApp/dist` を出力ディレクトリの `ClientApp/` にコピーします。この手順を省くには `-p:SkipClientAppBuild=true` を渡します。
+- Debug ビルドでは、`npm run dev` の実行中はビューが Vite 開発サーバー `http://localhost:5173` を読み込むため、再ビルドせずにフロントエンドの変更が反映されます。
+- `ClientApp/src/webview.ts` は `window.chrome.webview` ブリッジをラップします。生成されたページは `ping` メッセージを送り、ビューの `OnWebMessageReceived` が `pong` を返します。
+
+タブの UI を XAML ではなく React で作りたい場合に使います。
 
 ## `console` テンプレート
 
@@ -412,7 +490,7 @@ MyCompany.Tools/
 | オプション | 説明 |
 | --- | --- |
 | `<ProjectName>` | 必須のプロジェクト名。`Acme.Tools` のような有効なドット区切り C# 識別子である必要があります。 |
-| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`。既定は `minimal`。 |
+| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`、`react`。既定は `minimal`。 |
 | `--output`, `-o` | 出力ディレクトリ。既定は `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` のパッケージ バージョン。既定は CLI の製品バージョン。 |
 | `--overwrite`, `-f` | 既存ファイルを上書きする。この指定がない場合、対象ファイルが存在すると生成は失敗します。 |
@@ -478,15 +556,17 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完全なプロジェクト名。例: `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後のドット区切りセグメント。例: `Tools`。 |
 | `__PROJECT_HOST__` | URI host として使う小文字の短い名前。例: `tools`。 |
+| `__PROJECT_WEB_NAME__` | npm パッケージ名と WebView2 仮想ホストに使う、小文字でハイフン区切りの完全な名前。例: `mycompany-tools`。 |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
 
-テキスト テンプレート ファイルは UTF-8 with BOM で書き込まれ、CRLF 改行に正規化されます。
+テキスト テンプレート ファイルは CRLF 改行に正規化され、UTF-8 with BOM で書き込まれます。フロントエンド ファイル (`package.json`、`tsconfig.json`、`.ts`、`.tsx`、`.html`、`.css`) は Node.js のツールが読み込むため、BOM なしで書き込まれます。
 
 ## テンプレートの選び方
 
 | 状況 | 推奨コマンド |
 | --- | --- |
 | 1 つのビューを持つ最速の Host が欲しい。 | `zyc new MyCompany.Tools` |
+| タブの UI を React で作りたい。 | `zyc new MyCompany.Tools --template react` |
 | `ZYC.CoreToolkit` を参照するコンソール アプリケーションが欲しい。 | `zyc new MyCompany.Tools --template console` |
 | バージョン管理、コンパイル、パッケージ作成用の独立したビルド プロジェクトが欲しい。 | `zyc new MyCompany.Tools --template build` |
 | Autofac と設定のブートストラップを備えた WPF アプリケーションが欲しい。 | `zyc new MyCompany.Desktop --template wpf` |
@@ -549,6 +629,44 @@ MyCompany.Tools/
 ```
 
 当你想用最短路径得到可运行 Host，并且功能表面只是一个简单 WPF View 时，使用这个模板。
+
+## `react` 模板
+
+`react` 会创建与 `minimal` 相同的单项目 Host，但它的 Tab 是一个 WebView2 View，显示用 Vite 和 TypeScript 构建的 React 前端。构建该项目需要 Node.js 20.19+ 或 22.12+。
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+生成结构：
+
+```text
+MyCompany.Tools/
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` 继承 `WebViewHostBase`，通过虚拟主机 `https://<web-name>.example/` 提供构建好的前端，其中 `<web-name>` 是 `__PROJECT_WEB_NAME__` 的值，例如 `mycompany-tools`。
+- 构建项目时，`ClientApp/package.json` 变化后会执行 `npm install`，前端源码变化后会执行 `npm run build`，然后把 `ClientApp/dist` 复制到输出目录下的 `ClientApp/`。传入 `-p:SkipClientAppBuild=true` 可跳过这一步。
+- 在 Debug 构建中，只要 `npm run dev` 正在运行，View 就会加载 Vite 开发服务器 `http://localhost:5173`，前端改动无需重新构建即可生效。
+- `ClientApp/src/webview.ts` 封装了 `window.chrome.webview` 桥接。生成的页面会发送 `ping` 消息，View 中的 `OnWebMessageReceived` 会回复 `pong`。
+
+当你想用 React 而不是 XAML 编写 Tab 界面时，使用这个模板。
 
 ## `console` 模板
 
@@ -656,7 +774,7 @@ MyCompany.Tools/
 | 选项 | 说明 |
 | --- | --- |
 | `<ProjectName>` | 必填项目名。必须是有效的点分隔 C# 标识符，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console`、`build` 和 `wpf`，默认 `minimal`。 |
+| `--template`, `-t` | 项目模板。支持 `minimal`、`modular`、`console`、`build`、`wpf` 和 `react`，默认 `minimal`。 |
 | `--output`, `-o` | 输出目录。默认 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 包版本。默认使用 CLI 产品版本。 |
 | `--overwrite`, `-f` | 覆盖已有文件。不指定时，如果目标文件已存在，生成会失败。 |
@@ -722,15 +840,17 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完整项目名，例如 `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最后一个点分隔片段，例如 `Tools`。 |
 | `__PROJECT_HOST__` | 用作 URI Host 的小写短名称，例如 `tools`。 |
+| `__PROJECT_WEB_NAME__` | 小写、以连字符分隔的完整名称，用作 npm 包名和 WebView2 虚拟主机，例如 `mycompany-tools`。 |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | 由 `--package-version` 或 CLI 产品版本决定的包版本。 |
 
-文本模板文件会以 UTF-8 with BOM 写入，并统一为 CRLF 换行。
+文本模板文件会统一为 CRLF 换行，并以 UTF-8 with BOM 写入。前端文件（`package.json`、`tsconfig.json`、`.ts`、`.tsx`、`.html`、`.css`）由 Node.js 工具读取，因此写入时不带 BOM。
 
 ## 如何选择模板
 
 | 情况 | 推荐命令 |
 | --- | --- |
 | 你想最快得到一个只有一个 View 的 Host。 | `zyc new MyCompany.Tools` |
+| 你想用 React 编写 Tab 界面。 | `zyc new MyCompany.Tools --template react` |
 | 你想创建一个引用 `ZYC.CoreToolkit` 的控制台应用。 | `zyc new MyCompany.Tools --template console` |
 | 你需要独立的编译项目来管理版本、编译和打包。 | `zyc new MyCompany.Tools --template build` |
 | 你想创建一个带 Autofac 和配置启动逻辑的 WPF 应用。 | `zyc new MyCompany.Desktop --template wpf` |
@@ -793,6 +913,44 @@ MyCompany.Tools/
 ```
 
 當你想用最短路徑得到可執行 Host，且功能表面只是一個簡單 WPF View 時，使用這個範本。
+
+## `react` 範本
+
+`react` 會建立與 `minimal` 相同的單一專案 Host，但它的 Tab 是一個 WebView2 View，顯示以 Vite 與 TypeScript 建置的 React 前端。建置此專案需要 Node.js 20.19+ 或 22.12+。
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+生成結構：
+
+```text
+MyCompany.Tools/
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` 繼承 `WebViewHostBase`，透過虛擬主機 `https://<web-name>.example/` 提供建置好的前端，其中 `<web-name>` 是 `__PROJECT_WEB_NAME__` 的值，例如 `mycompany-tools`。
+- 建置專案時，`ClientApp/package.json` 變更後會執行 `npm install`，前端原始碼變更後會執行 `npm run build`，然後把 `ClientApp/dist` 複製到輸出目錄下的 `ClientApp/`。傳入 `-p:SkipClientAppBuild=true` 可略過這一步。
+- 在 Debug 建置中，只要 `npm run dev` 正在執行，View 就會載入 Vite 開發伺服器 `http://localhost:5173`，前端變更不需重新建置即可生效。
+- `ClientApp/src/webview.ts` 封裝了 `window.chrome.webview` 橋接。產生的頁面會傳送 `ping` 訊息，View 中的 `OnWebMessageReceived` 會回覆 `pong`。
+
+當你想用 React 而不是 XAML 撰寫 Tab 介面時，使用這個範本。
 
 ## `console` 範本
 
@@ -900,7 +1058,7 @@ MyCompany.Tools/
 | 選項 | 說明 |
 | --- | --- |
 | `<ProjectName>` | 必填專案名。必須是有效的點分隔 C# 識別碼，例如 `Acme.Tools`。 |
-| `--template`, `-t` | 專案範本。支援 `minimal`、`modular`、`console`、`build` 與 `wpf`，預設 `minimal`。 |
+| `--template`, `-t` | 專案範本。支援 `minimal`、`modular`、`console`、`build`、`wpf` 與 `react`，預設 `minimal`。 |
 | `--output`, `-o` | 輸出目錄。預設 `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` 套件版本。預設使用 CLI 產品版本。 |
 | `--overwrite`, `-f` | 覆蓋既有檔案。不指定時，如果目標檔案已存在，生成會失敗。 |
@@ -966,15 +1124,17 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完整專案名，例如 `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後一個點分隔片段，例如 `Tools`。 |
 | `__PROJECT_HOST__` | 用作 URI Host 的小寫短名稱，例如 `tools`。 |
+| `__PROJECT_WEB_NAME__` | 小寫、以連字號分隔的完整名稱，用作 npm 套件名稱與 WebView2 虛擬主機，例如 `mycompany-tools`。 |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | 由 `--package-version` 或 CLI 產品版本決定的套件版本。 |
 
-文字範本檔案會以 UTF-8 with BOM 寫入，並統一為 CRLF 換行。
+文字範本檔案會統一為 CRLF 換行，並以 UTF-8 with BOM 寫入。前端檔案（`package.json`、`tsconfig.json`、`.ts`、`.tsx`、`.html`、`.css`）由 Node.js 工具讀取，因此寫入時不帶 BOM。
 
 ## 如何選擇範本
 
 | 情況 | 建議命令 |
 | --- | --- |
 | 你想最快得到一個只有一個 View 的 Host。 | `zyc new MyCompany.Tools` |
+| 你想用 React 撰寫 Tab 介面。 | `zyc new MyCompany.Tools --template react` |
 | 你想建立一個引用 `ZYC.CoreToolkit` 的主控台應用。 | `zyc new MyCompany.Tools --template console` |
 | 你需要獨立的編譯專案來管理版本、編譯和封裝。 | `zyc new MyCompany.Tools --template build` |
 | 你想建立一個帶有 Autofac 與設定啟動邏輯的 WPF 應用程式。 | `zyc new MyCompany.Desktop --template wpf` |
@@ -1037,6 +1197,44 @@ MyCompany.Tools/
 ```
 
 하나의 단순한 WPF 뷰만 필요한 실행 가능한 Host를 가장 빠르게 만들고 싶을 때 사용합니다.
+
+## `react` 템플릿
+
+`react`는 `minimal`과 같은 단일 프로젝트 Host를 만들지만, 탭은 Vite와 TypeScript로 빌드한 React 프런트엔드를 표시하는 WebView2 뷰입니다. 프로젝트를 빌드하려면 Node.js 20.19 이상 또는 22.12 이상이 필요합니다.
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+생성 구조:
+
+```text
+MyCompany.Tools/
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView`는 `WebViewHostBase`를 상속하며, 빌드된 프런트엔드를 가상 호스트 `https://<web-name>.example/`에서 제공합니다. `<web-name>`은 `__PROJECT_WEB_NAME__` 값입니다. 예: `mycompany-tools`.
+- 프로젝트를 빌드하면 `ClientApp/package.json`이 바뀌었을 때 `npm install`을, 프런트엔드 소스가 바뀌었을 때 `npm run build`를 실행한 뒤 `ClientApp/dist`를 출력 디렉터리의 `ClientApp/`으로 복사합니다. 이 단계를 건너뛰려면 `-p:SkipClientAppBuild=true`를 전달합니다.
+- Debug 빌드에서는 `npm run dev`가 실행 중이면 뷰가 Vite 개발 서버 `http://localhost:5173`을 로드하므로, 다시 빌드하지 않아도 프런트엔드 변경이 반영됩니다.
+- `ClientApp/src/webview.ts`는 `window.chrome.webview` 브리지를 감쌉니다. 생성된 페이지는 `ping` 메시지를 보내고, 뷰의 `OnWebMessageReceived`가 `pong`으로 응답합니다.
+
+탭 UI를 XAML 대신 React로 만들고 싶을 때 사용합니다.
 
 ## `console` 템플릿
 
@@ -1144,7 +1342,7 @@ MyCompany.Tools/
 | 옵션 | 설명 |
 | --- | --- |
 | `<ProjectName>` | 필수 프로젝트 이름. `Acme.Tools`처럼 유효한 점 구분 C# 식별자여야 합니다. |
-| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `build`, `wpf`입니다. 기본값은 `minimal`입니다. |
+| `--template`, `-t` | 프로젝트 템플릿. 지원 값은 `minimal`, `modular`, `console`, `build`, `wpf`, `react`입니다. 기본값은 `minimal`입니다. |
 | `--output`, `-o` | 출력 디렉터리. 기본값은 `./<ProjectName>`입니다. |
 | `--package-version` | `ZYC.Framework.Alpha` 패키지 버전. 기본값은 CLI 제품 버전입니다. |
 | `--overwrite`, `-f` | 기존 파일을 덮어씁니다. 이 플래그가 없으면 대상 파일이 있을 때 생성이 실패합니다. |
@@ -1210,15 +1408,17 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 전체 프로젝트 이름. 예: `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | 마지막 점 구분 세그먼트. 예: `Tools`. |
 | `__PROJECT_HOST__` | URI host로 사용하는 소문자 짧은 이름. 예: `tools`. |
+| `__PROJECT_WEB_NAME__` | npm 패키지 이름과 WebView2 가상 호스트로 사용하는, 하이픈으로 구분된 소문자 전체 이름. 예: `mycompany-tools`. |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` 또는 CLI 제품 버전으로 선택된 패키지 버전. |
 
-텍스트 템플릿 파일은 UTF-8 with BOM으로 작성되고 CRLF 줄 끝으로 정규화됩니다.
+텍스트 템플릿 파일은 CRLF 줄 끝으로 정규화되고 UTF-8 with BOM으로 작성됩니다. 프런트엔드 파일(`package.json`, `tsconfig.json`, `.ts`, `.tsx`, `.html`, `.css`)은 Node.js 도구가 읽기 때문에 BOM 없이 작성됩니다.
 
 ## 템플릿 선택
 
 | 상황 | 권장 명령 |
 | --- | --- |
 | 하나의 뷰가 있는 가장 빠른 Host가 필요합니다. | `zyc new MyCompany.Tools` |
+| 탭 UI를 React로 만들고 싶습니다. | `zyc new MyCompany.Tools --template react` |
 | `ZYC.CoreToolkit`을 참조하는 콘솔 애플리케이션이 필요합니다. | `zyc new MyCompany.Tools --template console` |
 | 버전 관리, 컴파일 및 패키징을 위한 독립적인 빌드 프로젝트가 필요합니다. | `zyc new MyCompany.Tools --template build` |
 | Autofac 및 설정 부트스트랩이 포함된 WPF 애플리케이션이 필요합니다. | `zyc new MyCompany.Desktop --template wpf` |
