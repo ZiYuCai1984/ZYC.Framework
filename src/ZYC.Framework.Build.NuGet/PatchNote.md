@@ -6,30 +6,27 @@
 
 ## 🆕 New Features
 
-* Added the `react` project template. `zyc new <ProjectName> --template react` creates a host whose tab is a WebView2 view running a Vite + React + TypeScript front end, with a typed `window.chrome.webview` message bridge between the page and C#.
-* Added the `__PROJECT_WEB_NAME__` project template token: a lowercase, hyphen-separated project name used as the npm package name and the WebView2 virtual host, for example `mycompany-tools`.
-* Added the application-level `HybridIcon16Style` and `PackIconMaterial16Style` styles for 16 px icons.
+* Added `AppConfig.IconPath` to replace the application icon with an `.ico` file. The icon is used for the main window, the taskbar, the tray icon, dialogs, and the desktop shortcut. Set it in `settings/AppConfig.json`; a relative path is resolved against the application root directory (the folder that contains `settings`). Changes take effect after a restart. If the file cannot be loaded, a warning is logged and the icon embedded in the executable is used.
+* Added `IconTools.SetOverrideIcon` and `IconTools.OverrideIconPath` to `ZYC.Framework.Core`. `SetOverrideIcon` must be called before any window or tray icon reads the application icon.
 
 ---
 
 ## 🛠 Improvements
 
-* Projects created from the `react` template build their front end as part of `dotnet build`: `npm install` runs when `package.json` changes and `npm run build` runs when front-end sources change. Debug builds load the Vite dev server at `http://localhost:5173` while `npm run dev` is running, so front-end changes appear without rebuilding.
-* `zyc new` writes front-end template files (`package.json`, `tsconfig.json`, `.ts`, `.tsx`, `.html`, `.css`) as UTF-8 without a BOM so Node.js tooling reads them correctly. Other text files are still written as UTF-8 with BOM.
-* The `minimal` template now includes an `.editorconfig`, and the `.editorconfig` files of the `console`, `build`, and `wpf` templates add rules for `*.DotSettings` and `*.fx` files.
+* The `minimal` and `react` project templates now generate `Directory.Build.props` and `Directory.Build.targets`, like the other templates. The target framework, WPF, nullable, and implicit-usings settings move out of the project file, and the `ZYC.Framework.Alpha` version is set in `Directory.Build.targets`. Once the package is restored, `Directory.Build.targets` also imports the package's dependency versions, so `ZYC.CoreToolkit.*` and other framework dependencies added later can omit `Version`.
+* Added XML documentation for `DropAction`, `DropContext`, and `TabItemsPreloadCompletedEvent`.
 
 ---
 
 ## 🐛 Fixes
 
-None
+* Fixed the page of a project created from the `react` template showing white text on a white background when Windows uses dark mode. The page now declares `color-scheme: light`, matching the light-only host UI.
 
 ---
 
 ## 🔄 Compatibility
 
-* **Breaking change:** `AspireModuleContansts` in `ZYC.Framework.Modules.Aspire.Abstractions` has been renamed to `AspireModuleConstants`. Update source references; assemblies compiled against the old name must be recompiled.
-* Building a project created from the `react` template requires Node.js 20.19+ or 22.12+, and running it requires the Microsoft Edge WebView2 Runtime. Pass `-p:SkipClientAppBuild=true` to skip the front-end build.
+* Projects created from the `minimal` and `react` templates now build to `_bin/app/` instead of `bin/<Configuration>/net10.0-windows/`, and the host creates its `settings/` and `logs/` folders in `_bin/`, as in the `modular` template. Projects created with earlier versions are not affected.
 
 ---
 

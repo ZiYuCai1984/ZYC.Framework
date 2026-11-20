@@ -21,8 +21,8 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.2
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.2
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
 ```
 
 コマンドを確認します。
@@ -51,6 +51,8 @@ zyc new MyCompany.Tools --template minimal
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -60,7 +62,49 @@ MyCompany.Tools/
     ToolsView.xaml.cs
 ```
 
+`Directory.Build.props` は共通のビルドプロパティを定義し、ビルド出力を `_bin/app/` に置きます。そのため Host の `settings/` と `logs/` フォルダーは `_bin/` に作成されます。`Directory.Build.targets` は `ZYC.Framework.Alpha` のバージョンを指定し、パッケージの復元後はその依存関係のバージョンをインポートするため、後から追加する `ZYC.CoreToolkit.*` の参照では `Version` を省略できます。
+
 最短で実行可能な Host を作り、機能面が 1 つの単純な WPF ビューで足りる場合に使います。
+
+## `react` テンプレート
+
+`react` は `minimal` と同じ単一プロジェクトの Host を作成しますが、タブは Vite と TypeScript でビルドした React フロントエンドを表示する WebView2 ビューになります。プロジェクトのビルドには Node.js 20.19 以上または 22.12 以上が必要です。
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+生成される構成:
+
+```text
+MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` は `WebViewHostBase` を継承し、ビルド済みのフロントエンドを仮想ホスト `https://<web-name>.example/` から提供します。`<web-name>` は `__PROJECT_WEB_NAME__` の値です。例: `mycompany-tools`。
+- プロジェクトをビルドすると、`ClientApp/package.json` が変わったときは `npm install`、フロントエンドのソースが変わったときは `npm run build` を実行し、`ClientApp/dist` を出力ディレクトリの `ClientApp/` にコピーします。この手順を省くには `-p:SkipClientAppBuild=true` を渡します。
+- Debug ビルドでは、`npm run dev` の実行中はビューが Vite 開発サーバー `http://localhost:5173` を読み込むため、再ビルドせずにフロントエンドの変更が反映されます。
+- `ClientApp/src/webview.ts` は `window.chrome.webview` ブリッジをラップします。生成されたページは `ping` メッセージを送り、ビューの `OnWebMessageReceived` が `pong` を返します。
+
+タブの UI を XAML ではなく React で作りたい場合に使います。
 
 ## `console` テンプレート
 
@@ -168,7 +212,7 @@ MyCompany.Tools/
 | オプション | 説明 |
 | --- | --- |
 | `<ProjectName>` | 必須のプロジェクト名。`Acme.Tools` のような有効なドット区切り C# 識別子である必要があります。 |
-| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`。既定は `minimal`。 |
+| `--template`, `-t` | プロジェクト テンプレート。対応値は `minimal`、`modular`、`console`、`build`、`wpf`、`react`。既定は `minimal`。 |
 | `--output`, `-o` | 出力ディレクトリ。既定は `./<ProjectName>`。 |
 | `--package-version` | `ZYC.Framework.Alpha` のパッケージ バージョン。既定は CLI の製品バージョン。 |
 | `--overwrite`, `-f` | 既存ファイルを上書きする。この指定がない場合、対象ファイルが存在すると生成は失敗します。 |
@@ -176,7 +220,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.2
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
 ```
 
 ## 既存ソース ツリー向けの `new-module`
@@ -234,15 +278,17 @@ zyc new-module ZYC.Framework.Modules.Reports.Abstractions --src-root ./src
 | `__PROJECT_NAME__` | 完全なプロジェクト名。例: `MyCompany.Tools`。 |
 | `__PROJECT_SHORT_NAME__` | 最後のドット区切りセグメント。例: `Tools`。 |
 | `__PROJECT_HOST__` | URI host として使う小文字の短い名前。例: `tools`。 |
+| `__PROJECT_WEB_NAME__` | npm パッケージ名と WebView2 仮想ホストに使う、小文字でハイフン区切りの完全な名前。例: `mycompany-tools`。 |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | `--package-version` または CLI 製品バージョンで選択されたパッケージ バージョン。 |
 
-テキスト テンプレート ファイルは UTF-8 with BOM で書き込まれ、CRLF 改行に正規化されます。
+テキスト テンプレート ファイルは CRLF 改行に正規化され、UTF-8 with BOM で書き込まれます。フロントエンド ファイル (`package.json`、`tsconfig.json`、`.ts`、`.tsx`、`.html`、`.css`) は Node.js のツールが読み込むため、BOM なしで書き込まれます。
 
 ## テンプレートの選び方
 
 | 状況 | 推奨コマンド |
 | --- | --- |
 | 1 つのビューを持つ最速の Host が欲しい。 | `zyc new MyCompany.Tools` |
+| タブの UI を React で作りたい。 | `zyc new MyCompany.Tools --template react` |
 | `ZYC.CoreToolkit` を参照するコンソール アプリケーションが欲しい。 | `zyc new MyCompany.Tools --template console` |
 | バージョン管理、コンパイル、パッケージ作成用の独立したビルド プロジェクトが欲しい。 | `zyc new MyCompany.Tools --template build` |
 | Autofac と設定のブートストラップを備えた WPF アプリケーションが欲しい。 | `zyc new MyCompany.Desktop --template wpf` |

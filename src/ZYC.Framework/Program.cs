@@ -140,6 +140,7 @@ internal partial class Program
             builder,
             MetroWindow.AssemblyInfo.GetAssembly());
 
+        AppConfig? appConfig = null;
         ModuleConfig? moduleConfig = null;
         PendingFileOperationsState? pendingDeleteState = null;
 
@@ -148,6 +149,11 @@ internal partial class Program
             builder,
             typeof(ProductInfo).Assembly, obj =>
             {
+                if (obj is AppConfig initAppConfig)
+                {
+                    appConfig = initAppConfig;
+                }
+
                 if (obj is ModuleConfig initModuleConfig)
                 {
                     moduleConfig = initModuleConfig;
@@ -159,10 +165,15 @@ internal partial class Program
                 }
             });
 
+        Debug.Assert(appConfig != null);
         Debug.Assert(moduleConfig != null);
         Debug.Assert(pendingDeleteState != null);
 
         var startupLogger = StartupLogger.CreateInstance();
+
+        //!WARNING Must run before any window or tray icon reads IconTools, which caches the icon
+        ApplyOverrideIcon(appConfig, startupLogger);
+
         var modules = ModuleTools.RegisterModules(
             settingsDirectory,
             builder,
@@ -260,6 +271,27 @@ internal partial class Program
         Uri? startupUri)
     {
         startupUriNavigationDispatcher.Register(container, startupUri);
+    }
+
+    private static void ApplyOverrideIcon(AppConfig appConfig, IAppLogger logger)
+    {
+        if (string.IsNullOrWhiteSpace(appConfig.IconPath))
+        {
+            return;
+        }
+
+        try
+        {
+            var iconFilePath = Path.GetFullPath(
+                Path.Combine(AppContext.GetAppRootDirectory(), appConfig.IconPath));
+
+            IconTools.SetOverrideIcon(iconFilePath);
+            logger.Info($"Override application icon -> {iconFilePath}");
+        }
+        catch (Exception e)
+        {
+            logger.Warn($"Cannot load application icon '{appConfig.IconPath}', the default icon is used. {e}");
+        }
     }
 
     private static void InitJsonToolsSettings()

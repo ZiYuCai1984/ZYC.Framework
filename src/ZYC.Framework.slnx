@@ -72,6 +72,7 @@
     <File Path="FodyWeavers.xml" />
     <File Path="nuget.props" />
     <File Path="nuget.targets" />
+    <File Path="suppress-build-shader.flag" />
     <File Path="version.props" />
     <File Path="ZYC.Framework.slnx.DotSettings" />
   </Folder>

@@ -51,6 +51,8 @@ Generated structure:
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -59,6 +61,8 @@ MyCompany.Tools/
     ToolsView.xaml
     ToolsView.xaml.cs
 ```
+
+`Directory.Build.props` holds the shared build properties and sends build output to `_bin/app/`, so the host's `settings/` and `logs/` folders are created in `_bin/`. `Directory.Build.targets` sets the `ZYC.Framework.Alpha` version and, once the package is restored, imports its dependency versions, so `ZYC.CoreToolkit.*` references you add later can omit `Version`.
 
 Use this template when you want the shortest path to a runnable host and the feature surface is one simple WPF view.
 
@@ -74,6 +78,8 @@ Generated structure:
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -335,6 +341,8 @@ zyc new MyCompany.Tools --template minimal
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -343,6 +351,8 @@ MyCompany.Tools/
     ToolsView.xaml
     ToolsView.xaml.cs
 ```
+
+`Directory.Build.props` は共通のビルドプロパティを定義し、ビルド出力を `_bin/app/` に置きます。そのため Host の `settings/` と `logs/` フォルダーは `_bin/` に作成されます。`Directory.Build.targets` は `ZYC.Framework.Alpha` のバージョンを指定し、パッケージの復元後はその依存関係のバージョンをインポートするため、後から追加する `ZYC.CoreToolkit.*` の参照では `Version` を省略できます。
 
 最短で実行可能な Host を作り、機能面が 1 つの単純な WPF ビューで足りる場合に使います。
 
@@ -358,6 +368,8 @@ zyc new MyCompany.Tools --template react
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -619,6 +631,8 @@ zyc new MyCompany.Tools --template minimal
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -627,6 +641,8 @@ MyCompany.Tools/
     ToolsView.xaml
     ToolsView.xaml.cs
 ```
+
+`Directory.Build.props` 存放共享构建属性，并把构建输出放到 `_bin/app/`，因此 Host 的 `settings/` 和 `logs/` 目录会生成在 `_bin/` 下。`Directory.Build.targets` 设置 `ZYC.Framework.Alpha` 的版本，并在包还原后导入它的依赖版本，之后添加的 `ZYC.CoreToolkit.*` 引用可以省略 `Version`。
 
 当你想用最短路径得到可运行 Host，并且功能表面只是一个简单 WPF View 时，使用这个模板。
 
@@ -642,6 +658,8 @@ zyc new MyCompany.Tools --template react
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -903,6 +921,8 @@ zyc new MyCompany.Tools --template minimal
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -911,6 +931,8 @@ MyCompany.Tools/
     ToolsView.xaml
     ToolsView.xaml.cs
 ```
+
+`Directory.Build.props` 存放共用建置屬性，並把建置輸出放到 `_bin/app/`，因此 Host 的 `settings/` 與 `logs/` 目錄會產生在 `_bin/` 下。`Directory.Build.targets` 設定 `ZYC.Framework.Alpha` 的版本，並在套件還原後匯入它的相依版本，之後新增的 `ZYC.CoreToolkit.*` 參考可以省略 `Version`。
 
 當你想用最短路徑得到可執行 Host，且功能表面只是一個簡單 WPF View 時，使用這個範本。
 
@@ -926,6 +948,8 @@ zyc new MyCompany.Tools --template react
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -1187,6 +1211,8 @@ zyc new MyCompany.Tools --template minimal
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -1195,6 +1221,8 @@ MyCompany.Tools/
     ToolsView.xaml
     ToolsView.xaml.cs
 ```
+
+`Directory.Build.props`는 공통 빌드 속성을 정의하고 빌드 출력을 `_bin/app/`에 둡니다. 따라서 Host의 `settings/`와 `logs/` 폴더는 `_bin/`에 만들어집니다. `Directory.Build.targets`는 `ZYC.Framework.Alpha` 버전을 지정하고, 패키지가 복원된 뒤에는 그 종속성 버전을 가져오므로 나중에 추가하는 `ZYC.CoreToolkit.*` 참조에서는 `Version`을 생략할 수 있습니다.
 
 하나의 단순한 WPF 뷰만 필요한 실행 가능한 Host를 가장 빠르게 만들고 싶을 때 사용합니다.
 
@@ -1210,6 +1238,8 @@ zyc new MyCompany.Tools --template react
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs

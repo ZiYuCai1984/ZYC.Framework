@@ -15,6 +15,14 @@ public class AppConfig : IConfig
     public string Title { get; set; } = ProductInfo.ProductName;
 
     /// <summary>
+    ///     Gets or sets the path of an <c>.ico</c> file that overrides the application icon
+    ///     (main window, taskbar, tray icon, dialogs and desktop shortcut).
+    ///     A relative path is resolved against the application root directory (the folder that contains <c>settings</c>).
+    ///     When empty, the icon embedded in the executable is used. Changes take effect after restart.
+    /// </summary>
+    public string? IconPath { get; set; }
+
+    /// <summary>
     ///     Gets or sets the minimum width of the main window.
     /// </summary>
     public int MinWidth { get; set; } = 800;

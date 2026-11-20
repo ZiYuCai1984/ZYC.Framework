@@ -21,8 +21,8 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.2
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.2
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
 ```
 
 Then verify the command:
@@ -51,6 +51,8 @@ Generated structure:
 
 ```text
 MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
   MyCompany.Tools.csproj
   MyCompany.Tools.slnx
   Module.cs
@@ -60,7 +62,49 @@ MyCompany.Tools/
     ToolsView.xaml.cs
 ```
 
+`Directory.Build.props` holds the shared build properties and sends build output to `_bin/app/`, so the host's `settings/` and `logs/` folders are created in `_bin/`. `Directory.Build.targets` sets the `ZYC.Framework.Alpha` version and, once the package is restored, imports its dependency versions, so `ZYC.CoreToolkit.*` references you add later can omit `Version`.
+
 Use this template when you want the shortest path to a runnable host and the feature surface is one simple WPF view.
+
+## `react` Template
+
+`react` creates the same single-project host as `minimal`, but its tab is a WebView2 view that shows a React front end built with Vite and TypeScript. Building the project requires Node.js 20.19+ or 22.12+.
+
+```bash
+zyc new MyCompany.Tools --template react
+```
+
+Generated structure:
+
+```text
+MyCompany.Tools/
+  Directory.Build.props
+  Directory.Build.targets
+  MyCompany.Tools.csproj
+  MyCompany.Tools.slnx
+  Module.cs
+  ModuleConfig.json
+  README.md
+  UI/
+    ToolsView.cs
+  ClientApp/
+    index.html
+    package.json
+    tsconfig.json
+    vite.config.ts
+    src/
+      App.tsx
+      index.css
+      main.tsx
+      webview.ts
+```
+
+- `ToolsView` derives from `WebViewHostBase` and serves the built front end from the virtual host `https://<web-name>.example/`, where `<web-name>` is the `__PROJECT_WEB_NAME__` value, for example `mycompany-tools`.
+- Building the project runs `npm install` when `ClientApp/package.json` changes and `npm run build` when front-end sources change, then copies `ClientApp/dist` to `ClientApp/` in the output directory. Pass `-p:SkipClientAppBuild=true` to skip this step.
+- In Debug builds, the view loads the Vite dev server at `http://localhost:5173` while `npm run dev` is running, so front-end changes appear without rebuilding.
+- `ClientApp/src/webview.ts` wraps the `window.chrome.webview` bridge. The generated page sends a `ping` message, and `OnWebMessageReceived` in the view replies with `pong`.
+
+Use this template when you want to build the tab UI with React instead of XAML.
 
 ## `console` Template
 
@@ -168,7 +212,7 @@ Use this template when the feature should look like a real framework module: pub
 | Option | Description |
 | --- | --- |
 | `<ProjectName>` | Required project name. It must be a valid dotted C# identifier, for example `Acme.Tools`. |
-| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, and `wpf`. Defaults to `minimal`. |
+| `--template`, `-t` | Project template. Supported values are `minimal`, `modular`, `console`, `build`, `wpf`, and `react`. Defaults to `minimal`. |
 | `--output`, `-o` | Output directory. Defaults to `./<ProjectName>`. |
 | `--package-version` | `ZYC.Framework.Alpha` package version. Defaults to the CLI product version. |
 | `--overwrite`, `-f` | Overwrite existing files. Without this flag, existing target files fail the generation. |
@@ -176,7 +220,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.2
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
 ```
 
 ## `new-module` for Existing Source Trees
@@ -234,15 +278,17 @@ Project templates replace these tokens in paths and text files:
 | `__PROJECT_NAME__` | Full project name, for example `MyCompany.Tools`. |
 | `__PROJECT_SHORT_NAME__` | Last dotted segment, for example `Tools`. |
 | `__PROJECT_HOST__` | Lowercase short name used as the URI host, for example `tools`. |
+| `__PROJECT_WEB_NAME__` | Lowercase, hyphen-separated full name used as the npm package name and the WebView2 virtual host, for example `mycompany-tools`. |
 | `__V_ZYC_FRAMEWORK_ALPHA__` | Package version selected by `--package-version` or the CLI product version. |
 
-Text template files are written as UTF-8 with BOM and normalized to CRLF line endings.
+Text template files are normalized to CRLF line endings and written as UTF-8 with BOM. Front-end files (`package.json`, `tsconfig.json`, `.ts`, `.tsx`, `.html`, `.css`) are written without a BOM because Node.js tooling reads them.
 
 ## Choosing a Template
 
 | Situation | Recommended command |
 | --- | --- |
 | You want the fastest possible host with one view. | `zyc new MyCompany.Tools` |
+| You want the tab UI written in React. | `zyc new MyCompany.Tools --template react` |
 | You want a console application that references `ZYC.CoreToolkit`. | `zyc new MyCompany.Tools --template console` |
 | You want an independent build project for versioning, compilation, and packaging. | `zyc new MyCompany.Tools --template build` |
 | You want a WPF application with Autofac and settings bootstrap. | `zyc new MyCompany.Desktop --template wpf` |

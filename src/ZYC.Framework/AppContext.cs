@@ -71,7 +71,7 @@ internal partial class AppContext : IAppContext
                 {
                     if (appConfig.DesktopShortcut)
                     {
-                        ShortcutTools.CreateFromCurrentProcess();
+                        CreateDesktopShortcut();
                     }
                     else
                     {
@@ -127,6 +127,24 @@ internal partial class AppContext : IAppContext
     private AppConfig AppConfig { get; }
 
     private static SynchronizationContext? UISynchronizationContext { get; set; }
+
+    private static void CreateDesktopShortcut()
+    {
+        var iconPath = IconTools.OverrideIconPath;
+        if (string.IsNullOrWhiteSpace(iconPath))
+        {
+            ShortcutTools.CreateFromCurrentProcess();
+            return;
+        }
+
+        var exeFullName = ProcessTools.GetCurrentExeFullName();
+
+        ShortcutTools.Create(
+            IOTools.GetExecutingFolder(),
+            IOTools.GetFileName(exeFullName, true),
+            $"{IOTools.GetFileName(exeFullName, false)}.lnk",
+            iconPath);
+    }
 
     public void SaveAllConfig()
     {
