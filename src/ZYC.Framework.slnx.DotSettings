@@ -29,6 +29,7 @@
 	<s:Boolean x:Key="/Default/Environment/ExcludedFiles/FilesAndFoldersToSkip/=_002E_002E_005CThirdparty/@EntryIndexedValue">True</s:Boolean>
 
 	<s:Boolean x:Key="/Default/Environment/UpdatesManger/IsDownloadUpdateDataAllowed/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/GrammarAndSpelling/GrammarChecking/Exceptions/=a_0020double_002Dclick/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/GrammarAndSpelling/GrammarChecking/Exceptions/=mah/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/GrammarAndSpelling/GrammarChecking/Exceptions/=TODO_0020TODO/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=5462C98EA1409E4BB4DF19444CA7645D/@KeyIndexDefined">True</s:Boolean>

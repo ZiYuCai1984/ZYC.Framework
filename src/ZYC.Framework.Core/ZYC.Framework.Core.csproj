@@ -14,7 +14,8 @@
     <ProjectReference Include="..\ZYC.Framework.Abstractions\ZYC.Framework.Abstractions.csproj" />
   </ItemGroup>
   <Target BeforeTargets="PrepareForBuild" Name="BuildShader">
-    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/GrayScale.ps Shaders/GrayScale.fx" />
+    <Exec Condition="'$(Suppress_Target_BuildShader)' != 'true' Or !Exists('Shaders/GrayScale.ps')"
+          Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/GrayScale.ps Shaders/GrayScale.fx" />
     <ItemGroup>
       <None Remove="**\*.ps" />
       <Resource Include="**\*.ps" />

@@ -20,7 +20,8 @@
     <ProjectReference Include="..\Thirdparty\ZYC.MdXaml\ZYC.MdXaml.csproj" />
   </ItemGroup>
   <Target BeforeTargets="PrepareForBuild" Name="BuildShader">
-    <Exec Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/Crt.ps Shaders/Crt.fx" />
+    <Exec Condition="'$(Suppress_Target_BuildShader)' != 'true' Or !Exists('Shaders/Crt.ps')"
+          Command="$(NuGetPackageRoot)ZYC.CoreToolkit.Extensions.Fxc\$(V_ZYC_CoreToolkit_Extensions_Fxc)\build\x64\fxc.exe /T ps_3_0 /E main /Fo Shaders/Crt.ps Shaders/Crt.fx" />
     <ItemGroup>
       <None Remove="**\*.ps" />
       <Resource Include="**\*.ps" />

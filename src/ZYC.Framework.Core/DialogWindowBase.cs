@@ -6,4 +6,10 @@ namespace ZYC.Framework.Core;
 /// <summary>
 ///     Base class for WPF dialog windows resolved through <see cref="IDialogManager" />.
 /// </summary>
-public class DialogWindowBase : Window, IDialog;
+public class DialogWindowBase : Window, IDialog
+{
+    public DialogWindowBase()
+    {
+        SetCurrentValue(IconProperty, IconTools.IconImageSource);
+    }
+}

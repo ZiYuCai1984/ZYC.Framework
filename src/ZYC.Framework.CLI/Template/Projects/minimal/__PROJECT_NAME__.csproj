@@ -1,16 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <IgnoreFromPublish>true</IgnoreFromPublish>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ZYC.Framework.Alpha" Version="__V_ZYC_FRAMEWORK_ALPHA__" />
+    <PackageReference Include="ZYC.Framework.Alpha" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ZYC.Framework.Abstractions">

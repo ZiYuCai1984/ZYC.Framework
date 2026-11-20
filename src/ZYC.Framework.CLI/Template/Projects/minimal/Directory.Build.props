@@ -1,0 +1,25 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputPath>$(MSBuildThisFileDirectory)_bin/app/</OutputPath>
+    <!--
+      The host keeps settings and logs next to the output folder (_bin/settings, _bin/logs). The project file sits at
+      the root, so keep these folders out of the default item globs.
+    -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);_bin/**;_bin_build/**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+</Project>

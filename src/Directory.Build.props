@@ -6,6 +6,9 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU5104</NoWarn>
+    <NoWarn>$(NoWarn);NU1902</NoWarn>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+    <NoWarn>$(NoWarn);NU1904</NoWarn>
     <NoWarn>$(NoWarn);MSB3270</NoWarn>
     <NoWarn>$(NoWarn);NETSDK1206</NoWarn>
     <NoWarn>$(NoWarn);CSS102</NoWarn>
@@ -70,6 +73,14 @@
     <Enable_Target_CopyJsonToSettingsOutput>false</Enable_Target_CopyJsonToSettingsOutput>
     <Enable_Target_CopyDebugJsonToSettingsOutput>false</Enable_Target_CopyDebugJsonToSettingsOutput>
     <SettingsOutputDir>$([System.IO.Path]::GetFullPath('$(OutputPath)..\settings\'))</SettingsOutputDir>
+  </PropertyGroup>
+
+
+  <!-- Create an empty suppress-build-shader.flag next to this file (git-ignored) to skip fxc in BuildShader targets.
+       Shaders whose .ps output does not exist yet are still compiled. -->
+  <PropertyGroup>
+    <Suppress_Target_BuildShader>false</Suppress_Target_BuildShader>
+    <Suppress_Target_BuildShader Condition="Exists('$(MSBuildThisFileDirectory)suppress-build-shader.flag')">true</Suppress_Target_BuildShader>
   </PropertyGroup>
 
 

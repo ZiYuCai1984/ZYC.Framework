@@ -1,5 +1,9 @@
-﻿:root {
-  color-scheme: light dark;
+:root {
+  /*
+    The ZYC.Framework host UI is light only. WebView2 follows the Windows app mode, so declaring
+    `light dark` here would turn the text white in dark mode while WebView2 keeps its white background.
+  */
+  color-scheme: light;
   font-family: 'Segoe UI', system-ui, sans-serif;
   line-height: 1.5;
 }
@@ -31,6 +35,6 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  cursor: default;
-}
+  button:disabled {
+    cursor: default;
+  }
