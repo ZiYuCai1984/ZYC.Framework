@@ -63,8 +63,17 @@
     <Touch Files="$(ClientAppRoot)node_modules\.install-stamp" AlwaysCreate="true" />
   </Target>
 
+  <!--
+    Generates ClientApp/src/host-services.d.ts from the [ExposeToWeb] interfaces in this assembly, so the page
+    calls them with types (see ClientApp/src/webview.ts). It runs after every build, also with
+    SkipClientAppBuild, and only rewrites the file when the interfaces change.
+  -->
+  <Target Name="ClientAppGenerateHostTypes" AfterTargets="Build">
+    <Exec Command="&quot;$(OutDir)ZYC.Framework.CLI.exe&quot; web-types --assembly &quot;$(TargetPath)&quot; --output &quot;$(MSBuildProjectDirectory)\$(ClientAppRoot)src\host-services.d.ts&quot;" />
+  </Target>
+
   <Target Name="ClientAppBuild"
-          DependsOnTargets="ClientAppNpmInstall"
+          DependsOnTargets="ClientAppNpmInstall;ClientAppGenerateHostTypes"
           Inputs="@(ClientAppSource)"
           Outputs="$(ClientAppRoot)dist\index.html">
     <Exec Command="npm run build" WorkingDirectory="$(ClientAppRoot)" />

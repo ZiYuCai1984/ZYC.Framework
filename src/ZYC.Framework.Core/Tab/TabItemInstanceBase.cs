@@ -61,8 +61,7 @@ public abstract class TabItemInstanceBase : ITabItemInstance
 
     public virtual void Dispose()
     {
-        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-        View?.TryDispose();
+        _view?.TryDispose();
     }
 
     protected T GetConstant<T>(string memberName)

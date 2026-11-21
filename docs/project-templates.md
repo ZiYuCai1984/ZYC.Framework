@@ -21,8 +21,8 @@ ZYC.Framework provides `dotnet tool` commands for two common scaffolding tasks: 
 Install or update the CLI as a .NET tool:
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.4
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.4
 ```
 
 Then verify the command:
@@ -87,6 +87,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -94,6 +97,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -102,7 +106,7 @@ MyCompany.Tools/
 - `ToolsView` derives from `WebViewHostBase` and serves the built front end from the virtual host `https://<web-name>.example/`, where `<web-name>` is the `__PROJECT_WEB_NAME__` value, for example `mycompany-tools`.
 - Building the project runs `npm install` when `ClientApp/package.json` changes and `npm run build` when front-end sources change, then copies `ClientApp/dist` to `ClientApp/` in the output directory. Pass `-p:SkipClientAppBuild=true` to skip this step.
 - In Debug builds, the view loads the Vite dev server at `http://localhost:5173` while `npm run dev` is running, so front-end changes appear without rebuilding.
-- `ClientApp/src/webview.ts` wraps the `window.chrome.webview` bridge. The generated page sends a `ping` message, and `OnWebMessageReceived` in the view replies with `pong`.
+- `ClientApp/src/webview.ts` gives the page typed calls to C# services: `await hostService('GreetingService').greetAsync('React')`. `Services/IGreetingService.cs` is marked with `[ExposeToWeb]` (and `[ExposeToMCP]`), `WebBridge` in the view dispatches the calls, and every build runs `ZYC.Framework.CLI.exe web-types` to regenerate `ClientApp/src/host-services.d.ts` from the `[ExposeToWeb]` interfaces.
 
 Use this template when you want to build the tab UI with React instead of XAML.
 
@@ -220,7 +224,7 @@ Use this template when the feature should look like a real framework module: pub
 Example with all common options:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.4
 ```
 
 ## `new-module` for Existing Source Trees

@@ -248,6 +248,12 @@ internal partial class Program
         RegisterStartupUriNavigation(container, startupUriNavigationDispatcher, startupUri);
 
         var window = (Window)mainWindow;
+
+        //!WARNING Must set MainWindow explicitly. WPF assigns it to the first Window constructed after the
+        // Application exists, and Run(window) only sets it when it is still null. A module can construct a
+        // window earlier (e.g. a tab item factory injecting IAppBusyWindow during LoadAsync), which would then
+        // become MainWindow and break LifetimeScopeResource, because it reads the scope from MainWindow.DataContext.
+        app.MainWindow = window;
         app.Run(window);
     }
 

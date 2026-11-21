@@ -20,7 +20,7 @@ public class AppConfig : IConfig
     ///     A relative path is resolved against the application root directory (the folder that contains <c>settings</c>).
     ///     When empty, the icon embedded in the executable is used. Changes take effect after restart.
     /// </summary>
-    public string? IconPath { get; set; }
+    public string? IconPath { get; set; } = "";
 
     /// <summary>
     ///     Gets or sets the minimum width of the main window.

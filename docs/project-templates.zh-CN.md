@@ -21,8 +21,8 @@ ZYC.Framework 通过 `dotnet tool` 命令支持两类常见脚手架任务：创
 以 .NET tool 方式安装或更新 CLI：
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.4
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.4
 ```
 
 然后确认命令可用：
@@ -87,6 +87,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -94,6 +97,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -102,7 +106,7 @@ MyCompany.Tools/
 - `ToolsView` 继承 `WebViewHostBase`，通过虚拟主机 `https://<web-name>.example/` 提供构建好的前端，其中 `<web-name>` 是 `__PROJECT_WEB_NAME__` 的值，例如 `mycompany-tools`。
 - 构建项目时，`ClientApp/package.json` 变化后会执行 `npm install`，前端源码变化后会执行 `npm run build`，然后把 `ClientApp/dist` 复制到输出目录下的 `ClientApp/`。传入 `-p:SkipClientAppBuild=true` 可跳过这一步。
 - 在 Debug 构建中，只要 `npm run dev` 正在运行，View 就会加载 Vite 开发服务器 `http://localhost:5173`，前端改动无需重新构建即可生效。
-- `ClientApp/src/webview.ts` 封装了 `window.chrome.webview` 桥接。生成的页面会发送 `ping` 消息，View 中的 `OnWebMessageReceived` 会回复 `pong`。
+- `ClientApp/src/webview.ts` 为页面提供对 C# 服务的类型化调用：`await hostService('GreetingService').greetAsync('React')`。`Services/IGreetingService.cs` 标记了 `[ExposeToWeb]`（以及 `[ExposeToMCP]`），View 中的 `WebBridge` 负责分发调用；每次构建都会运行 `ZYC.Framework.CLI.exe web-types`，根据 `[ExposeToWeb]` 接口重新生成 `ClientApp/src/host-services.d.ts`。
 
 当你想用 React 而不是 XAML 编写 Tab 界面时，使用这个模板。
 
@@ -220,7 +224,7 @@ MyCompany.Tools/
 包含常用选项的示例：
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.4
 ```
 
 ## 面向已有源码树的 `new-module`
