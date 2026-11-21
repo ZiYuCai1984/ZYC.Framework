@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Net.Http;
-using System.Text.Json;
 using Autofac;
 using Microsoft.Web.WebView2.Core;
 using ZYC.CoreToolkit.Extensions.Autofac.Attributes;
@@ -33,16 +32,20 @@ internal class __PROJECT_SHORT_NAME__View : WebViewHostBase
     /// </summary>
     private const string DevServerUri = "http://localhost:5173/";
 
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
-
     public __PROJECT_SHORT_NAME__View(
         ILifetimeScope lifetimeScope,
         IAppLogger<__PROJECT_SHORT_NAME__View> logger) : base(lifetimeScope)
     {
         Logger = logger;
+        WebBridge = new WebBridge(lifetimeScope);
     }
 
     private IAppLogger<__PROJECT_SHORT_NAME__View> Logger { get; }
+
+    /// <summary>
+    ///     Answers the calls that ClientApp/src/webview.ts makes to [ExposeToWeb] services.
+    /// </summary>
+    private WebBridge WebBridge { get; }
 
     protected override async Task InternalWebViewHostLoadedAsync()
     {
@@ -69,9 +72,10 @@ internal class __PROJECT_SHORT_NAME__View : WebViewHostBase
     }
 
     /// <summary>
-    ///     Receives messages sent by ClientApp/src/webview.ts (window.chrome.webview.postMessage).
+    ///     Receives the calls that ClientApp/src/webview.ts sends (window.chrome.webview.postMessage)
+    ///     and posts the replies back.
     /// </summary>
-    protected override void OnWebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
+    protected override async void OnWebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
     {
         base.OnWebMessageReceived(sender, e);
 
@@ -83,23 +87,16 @@ internal class __PROJECT_SHORT_NAME__View : WebViewHostBase
 
         try
         {
-            var message = JsonSerializer.Deserialize<HostMessage>(e.WebMessageAsJson, JsonOptions);
-            if (message?.Type == "ping")
+            var reply = await WebBridge.HandleAsync(e.WebMessageAsJson);
+            if (reply is not null && !Disposing && !IsCoreWebView2Null())
             {
-                PostToClientApp(new HostMessage(
-                    "pong",
-                    $"Hello from {ProductInfo.ProductName} {ProductInfo.Version} on .NET {Environment.Version}."));
+                CoreWebView2.PostWebMessageAsJson(reply);
             }
         }
-        catch (JsonException exception)
+        catch (Exception exception)
         {
             Logger.Error(exception);
         }
-    }
-
-    private void PostToClientApp(HostMessage message)
-    {
-        CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, JsonOptions));
     }
 
     private bool IsFromClientApp(string source)
@@ -129,9 +126,4 @@ internal class __PROJECT_SHORT_NAME__View : WebViewHostBase
         }
     }
 #endif
-
-    /// <summary>
-    ///     Message shape shared with ClientApp/src/webview.ts (serialized as camelCase JSON).
-    /// </summary>
-    private record HostMessage(string Type, string? Payload = null);
 }

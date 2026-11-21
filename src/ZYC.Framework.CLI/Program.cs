@@ -12,9 +12,21 @@ namespace ZYC.Framework.CLI;
 
 internal class Program
 {
+    private const string WebTypesCommandName = "web-types";
+
     public static async Task<int> Main(string[] args)
     {
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+        //!WARNING web-types only reads assembly metadata. It skips module loading so it can run from a host
+        // output folder, whose WPF modules cannot be loaded by this non-WPF process !!
+        if (args.Length > 0 && string.Equals(args[0], WebTypesCommandName, StringComparison.Ordinal))
+        {
+            var webTypesRootCommand =
+                new RootCommand($"Command line tool for {ProductInfo.ProductName} {ProductInfo.Version}");
+            RegisterWebTypesCommand(webTypesRootCommand);
+            return await webTypesRootCommand.InvokeAsync(args);
+        }
 
         var rootCommand = new RootCommand($"Command line tool for {ProductInfo.ProductName} {ProductInfo.Version}");
         var optionRegister = new CommandLineOptionRegister(rootCommand);
@@ -74,6 +86,7 @@ internal class Program
         RegisterNewModuleCommand(rootCommand);
         RegisterClearNuGetHttpCacheCommand(rootCommand);
         RegisterUpdateCommand(rootCommand);
+        RegisterWebTypesCommand(rootCommand);
 
         optionRegister.FinalizeHandlers();
 
@@ -105,6 +118,53 @@ internal class Program
         });
 
         rootCommand.AddCommand(clearNuGetHttpCacheCommand);
+    }
+
+    private static void RegisterWebTypesCommand(RootCommand rootCommand)
+    {
+        var webTypesCommand = new Command(WebTypesCommandName,
+            "Generate TypeScript declarations for the [ExposeToWeb] interfaces of the given assemblies.");
+
+        var assemblyOption = new Option<string[]>("--assembly", "Assembly to scan. Repeat the option for more assemblies.")
+        {
+            IsRequired = true
+        };
+        assemblyOption.AddAlias("-a");
+
+        var outputOption = new Option<string>("--output",
+            "The .d.ts file to write. It is only rewritten when its content changes.")
+        {
+            IsRequired = true
+        };
+        outputOption.AddAlias("-o");
+
+        webTypesCommand.AddOption(assemblyOption);
+        webTypesCommand.AddOption(outputOption);
+
+        webTypesCommand.SetHandler(context =>
+        {
+            try
+            {
+                var assemblyPaths = context.ParseResult.GetValueForOption(assemblyOption)!;
+                var outputPath = Path.GetFullPath(context.ParseResult.GetValueForOption(outputOption)!);
+
+                var result = WebTypesGenerator.Generate(assemblyPaths);
+                foreach (var warning in result.Warnings)
+                {
+                    context.Console.Error.Write($"warning: {warning}{Environment.NewLine}");
+                }
+
+                var changed = WebTypesGenerator.WriteIfChanged(outputPath, result.Content);
+                context.Console.Out.Write($"{(changed ? "Generated" : "Up to date")}: {outputPath}{Environment.NewLine}");
+            }
+            catch (Exception exception)
+            {
+                context.Console.Error.Write($"{exception.Message}{Environment.NewLine}");
+                context.ExitCode = 1;
+            }
+        });
+
+        rootCommand.AddCommand(webTypesCommand);
     }
 
     private static void RegisterUpdateCommand(RootCommand rootCommand)

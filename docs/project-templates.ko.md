@@ -21,8 +21,8 @@ ZYC.Framework는 두 가지 일반적인 스캐폴딩 작업을 위한 `dotnet t
 CLI를 .NET tool로 설치하거나 업데이트합니다.
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.4
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.4
 ```
 
 명령을 확인합니다.
@@ -87,6 +87,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -94,6 +97,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -102,7 +106,7 @@ MyCompany.Tools/
 - `ToolsView`는 `WebViewHostBase`를 상속하며, 빌드된 프런트엔드를 가상 호스트 `https://<web-name>.example/`에서 제공합니다. `<web-name>`은 `__PROJECT_WEB_NAME__` 값입니다. 예: `mycompany-tools`.
 - 프로젝트를 빌드하면 `ClientApp/package.json`이 바뀌었을 때 `npm install`을, 프런트엔드 소스가 바뀌었을 때 `npm run build`를 실행한 뒤 `ClientApp/dist`를 출력 디렉터리의 `ClientApp/`으로 복사합니다. 이 단계를 건너뛰려면 `-p:SkipClientAppBuild=true`를 전달합니다.
 - Debug 빌드에서는 `npm run dev`가 실행 중이면 뷰가 Vite 개발 서버 `http://localhost:5173`을 로드하므로, 다시 빌드하지 않아도 프런트엔드 변경이 반영됩니다.
-- `ClientApp/src/webview.ts`는 `window.chrome.webview` 브리지를 감쌉니다. 생성된 페이지는 `ping` 메시지를 보내고, 뷰의 `OnWebMessageReceived`가 `pong`으로 응답합니다.
+- `ClientApp/src/webview.ts`는 페이지에서 C# 서비스를 타입 있게 호출하게 해 줍니다: `await hostService('GreetingService').greetAsync('React')`. `Services/IGreetingService.cs`에는 `[ExposeToWeb]`(와 `[ExposeToMCP]`)가 붙어 있고, 뷰의 `WebBridge`가 호출을 처리합니다. 빌드할 때마다 `ZYC.Framework.CLI.exe web-types`가 실행되어 `[ExposeToWeb]` 인터페이스로부터 `ClientApp/src/host-services.d.ts`를 다시 생성합니다.
 
 탭 UI를 XAML 대신 React로 만들고 싶을 때 사용합니다.
 
@@ -220,7 +224,7 @@ MyCompany.Tools/
 일반적인 옵션을 모두 지정한 예:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.4
 ```
 
 ## 기존 소스 트리를 위한 `new-module`

@@ -1,19 +1,22 @@
-﻿import { useEffect, useState } from 'react'
-import { isHosted, onHostMessage, postToHost } from './webview.ts'
+﻿import { useState } from 'react'
+import type { HostGreeting } from './host-services'
+import { hostService, isHosted } from './webview.ts'
+
+const greetingService = hostService('GreetingService')
 
 function App() {
   const [count, setCount] = useState(0)
-  const [reply, setReply] = useState<string>()
+  const [greeting, setGreeting] = useState<HostGreeting>()
+  const [error, setError] = useState<string>()
 
-  useEffect(
-    () =>
-      onHostMessage((message) => {
-        if (message.type === 'pong') {
-          setReply(message.payload)
-        }
-      }),
-    [],
-  )
+  async function greet() {
+    try {
+      setGreeting(await greetingService.greetAsync('React'))
+      setError(undefined)
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason))
+    }
+  }
 
   return (
     <main className="app">
@@ -31,13 +34,13 @@ function App() {
       </section>
 
       <section className="card">
-        <button type="button" disabled={!isHosted} onClick={() => postToHost({ type: 'ping' })}>
-          Ping host
+        <button type="button" disabled={!isHosted} onClick={greet}>
+          Call host
         </button>
         <p className="muted">
           {isHosted
-            ? (reply ?? 'Sends a message to the C# view and shows its reply.')
-            : 'Open this page inside the app to talk to the C# host.'}
+            ? (error ?? greeting?.message ?? 'Calls IGreetingService in C# through the typed web bridge.')
+            : 'Open this page inside the app to call the C# host.'}
         </p>
       </section>
     </main>

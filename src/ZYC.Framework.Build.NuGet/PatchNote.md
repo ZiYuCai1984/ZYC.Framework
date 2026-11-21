@@ -6,27 +6,32 @@
 
 ## 🆕 New Features
 
-* Added `AppConfig.IconPath` to replace the application icon with an `.ico` file. The icon is used for the main window, the taskbar, the tray icon, dialogs, and the desktop shortcut. Set it in `settings/AppConfig.json`; a relative path is resolved against the application root directory (the folder that contains `settings`). Changes take effect after a restart. If the file cannot be loaded, a warning is logged and the icon embedded in the executable is used.
-* Added `IconTools.SetOverrideIcon` and `IconTools.OverrideIconPath` to `ZYC.Framework.Core`. `SetOverrideIcon` must be called before any window or tray icon reads the application icon.
+* Added a typed web bridge for pages hosted in WebView2. Mark an interface with `[ExposeToWeb]` (`ZYC.Framework.Abstractions.Web`) and register its implementation in the DI container; `WebBridge` (`ZYC.Framework.WebView2`) then dispatches the calls a page sends with `postMessage` to that service and returns the result or the error message. Arguments and results are camelCase JSON with enums as strings, `Task`/`ValueTask` results are awaited, and a `CancellationToken` parameter receives `CancellationToken.None`. The service name defaults to the interface name without its leading `I`; set `[ExposeToWeb(Name = "...")]` to change it. Overloaded methods are not supported.
+* Added the `zyc web-types` command, which generates TypeScript declarations for the `[ExposeToWeb]` interfaces of the given assemblies: `zyc web-types --assembly <path.dll> --output <file.d.ts>`. The output file is only rewritten when its content changes. The command reads assembly metadata only, so it can run against a host output folder.
+* The `react` project template now calls C# services with types, for example `await hostService('GreetingService').greetAsync('React')`. It includes a sample `Services/IGreetingService.cs` marked with `[ExposeToWeb]` and `[ExposeToMCP]`, so the same interface serves C# code, the MCP server, and the page. The view passes page messages to `WebBridge`, and every build regenerates `ClientApp/src/host-services.d.ts` from the `[ExposeToWeb]` interfaces.
+
+> ⚠️ Only pass messages from pages you trust to `WebBridge` (check `CoreWebView2WebMessageReceivedEventArgs.Source`): every `[ExposeToWeb]` interface becomes callable by the page. The `react` template only forwards messages from the page it loaded.
 
 ---
 
 ## 🛠 Improvements
 
-* The `minimal` and `react` project templates now generate `Directory.Build.props` and `Directory.Build.targets`, like the other templates. The target framework, WPF, nullable, and implicit-usings settings move out of the project file, and the `ZYC.Framework.Alpha` version is set in `Directory.Build.targets`. Once the package is restored, `Directory.Build.targets` also imports the package's dependency versions, so `ZYC.CoreToolkit.*` and other framework dependencies added later can omit `Version`.
-* Added XML documentation for `DropAction`, `DropContext`, and `TabItemsPreloadCompletedEvent`.
+* `AppConfig.IconPath` now defaults to an empty string instead of `null`.
 
 ---
 
 ## 🐛 Fixes
 
-* Fixed the page of a project created from the `react` template showing white text on a white background when Windows uses dark mode. The page now declares `color-scheme: light`, matching the light-only host UI.
+* Fixed the host's main window not always becoming `Application.MainWindow`. A window constructed by a module during `LoadAsync` (for example, a tab item factory that injects `IAppBusyWindow`) became `MainWindow` instead, which broke `LifetimeScopeResource` because it reads the lifetime scope from `MainWindow.DataContext`. The host now sets `MainWindow` explicitly.
+* Fixed `TabItemInstanceBase.Dispose` creating the view of a tab item whose view had never been created, only to dispose it.
+* Fixed the plugins button in the WebView2 menu bar staying disabled when its command was evaluated before the browser extension list was bound.
+* Fixed the CLI logging `System.String[]` instead of the file name when it ignores a module assembly.
 
 ---
 
 ## 🔄 Compatibility
 
-* Projects created from the `minimal` and `react` templates now build to `_bin/app/` instead of `bin/<Configuration>/net10.0-windows/`, and the host creates its `settings/` and `logs/` folders in `_bin/`, as in the `modular` template. Projects created with earlier versions are not affected.
+* In projects created from the `react` template, `ClientApp/src/webview.ts` now exports `callHost` and `hostService` instead of `postToHost` and `onHostMessage`, and the `ping`/`pong` sample is replaced by the `GreetingService` call. The build also runs `ZYC.Framework.CLI.exe web-types` after every build, including with `-p:SkipClientAppBuild=true`. Projects created with earlier versions are not affected.
 
 ---
 

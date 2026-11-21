@@ -100,7 +100,7 @@ public static class ModuleTools
                 }
                 else
                 {
-                    logger?.Warn($"Ignore module <{dllFiles}>");
+                    logger?.Warn($"Ignore module <{dllFile}>");
                 }
 
 

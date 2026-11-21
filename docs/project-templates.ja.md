@@ -21,8 +21,8 @@ ZYC.Framework は、よく使う 2 つのスキャフォールド作業のため
 CLI を .NET tool としてインストールまたは更新します。
 
 ```bash
-dotnet tool install -g ZYC.Framework.CLI --version 1.6.3
-dotnet tool update -g ZYC.Framework.CLI --version 1.6.3
+dotnet tool install -g ZYC.Framework.CLI --version 1.6.4
+dotnet tool update -g ZYC.Framework.CLI --version 1.6.4
 ```
 
 コマンドを確認します。
@@ -87,6 +87,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -94,6 +97,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -102,7 +106,7 @@ MyCompany.Tools/
 - `ToolsView` は `WebViewHostBase` を継承し、ビルド済みのフロントエンドを仮想ホスト `https://<web-name>.example/` から提供します。`<web-name>` は `__PROJECT_WEB_NAME__` の値です。例: `mycompany-tools`。
 - プロジェクトをビルドすると、`ClientApp/package.json` が変わったときは `npm install`、フロントエンドのソースが変わったときは `npm run build` を実行し、`ClientApp/dist` を出力ディレクトリの `ClientApp/` にコピーします。この手順を省くには `-p:SkipClientAppBuild=true` を渡します。
 - Debug ビルドでは、`npm run dev` の実行中はビューが Vite 開発サーバー `http://localhost:5173` を読み込むため、再ビルドせずにフロントエンドの変更が反映されます。
-- `ClientApp/src/webview.ts` は `window.chrome.webview` ブリッジをラップします。生成されたページは `ping` メッセージを送り、ビューの `OnWebMessageReceived` が `pong` を返します。
+- `ClientApp/src/webview.ts` は C# サービスへの型付き呼び出しを提供します（`await hostService('GreetingService').greetAsync('React')`）。`Services/IGreetingService.cs` には `[ExposeToWeb]`（と `[ExposeToMCP]`）が付いており、ビューの `WebBridge` が呼び出しを処理します。ビルドのたびに `ZYC.Framework.CLI.exe web-types` が実行され、`[ExposeToWeb]` インターフェイスから `ClientApp/src/host-services.d.ts` を再生成します。
 
 タブの UI を XAML ではなく React で作りたい場合に使います。
 
@@ -220,7 +224,7 @@ MyCompany.Tools/
 よく使うオプションをすべて指定する例:
 
 ```bash
-zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.3
+zyc new Acme.Tools --template modular --output ./Acme.Tools --package-version 1.6.4
 ```
 
 ## 既存ソース ツリー向けの `new-module`

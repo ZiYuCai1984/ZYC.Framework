@@ -87,6 +87,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -94,6 +97,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -102,7 +106,7 @@ MyCompany.Tools/
 - `ToolsView` derives from `WebViewHostBase` and serves the built front end from the virtual host `https://<web-name>.example/`, where `<web-name>` is the `__PROJECT_WEB_NAME__` value, for example `mycompany-tools`.
 - Building the project runs `npm install` when `ClientApp/package.json` changes and `npm run build` when front-end sources change, then copies `ClientApp/dist` to `ClientApp/` in the output directory. Pass `-p:SkipClientAppBuild=true` to skip this step.
 - In Debug builds, the view loads the Vite dev server at `http://localhost:5173` while `npm run dev` is running, so front-end changes appear without rebuilding.
-- `ClientApp/src/webview.ts` wraps the `window.chrome.webview` bridge. The generated page sends a `ping` message, and `OnWebMessageReceived` in the view replies with `pong`.
+- `ClientApp/src/webview.ts` gives the page typed calls to C# services: `await hostService('GreetingService').greetAsync('React')`. `Services/IGreetingService.cs` is marked with `[ExposeToWeb]` (and `[ExposeToMCP]`), `WebBridge` in the view dispatches the calls, and every build runs `ZYC.Framework.CLI.exe web-types` to regenerate `ClientApp/src/host-services.d.ts` from the `[ExposeToWeb]` interfaces.
 
 Use this template when you want to build the tab UI with React instead of XAML.
 
@@ -377,6 +381,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -384,6 +391,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -392,7 +400,7 @@ MyCompany.Tools/
 - `ToolsView` は `WebViewHostBase` を継承し、ビルド済みのフロントエンドを仮想ホスト `https://<web-name>.example/` から提供します。`<web-name>` は `__PROJECT_WEB_NAME__` の値です。例: `mycompany-tools`。
 - プロジェクトをビルドすると、`ClientApp/package.json` が変わったときは `npm install`、フロントエンドのソースが変わったときは `npm run build` を実行し、`ClientApp/dist` を出力ディレクトリの `ClientApp/` にコピーします。この手順を省くには `-p:SkipClientAppBuild=true` を渡します。
 - Debug ビルドでは、`npm run dev` の実行中はビューが Vite 開発サーバー `http://localhost:5173` を読み込むため、再ビルドせずにフロントエンドの変更が反映されます。
-- `ClientApp/src/webview.ts` は `window.chrome.webview` ブリッジをラップします。生成されたページは `ping` メッセージを送り、ビューの `OnWebMessageReceived` が `pong` を返します。
+- `ClientApp/src/webview.ts` は C# サービスへの型付き呼び出しを提供します（`await hostService('GreetingService').greetAsync('React')`）。`Services/IGreetingService.cs` には `[ExposeToWeb]`（と `[ExposeToMCP]`）が付いており、ビューの `WebBridge` が呼び出しを処理します。ビルドのたびに `ZYC.Framework.CLI.exe web-types` が実行され、`[ExposeToWeb]` インターフェイスから `ClientApp/src/host-services.d.ts` を再生成します。
 
 タブの UI を XAML ではなく React で作りたい場合に使います。
 
@@ -667,6 +675,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -674,6 +685,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -682,7 +694,7 @@ MyCompany.Tools/
 - `ToolsView` 继承 `WebViewHostBase`，通过虚拟主机 `https://<web-name>.example/` 提供构建好的前端，其中 `<web-name>` 是 `__PROJECT_WEB_NAME__` 的值，例如 `mycompany-tools`。
 - 构建项目时，`ClientApp/package.json` 变化后会执行 `npm install`，前端源码变化后会执行 `npm run build`，然后把 `ClientApp/dist` 复制到输出目录下的 `ClientApp/`。传入 `-p:SkipClientAppBuild=true` 可跳过这一步。
 - 在 Debug 构建中，只要 `npm run dev` 正在运行，View 就会加载 Vite 开发服务器 `http://localhost:5173`，前端改动无需重新构建即可生效。
-- `ClientApp/src/webview.ts` 封装了 `window.chrome.webview` 桥接。生成的页面会发送 `ping` 消息，View 中的 `OnWebMessageReceived` 会回复 `pong`。
+- `ClientApp/src/webview.ts` 为页面提供对 C# 服务的类型化调用：`await hostService('GreetingService').greetAsync('React')`。`Services/IGreetingService.cs` 标记了 `[ExposeToWeb]`（以及 `[ExposeToMCP]`），View 中的 `WebBridge` 负责分发调用；每次构建都会运行 `ZYC.Framework.CLI.exe web-types`，根据 `[ExposeToWeb]` 接口重新生成 `ClientApp/src/host-services.d.ts`。
 
 当你想用 React 而不是 XAML 编写 Tab 界面时，使用这个模板。
 
@@ -957,6 +969,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -964,6 +979,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -972,7 +988,7 @@ MyCompany.Tools/
 - `ToolsView` 繼承 `WebViewHostBase`，透過虛擬主機 `https://<web-name>.example/` 提供建置好的前端，其中 `<web-name>` 是 `__PROJECT_WEB_NAME__` 的值，例如 `mycompany-tools`。
 - 建置專案時，`ClientApp/package.json` 變更後會執行 `npm install`，前端原始碼變更後會執行 `npm run build`，然後把 `ClientApp/dist` 複製到輸出目錄下的 `ClientApp/`。傳入 `-p:SkipClientAppBuild=true` 可略過這一步。
 - 在 Debug 建置中，只要 `npm run dev` 正在執行，View 就會載入 Vite 開發伺服器 `http://localhost:5173`，前端變更不需重新建置即可生效。
-- `ClientApp/src/webview.ts` 封裝了 `window.chrome.webview` 橋接。產生的頁面會傳送 `ping` 訊息，View 中的 `OnWebMessageReceived` 會回覆 `pong`。
+- `ClientApp/src/webview.ts` 為頁面提供對 C# 服務的型別化呼叫：`await hostService('GreetingService').greetAsync('React')`。`Services/IGreetingService.cs` 標記了 `[ExposeToWeb]`（以及 `[ExposeToMCP]`），View 中的 `WebBridge` 負責分派呼叫；每次建置都會執行 `ZYC.Framework.CLI.exe web-types`，根據 `[ExposeToWeb]` 介面重新產生 `ClientApp/src/host-services.d.ts`。
 
 當你想用 React 而不是 XAML 撰寫 Tab 介面時，使用這個範本。
 
@@ -1247,6 +1263,9 @@ MyCompany.Tools/
   README.md
   UI/
     ToolsView.cs
+  Services/
+    IGreetingService.cs
+    GreetingService.cs
   ClientApp/
     index.html
     package.json
@@ -1254,6 +1273,7 @@ MyCompany.Tools/
     vite.config.ts
     src/
       App.tsx
+      host-services.d.ts
       index.css
       main.tsx
       webview.ts
@@ -1262,7 +1282,7 @@ MyCompany.Tools/
 - `ToolsView`는 `WebViewHostBase`를 상속하며, 빌드된 프런트엔드를 가상 호스트 `https://<web-name>.example/`에서 제공합니다. `<web-name>`은 `__PROJECT_WEB_NAME__` 값입니다. 예: `mycompany-tools`.
 - 프로젝트를 빌드하면 `ClientApp/package.json`이 바뀌었을 때 `npm install`을, 프런트엔드 소스가 바뀌었을 때 `npm run build`를 실행한 뒤 `ClientApp/dist`를 출력 디렉터리의 `ClientApp/`으로 복사합니다. 이 단계를 건너뛰려면 `-p:SkipClientAppBuild=true`를 전달합니다.
 - Debug 빌드에서는 `npm run dev`가 실행 중이면 뷰가 Vite 개발 서버 `http://localhost:5173`을 로드하므로, 다시 빌드하지 않아도 프런트엔드 변경이 반영됩니다.
-- `ClientApp/src/webview.ts`는 `window.chrome.webview` 브리지를 감쌉니다. 생성된 페이지는 `ping` 메시지를 보내고, 뷰의 `OnWebMessageReceived`가 `pong`으로 응답합니다.
+- `ClientApp/src/webview.ts`는 페이지에서 C# 서비스를 타입 있게 호출하게 해 줍니다: `await hostService('GreetingService').greetAsync('React')`. `Services/IGreetingService.cs`에는 `[ExposeToWeb]`(와 `[ExposeToMCP]`)가 붙어 있고, 뷰의 `WebBridge`가 호출을 처리합니다. 빌드할 때마다 `ZYC.Framework.CLI.exe web-types`가 실행되어 `[ExposeToWeb]` 인터페이스로부터 `ClientApp/src/host-services.d.ts`를 다시 생성합니다.
 
 탭 UI를 XAML 대신 React로 만들고 싶을 때 사용합니다.
 
